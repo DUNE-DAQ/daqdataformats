@@ -13,7 +13,7 @@ daq_setup_environment()
 ##############################################################################
 # Main library
 
-#daq_add_library(*.cpp LINK_LIBRARIES ${RAWDATA_DEPENDENCIES})
+daq_add_library(*.cpp LINK_LIBRARIES ${RAWDATA_DEPENDENCIES})
 
 ##############################################################################
 # Plugins
