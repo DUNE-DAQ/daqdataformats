@@ -6,13 +6,15 @@
  * received with this code.
  */
 
+#ifndef CDF_INCLUDE_CDF_FRAGMENTHEADER_HPP_
+#define CDF_INCLUDE_CDF_FRAGMENTHEADER_HPP_
+
 #include "GeoID.hpp"
 #include "Types.hpp"
 
 #include <bitset>
 #include <cstdlib>
 #include <numeric>
-#include <pair>
 #include <vector>
 
 namespace dunedaq {
@@ -20,11 +22,11 @@ namespace cdf {
 
 struct FragmentHeader
 {
-  static constexpr uint32_t FRAGMENT_HEADER_MAGIC = 0x11112222;
-  static constexpr uint32_t FRAGMENT_HEADER_VERSION = 1;
+  static constexpr uint32_t FRAGMENT_HEADER_MAGIC = 0x11112222; // NOLINT(build/unsigned)
+  static constexpr uint32_t FRAGMENT_HEADER_VERSION = 1;        // NOLINT(build/unsigned)
 
-  uint32_t HeaderMarker = FRAGMENT_HEADER_MAGIC;
-  uint32_t Version = FRAGMENT_HEADER_VERSION;
+  uint32_t HeaderMarker = FRAGMENT_HEADER_MAGIC; // NOLINT(build/unsigned)
+  uint32_t Version = FRAGMENT_HEADER_VERSION;    // NOLINT(build/unsigned)
   trigger_number_t TriggerNumber;
   run_number_t RunNumber;
 
@@ -39,3 +41,5 @@ struct FragmentHeader
 };
 } // namespace cdf
 } // namespace dunedaq
+
+#endif // CDF_INCLUDE_CDF_FRAGMENTHEADER_HPP_

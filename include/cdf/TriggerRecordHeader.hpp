@@ -6,6 +6,9 @@
  * received with this code.
  */
 
+#ifndef CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_
+#define CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_
+
 #include "GeoID.hpp"
 #include "Types.hpp"
 
@@ -14,11 +17,11 @@ namespace cdf {
 
 struct TriggerRecordHeader
 {
-  static constexpr uint32_t TRIGGER_RECORD_HEADER_MAGIC = 0x33334444;
-  static constexpr uint32_t TRIGGER_RECORD_HEADER_VERSION = 1;
+  static constexpr uint32_t TRIGGER_RECORD_HEADER_MAGIC = 0x33334444; // NOLINT(build/unsigned)
+  static constexpr uint32_t TRIGGER_RECORD_HEADER_VERSION = 1;        // NOLINT(build/unsigned)
 
-  uint32_t HeaderMarker = TRIGGER_RECORD_HEADER_MAGIC;
-  uint32_t Version = TRIGGER_RECORD_HEADER_VERSION;
+  uint32_t HeaderMarker = TRIGGER_RECORD_HEADER_MAGIC; // NOLINT(build/unsigned)
+  uint32_t Version = TRIGGER_RECORD_HEADER_VERSION;    // NOLINT(build/unsigned)
 
   trigger_number_t TriggerNumber;
   run_number_t RunNumber;
@@ -27,3 +30,5 @@ struct TriggerRecordHeader
 };
 } // namespace cdf
 } // namespace dunedaq
+
+#endif // CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_

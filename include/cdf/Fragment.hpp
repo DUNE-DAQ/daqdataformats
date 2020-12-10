@@ -10,14 +10,18 @@
  * received with this code.
  */
 
+#ifndef CDF_INCLUDE_CDF_FRAGMENT_HPP_
+#define CDF_INCLUDE_CDF_FRAGMENT_HPP_
+
 #include "FragmentHeader.hpp"
 #include "GeoID.hpp"
 #include "Types.hpp"
 
 #include <bitset>
 #include <cstdlib>
+#include <cstring>
 #include <numeric>
-#include <pair>
+#include <utility>
 #include <vector>
 
 namespace dunedaq {
@@ -26,14 +30,14 @@ namespace cdf {
 class Fragment
 {
 public:
-  Fragment(std::vector<std::pair<void*, size_t>> pieces)
+  explicit Fragment(std::vector<std::pair<void*, size_t>> pieces)
   {
     size_ = std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
     data_ = malloc(size_);
 
     size_t offset = 0;
     for (auto& piece : pieces) {
-      memcpy(data_ + offset, piece.first, piece.second);
+      memcpy(static_cast<uint8_t*>(data_) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
       offset += piece.second;
     }
   }
@@ -77,3 +81,5 @@ private:
 };
 } // namespace cdf
 } // namespace dunedaq
+
+#endif // CDF_INCLUDE_CDF_FRAGMENT_HPP_

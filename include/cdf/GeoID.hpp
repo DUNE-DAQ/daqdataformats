@@ -6,14 +6,19 @@
  * received with this code.
  */
 
+#ifndef CDF_INCLUDE_CDF_GEOID_HPP_
+#define CDF_INCLUDE_CDF_GEOID_HPP_
+
 #include <cstdint>
 
 namespace dunedaq {
 namespace cdf {
 struct GeoID
 {
-  uint32_t APANumber;
-  uint32_t LinkNumber;
+  uint32_t APANumber;  // NOLINT(build/unsigned)
+  uint32_t LinkNumber; // NOLINT(build/unsigned)
 };
-} // namespace dfmessages
+} // namespace cdf
 } // namespace dunedaq
+
+#endif // CDF_INCLUDE_CDF_GEOID_HPP_
