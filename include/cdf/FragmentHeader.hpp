@@ -9,8 +9,8 @@
 #ifndef CDF_INCLUDE_CDF_FRAGMENTHEADER_HPP_
 #define CDF_INCLUDE_CDF_FRAGMENTHEADER_HPP_
 
-#include "GeoID.hpp"
-#include "Types.hpp"
+#include "cdf/GeoID.hpp"
+#include "cdf/Types.hpp"
 
 #include <bitset>
 #include <cstdlib>

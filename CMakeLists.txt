@@ -8,6 +8,9 @@ daq_setup_environment()
 
 find_package(Boost 1.70.0 COMPONENTS unit_test_framework REQUIRED)
 
+# No sources, so we'll create an INTERFACE library
+daq_add_library()
+
 daq_add_unit_test(Fragment_test)
 daq_add_unit_test(TriggerRecordHeader_test)
 

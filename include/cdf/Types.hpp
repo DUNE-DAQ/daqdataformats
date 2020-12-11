@@ -9,7 +9,7 @@
 #ifndef CDF_INCLUDE_CDF_TYPES_HPP_
 #define CDF_INCLUDE_CDF_TYPES_HPP_
 
-#include "GeoID.hpp"
+#include <cstdint>
 
 namespace dunedaq {
 namespace cdf {

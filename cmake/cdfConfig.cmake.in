@@ -3,6 +3,8 @@
 
 include(CMakeFindDependencyMacro)
 
+find_dependency(Boost 1.70.0 COMPONENTS unit_test_framework)
+
 # Figure out whether or not this dependency is an installed package or
 # in repo form
 

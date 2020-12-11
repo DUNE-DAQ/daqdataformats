@@ -9,8 +9,7 @@
 #ifndef CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_
 #define CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_
 
-#include "GeoID.hpp"
-#include "Types.hpp"
+#include "cdf/Types.hpp"
 
 namespace dunedaq {
 namespace cdf {
