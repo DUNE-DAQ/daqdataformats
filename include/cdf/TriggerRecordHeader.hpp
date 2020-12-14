@@ -9,8 +9,10 @@
 #ifndef CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_
 #define CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_
 
-#include "GeoID.hpp"
-#include "Types.hpp"
+#include "cdf/Types.hpp"
+#include "cdf/ComponentRequest.hpp"
+
+#include <vector>
 
 namespace dunedaq {
 namespace cdf {
@@ -27,6 +29,12 @@ struct TriggerRecordHeader
   run_number_t RunNumber;
   timestamp_t TriggerTimestamp;
   trigger_type_t TriggerType;
+
+  timestamp_t TriggerRecordStartTime;
+  timestamp_t TriggerRecordEndTime;
+
+  std::vector<ComponentRequest> RequestedComponents;
+  std::vector<ComponentRequest> IncludedComponents;
 };
 } // namespace cdf
 } // namespace dunedaq

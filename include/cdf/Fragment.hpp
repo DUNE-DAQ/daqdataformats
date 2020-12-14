@@ -13,9 +13,9 @@
 #ifndef CDF_INCLUDE_CDF_FRAGMENT_HPP_
 #define CDF_INCLUDE_CDF_FRAGMENT_HPP_
 
-#include "FragmentHeader.hpp"
-#include "GeoID.hpp"
-#include "Types.hpp"
+#include "cdf/FragmentHeader.hpp"
+#include "cdf/GeoID.hpp"
+#include "cdf/Types.hpp"
 
 #include <bitset>
 #include <cstdlib>
