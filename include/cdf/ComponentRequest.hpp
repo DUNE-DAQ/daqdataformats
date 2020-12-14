@@ -15,6 +15,8 @@ namespace dunedaq {
 namespace cdf {
 struct ComponentRequest
 {
+  GeoID Component;
+
   timestamp_t RequestTimestamp;
   timestamp_diff_t RequestOffset;
   timestamp_t RequestWidth;
