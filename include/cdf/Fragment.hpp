@@ -45,30 +45,30 @@ public:
     : Fragment({ std::make_pair(buffer, size) })
   {}
 
-  FragmentHeader const& GetHeader() { return header_; }
-  void SetHeader(FragmentHeader header) { header_ = header; }
+  FragmentHeader const& header() { return header_; }
+  void set_header(FragmentHeader header) { header_ = header; }
 
   // Header setters and getters
-  trigger_number_t GetTriggerNumber() { return header_.TriggerNumber; }
-  void SetTriggerNumber(trigger_number_t triggerNumber) { header_.TriggerNumber = triggerNumber; }
-  run_number_t GetRunNumber() { return header_.RunNumber; }
-  void SetRunNumber(run_number_t runNumber) { header_.RunNumber = runNumber; }
+  trigger_number_t trigger_number() { return header_.trigger_number; }
+  void set_trigger_number(trigger_number_t trigger_number) { header_.trigger_number = trigger_number; }
+  run_number_t run_number() { return header_.run_number; }
+  void set_run_number(run_number_t run_number) { header_.run_number = run_number; }
 
-  timestamp_t GetTriggerTimestamp() { return header_.TriggerTimestamp; }
-  void SetTriggerTimestamp(timestamp_t triggerTimestamp) { header_.TriggerTimestamp = triggerTimestamp; }
-  timestamp_t GetDataStart() { return header_.DataStart; }
-  void SetDataStart(timestamp_t dataStart) { header_.DataStart = dataStart; }
-  timestamp_t GetDataEnd() { return header_.DataEnd; }
-  void SetDataEnd(timestamp_t dataEnd) { header_.DataEnd = dataEnd; }
+  timestamp_t trigger_timestamp() { return header_.trigger_timestamp; }
+  void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_.trigger_timestamp = trigger_timestamp; }
+  timestamp_t data_start() { return header_.data_start; }
+  void set_data_start(timestamp_t data_start) { header_.data_start = data_start; }
+  timestamp_t data_end() { return header_.data_end; }
+  void set_data_end(timestamp_t data_end) { header_.data_end = data_end; }
 
-  GeoID GetLinkID() { return header_.LinkID; }
-  void SetLinkID(GeoID linkID) { header_.LinkID = linkID; }
-  std::bitset<32> GetErrorBits() { return header_.ErrorBits; }
-  void SetErrorBits(std::bitset<32> errorBits) { header_.ErrorBits = errorBits; }
-  bool GetErrorBit(size_t bit) { return header_.ErrorBits[bit]; }
-  void SetErrorBit(size_t bit, bool value) { header_.ErrorBits[bit] = value; }
-  type_t GetType() { return header_.Type; }
-  void SetType(type_t type) { header_.Type = type; }
+  GeoID link_ID() { return header_.link_ID; }
+  void set_link_ID(GeoID link_ID) { header_.link_ID = link_ID; }
+  std::bitset<32> error_bits() { return header_.error_bits; }
+  void set_error_bits(std::bitset<32> error_bits) { header_.error_bits = error_bits; }
+  bool error_bit(size_t bit) { return header_.error_bits[bit]; }
+  void set_error_bit(size_t bit, bool value) { header_.error_bits[bit] = value; }
+  fragment_type_t fragment_type() { return header_.fragment_type; }
+  void set_type(fragment_type_t fragment_type) { header_.fragment_type = fragment_type; }
 
   size_t size() { return size_; }
   void* data() { return data_; }

@@ -25,19 +25,18 @@ struct FragmentHeader
   static constexpr uint32_t FRAGMENT_HEADER_MAGIC = 0x11112222; // NOLINT(build/unsigned)
   static constexpr uint32_t FRAGMENT_HEADER_VERSION = 1;        // NOLINT(build/unsigned)
 
-  uint32_t HeaderMarker = FRAGMENT_HEADER_MAGIC; // NOLINT(build/unsigned)
-  uint32_t Version = FRAGMENT_HEADER_VERSION;    // NOLINT(build/unsigned)
-  trigger_number_t TriggerNumber;
-  run_number_t RunNumber;
+  uint32_t fragment_header_marker = FRAGMENT_HEADER_MAGIC; // NOLINT(build/unsigned)
+  uint32_t version = FRAGMENT_HEADER_VERSION;    // NOLINT(build/unsigned)
+  trigger_number_t trigger_number;
+  run_number_t run_number;
 
-  timestamp_t TriggerTimestamp;
-  timestamp_t DataStart;
-  timestamp_t DataEnd;
+  timestamp_t trigger_timestamp;
+  timestamp_t data_start;
+  timestamp_t data_end;
 
-  GeoID LinkID;
-  std::bitset<32> ErrorBits;
-  // fragment_id_t FragmentID;
-  type_t Type;
+  GeoID link_ID;
+  std::bitset<32> error_bits;
+  fragment_type_t fragment_type;
 };
 } // namespace cdf
 } // namespace dunedaq

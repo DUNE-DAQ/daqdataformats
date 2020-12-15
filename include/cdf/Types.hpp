@@ -16,10 +16,10 @@ namespace cdf {
 
 using run_number_t = uint32_t;     // NOLINT(build/unsigned)
 using trigger_number_t = uint64_t; // NOLINT(build/unsigned)
-using type_t = uint32_t;           // NOLINT(build/unsigned)
+using fragment_type_t = uint32_t;  // NOLINT(build/unsigned)
 using timestamp_t = uint64_t;      // NOLINT(build/unsigned)
 using timestamp_diff_t = int64_t;
-using trigger_type_t = uint16_t;   // NOLINT(build/unsigned)
+using trigger_type_t = uint16_t; // NOLINT(build/unsigned)
 } // namespace cdf
 } // namespace dunedaq
 

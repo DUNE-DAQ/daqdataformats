@@ -16,12 +16,12 @@ namespace dunedaq {
 namespace cdf {
 struct GeoID
 {
-  uint32_t APANumber;  // NOLINT(build/unsigned)
-  uint32_t LinkNumber; // NOLINT(build/unsigned)
+  uint32_t APA_number;  // NOLINT(build/unsigned)
+  uint32_t link_number; // NOLINT(build/unsigned)
 
   bool operator<(const GeoID& other) const
   {
-    return std::tuple(APANumber, LinkNumber) < std::tuple(other.APANumber, other.LinkNumber);
+    return std::tuple(APA_number, link_number) < std::tuple(other.APA_number, other.link_number);
   }
 };
 } // namespace cdf
