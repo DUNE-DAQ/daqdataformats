@@ -12,6 +12,6 @@ find_package(Boost 1.70.0 COMPONENTS unit_test_framework REQUIRED)
 daq_add_library()
 
 daq_add_unit_test(Fragment_test)
-daq_add_unit_test(TriggerRecordHeader_test)
+daq_add_unit_test(TriggerRecord_test)
 
 daq_install()

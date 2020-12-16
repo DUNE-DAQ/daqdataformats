@@ -9,9 +9,10 @@
 #ifndef CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_
 #define CDF_INCLUDE_CDF_TRIGGERRECORDHEADER_HPP_
 
-#include "cdf/Types.hpp"
 #include "cdf/ComponentRequest.hpp"
+#include "cdf/Types.hpp"
 
+#include <ostream>
 #include <vector>
 
 namespace dunedaq {
@@ -23,7 +24,7 @@ struct TriggerRecordHeader
   static constexpr uint32_t TRIGGER_RECORD_HEADER_VERSION = 1;        // NOLINT(build/unsigned)
 
   uint32_t trigger_record_header_marker = TRIGGER_RECORD_HEADER_MAGIC; // NOLINT(build/unsigned)
-  uint32_t version = TRIGGER_RECORD_HEADER_VERSION;    // NOLINT(build/unsigned)
+  uint32_t version = TRIGGER_RECORD_HEADER_VERSION;                    // NOLINT(build/unsigned)
 
   trigger_number_t trigger_number;
   run_number_t run_number;
@@ -33,9 +34,29 @@ struct TriggerRecordHeader
   timestamp_t trigger_record_start_time;
   timestamp_t trigger_record_end_time;
 
-  std::vector<ComponentRequest> requested_components;
-  std::vector<ComponentRequest> included_components;
+  uint32_t error_bits; // NOLINT(build/unsigned)
+
+  uint64_t n_requested_components; // NOLINT(build/unsigned)
 };
+
+inline std::ostream&
+operator<<(std::ostream& o, TriggerRecordHeader const& hdr)
+{
+  return o << "version: " << hdr.version << ", "
+
+           << "trigger_number: " << hdr.trigger_number << ", "
+           << "run_number: " << hdr.run_number << ", "
+           << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
+           << "trigger_type: " << hdr.trigger_type << ", "
+
+           << "trigger_record_start_time: " << hdr.trigger_record_start_time << ", "
+           << "trigger_record_end_time: " << hdr.trigger_record_end_time << ", "
+
+           << "error_bits: " << hdr.error_bits << ", "
+
+           << "n_requested_components: " << hdr.n_requested_components;
+}
+
 } // namespace cdf
 } // namespace dunedaq
 
