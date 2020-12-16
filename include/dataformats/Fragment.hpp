@@ -10,8 +10,8 @@
  * received with this code.
  */
 
-#ifndef dataformats_INCLUDE_dataformats_FRAGMENT_HPP_
-#define dataformats_INCLUDE_dataformats_FRAGMENT_HPP_
+#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENT_HPP_
+#define DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENT_HPP_
 
 #include "dataformats/FragmentHeader.hpp"
 #include "dataformats/GeoID.hpp"
@@ -93,4 +93,4 @@ private:
 } // namespace dataformats
 } // namespace dunedaq
 
-#endif // dataformats_INCLUDE_dataformats_FRAGMENT_HPP_
+#endif // DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENT_HPP_

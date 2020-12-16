@@ -6,8 +6,8 @@
  * received with this code.
  */
 
-#ifndef dataformats_INCLUDE_dataformats_GEOID_HPP_
-#define dataformats_INCLUDE_dataformats_GEOID_HPP_
+#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
+#define DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
 
 #include <cstdint>
 #include <ostream>
@@ -35,4 +35,4 @@ operator<<(std::ostream& o, GeoID const& id)
 } // namespace dataformats
 } // namespace dunedaq
 
-#endif // dataformats_INCLUDE_dataformats_GEOID_HPP_
+#endif // DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_

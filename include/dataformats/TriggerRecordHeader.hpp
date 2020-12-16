@@ -6,8 +6,8 @@
  * received with this code.
  */
 
-#ifndef dataformats_INCLUDE_dataformats_TRIGGERRECORDHEADER_HPP_
-#define dataformats_INCLUDE_dataformats_TRIGGERRECORDHEADER_HPP_
+#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADER_HPP_
+#define DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADER_HPP_
 
 #include "dataformats/ComponentRequest.hpp"
 #include "dataformats/Types.hpp"
@@ -60,4 +60,4 @@ operator<<(std::ostream& o, TriggerRecordHeader const& hdr)
 } // namespace dataformats
 } // namespace dunedaq
 
-#endif // dataformats_INCLUDE_dataformats_TRIGGERRECORDHEADER_HPP_
+#endif // DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADER_HPP_

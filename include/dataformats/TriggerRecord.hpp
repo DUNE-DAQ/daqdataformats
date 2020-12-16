@@ -6,8 +6,8 @@
  * received with this code.
  */
 
-#ifndef dataformats_INCLUDE_dataformats_TRIGGERRECORD_HPP_
-#define dataformats_INCLUDE_dataformats_TRIGGERRECORD_HPP_
+#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORD_HPP_
+#define DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORD_HPP_
 
 #include "dataformats/Fragment.hpp"
 #include "dataformats/TriggerRecordHeader.hpp"
@@ -74,4 +74,4 @@ private:
 } // namespace dataformats
 } // namespace dunedaq
 
-#endif // dataformats_INCLUDE_dataformats_TRIGGERRECORD_HPP_
+#endif // DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORD_HPP_

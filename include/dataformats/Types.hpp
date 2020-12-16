@@ -6,8 +6,8 @@
  * received with this code.
  */
 
-#ifndef dataformats_INCLUDE_dataformats_TYPES_HPP_
-#define dataformats_INCLUDE_dataformats_TYPES_HPP_
+#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_TYPES_HPP_
+#define DATAFORMATS_INCLUDE_DATAFORMATS_TYPES_HPP_
 
 #include <cstdint>
 
@@ -24,4 +24,4 @@ using trigger_type_t = uint16_t; // NOLINT(build/unsigned)
 } // namespace dataformats
 } // namespace dunedaq
 
-#endif // dataformats_INCLUDE_dataformats_TYPES_HPP_
+#endif // DATAFORMATS_INCLUDE_DATAFORMATS_TYPES_HPP_

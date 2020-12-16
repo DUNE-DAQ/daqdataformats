@@ -6,8 +6,8 @@
  * received with this code.
  */
 
-#ifndef dataformats_INCLUDE_dataformats_COMPONENTREQUEST_HPP_
-#define dataformats_INCLUDE_dataformats_COMPONENTREQUEST_HPP_
+#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_COMPONENTREQUEST_HPP_
+#define DATAFORMATS_INCLUDE_DATAFORMATS_COMPONENTREQUEST_HPP_
 
 #include "dataformats/GeoID.hpp"
 #include "dataformats/Types.hpp"
@@ -32,4 +32,4 @@ operator<<(std::ostream& o, ComponentRequest const& cr)
 } // namespace dataformats
 } // namespace dunedaq
 
-#endif // dataformats_INCLUDE_dataformats_COMPONENTREQUEST_HPP_
+#endif // DATAFORMATS_INCLUDE_DATAFORMATS_COMPONENTREQUEST_HPP_
