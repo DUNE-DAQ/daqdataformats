@@ -53,6 +53,7 @@ public:
 
   FragmentHeader const& get_header() { return *header_(); }
   void set_header(FragmentHeader header) { memcpy(&data_arr_[0], &header, sizeof(header)); }
+  uint8_t* get_storage_location() { return &data_arr_[0]; }
 
   // Header setters and getters
   trigger_number_t get_trigger_number() { return header_()->trigger_number; }
@@ -81,6 +82,10 @@ public:
   fragment_type_t get_fragment_type() { return header_()->fragment_type; }
   void set_type(fragment_type_t fragment_type) { header_()->fragment_type = fragment_type; }
 
+  /**
+   * @brief Get the total size of the Fragment
+   * @return The size of the Fragment, including header and all payload pieces
+  */
   fragment_size_t get_size() { return header_()->size; }
   void* data() { 
     // Increment header pointer by one to skip header
