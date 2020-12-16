@@ -12,16 +12,23 @@
 #include "cdf/GeoID.hpp"
 #include "cdf/Types.hpp"
 
+#include <ostream>
+
 namespace dunedaq {
 namespace cdf {
 struct ComponentRequest
 {
-  GeoID Component;
+  GeoID component;
 
-  timestamp_t RequestTimestamp;
-  timestamp_diff_t RequestOffset;
-  timestamp_t RequestWidth;
+  timestamp_diff_t window_offset;
+  timestamp_diff_t window_width;
 };
+
+inline std::ostream&
+operator<<(std::ostream& o, ComponentRequest const& cr)
+{
+  return o << cr.component << ", offset: " << cr.window_offset << ", width: " << cr.window_width;
+}
 } // namespace cdf
 } // namespace dunedaq
 
