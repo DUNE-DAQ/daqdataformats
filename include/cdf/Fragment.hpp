@@ -82,8 +82,10 @@ public:
   void set_type(fragment_type_t fragment_type) { header_()->fragment_type = fragment_type; }
 
   fragment_size_t get_size() { return header_()->size; }
-  void* data() { return static_cast<void*>(header_() + 1); } // NOLINT
-
+  void* data() { 
+    // Increment header pointer by one to skip header
+    return static_cast<void*>(header_() + 1);  // NOLINT
+  }
 private:
   FragmentHeader* header_() { return reinterpret_cast<FragmentHeader*>(&data_arr_[0]); } // NOLINT
   std::vector<uint8_t> data_arr_; // NOLINT(build/unsigned)
