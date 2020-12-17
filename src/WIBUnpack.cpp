@@ -1,5 +1,5 @@
-#include "daq-rawdata/wib/WIBFrame.hpp"
+#include "dataformats/wib/WIBFrame.hpp"
 
-namespace dunedaq::rawdata::wib {
+namespace dunedaq::dataformats::wib {
 
-} // namespace dunedaq::rawdata::wib
+} // namespace dunedaq::dataformats::wib
