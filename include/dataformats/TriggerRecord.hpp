@@ -43,17 +43,6 @@ public:
   trigger_type_t get_trigger_type() { return header_.trigger_type; }
   void set_trigger_type(trigger_type_t trigger_type) { header_.trigger_type = trigger_type; }
 
-  timestamp_t get_trigger_record_start_time() { return header_.trigger_record_start_time; }
-  void set_trigger_record_start_time(timestamp_t trigger_record_start_time)
-  {
-    header_.trigger_record_start_time = trigger_record_start_time;
-  }
-  timestamp_t get_trigger_record_end_time() { return header_.trigger_record_end_time; }
-  void set_trigger_record_end_time(timestamp_t trigger_record_end_time)
-  {
-    header_.trigger_record_end_time = trigger_record_end_time;
-  }
-
   std::bitset<32> get_error_bits() { return header_.error_bits; }
   void set_error_bits(std::bitset<32> bits) { header_.error_bits = bits.to_ulong(); }
   bool get_error_bit(size_t bit) { return get_error_bits()[bit]; }
