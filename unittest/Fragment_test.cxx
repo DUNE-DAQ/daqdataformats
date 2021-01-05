@@ -56,6 +56,7 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
     BOOST_REQUIRE_EQUAL(testFrag.get_trigger_timestamp(), 2);
     BOOST_REQUIRE_EQUAL(testFrag.get_run_number(), 3);
   }
+  free(frag); // Should not cause errors
 }
 
 BOOST_AUTO_TEST_SUITE_END()
