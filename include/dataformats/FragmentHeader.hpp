@@ -31,12 +31,12 @@ struct FragmentHeader
   fragment_size_t size; // NOLINT(build/unsigned)
 
   trigger_number_t trigger_number;
-  run_number_t run_number;
 
   timestamp_t trigger_timestamp;
   timestamp_diff_t window_offset;
   timestamp_diff_t window_width;
 
+  run_number_t run_number;
   GeoID link_ID;
   uint32_t error_bits; // NOLINT(build/unsigned)
   fragment_type_t fragment_type;

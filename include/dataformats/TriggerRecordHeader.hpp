@@ -27,16 +27,18 @@ struct TriggerRecordHeader
   uint32_t version = TRIGGER_RECORD_HEADER_VERSION;                    // NOLINT(build/unsigned)
 
   trigger_number_t trigger_number;
-  run_number_t run_number;
   timestamp_t trigger_timestamp;
-  trigger_type_t trigger_type;
 
   timestamp_t trigger_record_start_time;
   timestamp_t trigger_record_end_time;
 
+  uint64_t num_requested_components; // NOLINT(build/unsigned)
+
+  run_number_t run_number;
   uint32_t error_bits; // NOLINT(build/unsigned)
 
-  uint64_t num_requested_components; // NOLINT(build/unsigned)
+  trigger_type_t trigger_type;
+  uint64_t unused : 48;
 };
 
 inline std::ostream&
