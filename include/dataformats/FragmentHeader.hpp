@@ -22,8 +22,8 @@ namespace dataformats {
 
 struct FragmentHeader
 {
-  static constexpr uint32_t FRAGMENT_HEADER_MAGIC = 0x11112222; // NOLINT(build/unsigned)
-  static constexpr uint32_t FRAGMENT_HEADER_VERSION = 1;        // NOLINT(build/unsigned)
+#define FRAGMENT_HEADER_MAGIC 0x11112222
+#define FRAGMENT_HEADER_VERSION 1
 
   uint32_t fragment_header_marker = FRAGMENT_HEADER_MAGIC; // NOLINT(build/unsigned)
   uint32_t version = FRAGMENT_HEADER_VERSION;              // NOLINT(build/unsigned)
