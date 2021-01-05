@@ -36,6 +36,7 @@ public:
                   std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
 
     data_arr_ = malloc(size); // NOLINT(build/unsigned)
+    alloc_ = true;
 
     FragmentHeader header;
     header.size = size;
@@ -50,15 +51,22 @@ public:
   Fragment(void* buffer, size_t size)
     : Fragment({ std::make_pair(buffer, size) })
   {}
-  explicit Fragment(void* existing_fragment_buffer, bool copy_from_buffer = false)
+  Fragment(void* existing_fragment_buffer, bool copy_from_buffer = false)
   {
     if (!copy_from_buffer) {
-        data_arr_ = existing_fragment_buffer;
+      data_arr_ = existing_fragment_buffer;
     } else {
       auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
       data_arr_ = malloc(header->size);
+      alloc_ = true;
       memcpy(data_arr_, existing_fragment_buffer, header->size);
     }
+  }
+
+  ~Fragment()
+  {
+    if (alloc_)
+      free(data_arr_);
   }
 
   FragmentHeader const& get_header() { return *header_(); }
@@ -105,7 +113,8 @@ public:
 
 private:
   FragmentHeader* header_() { return static_cast<FragmentHeader*>(data_arr_); } // NOLINT
-  void* data_arr_;                                                        // NOLINT(build/unsigned)
+  void* data_arr_{ nullptr };
+  bool alloc_{ false };
 };
 } // namespace dataformats
 } // namespace dunedaq
