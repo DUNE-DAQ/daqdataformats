@@ -20,8 +20,8 @@ BOOST_AUTO_TEST_SUITE(TriggerRecord_test)
 
 BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
 {
-  BOOST_REQUIRE(std::is_copy_constructible_v<TriggerRecord>);
-  BOOST_REQUIRE(std::is_copy_assignable_v<TriggerRecord>);
+  BOOST_REQUIRE(!std::is_copy_constructible_v<TriggerRecord>);
+  BOOST_REQUIRE(!std::is_copy_assignable_v<TriggerRecord>);
   BOOST_REQUIRE(std::is_move_constructible_v<TriggerRecord>);
   BOOST_REQUIRE(std::is_move_assignable_v<TriggerRecord>);
 }
