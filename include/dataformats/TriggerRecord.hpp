@@ -35,7 +35,7 @@ public:
   std::vector<ComponentRequest> const& get_requested_components() { return requested_components_; }
   void set_requested_components(std::vector<ComponentRequest> components)
   {
-    header_.n_requested_components = components.size();
+    header_.num_requested_components = components.size();
     requested_components_ = components;
   }
   std::vector<std::unique_ptr<Fragment>>& get_fragments() { return fragments_; }
@@ -72,7 +72,7 @@ public:
     set_error_bits(bits);
   }
 
-  uint64_t get_n_requested_components() { return header_.n_requested_components; } // NOLINT(build/unsigned)
+  uint64_t get_num_requested_components() { return header_.num_requested_components; } // NOLINT(build/unsigned)
 
 private:
   TriggerRecordHeader header_;
