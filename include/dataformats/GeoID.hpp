@@ -17,12 +17,12 @@ namespace dunedaq {
 namespace dataformats {
 struct GeoID
 {
-  uint32_t APA_number;  // NOLINT(build/unsigned)
+  uint32_t apa_number;  // NOLINT(build/unsigned)
   uint32_t link_number; // NOLINT(build/unsigned)
 
   bool operator<(const GeoID& other) const
   {
-    return std::tuple(APA_number, link_number) < std::tuple(other.APA_number, other.link_number);
+    return std::tuple(apa_number, link_number) < std::tuple(other.apa_number, other.link_number);
   }
 
 };
@@ -30,7 +30,7 @@ struct GeoID
 inline std::ostream&
 operator<<(std::ostream& o, GeoID const& id)
 {
-  return o << "APA: " << id.APA_number << ", link: " << id.link_number;
+  return o << "APA: " << id.apa_number << ", link: " << id.link_number;
 }
 } // namespace dataformats
 } // namespace dunedaq
