@@ -29,9 +29,6 @@ struct TriggerRecordHeader
   trigger_number_t trigger_number;
   timestamp_t trigger_timestamp;
 
-  timestamp_t trigger_record_start_time;
-  timestamp_t trigger_record_end_time;
-
   uint64_t num_requested_components; // NOLINT(build/unsigned)
 
   run_number_t run_number;
@@ -50,9 +47,6 @@ operator<<(std::ostream& o, TriggerRecordHeader const& hdr)
            << "run_number: " << hdr.run_number << ", "
            << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
            << "trigger_type: " << hdr.trigger_type << ", "
-
-           << "trigger_record_start_time: " << hdr.trigger_record_start_time << ", "
-           << "trigger_record_end_time: " << hdr.trigger_record_end_time << ", "
 
            << "error_bits: " << hdr.error_bits << ", "
 
