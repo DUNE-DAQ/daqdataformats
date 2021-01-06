@@ -64,7 +64,7 @@ public:
    * @brief Get a copy of the TriggerRecordHeaderData from the TriggerRecordHeader
    * @return Copy of the TriggerRecordHeaderData struct from the TriggerRecordHeader
   */
-  TriggerRecordHeader::TriggerRecordHeaderData get_header_data() const { return header_.get_header(); }
+  TriggerRecordHeaderData get_header_data() const { return header_.get_header(); }
 
   /**
    * @brief Get a handle to the Fragments
