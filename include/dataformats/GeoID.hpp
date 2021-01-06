@@ -15,11 +15,26 @@
 
 namespace dunedaq {
 namespace dataformats {
+
+/**
+ * @brief Represents a coordinate point in the DAQ's logical coordinate system (i.e. not physical coordinates)
+*/
 struct GeoID
 {
+  /**
+   * @brief APA Number of the component
+  */
   uint32_t apa_number;  // NOLINT(build/unsigned)
+  /**
+   * @brief Link Number of the component
+  */
   uint32_t link_number; // NOLINT(build/unsigned)
 
+  /**
+   * @brief Comparison operator (to allow GeoID to be used in std::map)
+   * @param other GeoID to compare
+   * @return The result of std::tuple compare using apa_number and link_number
+  */
   bool operator<(const GeoID& other) const
   {
     return std::tuple(apa_number, link_number) < std::tuple(other.apa_number, other.link_number);
@@ -27,6 +42,12 @@ struct GeoID
 
 };
 
+/**
+ * @brief Stream a GeoID instance in a human-readable form
+ * @param o Stream to output to
+ * @param id GeoID to stream
+ * @return Stream instance for further streaming
+*/
 inline std::ostream&
 operator<<(std::ostream& o, GeoID const& id)
 {

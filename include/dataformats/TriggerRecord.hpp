@@ -14,59 +14,77 @@
 #include "dataformats/Types.hpp"
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace dunedaq {
 namespace dataformats {
 
+/**
+ * @brief C++ Representation of a DUNE TriggerRecord, consisting of a TriggerRecordHeader object and a vector of pointers to Fragment objects
+*/
 class TriggerRecord
 {
 public:
-  TriggerRecord() = default;
-  virtual ~TriggerRecord() = default;
-  
-  TriggerRecord(TriggerRecord const&) = delete;
-  TriggerRecord(TriggerRecord&&) = default;
-  TriggerRecord& operator=(TriggerRecord const&) = delete;
-  TriggerRecord& operator=(TriggerRecord&&) = default;
+  /**
+   * @brief Construct a TriggerRecord using the given vector of components to initialize the TriggerRecordHeader
+   * @param components List of components requested for this TriggerRecord
+  */
+  explicit TriggerRecord(std::vector<ComponentRequest> components)
+    : header_(components)
+    , fragments_()
+  {}
 
-  TriggerRecordHeader const& get_header() { return header_; }
+  /**
+   * @brief Construct a TriggerRecord using the given TriggerRecordHeader
+   * @param header TriggerRecordHeader to *copy* into the TriggerRecord
+  */
+  explicit TriggerRecord(TriggerRecordHeader const& header)
+    : header_(header)
+    , fragments_()
+  {}
+  virtual ~TriggerRecord() = default; ///< TriggerRecord default destructor
+
+  TriggerRecord(TriggerRecord const&) = delete; ///< TriggerRecords are not copy-constructible
+  TriggerRecord(TriggerRecord&&) = default; ///< Default TriggerRecord move constructor
+  TriggerRecord& operator=(TriggerRecord const&) = delete; ///< TriggerRecords are not copy-assignable
+  TriggerRecord& operator=(TriggerRecord&&) = default; ///< Default TriggerRecord move assignment operator
+
+  /**
+   * @brief Get a handle to the TriggerRecordHeader
+   * @return A reference to the TriggerRecordHeader
+  */
+  TriggerRecordHeader& get_header() { return header_; }
+  /**
+   * @brief Set the TriggerRecordHeader to the given TriggerRecordHeader object
+   * @param header new TriggerRecordHeader to use
+  */
   void set_header(TriggerRecordHeader header) { header_ = header; }
-  std::vector<ComponentRequest> const& get_requested_components() { return requested_components_; }
-  void set_requested_components(std::vector<ComponentRequest> components)
-  {
-    header_.num_requested_components = components.size();
-    requested_components_ = components;
-  }
+  /**
+   * @brief Get a copy of the TriggerRecordHeaderData from the TriggerRecordHeader
+   * @return Copy of the TriggerRecordHeaderData struct from the TriggerRecordHeader
+  */
+  TriggerRecordHeader::TriggerRecordHeaderData get_header_data() const { return header_.get_header(); }
+
+  /**
+   * @brief Get a handle to the Fragments
+   * @return A reference to the Fragments vector
+  */
   std::vector<std::unique_ptr<Fragment>>& get_fragments() { return fragments_; }
+  /**
+   * @brief Set the Fragments vector to the given vector of Fragments
+   * @param fragments Fragments vector to use
+  */
   void set_fragments(std::vector<std::unique_ptr<Fragment>>&& fragments) { fragments_ = std::move(fragments); }
+  /**
+   * @brief Add a Fragment pointer to the Fragments vector
+   * @param fragment Fragment to add
+  */
   void add_fragment(std::unique_ptr<Fragment>&& fragment) { fragments_.emplace_back(std::move(fragment)); }
 
-  trigger_number_t get_trigger_number() { return header_.trigger_number; }
-  void set_trigger_number(trigger_number_t trigger_number) { header_.trigger_number = trigger_number; }
-  run_number_t get_run_number() { return header_.run_number; }
-  void set_run_number(run_number_t run_number) { header_.run_number = run_number; }
-  timestamp_t get_trigger_timestamp() { return header_.trigger_timestamp; }
-  void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_.trigger_timestamp = trigger_timestamp; }
-  trigger_type_t get_trigger_type() { return header_.trigger_type; }
-  void set_trigger_type(trigger_type_t trigger_type) { header_.trigger_type = trigger_type; }
-
-  std::bitset<32> get_error_bits() { return header_.error_bits; }
-  void set_error_bits(std::bitset<32> bits) { header_.error_bits = bits.to_ulong(); }
-  bool get_error_bit(size_t bit) { return get_error_bits()[bit]; }
-  void set_error_bit(size_t bit, bool value)
-  {
-    auto bits = get_error_bits();
-    bits[bit] = value;
-    set_error_bits(bits);
-  }
-
-  uint64_t get_num_requested_components() { return header_.num_requested_components; } // NOLINT(build/unsigned)
-
 private:
-  TriggerRecordHeader header_;
-  std::vector<ComponentRequest> requested_components_;
-  std::vector<std::unique_ptr<Fragment>> fragments_;
+  TriggerRecordHeader header_; ///< TriggerRecordHeader object
+  std::vector<std::unique_ptr<Fragment>> fragments_; ///< Vector of unique_ptrs to Fragment objects
 };
 } // namespace dataformats
 } // namespace dunedaq
