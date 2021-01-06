@@ -13,6 +13,7 @@
 #include "dataformats/TriggerRecordHeader.hpp"
 #include "dataformats/Types.hpp"
 
+#include <memory>
 #include <vector>
 
 namespace dunedaq {
@@ -22,6 +23,12 @@ class TriggerRecord
 {
 public:
   TriggerRecord() = default;
+  virtual ~TriggerRecord() = default;
+  
+  TriggerRecord(TriggerRecord const&) = delete;
+  TriggerRecord(TriggerRecord&&) = default;
+  TriggerRecord& operator=(TriggerRecord const&) = delete;
+  TriggerRecord& operator=(TriggerRecord&&) = default;
 
   TriggerRecordHeader const& get_header() { return header_; }
   void set_header(TriggerRecordHeader header) { header_ = header; }
@@ -31,8 +38,9 @@ public:
     header_.n_requested_components = components.size();
     requested_components_ = components;
   }
-  std::vector<Fragment*>& get_fragments() { return fragments_; }
-  void set_fragments(std::vector<Fragment*> fragments) { fragments_ = fragments; }
+  std::vector<std::unique_ptr<Fragment>>& get_fragments() { return fragments_; }
+  void set_fragments(std::vector<std::unique_ptr<Fragment>>&& fragments) { fragments_ = std::move(fragments); }
+  void add_fragment(std::unique_ptr<Fragment>&& fragment) { fragments_.emplace_back(std::move(fragment)); }
 
   trigger_number_t get_trigger_number() { return header_.trigger_number; }
   void set_trigger_number(trigger_number_t trigger_number) { header_.trigger_number = trigger_number; }
@@ -69,7 +77,7 @@ public:
 private:
   TriggerRecordHeader header_;
   std::vector<ComponentRequest> requested_components_;
-  std::vector<Fragment*> fragments_;
+  std::vector<std::unique_ptr<Fragment>> fragments_;
 };
 } // namespace dataformats
 } // namespace dunedaq
