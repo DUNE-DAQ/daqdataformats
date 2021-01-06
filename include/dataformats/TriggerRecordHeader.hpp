@@ -20,8 +20,8 @@ namespace dataformats {
 
 struct TriggerRecordHeader
 {
-  static constexpr uint32_t TRIGGER_RECORD_HEADER_MAGIC = 0x33334444; // NOLINT(build/unsigned)
-  static constexpr uint32_t TRIGGER_RECORD_HEADER_VERSION = 1;        // NOLINT(build/unsigned)
+#define TRIGGER_RECORD_HEADER_MAGIC 0x33334444
+#define TRIGGER_RECORD_HEADER_VERSION 1
 
   uint32_t trigger_record_header_marker = TRIGGER_RECORD_HEADER_MAGIC; // NOLINT(build/unsigned)
   uint32_t version = TRIGGER_RECORD_HEADER_VERSION;                    // NOLINT(build/unsigned)
@@ -29,7 +29,7 @@ struct TriggerRecordHeader
   trigger_number_t trigger_number;
   timestamp_t trigger_timestamp;
 
-  uint64_t n_requested_components; // NOLINT(build/unsigned)
+  uint64_t num_requested_components; // NOLINT(build/unsigned)
 
   run_number_t run_number;
   uint32_t error_bits; // NOLINT(build/unsigned)
@@ -50,7 +50,7 @@ operator<<(std::ostream& o, TriggerRecordHeader const& hdr)
 
            << "error_bits: " << hdr.error_bits << ", "
 
-           << "n_requested_components: " << hdr.n_requested_components;
+           << "num_requested_components: " << hdr.num_requested_components;
 }
 
 } // namespace dataformats

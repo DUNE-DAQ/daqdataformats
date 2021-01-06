@@ -13,6 +13,7 @@
 #include "dataformats/TriggerRecordHeader.hpp"
 #include "dataformats/Types.hpp"
 
+#include <memory>
 #include <vector>
 
 namespace dunedaq {
@@ -22,17 +23,24 @@ class TriggerRecord
 {
 public:
   TriggerRecord() = default;
+  virtual ~TriggerRecord() = default;
+  
+  TriggerRecord(TriggerRecord const&) = delete;
+  TriggerRecord(TriggerRecord&&) = default;
+  TriggerRecord& operator=(TriggerRecord const&) = delete;
+  TriggerRecord& operator=(TriggerRecord&&) = default;
 
   TriggerRecordHeader const& get_header() { return header_; }
   void set_header(TriggerRecordHeader header) { header_ = header; }
   std::vector<ComponentRequest> const& get_requested_components() { return requested_components_; }
   void set_requested_components(std::vector<ComponentRequest> components)
   {
-    header_.n_requested_components = components.size();
+    header_.num_requested_components = components.size();
     requested_components_ = components;
   }
-  std::vector<Fragment*>& get_fragments() { return fragments_; }
-  void set_fragments(std::vector<Fragment*> fragments) { fragments_ = fragments; }
+  std::vector<std::unique_ptr<Fragment>>& get_fragments() { return fragments_; }
+  void set_fragments(std::vector<std::unique_ptr<Fragment>>&& fragments) { fragments_ = std::move(fragments); }
+  void add_fragment(std::unique_ptr<Fragment>&& fragment) { fragments_.emplace_back(std::move(fragment)); }
 
   trigger_number_t get_trigger_number() { return header_.trigger_number; }
   void set_trigger_number(trigger_number_t trigger_number) { header_.trigger_number = trigger_number; }
@@ -53,12 +61,12 @@ public:
     set_error_bits(bits);
   }
 
-  uint64_t get_n_requested_components() { return header_.n_requested_components; } // NOLINT(build/unsigned)
+  uint64_t get_num_requested_components() { return header_.num_requested_components; } // NOLINT(build/unsigned)
 
 private:
   TriggerRecordHeader header_;
   std::vector<ComponentRequest> requested_components_;
-  std::vector<Fragment*> fragments_;
+  std::vector<std::unique_ptr<Fragment>> fragments_;
 };
 } // namespace dataformats
 } // namespace dunedaq
