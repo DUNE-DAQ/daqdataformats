@@ -210,7 +210,7 @@ public:
   ComponentRequest at(size_t idx) const
   {
     if (idx >= header_()->num_requested_components) {
-      // Throw ERS exception
+      // TODO, Eric Flumerfelt <eflumerf@fnal.gov>, 01/06/2021: Throw an appropriate exception
     }
     // Increment header pointer by one to skip header
     return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
@@ -225,7 +225,7 @@ public:
   ComponentRequest& operator[](size_t idx)
   {
     if (idx >= header_()->num_requested_components) {
-      // Throw ERS exception
+      // TODO, Eric Flumerfelt <eflumerf@fnal.gov>, 01/06/2021: Throw an appropriate exception
     }
     // Increment header pointer by one to skip header
     return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
