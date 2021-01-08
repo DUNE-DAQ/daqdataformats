@@ -69,8 +69,30 @@ public:
       free(data_arr_);
   }
 
-  FragmentHeader const& get_header() { return *header_(); }
-  void set_header(FragmentHeader header) { memcpy(data_arr_, &header, sizeof(header)); }
+  /**
+   * @brief Get a copy of the FragmentHeader struct
+   * @return A copy of the FragmentHeader struct stored in this Fragment
+  */
+  FragmentHeader const& get_header() const { return *header_(); }
+  /**
+   * @brief Copy fields from the provided header in this Fragment's header
+   * @param header Header to copy into the Fragment data array
+  */
+  void set_header(FragmentHeader header)
+  {
+    header_()->trigger_number = header.trigger_number;
+    header_()->trigger_timestamp = header.trigger_timestamp;
+    header_()->window_offset = header.window_offset;
+    header_()->window_width = header.window_width;
+    header_()->run_number = header.run_number;
+    header_()->link_id = header.link_id;
+    header_()->error_bits = header.error_bits;
+    header_()->fragment_type = header.fragment_type;
+  }
+  /**
+   * @brief Get a pointer to the Fragment's data array for I/O
+   * @return Pointer to the Fragment's data array
+  */
   void* get_storage_location() { return data_arr_; }
 
   // Header setters and getters
