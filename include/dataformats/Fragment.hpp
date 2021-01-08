@@ -72,12 +72,14 @@ public:
   /**
    * @brief Get a copy of the FragmentHeader struct
    * @return A copy of the FragmentHeader struct stored in this Fragment
-  */
+   */
   FragmentHeader const& get_header() const { return *header_(); }
   /**
    * @brief Copy fields from the provided header in this Fragment's header
    * @param header Header to copy into the Fragment data array
-  */
+   *
+   * The fragment_header_marker, version and size FragmentHeader fields are *not* copied from the given FragmentHeader
+   */
   void set_header(FragmentHeader header)
   {
     header_()->trigger_number = header.trigger_number;
@@ -92,7 +94,7 @@ public:
   /**
    * @brief Get a pointer to the Fragment's data array for I/O
    * @return Pointer to the Fragment's data array
-  */
+   */
   void* get_storage_location() { return data_arr_; }
 
   // Header setters and getters
