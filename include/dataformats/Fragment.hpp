@@ -80,7 +80,7 @@ public:
    *
    * The fragment_header_marker, version and size FragmentHeader fields are *not* copied from the given FragmentHeader
    */
-  void set_header(FragmentHeader header)
+  void set_header_fields(FragmentHeader header)
   {
     header_()->trigger_number = header.trigger_number;
     header_()->trigger_timestamp = header.trigger_timestamp;
