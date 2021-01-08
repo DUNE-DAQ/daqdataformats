@@ -73,7 +73,7 @@ public:
    * @brief Get a copy of the FragmentHeader struct
    * @return A copy of the FragmentHeader struct stored in this Fragment
    */
-  FragmentHeader const& get_header() const { return *header_(); }
+  FragmentHeader const& get_header() { return *header_(); }
   /**
    * @brief Copy fields from the provided header in this Fragment's header
    * @param header Header to copy into the Fragment data array
@@ -87,7 +87,7 @@ public:
     header_()->window_offset = header.window_offset;
     header_()->window_width = header.window_width;
     header_()->run_number = header.run_number;
-    header_()->link_id = header.link_id;
+    header_()->link_ID = header.link_ID;
     header_()->error_bits = header.error_bits;
     header_()->fragment_type = header.fragment_type;
   }
