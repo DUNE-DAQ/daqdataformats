@@ -112,7 +112,7 @@ public:
     header_()->window_offset = header.window_offset;
     header_()->window_width = header.window_width;
     header_()->run_number = header.run_number;
-    header_()->link_ID = header.link_ID;
+    header_()->link_id = header.link_id;
     header_()->error_bits = header.error_bits;
     header_()->fragment_type = header.fragment_type;
   }
