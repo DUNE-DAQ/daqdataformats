@@ -16,14 +16,42 @@
 
 namespace dunedaq {
 namespace dataformats {
+
+/**
+ * @brief A request sent to a Component, including the GeoID of the component and the window offset and width
+*/
 struct ComponentRequest
 {
-  GeoID component;
+  GeoID component; ///< The Requested Component
 
+  /**
+   * @brief Offset from the Trigger Decision timestamp
+   * 
+   * Note that offsets are subtracted from the Trigger Decision timestamp (but may be themselves negative)
+   * Example: <=======|===>
+   *          ^ ts - offset
+   *                  ^ timestamp
+   *                      ^ ts - offset + width
+  */
   timestamp_diff_t window_offset;
+  /**
+   * @brief Width of the data collection window
+   * 
+   * Width is applied starting from the offset start time
+   * Example: <=======|===>
+   *          ^ ts - offset
+   *                  ^ timestamp
+   *                      ^ ts - offset + width
+  */
   timestamp_diff_t window_width;
 };
 
+/**
+ * @brief Write out a ComponentRequest in human-readable form
+ * @param o Output stream
+ * @param cr ComponentRequest to write
+ * @return Stream instance for continued streaming
+*/
 inline std::ostream&
 operator<<(std::ostream& o, ComponentRequest const& cr)
 {

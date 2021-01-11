@@ -20,39 +20,84 @@
 namespace dunedaq {
 namespace dataformats {
 
+/**
+ * @brief The header for a DUNE Fragment
+*/
 struct FragmentHeader
 {
 #define FRAGMENT_HEADER_MAGIC 0x11112222
 #define FRAGMENT_HEADER_VERSION 1
 
+  /**
+   * @brief Magic Bytes used to identify FragmentHeaders in a raw data stream
+  */
   uint32_t fragment_header_marker = FRAGMENT_HEADER_MAGIC; // NOLINT(build/unsigned)
+  /**
+   * @brief Version of the FragmentHeader
+  */
   uint32_t version = FRAGMENT_HEADER_VERSION;              // NOLINT(build/unsigned)
 
+  /**
+   * @brief Size of the Fragment (including header and payload)
+  */
   fragment_size_t size; // NOLINT(build/unsigned)
 
+  /**
+   * @brief Trigger Number this Fragment is associated with
+  */
   trigger_number_t trigger_number;
 
+  /**
+   * @brief Timestamp of the TriggerDecision
+  */
   timestamp_t trigger_timestamp;
+  /**
+   * @brief Window offset of data in the Fragment
+  */
   timestamp_diff_t window_offset;
+  /**
+   * @brief Window width of data in the Fragment
+  */
   timestamp_diff_t window_width;
 
+  /**
+   * @brief Run number this Fragment is associated with
+  */
   run_number_t run_number;
-  GeoID link_ID;
-  uint32_t error_bits; // NOLINT(build/unsigned)
+  /**
+   * @brief Component that generated the data in this Fragment
+  */
+  GeoID link_id;
+  /**
+   * @brief Error bits set by the Upstream DAQ
+   * 
+   * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
+  */
+  uint32_t error_bits{ 0 }; // NOLINT(build/unsigned)
+  /**
+   * @brief Type of the Fragment, indicating the format of the contained payload
+  */
   fragment_type_t fragment_type;
 };
 
+/**
+ * @brief Stream a Fragment Header in human-readable form
+ * @param o Stream to write to
+ * @param hdr FragmentHeader to stream
+ * @return Stream instance for further streaming
+*/
 inline std::ostream&
 operator<<(std::ostream& o, FragmentHeader const& hdr)
 {
-  return o << "version: " << hdr.version << ", "
+  return o << "check_word: " << std::hex << hdr.fragment_header_marker << std::dec << ", "
+           << "version: " << hdr.version << ", "
            << "size: " << hdr.size << ", "
            << "trigger_number: " << hdr.trigger_number << ", "
            << "run_number: " << hdr.run_number << ", "
            << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
            << "window_offset: " << hdr.window_offset << ", "
            << "window_width: " << hdr.window_width << ", "
-           << "link_ID: " << hdr.link_ID << ", "
+           << "link_id: " << hdr.link_id << ", "
            << "error_bits: " << hdr.error_bits << ", "
            << "fragment_type : " << hdr.fragment_type;
 }
