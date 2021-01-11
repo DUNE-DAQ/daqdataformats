@@ -33,7 +33,7 @@ struct ComponentRequest
    *                  ^ timestamp
    *                      ^ ts - offset + width
   */
-  timestamp_diff_t window_offset;
+  timestamp_diff_t window_offset {0};
   /**
    * @brief Width of the data collection window
    * 
@@ -43,7 +43,7 @@ struct ComponentRequest
    *                  ^ timestamp
    *                      ^ ts - offset + width
   */
-  timestamp_diff_t window_width;
+  timestamp_diff_t window_width {0};
 };
 
 /**
