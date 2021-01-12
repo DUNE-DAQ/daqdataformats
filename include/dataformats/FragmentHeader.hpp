@@ -40,30 +40,30 @@ struct FragmentHeader
   /**
    * @brief Size of the Fragment (including header and payload)
   */
-  fragment_size_t size; // NOLINT(build/unsigned)
+  fragment_size_t size {0}; // NOLINT(build/unsigned)
 
   /**
    * @brief Trigger Number this Fragment is associated with
   */
-  trigger_number_t trigger_number;
+  trigger_number_t trigger_number {0};
 
   /**
    * @brief Timestamp of the TriggerDecision
   */
-  timestamp_t trigger_timestamp;
+  timestamp_t trigger_timestamp {0};
   /**
    * @brief Window offset of data in the Fragment
   */
-  timestamp_diff_t window_offset;
+  timestamp_diff_t window_offset {0};
   /**
    * @brief Window width of data in the Fragment
   */
-  timestamp_diff_t window_width;
+  timestamp_diff_t window_width {0};
 
   /**
    * @brief Run number this Fragment is associated with
   */
-  run_number_t run_number;
+  run_number_t run_number {0};
   /**
    * @brief Component that generated the data in this Fragment
   */
@@ -77,7 +77,7 @@ struct FragmentHeader
   /**
    * @brief Type of the Fragment, indicating the format of the contained payload
   */
-  fragment_type_t fragment_type;
+  fragment_type_t fragment_type {0};
 };
 
 /**

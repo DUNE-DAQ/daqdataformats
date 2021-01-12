@@ -39,21 +39,21 @@ struct TriggerRecordHeaderData
   /**
    * @brief Trigger Number
    */
-  trigger_number_t trigger_number;
+  trigger_number_t trigger_number {0};
   /**
    * @brief Timestamp of the TriggerDecision
    */
-  timestamp_t trigger_timestamp;
+  timestamp_t trigger_timestamp {0};
 
   /**
    * @brief Number of ComponentRequest objects stored in the TriggerRecordHeader
    */
-  uint64_t num_requested_components; // NOLINT(build/unsigned)
+  uint64_t num_requested_components {0}; // NOLINT(build/unsigned)
 
   /**
    * @brief Run Number for the TriggerRecord
    */
-  run_number_t run_number;
+  run_number_t run_number {0};
   /**
    * @brief Error bits for the TriggerRecord
    *
@@ -64,7 +64,7 @@ struct TriggerRecordHeaderData
   /**
    * @brief Type of the TriggerDecision
    */
-  trigger_type_t trigger_type;
+  trigger_type_t trigger_type {0};
   uint64_t unused : 48; // NOLINT(build/unsigned)
 };
 

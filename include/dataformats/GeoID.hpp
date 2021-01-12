@@ -24,11 +24,11 @@ struct GeoID
   /**
    * @brief APA Number of the component
   */
-  uint32_t apa_number;  // NOLINT(build/unsigned)
+  uint32_t apa_number {0};  // NOLINT(build/unsigned)
   /**
    * @brief Link Number of the component
   */
-  uint32_t link_number; // NOLINT(build/unsigned)
+  uint32_t link_number {0}; // NOLINT(build/unsigned)
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
