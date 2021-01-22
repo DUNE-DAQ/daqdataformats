@@ -11,7 +11,13 @@
 
 #include <cstdint>
 
+/**
+ * @brief The DUNE-DAQ namespace
+ */
 namespace dunedaq {
+/**
+ * @brief Dataformats code
+ */
 namespace dataformats {
 
 /**
