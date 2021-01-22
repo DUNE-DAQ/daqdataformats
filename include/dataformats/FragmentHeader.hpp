@@ -25,7 +25,13 @@ namespace dataformats {
 */
 struct FragmentHeader
 {
+/**
+ * @brief Magic bytes to identify a FragmentHeader entry in a raw data stream
+ */
 #define FRAGMENT_HEADER_MAGIC 0x11112222
+/**
+ * @brief The current version of the Fragment
+ */
 #define FRAGMENT_HEADER_VERSION 1
 
   /**
