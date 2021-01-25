@@ -118,10 +118,10 @@ public:
     header_()->m_fragment_type = header.m_fragment_type;
   }
   /**
-   * @brief Get a pointer to the Fragment's data array for I/O
+   * @brief Get a pointer to the Fragment's data array for output
    * @return Pointer to the Fragment's data array
    */
-  void* get_storage_location() const { return m_data_arr_; }
+  const void* get_storage_location() const { return m_data_arr_; }
 
   // Header setters and getters
   /**
