@@ -42,16 +42,16 @@ public:
     size_t size = sizeof(FragmentHeader) +
                   std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
 
-    m_data_arr_ = malloc(size); // NOLINT(build/unsigned)
-    m_alloc_ = true;
+    m_data_arr = malloc(size); // NOLINT(build/unsigned)
+    m_alloc = true;
 
     FragmentHeader header;
     header.m_size = size;
-    memcpy(m_data_arr_, &header, sizeof(header));
+    memcpy(m_data_arr, &header, sizeof(header));
 
     size_t offset = sizeof(FragmentHeader);
     for (auto& piece : pieces) {
-      memcpy(static_cast<uint8_t*>(m_data_arr_) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
+      memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
       offset += piece.second;
     }
   }
@@ -72,12 +72,12 @@ public:
   explicit Fragment(void* existing_fragment_buffer, bool copy_from_buffer = false)
   {
     if (!copy_from_buffer) {
-      m_data_arr_ = existing_fragment_buffer;
+      m_data_arr = existing_fragment_buffer;
     } else {
       auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
-      m_data_arr_ = malloc(header->m_size);
-      m_alloc_ = true;
-      memcpy(m_data_arr_, existing_fragment_buffer, header->m_size);
+      m_data_arr = malloc(header->m_size);
+      m_alloc = true;
+      memcpy(m_data_arr, existing_fragment_buffer, header->m_size);
     }
   }
 
@@ -91,8 +91,8 @@ public:
    */
   ~Fragment()
   {
-    if (m_alloc_)
-      free(m_data_arr_);
+    if (m_alloc)
+      free(m_data_arr);
   }
 
   /**
@@ -121,7 +121,7 @@ public:
    * @brief Get a pointer to the Fragment's data array for I/O
    * @return Pointer to the Fragment's data array
    */
-  void* get_storage_location() const { return m_data_arr_; }
+  void* get_storage_location() const { return m_data_arr; }
 
   // Header setters and getters
   /**
@@ -241,12 +241,12 @@ public:
 
 private:
   /**
-   * @brief Get the FragmentHeader from the m_data_arr_ array
+   * @brief Get the FragmentHeader from the m_data_arr array
    * @return Pointer to the FragmentHeader
    */
-  FragmentHeader* header_() const { return static_cast<FragmentHeader*>(m_data_arr_); } // NOLINT
-  void* m_data_arr_{ nullptr }; ///< Flat memory containing a FragmentHeader and the data payload
-  bool m_alloc_{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr_
+  FragmentHeader* header_() const { return static_cast<FragmentHeader*>(m_data_arr); } // NOLINT
+  void* m_data_arr{ nullptr }; ///< Flat memory containing a FragmentHeader and the data payload
+  bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };
 } // namespace dataformats
 } // namespace dunedaq

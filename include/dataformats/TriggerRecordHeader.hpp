@@ -36,16 +36,16 @@ public:
   {
     size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
 
-    m_data_arr_ = malloc(size); // NOLINT(build/unsigned)
-    m_alloc_ = true;
+    m_data_arr = malloc(size); // NOLINT(build/unsigned)
+    m_alloc = true;
 
     TriggerRecordHeaderData header;
     header.m_num_requested_components = components.size();
-    memcpy(m_data_arr_, &header, sizeof(header));
+    memcpy(m_data_arr, &header, sizeof(header));
 
     size_t offset = sizeof(header);
     for (auto const& component : components) {
-      memcpy(static_cast<uint8_t*>(m_data_arr_) + offset, &component, sizeof(ComponentRequest)); // NOLINT
+      memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(ComponentRequest)); // NOLINT
       offset += sizeof(ComponentRequest);
     }
   }
@@ -59,14 +59,14 @@ public:
   explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false)
   {
     if (!copy_from_buffer) {
-      m_data_arr_ = existing_trigger_record_header_buffer;
+      m_data_arr = existing_trigger_record_header_buffer;
     } else {
       auto header = reinterpret_cast<TriggerRecordHeaderData*>(existing_trigger_record_header_buffer); // NOLINT
       size_t size = header->m_num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
 
-      m_data_arr_ = malloc(size);
-      m_alloc_ = true;
-      memcpy(m_data_arr_, existing_trigger_record_header_buffer, size);
+      m_data_arr = malloc(size);
+      m_alloc = true;
+      memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
     }
   }
 
@@ -75,7 +75,7 @@ public:
    * @param other TriggerRecordHeader to copy
    */
   TriggerRecordHeader(TriggerRecordHeader const& other)
-    : TriggerRecordHeader(other.m_data_arr_, true)
+    : TriggerRecordHeader(other.m_data_arr, true)
   {}
   /**
    * @brief TriggerRecordHeader copy assignment operator
@@ -87,9 +87,9 @@ public:
     if (&other == this)
       return *this;
 
-    m_data_arr_ = malloc(other.get_total_size_bytes());
-    m_alloc_ = true;
-    memcpy(m_data_arr_, other.m_data_arr_, other.get_total_size_bytes());
+    m_data_arr = malloc(other.get_total_size_bytes());
+    m_alloc = true;
+    memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());
     return *this;
   }
 
@@ -101,8 +101,8 @@ public:
    */
   ~TriggerRecordHeader()
   {
-    if (m_alloc_)
-      free(m_data_arr_);
+    if (m_alloc)
+      free(m_data_arr);
   }
 
   /**
@@ -202,7 +202,7 @@ public:
    * @brief Get the location of the flat data array for I/O
    * @return Pointer to the TriggerRecordHeader data array
    */
-  void* get_storage_location() const { return m_data_arr_; }
+  void* get_storage_location() const { return m_data_arr; }
 
   /**
    * @brief Access ComponentRequest and copy result
@@ -246,13 +246,13 @@ public:
 
 private:
   /**
-   * @brief Get the TriggerRecordHeaderData from the m_data_arr_ array
+   * @brief Get the TriggerRecordHeaderData from the m_data_arr array
    * @return Pointer to the TriggerRecordHeaderData
    */
-  TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr_); } // NOLINT
+  TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr); } // NOLINT
   
-  void* m_data_arr_{ nullptr }; ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
-  bool m_alloc_{ false };       ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr_
+  void* m_data_arr{ nullptr }; ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
+  bool m_alloc{ false };       ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr
 };
 
 } // namespace dataformats
