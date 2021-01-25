@@ -22,7 +22,7 @@ namespace dataformats {
 
 /**
  * @brief The header for a DUNE Fragment
-*/
+ */
 struct FragmentHeader
 {
 /**
@@ -36,54 +36,54 @@ struct FragmentHeader
 
   /**
    * @brief Magic Bytes used to identify FragmentHeaders in a raw data stream
-  */
-  uint32_t fragment_header_marker = FRAGMENT_HEADER_MAGIC; // NOLINT(build/unsigned)
+   */
+  uint32_t m_fragment_header_marker = FRAGMENT_HEADER_MAGIC; // NOLINT(build/unsigned)
   /**
    * @brief Version of the FragmentHeader
-  */
-  uint32_t version = FRAGMENT_HEADER_VERSION;              // NOLINT(build/unsigned)
+   */
+  uint32_t m_version = FRAGMENT_HEADER_VERSION; // NOLINT(build/unsigned)
 
   /**
    * @brief Size of the Fragment (including header and payload)
-  */
-  fragment_size_t size {0}; // NOLINT(build/unsigned)
+   */
+  fragment_size_t m_size{ 0 }; // NOLINT(build/unsigned)
 
   /**
    * @brief Trigger Number this Fragment is associated with
-  */
-  trigger_number_t trigger_number {0};
+   */
+  trigger_number_t m_trigger_number{ 0 };
 
   /**
    * @brief Timestamp of the TriggerDecision
-  */
-  timestamp_t trigger_timestamp {0};
+   */
+  timestamp_t m_trigger_timestamp{ 0 };
   /**
    * @brief Window offset of data in the Fragment
-  */
-  timestamp_diff_t window_offset {0};
+   */
+  timestamp_diff_t m_window_offset{ 0 };
   /**
    * @brief Window width of data in the Fragment
-  */
-  timestamp_diff_t window_width {0};
+   */
+  timestamp_diff_t m_window_width{ 0 };
 
   /**
    * @brief Run number this Fragment is associated with
-  */
-  run_number_t run_number {0};
+   */
+  run_number_t m_run_number{ 0 };
   /**
    * @brief Component that generated the data in this Fragment
-  */
-  GeoID link_id;
+   */
+  GeoID m_link_id;
   /**
    * @brief Error bits set by the Upstream DAQ
-   * 
+   *
    * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
-  */
-  uint32_t error_bits{ 0 }; // NOLINT(build/unsigned)
+   */
+  uint32_t m_error_bits{ 0 }; // NOLINT(build/unsigned)
   /**
    * @brief Type of the Fragment, indicating the format of the contained payload
-  */
-  fragment_type_t fragment_type {0};
+   */
+  fragment_type_t m_fragment_type{ 0 };
 };
 
 /**
@@ -91,21 +91,21 @@ struct FragmentHeader
  * @param o Stream to write to
  * @param hdr FragmentHeader to stream
  * @return Stream instance for further streaming
-*/
+ */
 inline std::ostream&
 operator<<(std::ostream& o, FragmentHeader const& hdr)
 {
-  return o << "check_word: " << std::hex << hdr.fragment_header_marker << std::dec << ", "
-           << "version: " << hdr.version << ", "
-           << "size: " << hdr.size << ", "
-           << "trigger_number: " << hdr.trigger_number << ", "
-           << "run_number: " << hdr.run_number << ", "
-           << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
-           << "window_offset: " << hdr.window_offset << ", "
-           << "window_width: " << hdr.window_width << ", "
-           << "link_id: " << hdr.link_id << ", "
-           << "error_bits: " << hdr.error_bits << ", "
-           << "fragment_type : " << hdr.fragment_type;
+  return o << "check_word: " << std::hex << hdr.m_fragment_header_marker << std::dec << ", "
+           << "version: " << hdr.m_version << ", "
+           << "size: " << hdr.m_size << ", "
+           << "trigger_number: " << hdr.m_trigger_number << ", "
+           << "run_number: " << hdr.m_run_number << ", "
+           << "trigger_timestamp: " << hdr.m_trigger_timestamp << ", "
+           << "window_offset: " << hdr.m_window_offset << ", "
+           << "window_width: " << hdr.m_window_width << ", "
+           << "link_id: " << hdr.m_link_id << ", "
+           << "error_bits: " << hdr.m_error_bits << ", "
+           << "fragment_type : " << hdr.m_fragment_type;
 }
 
 } // namespace dataformats

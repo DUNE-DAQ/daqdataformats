@@ -22,31 +22,31 @@ namespace dataformats {
 
 /**
  * @brief Type used to represent run number
-*/
-using run_number_t = uint32_t;     // NOLINT(build/unsigned)
+ */
+using run_number_t = uint32_t; // NOLINT(build/unsigned)
 /**
  * @brief Type used to represent trigger number
-*/
+ */
 using trigger_number_t = uint64_t; // NOLINT(build/unsigned)
 /**
  * @brief Type used to represent Fragment type ID
-*/
-using fragment_type_t = uint32_t;  // NOLINT(build/unsigned)
+ */
+using fragment_type_t = uint32_t; // NOLINT(build/unsigned)
 /**
  * @brief Type used to represent Fragment size
-*/
-using fragment_size_t = uint64_t;  // NOLINT(build/unsigned)
+ */
+using fragment_size_t = uint64_t; // NOLINT(build/unsigned)
 /**
  * @brief Type used to represent DUNE timing system timestamps
-*/
-using timestamp_t = uint64_t;      // NOLINT(build/unsigned)
+ */
+using timestamp_t = uint64_t; // NOLINT(build/unsigned)
 /**
  * @brief Type used to represent differences between DUNE system timestamps
-*/
+ */
 using timestamp_diff_t = int64_t;
 /**
  * @brief Type used to represent Trigger Decision trigger types
-*/
+ */
 using trigger_type_t = uint16_t; // NOLINT(build/unsigned)
 } // namespace dataformats
 } // namespace dunedaq
