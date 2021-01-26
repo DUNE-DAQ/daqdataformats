@@ -306,13 +306,13 @@ operator<<(std::ostream& o, const ColdataBlock& block)
 {
   o << block.m_head;
 
-  o << "\t\t0\t1\t2\t3\t4\t5\t6\t7" << std::endl;
+  o << "\t\t0\t1\t2\t3\t4\t5\t6\t7\n";
   for (int i = 0; i < 8; i++) {
     o << "Stream " << i << ":\t";
     for (int j = 0; j < 8; j++) {
       o << std::hex << block.channel(i, j) << '\t';
     }
-    o << std::dec << std::endl;
+    o << std::dec << '\n';
   }
   return o;
 }
@@ -342,8 +342,8 @@ struct WIBFrame
 inline std::ostream&
 operator<<(std::ostream& o, WIBFrame const& frame)
 {
-  o << "Printing frame:" << std::endl;
-  o << frame.m_head << std::endl;
+  o << "Printing frame:" << '\n';
+  o << frame.m_head << '\n';
   for (auto b : frame.m_blocks) {
     o << b;
   }
