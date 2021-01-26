@@ -37,7 +37,7 @@ public:
    * @brief Fragment constructor using a vector of buffer pointers
    * @param pieces Vector of pairs of pointer/size pairs used to initialize Fragment payload
    */
-  explicit Fragment(std::vector<std::pair<void*, size_t>> pieces)
+  explicit Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
   {
     size_t size = sizeof(FragmentHeader) +
                   std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
@@ -99,14 +99,14 @@ public:
    * @brief Get a copy of the FragmentHeader struct
    * @return A copy of the FragmentHeader struct stored in this Fragment
    */
-  FragmentHeader const& get_header() const { return *header_(); }
+  FragmentHeader get_header() const { return *header_(); }
   /**
    * @brief Copy fields from the provided header in this Fragment's header
    * @param header Header to copy into the Fragment data array
    *
-   * The fragment_header_marker, version and size FragmentHeader fields are *not* copied from the given FragmentHeader
+   * The size FragmentHeader field is *not* copied from the given FragmentHeader
    */
-  void set_header_fields(FragmentHeader header)
+  void set_header_fields(const FragmentHeader& header)
   {
     header_()->m_trigger_number = header.m_trigger_number;
     header_()->m_trigger_timestamp = header.m_trigger_timestamp;
@@ -118,10 +118,10 @@ public:
     header_()->m_fragment_type = header.m_fragment_type;
   }
   /**
-   * @brief Get a pointer to the Fragment's data array for I/O
+   * @brief Get a pointer to the Fragment's data array to read its contents directly
    * @return Pointer to the Fragment's data array
    */
-  void* get_storage_location() const { return m_data_arr; }
+  const void* get_storage_location() const { return m_data_arr; }
 
   // Header setters and getters
   /**
@@ -244,7 +244,7 @@ private:
    * @brief Get the FragmentHeader from the m_data_arr array
    * @return Pointer to the FragmentHeader
    */
-  FragmentHeader* header_() const { return static_cast<FragmentHeader*>(m_data_arr); } // NOLINT
+  FragmentHeader* header_() const { return static_cast<FragmentHeader*>(m_data_arr); } 
   void* m_data_arr{ nullptr }; ///< Flat memory containing a FragmentHeader and the data payload
   bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };

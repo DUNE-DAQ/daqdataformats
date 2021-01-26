@@ -20,28 +20,31 @@
 namespace dunedaq {
 namespace dataformats {
 
+
 /**
  * @brief The header for a DUNE Fragment
  */
 struct FragmentHeader
 {
-/**
- * @brief Magic bytes to identify a FragmentHeader entry in a raw data stream
- */
-#define FRAGMENT_HEADER_MAGIC 0x11112222
-/**
- * @brief The current version of the Fragment
- */
-#define FRAGMENT_HEADER_VERSION 1
+ /**
+  * @brief Magic bytes to identify a FragmentHeader entry in a raw data stream
+  */
+  static constexpr uint32_t s_fragment_header_magic = 0x11112222; // NOLINT(build/unsigned)
 
+  /**
+   * @brief The current version of the Fragment
+  */
+  static constexpr uint32_t s_fragment_header_version = 1; // NOLINT(build/unsigned)
+  
   /**
    * @brief Magic Bytes used to identify FragmentHeaders in a raw data stream
    */
-  uint32_t m_fragment_header_marker = FRAGMENT_HEADER_MAGIC; // NOLINT(build/unsigned)
+  uint32_t m_fragment_header_marker = s_fragment_header_magic; // NOLINT(build/unsigned)
+
   /**
    * @brief Version of the FragmentHeader
    */
-  uint32_t m_version = FRAGMENT_HEADER_VERSION; // NOLINT(build/unsigned)
+  uint32_t m_version = s_fragment_header_version; // NOLINT(build/unsigned)
 
   /**
    * @brief Size of the Fragment (including header and payload)
@@ -96,7 +99,7 @@ inline std::ostream&
 operator<<(std::ostream& o, FragmentHeader const& hdr)
 {
   return o << "check_word: " << std::hex << hdr.m_fragment_header_marker << std::dec << ", "
-           << "version: " << hdr.m_version << ", "
+	   << "version: " << hdr.m_version << ", "
            << "size: " << hdr.m_size << ", "
            << "trigger_number: " << hdr.m_trigger_number << ", "
            << "run_number: " << hdr.m_run_number << ", "

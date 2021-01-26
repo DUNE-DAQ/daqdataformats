@@ -6,10 +6,10 @@ find_package(daq-cmake REQUIRED)
 daq_setup_environment()
 
 #find_package(cetlib REQUIRED)
-#find_package(ers REQUIRED)
+find_package(ers REQUIRED)
 find_package(Boost 1.70.0 COMPONENTS unit_test_framework REQUIRED)
 
-#set(RAWDATA_DEPENDENCIES ${CETLIB} ${CETLIB_EXCEPT} ers::ers cmdlib::cmdlib nlohmann_json::nlohmann_json pistache_shared)
+set(RAWDATA_DEPENDENCIES ers::ers)
 
 ##############################################################################
 # Main library
@@ -29,8 +29,8 @@ daq_add_library(*.cpp LINK_LIBRARIES ${RAWDATA_DEPENDENCIES})
 ##############################################################################
 # Unit Tests
 
-daq_add_unit_test(Fragment_test)
-daq_add_unit_test(TriggerRecord_test)
+daq_add_unit_test(Fragment_test       LINK_LIBRARIES dataformats)
+daq_add_unit_test(TriggerRecord_test  LINK_LIBRARIES dataformats)
 
 ##############################################################################
 

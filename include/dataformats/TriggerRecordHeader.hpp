@@ -13,11 +13,19 @@
 #include "dataformats/TriggerRecordHeaderData.hpp"
 #include "dataformats/Types.hpp"
 
+#include "ers/ers.h"
+
 #include <ostream>
 #include <string>
 #include <vector>
 
 namespace dunedaq {
+
+ERS_DECLARE_ISSUE(dataformats, ComponentRequestIndexError,
+                  "Supplied ComponentRequest index " << cri_index_supplied << 
+		  " is greater than the maximum index " << cri_index_max,
+                  ((int)cri_index_supplied)
+                  ((int)cri_index_max))
 
 namespace dataformats {
 
@@ -32,7 +40,7 @@ public:
    * @brief Construct a TriggerRecordHeader using a vector of ComponentRequest objects
    * @param components Vector of ComponentRequests to copy into TriggerRecordHeader
    */
-  explicit TriggerRecordHeader(std::vector<ComponentRequest> components)
+  explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components)
   {
     size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
 
@@ -45,8 +53,8 @@ public:
 
     size_t offset = sizeof(header);
     for (auto const& component : components) {
-      memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(ComponentRequest)); // NOLINT
-      offset += sizeof(ComponentRequest);
+      memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(component)); // NOLINT
+      offset += sizeof(component);
     }
   }
 
@@ -202,23 +210,18 @@ public:
    * @brief Get the location of the flat data array for I/O
    * @return Pointer to the TriggerRecordHeader data array
    */
-  void* get_storage_location() const { return m_data_arr; }
+  const void* get_storage_location() const { return m_data_arr; }
 
   /**
    * @brief Access ComponentRequest and copy result
    * @param idx Index to access
    * @return Copy of ComponentRequest at index
-   * @throws std::out_of_range exception if idx is outside of allowable range
+   * @throws ComponentRequestIndexError exception if idx is outside of allowable range
    */
   ComponentRequest at(size_t idx) const
   {
     if (idx >= header_()->m_num_requested_components) {
-      /** @todo Eric Flumerfelt <eflumerf@fnal.gov>, 01/07/2021: Discuss whether throwing an ERS exception here would be
-       * more correct, given that this code may be shared with the Offline
-       */
-      throw std::out_of_range(std::string("Supplied ComponentRequest index ") + std::to_string(idx) +
-                              " is greater than the maximum index " +
-                              std::to_string(header_()->m_num_requested_components - 1));
+      throw ComponentRequestIndexError(ERS_HERE, idx, header_()->m_num_requested_components - 1);
     }
     // Increment header pointer by one to skip header
     return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
@@ -228,17 +231,12 @@ public:
    * @brief Operator[] to access ComponentRequests by index
    * @param idx Index to access
    * @return ComponentRequest reference
-   * @throws std::out_of_range exception if idx is outside of allowable range
+   * @throws ComponentRequestIndexError exception if idx is outside of allowable range
    */
   ComponentRequest& operator[](size_t idx)
   {
     if (idx >= header_()->m_num_requested_components) {
-      /** @todo Eric Flumerfelt <eflumerf@fnal.gov>, 01/07/2021: Discuss whether throwing an ERS exception here would be
-       * more correct, given that this code may be shared with the Offline
-       */
-      throw std::out_of_range(std::string("Supplied ComponentRequest index ") + std::to_string(idx) +
-                              " is greater than the maximum index " +
-                              std::to_string(header_()->m_num_requested_components - 1));
+      throw ComponentRequestIndexError(ERS_HERE, idx, header_()->m_num_requested_components - 1);
     }
     // Increment header pointer by one to skip header
     return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
@@ -249,7 +247,7 @@ private:
    * @brief Get the TriggerRecordHeaderData from the m_data_arr array
    * @return Pointer to the TriggerRecordHeaderData
    */
-  TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr); } // NOLINT
+  TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr); } 
   
   void* m_data_arr{ nullptr }; ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
   bool m_alloc{ false };       ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr

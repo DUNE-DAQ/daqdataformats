@@ -27,20 +27,20 @@ struct TriggerRecordHeaderData
 /**
  * @brief Magic bytes to identify a TriggerRecordHeader entry in a raw data stream
  */
-#define TRIGGER_RECORD_HEADER_MAGIC 0x33334444
+  static constexpr uint32_t s_trigger_record_header_magic = 0x33334444; // NOLINT(build/unsigned)
 /**
  * @brief The current version of the TriggerRecordHeader
  */
-#define TRIGGER_RECORD_HEADER_VERSION 1
+  static constexpr uint32_t s_trigger_record_header_version = 1; // NOLINT(build/unsigned)
 
   /**
    * @brief Magic bytes used to identify a TriggerRecordHeaderData struct in a raw data stream
    */
-  uint32_t m_trigger_record_header_marker = TRIGGER_RECORD_HEADER_MAGIC; // NOLINT(build/unsigned)
+  uint32_t m_trigger_record_header_marker = s_trigger_record_header_magic; // NOLINT(build/unsigned)
   /**
    * @brief Version of the TriggerRecordHeaderData structure
    */
-  uint32_t m_version = TRIGGER_RECORD_HEADER_VERSION; // NOLINT(build/unsigned)
+  uint32_t m_version = s_trigger_record_header_version; // NOLINT(build/unsigned)
 
   /**
    * @brief Trigger Number
