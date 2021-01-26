@@ -35,6 +35,24 @@ struct FragmentHeader
    */
   static constexpr uint32_t s_fragment_header_version = 1; // NOLINT(build/unsigned)
 
+  static constexpr fragment_size_t s_invalid_fragment_size =
+    0; ///< Invalid size for a Fragment (as FragmentHeader is counted as well)
+  static constexpr trigger_number_t s_invalid_trigger_number =
+    std::numeric_limits<trigger_number_t>::max(); ///< An invalid trigger number
+  static constexpr timestamp_t s_invalid_timestamp = std::numeric_limits<timestamp_t>::max(); ///< An invalid timestamp
+  static constexpr timestamp_diff_t s_invalid_offset =
+    std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid timestamp offset
+  static constexpr timestamp_diff_t s_invalid_width =
+    std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid window width
+  static constexpr run_number_t s_invalid_run_number =
+    std::numeric_limits<run_number_t>::max(); ///< An invalid run number
+  /**
+   * @brief By default, all error bits are unset
+   */
+  static constexpr uint32_t s_default_error_bits = 0; // NOLINT(build/unsigned)
+  static constexpr fragment_type_t s_invalid_fragment_type =
+    std::numeric_limits<fragment_type_t>::max(); ///< An invalid fragment type
+
   /**
    * @brief Magic Bytes used to identify FragmentHeaders in a raw data stream
    */
@@ -45,39 +63,31 @@ struct FragmentHeader
    */
   uint32_t m_version = s_fragment_header_version; // NOLINT(build/unsigned)
 
-  static constexpr fragment_size_t s_invalid_fragment_size =
-    0; ///< Invalid size for a Fragment (as FragmentHeader is counted as well)
   /**
    * @brief Size of the Fragment (including header and payload)
    */
   fragment_size_t m_size{ s_invalid_fragment_size }; // NOLINT(build/unsigned)
 
-  static constexpr trigger_number_t s_invalid_trigger_number =
-    std::numeric_limits<trigger_number_t>::max(); ///< An invalid trigger number
   /**
    * @brief Trigger Number this Fragment is associated with
    */
   trigger_number_t m_trigger_number{ s_invalid_trigger_number };
 
-  static constexpr timestamp_t s_invalid_timestamp = std::numeric_limits<timestamp_t>::max(); ///< An invalid timestamp
   /**
    * @brief Timestamp of the TriggerDecision
    */
   timestamp_t m_trigger_timestamp{ s_invalid_timestamp };
 
-  static constexpr timestamp_diff_t s_invalid_offset = std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid timestamp offset
   /**
    * @brief Window offset of data in the Fragment
    */
   timestamp_diff_t m_window_offset{ s_invalid_offset };
 
-  static constexpr timestamp_diff_t s_invalid_width = std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid window width
   /**
    * @brief Window width of data in the Fragment
    */
   timestamp_diff_t m_window_width{ s_invalid_width };
 
-  static constexpr run_number_t s_invalid_run_number = std::numeric_limits<run_number_t>::max(); ///< An invalid run number
   /**
    * @brief Run number this Fragment is associated with
    */
@@ -89,17 +99,12 @@ struct FragmentHeader
   GeoID m_link_id;
 
   /**
-   * @brief By default, all error bits are unset
-   */
-  static constexpr uint32_t s_default_error_bits = 0; // NOLINT(build/unsigned)
-  /**
    * @brief Error bits set by the Upstream DAQ
    *
    * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
    */
   uint32_t m_error_bits{ s_default_error_bits }; // NOLINT(build/unsigned)
 
-  static constexpr fragment_type_t s_invalid_fragment_type = std::numeric_limits<fragment_type_t>::max(); ///< An invalid fragment type
   /**
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
