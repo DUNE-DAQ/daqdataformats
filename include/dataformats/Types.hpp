@@ -10,6 +10,7 @@
 #define DATAFORMATS_INCLUDE_DATAFORMATS_TYPES_HPP_
 
 #include <cstdint>
+#include <limits>
 
 /**
  * @brief The DUNE-DAQ namespace

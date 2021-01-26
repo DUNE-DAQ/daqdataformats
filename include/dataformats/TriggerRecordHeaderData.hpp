@@ -12,6 +12,7 @@
 #include "dataformats/ComponentRequest.hpp"
 #include "dataformats/Types.hpp"
 
+#include <limits>
 #include <ostream>
 #include <vector>
 

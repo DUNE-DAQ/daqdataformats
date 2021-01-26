@@ -10,6 +10,7 @@
 #define DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
 
 #include <cstdint>
+#include <limits>
 #include <ostream>
 #include <tuple>
 
