@@ -211,7 +211,7 @@ public:
    * @return Pointer to the TriggerRecordHeader data array
    */
 
-  const void* get_storage_location() const { return m_data_arr_; }
+  const void* get_storage_location() const { return m_data_arr; }
 
 
   /**

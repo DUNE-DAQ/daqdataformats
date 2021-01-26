@@ -22,13 +22,22 @@ namespace dataformats {
 struct GeoID
 {
   /**
+   * @brief An invalid APA number, used for initialization
+  */
+  static constexpr uint32_t s_invalid_apa_number = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
+  /**
+   * @brief An invalid link number, used for initialization
+   */
+  static constexpr uint32_t s_invalid_link_number = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
+
+  /**
    * @brief APA Number of the component
    */
-  uint32_t m_apa_number{ 0 }; // NOLINT(build/unsigned)
+  uint32_t m_apa_number{ s_invalid_apa_number }; // NOLINT(build/unsigned)
   /**
    * @brief Link Number of the component
    */
-  uint32_t m_link_number{ 0 }; // NOLINT(build/unsigned)
+  uint32_t m_link_number{ s_invalid_link_number }; // NOLINT(build/unsigned)
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)

@@ -35,23 +35,10 @@ struct FragmentHeader
    */
   static constexpr uint32_t s_fragment_header_version = 1; // NOLINT(build/unsigned)
 
-  static constexpr fragment_size_t s_invalid_fragment_size =
-    0; ///< Invalid size for a Fragment (as FragmentHeader is counted as well)
-  static constexpr trigger_number_t s_invalid_trigger_number =
-    std::numeric_limits<trigger_number_t>::max(); ///< An invalid trigger number
-  static constexpr timestamp_t s_invalid_timestamp = std::numeric_limits<timestamp_t>::max(); ///< An invalid timestamp
-  static constexpr timestamp_diff_t s_invalid_offset =
-    std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid timestamp offset
-  static constexpr timestamp_diff_t s_invalid_width =
-    std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid window width
-  static constexpr run_number_t s_invalid_run_number =
-    std::numeric_limits<run_number_t>::max(); ///< An invalid run number
   /**
    * @brief By default, all error bits are unset
    */
   static constexpr uint32_t s_default_error_bits = 0; // NOLINT(build/unsigned)
-  static constexpr fragment_type_t s_invalid_fragment_type =
-    std::numeric_limits<fragment_type_t>::max(); ///< An invalid fragment type
 
   /**
    * @brief Magic Bytes used to identify FragmentHeaders in a raw data stream
@@ -66,32 +53,32 @@ struct FragmentHeader
   /**
    * @brief Size of the Fragment (including header and payload)
    */
-  fragment_size_t m_size{ s_invalid_fragment_size }; // NOLINT(build/unsigned)
+  fragment_size_t m_size{ TypeDefaults::s_invalid_fragment_size }; // NOLINT(build/unsigned)
 
   /**
    * @brief Trigger Number this Fragment is associated with
    */
-  trigger_number_t m_trigger_number{ s_invalid_trigger_number };
+  trigger_number_t m_trigger_number{ TypeDefaults::s_invalid_trigger_number };
 
   /**
    * @brief Timestamp of the TriggerDecision
    */
-  timestamp_t m_trigger_timestamp{ s_invalid_timestamp };
+  timestamp_t m_trigger_timestamp{ TypeDefaults::s_invalid_timestamp };
 
   /**
    * @brief Window offset of data in the Fragment
    */
-  timestamp_diff_t m_window_offset{ s_invalid_offset };
+  timestamp_diff_t m_window_offset{ TypeDefaults::s_invalid_timestamp_diff };
 
   /**
    * @brief Window width of data in the Fragment
    */
-  timestamp_diff_t m_window_width{ s_invalid_width };
+  timestamp_diff_t m_window_width{ TypeDefaults::s_invalid_timestamp_diff };
 
   /**
    * @brief Run number this Fragment is associated with
    */
-  run_number_t m_run_number{ s_invalid_run_number };
+  run_number_t m_run_number{ TypeDefaults::s_invalid_run_number };
 
   /**
    * @brief Component that generated the data in this Fragment
@@ -108,7 +95,7 @@ struct FragmentHeader
   /**
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
-  fragment_type_t m_fragment_type{ s_invalid_fragment_type };
+  fragment_type_t m_fragment_type{ TypeDefaults::s_invalid_fragment_type };
 };
 
 /**
