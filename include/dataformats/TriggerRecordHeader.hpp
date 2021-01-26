@@ -207,10 +207,12 @@ public:
     return header_()->m_num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
   }
   /**
-   * @brief Get the location of the flat data array for I/O
+   * @brief Get the location of the flat data array for output
    * @return Pointer to the TriggerRecordHeader data array
    */
-  const void* get_storage_location() const { return m_data_arr; }
+
+  const void* get_storage_location() const { return m_data_arr_; }
+
 
   /**
    * @brief Access ComponentRequest and copy result
