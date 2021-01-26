@@ -57,14 +57,14 @@ struct WIBHeader
   }
 
   // Print functions for debugging.
-  std::ostream& printHex(std::ostream& o) const
+  std::ostream& print_hex(std::ostream& o) const
   {
     return o << std::hex << "SOF:" << m_sof << " version:" << m_version << " fiber:" << m_fiber_no
              << " slot:" << m_slot_no << " crate:" << m_crate_no << " mm:" << m_mm << " oos:" << m_oos
              << " wib_errors:" << m_wib_errors << " timestamp: " << timestamp() << std::dec << '\n';
   }
 
-  std::ostream& printBits(std::ostream& o) const
+  std::ostream& print_bits(std::ostream& o) const
   {
     return o << "SOF:" << std::bitset<8>(m_sof) << " version:" << std::bitset<5>(m_version)
              << " fiber:" << std::bitset<3>(m_fiber_no) << " slot:" << std::bitset<5>(m_slot_no)
@@ -159,7 +159,7 @@ struct ColdataHeader
   }
 
   // Print functions for debugging.
-  std::ostream& printHex(std::ostream& o) const
+  std::ostream& print_hex(std::ostream& o) const
   {
     o << std::hex << "s1_error:" << m_s1_error << " s2_error:" << m_s2_error << " checksum_a1:" << m_checksum_a_1
       << " checksum_b1:" << m_checksum_b_1 << " checksum_a2:" << m_checksum_a_2 << " checksum_b1:" << m_checksum_b_2
@@ -168,7 +168,7 @@ struct ColdataHeader
       << " hdr_5:" << m_hdr_5 << " hdr_6:" << m_hdr_6 << " hdr_7:" << m_hdr_7 << " hdr_8:" << m_hdr_8;
     return o << '\n';
   }
-  std::ostream& printBits(std::ostream& o) const
+  std::ostream& print_bits(std::ostream& o) const
   {
     o << "s1_error:" << std::bitset<4>(m_s1_error) << " s2_error:" << std::bitset<4>(m_s2_error)
       << " checksum_a1:" << std::bitset<8>(m_checksum_a_1) << " checksum_b1:" << std::bitset<8>(m_checksum_b_1)
