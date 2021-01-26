@@ -49,8 +49,9 @@ using timestamp_diff_t = int64_t;
  */
 using trigger_type_t = uint16_t; // NOLINT(build/unsigned)
 
-struct TypeDefaults
+class TypeDefaults
 {
+public:
   static constexpr run_number_t s_invalid_run_number =
     std::numeric_limits<run_number_t>::max(); ///< An invalid run number
   static constexpr trigger_number_t s_invalid_trigger_number =
@@ -62,7 +63,8 @@ struct TypeDefaults
   static constexpr timestamp_t s_invalid_timestamp = std::numeric_limits<timestamp_t>::max(); ///< An invalid timestamp
   static constexpr timestamp_diff_t s_invalid_timestamp_diff =
     std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid timestamp difference
-  static constexpr trigger_type_t s_invalid_trigger_Type = std::numeric_limits<trigger_type_t>::max(); ///< An invalid trigger type
+  static constexpr trigger_type_t s_invalid_trigger_type =
+    std::numeric_limits<trigger_type_t>::max(); ///< An invalid trigger type
 };
 
 } // namespace dataformats

@@ -23,7 +23,7 @@ struct GeoID
 {
   /**
    * @brief An invalid APA number, used for initialization
-  */
+   */
   static constexpr uint32_t s_invalid_apa_number = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
   /**
    * @brief An invalid link number, used for initialization
