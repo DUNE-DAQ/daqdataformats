@@ -31,7 +31,7 @@ struct WIBHeader
   word_t m_timestamp_1;
   word_t m_timestamp_2 : 16, m_wib_counter_1 : 15, m_z : 1;
 
-  uint64_t timestamp() const // NOLINT(build/unsigned)
+  uint64_t get_timestamp() const // NOLINT(build/unsigned)
   {
     uint64_t timestamp = m_timestamp_1 | ((uint64_t)m_timestamp_2 << 32); // NOLINT(build/unsigned)
     if (!m_z) {
@@ -61,7 +61,7 @@ struct WIBHeader
   {
     return o << std::hex << "SOF:" << m_sof << " version:" << m_version << " fiber:" << m_fiber_no
              << " slot:" << m_slot_no << " crate:" << m_crate_no << " mm:" << m_mm << " oos:" << m_oos
-             << " wib_errors:" << m_wib_errors << " timestamp: " << timestamp() << std::dec << '\n';
+             << " wib_errors:" << m_wib_errors << " timestamp: " << get_timestamp() << std::dec << '\n';
   }
 
   std::ostream& print_bits(std::ostream& o) const
@@ -69,7 +69,7 @@ struct WIBHeader
     return o << "SOF:" << std::bitset<8>(m_sof) << " version:" << std::bitset<5>(m_version)
              << " fiber:" << std::bitset<3>(m_fiber_no) << " slot:" << std::bitset<5>(m_slot_no)
              << " crate:" << std::bitset<3>(m_crate_no) << " mm:" << bool(m_mm) << " oos:" << bool(m_oos)
-             << " wib_errors:" << std::bitset<16>(m_wib_errors) << " timestamp: " << timestamp() << '\n'
+             << " wib_errors:" << std::bitset<16>(m_wib_errors) << " timestamp: " << get_timestamp() << '\n'
              << " Z: " << m_z << '\n';
   }
 };
@@ -80,7 +80,7 @@ operator<<(std::ostream& o, WIBHeader const& h)
   return o << "SOF:" << unsigned(h.m_sof) << " version:" << unsigned(h.m_version) << " fiber:" << unsigned(h.m_fiber_no)
            << " slot:" << unsigned(h.m_slot_no) << " crate:" << unsigned(h.m_crate_no) << " mm:" << unsigned(h.m_mm)
            << " oos:" << unsigned(h.m_oos) << " wib_errors:" << unsigned(h.m_wib_errors)
-           << " timestamp: " << h.timestamp() << '\n';
+           << " timestamp: " << h.get_timestamp() << '\n';
 }
 
 /**
