@@ -84,9 +84,9 @@ operator<<(std::ostream& o, WIBHeader const& h)
 }
 
 /**
- * @brief COLDDATA header struct
+ * @brief COLDATA header struct
  */
-struct ColdDataHeader
+struct ColdataHeader
 {
   word_t m_s1_error : 4, m_s2_error : 4, m_reserved_1 : 8, m_checksum_a_1 : 8, m_checksum_b_1 : 8;
   word_t m_checksum_a_2 : 8, m_checksum_b_2 : 8, m_coldata_convert_count : 16;
@@ -184,7 +184,7 @@ struct ColdDataHeader
 };
 
 inline std::ostream&
-operator<<(std::ostream& o, ColdDataHeader const& hdr)
+operator<<(std::ostream& o, ColdataHeader const& hdr)
 {
   o << "s1_error:" << unsigned(hdr.m_s1_error) << " s2_error:" << unsigned(hdr.m_s2_error)
     << " checksum_a1:" << unsigned(hdr.m_checksum_a_1) << " checksum_b1:" << unsigned(hdr.m_checksum_b_1)
@@ -198,12 +198,12 @@ operator<<(std::ostream& o, ColdDataHeader const& hdr)
 }
 
 /**
- * @brief COLDDATA segment struct
+ * @brief COLDATA segment struct
  */
-struct ColdDataSegment
+struct ColdataSegment
 {
   // This struct contains three words of ADC values that form the main repeating
-  // pattern in the COLDDATA block.
+  // pattern in the COLDATA block.
   word_t m_adc0ch0_1 : 8, m_adc1ch0_1 : 8, m_adc0ch0_2 : 4, m_adc0ch1_1 : 4, m_adc1ch0_2 : 4, m_adc1ch1_1 : 4;
   word_t m_adc0ch1_2 : 8, m_adc1ch1_2 : 8, m_adc0ch2_1 : 8, m_adc1ch2_1 : 8;
   word_t m_adc0ch2_2 : 4, m_adc0ch3_1 : 4, m_adc1ch2_2 : 4, m_adc1ch3_1 : 4, m_adc0ch3_2 : 8, m_adc1ch3_2 : 8;
@@ -281,13 +281,13 @@ struct ColdDataSegment
 };
 
 /**
- * @brief COLDDATA block struct
+ * @brief COLDATA block struct
  */
-struct ColdDataBlock
+struct ColdataBlock
 {
-  ColdDataHeader m_head;
+  ColdataHeader m_head;
 
-  ColdDataSegment m_segments[8];
+  ColdataSegment m_segments[8];
 
   uint16_t channel(const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
@@ -302,7 +302,7 @@ struct ColdDataBlock
 };
 
 inline std::ostream&
-operator<<(std::ostream& o, const ColdDataBlock& block)
+operator<<(std::ostream& o, const ColdataBlock& block)
 {
   o << block.m_head;
 
@@ -336,7 +336,7 @@ struct WIBFrame
   static constexpr size_t s_num_ch_per_seg = 8;
 
   WIBHeader m_head;
-  ColdDataBlock m_blocks[4];
+  ColdataBlock m_blocks[4];
 };
 
 inline std::ostream&
