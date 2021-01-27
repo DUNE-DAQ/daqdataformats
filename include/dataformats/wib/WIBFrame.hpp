@@ -208,7 +208,7 @@ struct ColdataSegment
   word_t m_adc0ch1_2 : 8, m_adc1ch1_2 : 8, m_adc0ch2_1 : 8, m_adc1ch2_1 : 8;
   word_t m_adc0ch2_2 : 4, m_adc0ch3_1 : 4, m_adc1ch2_2 : 4, m_adc1ch3_1 : 4, m_adc0ch3_2 : 8, m_adc1ch3_2 : 8;
 
-  uint16_t channel(const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
+  uint16_t get_channel(const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
     if (adc % 2 == 0) {
       switch (ch % 4) {
@@ -286,13 +286,12 @@ struct ColdataSegment
 struct ColdataBlock
 {
   ColdataHeader m_head;
-
   ColdataSegment m_segments[8];
 
-  uint16_t channel(const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
+  uint16_t get_channel(const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
     // Each segment houses one half (four channels) of two subsequent ADCs.
-    return m_segments[(adc / 2) * 2 + ch / 4].channel(adc, ch);
+    return m_segments[(adc / 2) * 2 + ch / 4].get_channel(adc, ch);
   }
 
   void set_channel(const uint8_t adc, const uint8_t ch, uint16_t new_val) // NOLINT(build/unsigned)
@@ -310,7 +309,7 @@ operator<<(std::ostream& o, const ColdataBlock& block)
   for (int i = 0; i < 8; i++) {
     o << "Stream " << i << ":\t";
     for (int j = 0; j < 8; j++) {
-      o << std::hex << block.channel(i, j) << '\t';
+      o << std::hex << block.get_channel(i, j) << '\t';
     }
     o << std::dec << '\n';
   }
@@ -320,9 +319,9 @@ operator<<(std::ostream& o, const ColdataBlock& block)
 /**
  * @brief FELIX frame
  */
-struct WIBFrame
+class WIBFrame
 {
-  // Constant expressions
+public:
   static constexpr size_t s_num_frame_hdr_words = 4;
   static constexpr size_t s_num_COLDATA_hdr_words = 4;
   static constexpr size_t s_num_frame_words = 116;
@@ -335,8 +334,31 @@ struct WIBFrame
   static constexpr size_t s_num_seg_per_block = 8;
   static constexpr size_t s_num_ch_per_seg = 8;
 
+  const WIBHeader* get_wib_header() const { return &m_head; }
+  const ColdataHeader* get_coldata_header(unsigned block_index) const { 
+    return &m_blocks[block_index % s_num_block_per_frame].m_head; }
+  const ColdataBlock& get_block(uint8_t b) const { return m_blocks[b]; }
+  //    ColdataBlock& get_block(const uint8_t b) { return blocks[b]; }
+
+  // WIBHeader mutators 
+  void set_wib_errors(uint16_t new_wib_errors) { m_head.m_wib_errors = new_wib_errors; }
+  void set_timestamp(uint64_t new_timestamp) { m_head.set_timestamp(new_timestamp); }
+ 
+  // ColdataBlock channel accessors                                                                                                     
+  uint16_t get_channel(uint8_t block_num, uint8_t adc, uint8_t ch) const { return m_blocks[block_num].get_channel(adc, ch); }
+  uint16_t get_channel(uint8_t block_num, uint8_t ch) const { return get_channel(block_num, ch / s_num_seg_per_block, ch % s_num_ch_per_seg); }
+  uint16_t get_channel(uint8_t ch) const { return get_channel(ch / s_num_ch_per_block, ch % s_num_ch_per_block); }
+
+  // ColdataBlock channel mutators                                                                                                                                                                               
+  void set_channel(uint8_t block_num, uint8_t adc, uint8_t ch, uint16_t new_val) { m_blocks[block_num].set_channel(adc, ch, new_val); }
+  void set_channel(uint8_t block_num, uint8_t ch, uint16_t new_val) { set_channel(block_num, ch / s_num_seg_per_block, ch % s_num_ch_per_seg, new_val); }
+  void set_channel(uint8_t ch, uint16_t new_val) { set_channel(ch / s_num_ch_per_block, ch % s_num_ch_per_block, new_val); }
+
+  friend std::ostream& operator<<(std::ostream& o, WIBFrame const& frame);
+  
+private:
   WIBHeader m_head;
-  ColdataBlock m_blocks[4];
+  ColdataBlock m_blocks[s_num_block_per_frame];
 };
 
 inline std::ostream&
