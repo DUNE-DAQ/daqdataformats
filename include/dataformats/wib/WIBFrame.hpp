@@ -202,6 +202,8 @@ operator<<(std::ostream& o, ColdataHeader const& hdr)
  */
 struct ColdataSegment
 {
+  static constexpr size_t s_num_ch_per_seg = 8;
+
   // This struct contains three words of ADC values that form the main repeating
   // pattern in the COLDATA block.
   word_t m_adc0ch0_1 : 8, m_adc1ch0_1 : 8, m_adc0ch0_2 : 4, m_adc0ch1_1 : 4, m_adc1ch0_2 : 4, m_adc1ch1_1 : 4;
@@ -285,8 +287,11 @@ struct ColdataSegment
  */
 struct ColdataBlock
 {
+  static constexpr size_t s_num_seg_per_block = 8;
+  static constexpr size_t s_num_ch_per_block = s_num_seg_per_block * ColdataSegment::s_num_ch_per_seg;
+
   ColdataHeader m_head;
-  ColdataSegment m_segments[8];
+  ColdataSegment m_segments[s_num_seg_per_block];
 
   uint16_t get_channel(const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
@@ -305,11 +310,12 @@ operator<<(std::ostream& o, const ColdataBlock& block)
 {
   o << block.m_head;
 
+  // Note that this is an ADC-centric view, whereas ColdataBlock uses a channel-centric view
   o << "\t\t0\t1\t2\t3\t4\t5\t6\t7\n";
-  for (int i = 0; i < 8; i++) {
-    o << "Stream " << i << ":\t";
-    for (int j = 0; j < 8; j++) {
-      o << std::hex << block.get_channel(i, j) << '\t';
+  for (int adc = 0; adc < 8; adc++) {
+    o << "Stream " << adc << ":\t";
+    for (int ch = 0; ch < 8; ch++) {
+      o << std::hex << block.get_channel(adc, ch) << '\t';
     }
     o << std::dec << '\n';
   }
@@ -322,17 +328,14 @@ operator<<(std::ostream& o, const ColdataBlock& block)
 class WIBFrame
 {
 public:
-  static constexpr size_t s_num_frame_hdr_words = 4;
-  static constexpr size_t s_num_COLDATA_hdr_words = 4;
-  static constexpr size_t s_num_frame_words = 116;
-  static constexpr size_t s_num_frame_bytes = s_num_frame_words * sizeof(word_t);
-  static constexpr size_t s_num_COLDATA_words = 28;
-
   static constexpr size_t s_num_block_per_frame = 4;
-  static constexpr size_t s_num_ch_per_frame = 256;
-  static constexpr size_t s_num_ch_per_block = 64;
-  static constexpr size_t s_num_seg_per_block = 8;
-  static constexpr size_t s_num_ch_per_seg = 8;
+  static constexpr size_t s_num_ch_per_frame = s_num_block_per_frame * ColdataBlock::s_num_ch_per_block;
+
+  static constexpr size_t s_num_frame_hdr_words = sizeof(WIBHeader) / sizeof(word_t);
+  static constexpr size_t s_num_COLDATA_hdr_words = sizeof(ColdataHeader) / sizeof(word_t);
+  static constexpr size_t s_num_COLDATA_words = sizeof(ColdataBlock) / sizeof(word_t);
+  static constexpr size_t s_num_frame_words = s_num_blocks_per_frame * s_num_COLDATA_words + s_num_frame_hdr_words;
+  static constexpr size_t s_num_frame_bytes = s_num_frame_words * sizeof(word_t);
 
   const WIBHeader* get_wib_header() const { return &m_head; }
   const ColdataHeader* get_coldata_header(unsigned block_index) const { 
