@@ -13,7 +13,8 @@
  */
 #define BOOST_TEST_MODULE TriggerRecord_test // NOLINT
 
-#include <boost/test/unit_test.hpp>
+#include "boost/test/unit_test.hpp"
+
 #include <string>
 #include <vector>
 
