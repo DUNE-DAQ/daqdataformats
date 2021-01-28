@@ -25,18 +25,21 @@ namespace dataformats {
  */
 struct TriggerRecordHeaderData
 {
-/**
- * @brief Magic bytes to identify a TriggerRecordHeader entry in a raw data stream
- */
+  /**
+   * @brief Magic bytes to identify a TriggerRecordHeader entry in a raw data stream
+   */
   static constexpr uint32_t s_trigger_record_header_magic = 0x33334444; // NOLINT(build/unsigned)
-/**
- * @brief The current version of the TriggerRecordHeader
- */
+
+  /**
+   * @brief The current version of the TriggerRecordHeader
+   */
   static constexpr uint32_t s_trigger_record_header_version = 1; // NOLINT(build/unsigned)
+
   /**
    * @brief An invalid number of components
-  */
-  static constexpr uint64_t s_invalid_number_components = std::numeric_limits<uint64_t>::max(); // NOLINT(build/unsigned)
+   */
+  static constexpr uint64_t s_invalid_number_components =
+    std::numeric_limits<uint64_t>::max(); // NOLINT(build/unsigned)
 
   /**
    * @brief By default, all error bits are unset
@@ -47,6 +50,7 @@ struct TriggerRecordHeaderData
    * @brief Magic bytes used to identify a TriggerRecordHeaderData struct in a raw data stream
    */
   uint32_t m_trigger_record_header_marker = s_trigger_record_header_magic; // NOLINT(build/unsigned)
+
   /**
    * @brief Version of the TriggerRecordHeaderData structure
    */
@@ -56,6 +60,7 @@ struct TriggerRecordHeaderData
    * @brief Trigger Number
    */
   trigger_number_t m_trigger_number{ TypeDefaults::s_invalid_trigger_number };
+  
   /**
    * @brief Timestamp of the TriggerDecision
    */
@@ -70,6 +75,7 @@ struct TriggerRecordHeaderData
    * @brief Run Number for the TriggerRecord
    */
   run_number_t m_run_number{ TypeDefaults::s_invalid_run_number };
+  
   /**
    * @brief Error bits for the TriggerRecord
    *
@@ -81,6 +87,7 @@ struct TriggerRecordHeaderData
    * @brief Type of the TriggerDecision
    */
   trigger_type_t m_trigger_type{ TypeDefaults::s_invalid_trigger_type };
+  
   /**
    * @brief Padding to ensure 64-bit alignment
    */

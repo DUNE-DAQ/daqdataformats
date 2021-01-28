@@ -244,7 +244,7 @@ private:
    * @brief Get the FragmentHeader from the m_data_arr array
    * @return Pointer to the FragmentHeader
    */
-  FragmentHeader* header_() const { return static_cast<FragmentHeader*>(m_data_arr); } 
+  FragmentHeader* header_() const { return static_cast<FragmentHeader*>(m_data_arr); }
   void* m_data_arr{ nullptr }; ///< Flat memory containing a FragmentHeader and the data payload
   bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };

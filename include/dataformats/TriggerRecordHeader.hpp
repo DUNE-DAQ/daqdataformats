@@ -21,11 +21,11 @@
 
 namespace dunedaq {
 
-ERS_DECLARE_ISSUE(dataformats, ComponentRequestIndexError,
-                  "Supplied ComponentRequest index " << cri_index_supplied << 
-		  " is greater than the maximum index " << cri_index_max,
-                  ((int)cri_index_supplied)
-                  ((int)cri_index_max))
+ERS_DECLARE_ISSUE(dataformats,
+                  ComponentRequestIndexError,
+                  "Supplied ComponentRequest index " << cri_index_supplied << " is greater than the maximum index "
+                                                     << cri_index_max,
+                  ((int)cri_index_supplied)((int)cri_index_max))
 
 namespace dataformats {
 
@@ -213,7 +213,6 @@ public:
 
   const void* get_storage_location() const { return m_data_arr; }
 
-
   /**
    * @brief Access ComponentRequest and copy result
    * @param idx Index to access
@@ -249,10 +248,12 @@ private:
    * @brief Get the TriggerRecordHeaderData from the m_data_arr array
    * @return Pointer to the TriggerRecordHeaderData
    */
-  TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr); } 
-  
-  void* m_data_arr{ nullptr }; ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
-  bool m_alloc{ false };       ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr
+  TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr); }
+
+  void* m_data_arr{
+    nullptr
+  };                     ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
+  bool m_alloc{ false }; ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr
 };
 
 } // namespace dataformats

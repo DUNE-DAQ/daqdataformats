@@ -58,9 +58,10 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_error_bit(1, true);
   header->set_error_bit(3, true);
 
-  BOOST_REQUIRE_THROW(header->at( header->get_header().m_num_requested_components ), dunedaq::dataformats::ComponentRequestIndexError);
-  BOOST_REQUIRE_THROW((*header)[ header->get_header().m_num_requested_components ], dunedaq::dataformats::ComponentRequestIndexError);
-  
+  BOOST_REQUIRE_THROW(header->at(header->get_header().m_num_requested_components),
+                      dunedaq::dataformats::ComponentRequestIndexError);
+  BOOST_REQUIRE_THROW((*header)[header->get_header().m_num_requested_components],
+                      dunedaq::dataformats::ComponentRequestIndexError);
 
   void* buff = malloc(header->get_total_size_bytes());
   memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
@@ -87,7 +88,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(bufferHeader[1].m_window_offset, 7);
   }
 
-  BOOST_REQUIRE_EQUAL(*reinterpret_cast<uint32_t*>(buff), TriggerRecordHeaderData::s_trigger_record_header_magic);  //NOLINT
+  BOOST_REQUIRE_EQUAL(*reinterpret_cast<uint32_t*>(buff), // NOLINT
+                      TriggerRecordHeaderData::s_trigger_record_header_magic);
 
   free(buff);
 }
