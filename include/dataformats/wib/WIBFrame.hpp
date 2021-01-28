@@ -302,7 +302,7 @@ struct ColdataBlock
     return m_segments[(adc / 2) * 2 + ch / 4].get_channel(adc, ch);
   }
 
-  void set_channel(const uint8_t adc, const uint8_t ch, uint16_t new_val) // NOLINT(build/unsigned)
+  void set_channel(const uint8_t adc, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
   {
     m_segments[(adc / 2) * 2 + ch / 4].set_channel(adc, ch, new_val);
   }
@@ -341,41 +341,41 @@ public:
   static constexpr size_t s_num_frame_bytes = s_num_frame_words * sizeof(word_t);
 
   const WIBHeader* get_wib_header() const { return &m_head; }
-  const ColdataHeader* get_coldata_header(unsigned block_index) const
+  const ColdataHeader* get_coldata_header(const unsigned block_index) const
   {
     return &m_blocks[block_index % s_num_block_per_frame].m_head;
   }
-  const ColdataBlock& get_block(uint8_t b) const { return m_blocks[b]; } // NOLINT(build/unsigned)
+  const ColdataBlock& get_block(const uint8_t b) const { return m_blocks[b]; } // NOLINT(build/unsigned)
   //    ColdataBlock& get_block(const uint8_t b) { return blocks[b]; }
 
   // WIBHeader mutators
-  void set_wib_errors(uint16_t new_wib_errors) { m_head.m_wib_errors = new_wib_errors; } // NOLINT(build/unsigned)
-  void set_timestamp(uint64_t new_timestamp) { m_head.set_timestamp(new_timestamp); }    // NOLINT(build/unsigned)
+  void set_wib_errors(const uint16_t new_wib_errors) { m_head.m_wib_errors = new_wib_errors; } // NOLINT(build/unsigned)
+  void set_timestamp(const uint64_t new_timestamp) { m_head.set_timestamp(new_timestamp); }    // NOLINT(build/unsigned)
 
   // ColdataBlock channel accessors
-  uint16_t get_channel(uint8_t block_num, uint8_t adc, uint8_t ch) const // NOLINT(build/unsigned)
+  uint16_t get_channel(const uint8_t block_num, const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
     return m_blocks[block_num].get_channel(adc, ch);
   }
-  uint16_t get_channel(uint8_t block_num, uint8_t ch) const // NOLINT(build/unsigned)
+  uint16_t get_channel(const uint8_t block_num, const uint8_t ch) const // NOLINT(build/unsigned)
   {
     return get_channel(block_num, ch / ColdataBlock::s_num_adc_per_block, ch % ColdataBlock::s_num_adc_per_block);
   }
-  uint16_t get_channel(uint8_t ch) const // NOLINT(build/unsigned)
+  uint16_t get_channel(const uint8_t ch) const // NOLINT(build/unsigned)
   {
     return get_channel(ch / ColdataBlock::s_num_ch_per_block, ch % ColdataBlock::s_num_ch_per_block);
   }
 
   // ColdataBlock channel mutators
-  void set_channel(uint8_t block_num, uint8_t adc, uint8_t ch, uint16_t new_val) // NOLINT(build/unsigned)
+  void set_channel(const uint8_t block_num, const uint8_t adc, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
   {
     m_blocks[block_num].set_channel(adc, ch, new_val);
   }
-  void set_channel(uint8_t block_num, uint8_t ch, uint16_t new_val) // NOLINT(build/unsigned)
+  void set_channel(const uint8_t block_num, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
   {
     set_channel(block_num, ch / ColdataBlock::s_num_adc_per_block, ch % ColdataBlock::s_num_adc_per_block, new_val);
   }
-  void set_channel(uint8_t ch, uint16_t new_val) // NOLINT(build/unsigned)
+  void set_channel(const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
   {
     set_channel(ch / ColdataBlock::s_num_ch_per_block, ch % ColdataBlock::s_num_ch_per_block, new_val);
   }
