@@ -20,22 +20,26 @@
 namespace dunedaq {
 namespace dataformats {
 
-
 /**
  * @brief The header for a DUNE Fragment
  */
 struct FragmentHeader
 {
- /**
-  * @brief Magic bytes to identify a FragmentHeader entry in a raw data stream
-  */
+  /**
+   * @brief Magic bytes to identify a FragmentHeader entry in a raw data stream
+   */
   static constexpr uint32_t s_fragment_header_magic = 0x11112222; // NOLINT(build/unsigned)
 
   /**
    * @brief The current version of the Fragment
-  */
+   */
   static constexpr uint32_t s_fragment_header_version = 1; // NOLINT(build/unsigned)
-  
+
+  /**
+   * @brief By default, all error bits are unset
+   */
+  static constexpr uint32_t s_default_error_bits = 0; // NOLINT(build/unsigned)
+
   /**
    * @brief Magic Bytes used to identify FragmentHeaders in a raw data stream
    */
@@ -49,44 +53,49 @@ struct FragmentHeader
   /**
    * @brief Size of the Fragment (including header and payload)
    */
-  fragment_size_t m_size{ 0 }; // NOLINT(build/unsigned)
+  fragment_size_t m_size{ TypeDefaults::s_invalid_fragment_size }; // NOLINT(build/unsigned)
 
   /**
    * @brief Trigger Number this Fragment is associated with
    */
-  trigger_number_t m_trigger_number{ 0 };
+  trigger_number_t m_trigger_number{ TypeDefaults::s_invalid_trigger_number };
 
   /**
    * @brief Timestamp of the TriggerDecision
    */
-  timestamp_t m_trigger_timestamp{ 0 };
+  timestamp_t m_trigger_timestamp{ TypeDefaults::s_invalid_timestamp };
+
   /**
    * @brief Window offset of data in the Fragment
    */
-  timestamp_diff_t m_window_offset{ 0 };
+  timestamp_diff_t m_window_offset{ TypeDefaults::s_invalid_timestamp_diff };
+
   /**
    * @brief Window width of data in the Fragment
    */
-  timestamp_diff_t m_window_width{ 0 };
+  timestamp_diff_t m_window_width{ TypeDefaults::s_invalid_timestamp_diff };
 
   /**
    * @brief Run number this Fragment is associated with
    */
-  run_number_t m_run_number{ 0 };
+  run_number_t m_run_number{ TypeDefaults::s_invalid_run_number };
+
   /**
    * @brief Component that generated the data in this Fragment
    */
   GeoID m_link_id;
+
   /**
    * @brief Error bits set by the Upstream DAQ
    *
    * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
    */
-  uint32_t m_error_bits{ 0 }; // NOLINT(build/unsigned)
+  uint32_t m_error_bits{ s_default_error_bits }; // NOLINT(build/unsigned)
+
   /**
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
-  fragment_type_t m_fragment_type{ 0 };
+  fragment_type_t m_fragment_type{ TypeDefaults::s_invalid_fragment_type };
 };
 
 /**
@@ -99,7 +108,7 @@ inline std::ostream&
 operator<<(std::ostream& o, FragmentHeader const& hdr)
 {
   return o << "check_word: " << std::hex << hdr.m_fragment_header_marker << std::dec << ", "
-	   << "version: " << hdr.m_version << ", "
+           << "version: " << hdr.m_version << ", "
            << "size: " << hdr.m_size << ", "
            << "trigger_number: " << hdr.m_trigger_number << ", "
            << "run_number: " << hdr.m_run_number << ", "

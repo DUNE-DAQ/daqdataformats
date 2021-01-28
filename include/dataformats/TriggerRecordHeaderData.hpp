@@ -12,6 +12,7 @@
 #include "dataformats/ComponentRequest.hpp"
 #include "dataformats/Types.hpp"
 
+#include <limits>
 #include <ostream>
 #include <vector>
 
@@ -32,6 +33,15 @@ struct TriggerRecordHeaderData
  * @brief The current version of the TriggerRecordHeader
  */
   static constexpr uint32_t s_trigger_record_header_version = 1; // NOLINT(build/unsigned)
+  /**
+   * @brief An invalid number of components
+  */
+  static constexpr uint64_t s_invalid_number_components = std::numeric_limits<uint64_t>::max(); // NOLINT(build/unsigned)
+
+  /**
+   * @brief By default, all error bits are unset
+   */
+  static constexpr uint32_t s_default_error_bits = 0; // NOLINT(build/unsigned)
 
   /**
    * @brief Magic bytes used to identify a TriggerRecordHeaderData struct in a raw data stream
@@ -45,32 +55,32 @@ struct TriggerRecordHeaderData
   /**
    * @brief Trigger Number
    */
-  trigger_number_t m_trigger_number{ 0 };
+  trigger_number_t m_trigger_number{ TypeDefaults::s_invalid_trigger_number };
   /**
    * @brief Timestamp of the TriggerDecision
    */
-  timestamp_t m_trigger_timestamp{ 0 };
+  timestamp_t m_trigger_timestamp{ TypeDefaults::s_invalid_timestamp };
 
   /**
    * @brief Number of ComponentRequest objects stored in the TriggerRecordHeader
    */
-  uint64_t m_num_requested_components{ 0 }; // NOLINT(build/unsigned)
+  uint64_t m_num_requested_components{ s_invalid_number_components }; // NOLINT(build/unsigned)
 
   /**
    * @brief Run Number for the TriggerRecord
    */
-  run_number_t m_run_number{ 0 };
+  run_number_t m_run_number{ TypeDefaults::s_invalid_run_number };
   /**
    * @brief Error bits for the TriggerRecord
    *
    * Defined error bits should be documented here
    */
-  uint32_t m_error_bits{ 0 }; // NOLINT(build/unsigned)
+  uint32_t m_error_bits{ s_default_error_bits }; // NOLINT(build/unsigned)
 
   /**
    * @brief Type of the TriggerDecision
    */
-  trigger_type_t m_trigger_type{ 0 };
+  trigger_type_t m_trigger_type{ TypeDefaults::s_invalid_trigger_type };
   /**
    * @brief Padding to ensure 64-bit alignment
    */

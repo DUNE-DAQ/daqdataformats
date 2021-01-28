@@ -33,7 +33,7 @@ struct ComponentRequest
    *                  ^ timestamp
    *                      ^ ts - offset + width
    */
-  timestamp_diff_t m_window_offset{ 0 };
+  timestamp_diff_t m_window_offset{ TypeDefaults::s_invalid_timestamp_diff };
   /**
    * @brief Width of the data collection window
    *
@@ -43,7 +43,7 @@ struct ComponentRequest
    *                  ^ timestamp
    *                      ^ ts - offset + width
    */
-  timestamp_diff_t m_window_width{ 0 };
+  timestamp_diff_t m_window_width{ TypeDefaults::s_invalid_timestamp_diff };
 };
 
 /**
