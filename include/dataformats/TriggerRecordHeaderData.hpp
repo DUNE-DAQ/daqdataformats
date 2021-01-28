@@ -24,7 +24,13 @@ namespace dataformats {
  */
 struct TriggerRecordHeaderData
 {
+/**
+ * @brief Magic bytes to identify a TriggerRecordHeader entry in a raw data stream
+ */
 #define TRIGGER_RECORD_HEADER_MAGIC 0x33334444
+/**
+ * @brief The current version of the TriggerRecordHeader
+ */
 #define TRIGGER_RECORD_HEADER_VERSION 1
 
   /**
@@ -65,6 +71,9 @@ struct TriggerRecordHeaderData
    * @brief Type of the TriggerDecision
    */
   trigger_type_t trigger_type {0};
+  /**
+   * @brief Padding to ensure 64-bit alignment
+   */
   uint64_t unused : 48; // NOLINT(build/unsigned)
 };
 
