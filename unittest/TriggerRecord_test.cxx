@@ -8,6 +8,9 @@
 
 #include "dataformats/TriggerRecord.hpp"
 
+ /**
+  * @brief Name of this test module
+  */
 #define BOOST_TEST_MODULE TriggerRecord_test // NOLINT
 
 #include <boost/test/unit_test.hpp>
@@ -18,6 +21,9 @@ using namespace dunedaq::dataformats;
 
 BOOST_AUTO_TEST_SUITE(TriggerRecord_test)
 
+/**
+ * @brief Check that TriggerRecords have appropriate Copy/Move semantics
+*/
 BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
 {
   BOOST_REQUIRE(!std::is_copy_constructible_v<TriggerRecord>);
@@ -26,6 +32,9 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
   BOOST_REQUIRE(std::is_move_assignable_v<TriggerRecord>);
 }
 
+/**
+ * @brief Check that TriggerRecordHeader constructors function correctly
+*/
 BOOST_AUTO_TEST_CASE(ExistingHeader)
 {
   auto components = std::vector<ComponentRequest>();
