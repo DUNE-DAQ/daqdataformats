@@ -54,8 +54,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_trigger_number(10);
   header->set_trigger_timestamp(11);
   header->set_trigger_type(12);
-  header->set_error_bit(1, true);
-  header->set_error_bit(3, true);
+  header->set_error_bit(TriggerRecordErrorBits::kUnassigned1, true);
+  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
 
   void* buff = malloc(header->get_total_size_bytes());
   memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
@@ -65,8 +65,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   delete header; // NOLINT(build/raw_ownership)
 
   BOOST_REQUIRE_EQUAL(record.get_header().get_run_number(), 9);
-  BOOST_REQUIRE_EQUAL(record.get_header().get_error_bit(0), false);
-  BOOST_REQUIRE_EQUAL(record.get_header().get_error_bit(1), true);
+  BOOST_REQUIRE_EQUAL(record.get_header().get_error_bit(TriggerRecordErrorBits::kUnassigned0), false);
+  BOOST_REQUIRE_EQUAL(record.get_header().get_error_bit(TriggerRecordErrorBits::kUnassigned1), true);
   BOOST_REQUIRE_EQUAL(record.get_header_data().error_bits, 10);
   BOOST_REQUIRE_EQUAL(record.get_header().at(0).window_offset, 3);
   BOOST_REQUIRE_EQUAL(record.get_header()[1].window_offset, 7);
@@ -75,8 +75,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   TriggerRecordHeader bufferHeader(buff, false);
 
   BOOST_REQUIRE_EQUAL(bufferHeader.get_run_number(), 9);
-  BOOST_REQUIRE_EQUAL(bufferHeader.get_error_bit(0), false);
-  BOOST_REQUIRE_EQUAL(bufferHeader.get_error_bit(1), true);
+  BOOST_REQUIRE_EQUAL(bufferHeader.get_error_bit(TriggerRecordErrorBits::kUnassigned0), false);
+  BOOST_REQUIRE_EQUAL(bufferHeader.get_error_bit(TriggerRecordErrorBits::kUnassigned1), true);
   BOOST_REQUIRE_EQUAL(bufferHeader.get_header().error_bits, 10);
   BOOST_REQUIRE_EQUAL(bufferHeader.at(0).window_offset, 3);
   BOOST_REQUIRE_EQUAL(bufferHeader[1].window_offset, 7);
