@@ -304,7 +304,7 @@ struct ColdataBlock
   static constexpr int s_num_ch_per_block = s_num_seg_per_block * ColdataSegment::s_num_ch_per_seg;
 
   ColdataHeader m_head;
-  ColdataSegment m_segments[s_num_seg_per_block];
+  ColdataSegment m_segments[s_num_seg_per_block]; // NOLINT
 
   uint16_t get_channel(const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
@@ -392,7 +392,10 @@ public:
   }
 
   // ColdataBlock channel mutators
-  void set_channel(const uint8_t block_num, const uint8_t adc, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
+  void set_channel(const uint8_t block_num,
+                   const uint8_t adc,
+                   const uint8_t ch,
+                   const uint16_t new_val) // NOLINT(build/unsigned)
   {
     throw_if_invalid_block_index_(block_num);
     m_blocks[block_num].set_channel(adc, ch, new_val);
@@ -418,7 +421,7 @@ private:
   }
 
   WIBHeader m_head;
-  ColdataBlock m_blocks[s_num_block_per_frame];
+  ColdataBlock m_blocks[s_num_block_per_frame]; // NOLINT
 };
 
 inline std::ostream&

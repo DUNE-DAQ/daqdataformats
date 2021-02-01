@@ -174,16 +174,16 @@ public:
    * @param bit Bit to get
    * @return Value of bit (true/false)
    */
-  bool get_error_bit(size_t bit) const { return get_error_bits()[bit]; }
+  bool get_error_bit(TriggerRecordErrorBits bit) const { return get_error_bits()[static_cast<size_t>(bit)]; }
   /**
    * @brief Set the given error bit to the given value
    * @param bit Bit to set
    * @param value Value to set (true/false)
    */
-  void set_error_bit(size_t bit, bool value)
+  void set_error_bit(TriggerRecordErrorBits bit, bool value)
   {
     auto bits = get_error_bits();
-    bits[bit] = value;
+    bits[static_cast<size_t>(bit)] = value;
     set_error_bits(bits);
   }
 
