@@ -201,16 +201,18 @@ public:
    * @param bit Bit to query
    * @return Value of bit (true/false)
    */
-  bool get_error_bit(size_t bit) const { return get_error_bits()[bit]; }
+  bool get_error_bit(FragmentErrorBits bit) const { return get_error_bits()[static_cast<size_t>(bit)]; }
+
   /**
    * @brief Set the designated error bit
    * @param bit Bit to set
    * @param value Value (true/false) for the error bit
    */
-  void set_error_bit(size_t bit, bool value)
+  void set_error_bit(FragmentErrorBits bit, bool value)
+
   {
     auto bits = get_error_bits();
-    bits[bit] = value;
+    bits[static_cast<size_t>(bit)] = value;
     set_error_bits(bits);
   }
   /**

@@ -38,8 +38,8 @@ struct TriggerRecordHeaderData
   /**
    * @brief An invalid number of components
    */
-  static constexpr uint64_t s_invalid_number_components =
-    std::numeric_limits<uint64_t>::max(); // NOLINT(build/unsigned)
+  static constexpr uint64_t s_invalid_number_components = // NOLINT(build/unsigned)
+    std::numeric_limits<uint64_t>::max();                 // NOLINT(build/unsigned)
 
   /**
    * @brief By default, all error bits are unset
@@ -60,7 +60,7 @@ struct TriggerRecordHeaderData
    * @brief Trigger Number
    */
   trigger_number_t m_trigger_number{ TypeDefaults::s_invalid_trigger_number };
-  
+
   /**
    * @brief Timestamp of the TriggerDecision
    */
@@ -75,11 +75,9 @@ struct TriggerRecordHeaderData
    * @brief Run Number for the TriggerRecord
    */
   run_number_t m_run_number{ TypeDefaults::s_invalid_run_number };
-  
+
   /**
    * @brief Error bits for the TriggerRecord
-   *
-   * Defined error bits should be documented here
    */
   uint32_t m_error_bits{ s_default_error_bits }; // NOLINT(build/unsigned)
 
@@ -87,11 +85,51 @@ struct TriggerRecordHeaderData
    * @brief Type of the TriggerDecision
    */
   trigger_type_t m_trigger_type{ TypeDefaults::s_invalid_trigger_type };
-  
+
   /**
    * @brief Padding to ensure 64-bit alignment
    */
   uint64_t m_unused : 48; // NOLINT(build/unsigned)
+};
+
+/**
+ * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
+ */
+enum class TriggerRecordErrorBits : size_t
+{
+  kUnassigned0 = 0,   ///< Error bit 0 is not assigned
+  kUnassigned1 = 1,   ///< Error bit 1 is not assigned
+  kUnassigned2 = 2,   ///< Error bit 2 is not assigned
+  kUnassigned3 = 3,   ///< Error bit 3 is not assigned
+  kUnassigned4 = 4,   ///< Error bit 4 is not assigned
+  kUnassigned5 = 5,   ///< Error bit 5 is not assigned
+  kUnassigned6 = 6,   ///< Error bit 6 is not assigned
+  kUnassigned7 = 7,   ///< Error bit 7 is not assigned
+  kUnassigned8 = 8,   ///< Error bit 8 is not assigned
+  kUnassigned9 = 9,   ///< Error bit 9 is not assigned
+  kUnassigned10 = 10, ///< Error bit 10 is not assigned
+  kUnassigned11 = 11, ///< Error bit 11 is not assigned
+  kUnassigned12 = 12, ///< Error bit 12 is not assigned
+  kUnassigned13 = 13, ///< Error bit 13 is not assigned
+  kUnassigned14 = 14, ///< Error bit 14 is not assigned
+  kUnassigned15 = 15, ///< Error bit 15 is not assigned
+  kUnassigned16 = 16, ///< Error bit 16 is not assigned
+  kUnassigned17 = 17, ///< Error bit 17 is not assigned
+  kUnassigned18 = 18, ///< Error bit 18 is not assigned
+  kUnassigned19 = 19, ///< Error bit 19 is not assigned
+  kUnassigned20 = 20, ///< Error bit 20 is not assigned
+  kUnassigned21 = 21, ///< Error bit 21 is not assigned
+  kUnassigned22 = 22, ///< Error bit 22 is not assigned
+  kUnassigned23 = 23, ///< Error bit 23 is not assigned
+  kUnassigned24 = 24, ///< Error bit 24 is not assigned
+  kUnassigned25 = 25, ///< Error bit 25 is not assigned
+  kUnassigned26 = 26, ///< Error bit 26 is not assigned
+  kUnassigned27 = 27, ///< Error bit 27 is not assigned
+  kUnassigned28 = 28, ///< Error bit 28 is not assigned
+  kUnassigned29 = 29, ///< Error bit 29 is not assigned
+  kUnassigned30 = 30, ///< Error bit 30 is not assigned
+  kUnassigned31 = 31, ///< Error bit 31 is not assigned
+  kInvalid = 32       ///< Error bit 32 and higher are not valid (m_error_bits is only 32 bits)
 };
 
 /**
