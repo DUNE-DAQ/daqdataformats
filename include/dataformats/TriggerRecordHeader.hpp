@@ -25,7 +25,7 @@ ERS_DECLARE_ISSUE(dataformats,
                   ComponentRequestIndexError,
                   "Supplied ComponentRequest index " << cri_index_supplied << " is greater than the maximum index "
                                                      << cri_index_max,
-                  ((int)cri_index_supplied)((int)cri_index_max))
+                  ((int)cri_index_supplied)((int)cri_index_max)) // NOLINT
 
 namespace dataformats {
 

@@ -11,11 +11,21 @@
 #ifndef DATAFORMATS_INCLUDE_DATAFORMATS_WIB_WIBFRAME_HPP_
 #define DATAFORMATS_INCLUDE_DATAFORMATS_WIB_WIBFRAME_HPP_
 
+#include "ers/ers.h"
+
 #include <bitset>
 #include <iostream>
 #include <vector>
 
 namespace dunedaq {
+
+ERS_DECLARE_ISSUE(dataformats,
+                  WibFrameRelatedIndexError,
+                  "Supplied index " << wib_index_supplied << " is outside the allowed range of " << wib_index_min << " to " << wib_index_max,
+                  ((int)wib_index_supplied)((int)wib_index_min)((int)wib_index_max)) // NOLINT
+
+
+
 namespace dataformats {
 
 using word_t = uint32_t; // NOLINT(build/unsigned)
@@ -33,13 +43,13 @@ struct WIBHeader
 
   uint64_t get_timestamp() const // NOLINT(build/unsigned)
   {
-    uint64_t timestamp = m_timestamp_1 | ((uint64_t)m_timestamp_2 << 32); // NOLINT(build/unsigned)
+    uint64_t timestamp = m_timestamp_1 | (static_cast<uint64_t>(m_timestamp_2) << 32); // NOLINT(build/unsigned)
     if (!m_z) {
-      timestamp |= (uint64_t)m_wib_counter_1 << 48; // NOLINT(build/unsigned)
+      timestamp |= static_cast<uint64_t>(m_wib_counter_1) << 48; // NOLINT(build/unsigned)
     }
     return timestamp;
   }
-  uint16_t wib_counter() const { return m_z ? m_wib_counter_1 : 0; } // NOLINT(build/unsigned)
+  uint16_t get_wib_counter() const { return m_z ? m_wib_counter_1 : 0; } // NOLINT(build/unsigned)
 
   void set_timestamp(const uint64_t new_timestamp) // NOLINT(build/unsigned)
   {
@@ -93,9 +103,9 @@ struct ColdataHeader
   word_t m_error_register : 16, m_reserved_2 : 16;
   word_t m_hdr_1 : 4, m_hdr_3 : 4, m_hdr_2 : 4, m_hdr_4 : 4, m_hdr_5 : 4, m_hdr_7 : 4, m_hdr_6 : 4, m_hdr_8 : 4;
 
-  uint16_t checksum_a() const { return (uint16_t)m_checksum_a_1 | (m_checksum_a_2 << 8); } // NOLINT(build/unsigned)
-  uint16_t checksum_b() const { return (uint16_t)m_checksum_b_1 | (m_checksum_b_2 << 8); } // NOLINT(build/unsigned)
-  uint8_t hdr(const uint8_t i) const                                                       // NOLINT(build/unsigned)
+  uint16_t get_checksum_a() const { return static_cast<uint16_t>(m_checksum_a_1) | (m_checksum_a_2 << 8); } // NOLINT(build/unsigned)
+  uint16_t get_checksum_b() const { return static_cast<uint16_t>(m_checksum_b_1) | (m_checksum_b_2 << 8); } // NOLINT(build/unsigned)
+  uint8_t get_hdr(const uint8_t i) const                                                       // NOLINT(build/unsigned)
   {
     switch (i) {
       case 1:
@@ -202,7 +212,7 @@ operator<<(std::ostream& o, ColdataHeader const& hdr)
  */
 struct ColdataSegment
 {
-  static constexpr size_t s_num_ch_per_seg = 8;
+  static constexpr int s_num_ch_per_seg = 8;
 
   // This struct contains three words of ADC values that form the main repeating
   // pattern in the COLDATA block.
@@ -287,11 +297,11 @@ struct ColdataSegment
  */
 struct ColdataBlock
 {
-  static constexpr size_t s_num_seg_per_block = 8;
-  static constexpr size_t s_num_ch_per_adc = 8;
-  static constexpr size_t s_num_adc_per_block =
+  static constexpr int s_num_seg_per_block = 8;
+  static constexpr int s_num_ch_per_adc = 8;
+  static constexpr int s_num_adc_per_block =
     ColdataSegment::s_num_ch_per_seg * s_num_seg_per_block / s_num_ch_per_adc;
-  static constexpr size_t s_num_ch_per_block = s_num_seg_per_block * ColdataSegment::s_num_ch_per_seg;
+  static constexpr int s_num_ch_per_block = s_num_seg_per_block * ColdataSegment::s_num_ch_per_seg;
 
   ColdataHeader m_head;
   ColdataSegment m_segments[s_num_seg_per_block];
@@ -299,12 +309,22 @@ struct ColdataBlock
   uint16_t get_channel(const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
     // Each segment houses one half (four channels) of two subsequent ADCs.
-    return m_segments[(adc / 2) * 2 + ch / 4].get_channel(adc, ch);
+    return m_segments[ get_segment_index_(adc, ch) ].get_channel(adc, ch);
   }
 
   void set_channel(const uint8_t adc, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
   {
-    m_segments[(adc / 2) * 2 + ch / 4].set_channel(adc, ch, new_val);
+    m_segments[ get_segment_index_(adc, ch) ].set_channel(adc, ch, new_val);
+  }
+
+private:
+  int get_segment_index_(const int adc, const int ch) const {
+    auto segment_id = (adc / 2) * 2 + ch / 4;
+
+    if (segment_id < 0 || segment_id > s_num_seg_per_block - 1) {
+      throw WibFrameRelatedIndexError(ERS_HERE, segment_id, 0, s_num_seg_per_block - 1);
+    }
+    return segment_id;
   }
 };
 
@@ -331,22 +351,25 @@ operator<<(std::ostream& o, const ColdataBlock& block)
 class WIBFrame
 {
 public:
-  static constexpr size_t s_num_block_per_frame = 4;
-  static constexpr size_t s_num_ch_per_frame = s_num_block_per_frame * ColdataBlock::s_num_ch_per_block;
+  static constexpr int s_num_block_per_frame = 4;
+  static constexpr int s_num_ch_per_frame = s_num_block_per_frame * ColdataBlock::s_num_ch_per_block;
 
-  static constexpr size_t s_num_frame_hdr_words = sizeof(WIBHeader) / sizeof(word_t);
-  static constexpr size_t s_num_COLDATA_hdr_words = sizeof(ColdataHeader) / sizeof(word_t);
-  static constexpr size_t s_num_COLDATA_words = sizeof(ColdataBlock) / sizeof(word_t);
-  static constexpr size_t s_num_frame_words = s_num_block_per_frame * s_num_COLDATA_words + s_num_frame_hdr_words;
-  static constexpr size_t s_num_frame_bytes = s_num_frame_words * sizeof(word_t);
+  static constexpr int s_num_frame_hdr_words = sizeof(WIBHeader) / sizeof(word_t);
+  static constexpr int s_num_COLDATA_hdr_words = sizeof(ColdataHeader) / sizeof(word_t);
+  static constexpr int s_num_COLDATA_words = sizeof(ColdataBlock) / sizeof(word_t);
+  static constexpr int s_num_frame_words = s_num_block_per_frame * s_num_COLDATA_words + s_num_frame_hdr_words;
+  static constexpr int s_num_frame_bytes = s_num_frame_words * sizeof(word_t);
 
   const WIBHeader* get_wib_header() const { return &m_head; }
   const ColdataHeader* get_coldata_header(const unsigned block_index) const
   {
-    return &m_blocks[block_index % s_num_block_per_frame].m_head;
+    throw_if_invalid_block_index_(block_index);
+    return &m_blocks[block_index].m_head;
   }
-  const ColdataBlock& get_block(const uint8_t b) const { return m_blocks[b]; } // NOLINT(build/unsigned)
-  //    ColdataBlock& get_block(const uint8_t b) { return blocks[b]; }
+  const ColdataBlock& get_block(const uint8_t b) const { // NOLINT(build/unsigned)
+    throw_if_invalid_block_index_(b);
+    return m_blocks[b]; 
+  }
 
   // WIBHeader mutators
   void set_wib_errors(const uint16_t new_wib_errors) { m_head.m_wib_errors = new_wib_errors; } // NOLINT(build/unsigned)
@@ -355,10 +378,12 @@ public:
   // ColdataBlock channel accessors
   uint16_t get_channel(const uint8_t block_num, const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
+    throw_if_invalid_block_index_(block_num);
     return m_blocks[block_num].get_channel(adc, ch);
   }
   uint16_t get_channel(const uint8_t block_num, const uint8_t ch) const // NOLINT(build/unsigned)
   {
+    throw_if_invalid_block_index_(block_num);
     return get_channel(block_num, ch / ColdataBlock::s_num_adc_per_block, ch % ColdataBlock::s_num_adc_per_block);
   }
   uint16_t get_channel(const uint8_t ch) const // NOLINT(build/unsigned)
@@ -369,10 +394,12 @@ public:
   // ColdataBlock channel mutators
   void set_channel(const uint8_t block_num, const uint8_t adc, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
   {
+    throw_if_invalid_block_index_(block_num);
     m_blocks[block_num].set_channel(adc, ch, new_val);
   }
   void set_channel(const uint8_t block_num, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
   {
+    throw_if_invalid_block_index_(block_num);
     set_channel(block_num, ch / ColdataBlock::s_num_adc_per_block, ch % ColdataBlock::s_num_adc_per_block, new_val);
   }
   void set_channel(const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
@@ -383,6 +410,13 @@ public:
   friend std::ostream& operator<<(std::ostream& o, WIBFrame const& frame);
 
 private:
+
+  void throw_if_invalid_block_index_(const int block_num) const {
+    if (block_num < 0 || block_num > s_num_block_per_frame - 1) {
+      throw WibFrameRelatedIndexError(ERS_HERE, block_num, 0, s_num_block_per_frame - 1);
+    }
+  }
+
   WIBHeader m_head;
   ColdataBlock m_blocks[s_num_block_per_frame];
 };

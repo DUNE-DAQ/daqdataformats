@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
  */
 BOOST_AUTO_TEST_CASE(ExistingHeader)
 {
-  auto components = std::vector<ComponentRequest>();
+  std::vector<ComponentRequest> components;
   components.emplace_back();
   components.back().m_component.m_apa_number = 1;
   components.back().m_component.m_link_number = 2;
@@ -70,12 +70,12 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   TriggerRecord record(*header);
   delete header; // NOLINT(build/raw_ownership)
 
-  BOOST_REQUIRE_EQUAL(record.header_ref().get_run_number(), 9);
-  BOOST_REQUIRE_EQUAL(record.header_ref().get_error_bit(0), false);
-  BOOST_REQUIRE_EQUAL(record.header_ref().get_error_bit(1), true);
+  BOOST_REQUIRE_EQUAL(record.get_header_ref().get_run_number(), 9);
+  BOOST_REQUIRE_EQUAL(record.get_header_ref().get_error_bit(0), false);
+  BOOST_REQUIRE_EQUAL(record.get_header_ref().get_error_bit(1), true);
   BOOST_REQUIRE_EQUAL(record.get_header_data().m_error_bits, 10);
-  BOOST_REQUIRE_EQUAL(record.header_ref().at(0).m_window_offset, 3);
-  BOOST_REQUIRE_EQUAL(record.header_ref()[1].m_window_offset, 7);
+  BOOST_REQUIRE_EQUAL(record.get_header_ref().at(0).m_window_offset, 3);
+  BOOST_REQUIRE_EQUAL(record.get_header_ref()[1].m_window_offset, 7);
 
   {
     TriggerRecordHeader bufferHeader(buff, false);

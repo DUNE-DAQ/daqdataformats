@@ -62,10 +62,10 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
     BOOST_REQUIRE_EQUAL(testFrag.get_trigger_timestamp(), 2);
     BOOST_REQUIRE_EQUAL(testFrag.get_run_number(), 3);
 
-    BOOST_REQUIRE_EQUAL(*static_cast<uint8_t*>(testFrag.data()), one);         // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.data()) + 1), two);   // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.data()) + 2), three); // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.data()) + 3), four);  // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*static_cast<uint8_t*>(testFrag.get_data()), one);         // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.get_data()) + 1), two);   // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.get_data()) + 2), three); // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.get_data()) + 3), four);  // NOLINT(build/unsigned)
   }
 
   frag = malloc(sizeof(FragmentHeader) + 4);
@@ -83,10 +83,10 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
     BOOST_REQUIRE_EQUAL(testFrag.get_trigger_timestamp(), 2);
     BOOST_REQUIRE_EQUAL(testFrag.get_run_number(), 3);
 
-    BOOST_REQUIRE_EQUAL(*static_cast<uint8_t*>(testFrag.data()), four);        // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.data()) + 1), three); // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.data()) + 2), two);   // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.data()) + 3), one);   // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*static_cast<uint8_t*>(testFrag.get_data()), four);        // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.get_data()) + 1), three); // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.get_data()) + 2), two);   // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(testFrag.get_data()) + 3), one);   // NOLINT(build/unsigned)
   }
   free(frag); // Should not cause errors
 }
