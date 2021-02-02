@@ -13,11 +13,19 @@
 #include "dataformats/TriggerRecordHeaderData.hpp"
 #include "dataformats/Types.hpp"
 
+#include "ers/ers.h"
+
 #include <ostream>
 #include <string>
 #include <vector>
 
 namespace dunedaq {
+
+ERS_DECLARE_ISSUE(dataformats,
+                  ComponentRequestIndexError,
+                  "Supplied ComponentRequest index " << cri_index_supplied << " is greater than the maximum index "
+                                                     << cri_index_max,
+                  ((int)cri_index_supplied)((int)cri_index_max)) // NOLINT
 
 namespace dataformats {
 
@@ -32,21 +40,21 @@ public:
    * @brief Construct a TriggerRecordHeader using a vector of ComponentRequest objects
    * @param components Vector of ComponentRequests to copy into TriggerRecordHeader
    */
-  explicit TriggerRecordHeader(std::vector<ComponentRequest> components)
+  explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components)
   {
     size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
 
-    data_arr_ = malloc(size); // NOLINT(build/unsigned)
-    alloc_ = true;
+    m_data_arr = malloc(size); // NOLINT(build/unsigned)
+    m_alloc = true;
 
     TriggerRecordHeaderData header;
-    header.num_requested_components = components.size();
-    memcpy(data_arr_, &header, sizeof(header));
+    header.m_num_requested_components = components.size();
+    memcpy(m_data_arr, &header, sizeof(header));
 
     size_t offset = sizeof(header);
     for (auto const& component : components) {
-      memcpy(static_cast<uint8_t*>(data_arr_) + offset, &component, sizeof(ComponentRequest)); // NOLINT
-      offset += sizeof(ComponentRequest);
+      memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(component)); // NOLINT
+      offset += sizeof(component);
     }
   }
 
@@ -59,14 +67,14 @@ public:
   explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false)
   {
     if (!copy_from_buffer) {
-      data_arr_ = existing_trigger_record_header_buffer;
+      m_data_arr = existing_trigger_record_header_buffer;
     } else {
       auto header = reinterpret_cast<TriggerRecordHeaderData*>(existing_trigger_record_header_buffer); // NOLINT
-      size_t size = header->num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
+      size_t size = header->m_num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
 
-      data_arr_ = malloc(size);
-      alloc_ = true;
-      memcpy(data_arr_, existing_trigger_record_header_buffer, size);
+      m_data_arr = malloc(size);
+      m_alloc = true;
+      memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
     }
   }
 
@@ -75,7 +83,7 @@ public:
    * @param other TriggerRecordHeader to copy
    */
   TriggerRecordHeader(TriggerRecordHeader const& other)
-    : TriggerRecordHeader(other.data_arr_, true)
+    : TriggerRecordHeader(other.m_data_arr, true)
   {}
   /**
    * @brief TriggerRecordHeader copy assignment operator
@@ -87,9 +95,9 @@ public:
     if (&other == this)
       return *this;
 
-    data_arr_ = malloc(other.get_total_size_bytes());
-    alloc_ = true;
-    memcpy(data_arr_, other.data_arr_, other.get_total_size_bytes());
+    m_data_arr = malloc(other.get_total_size_bytes());
+    m_alloc = true;
+    memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());
     return *this;
   }
 
@@ -101,8 +109,8 @@ public:
    */
   ~TriggerRecordHeader()
   {
-    if (alloc_)
-      free(data_arr_);
+    if (m_alloc)
+      free(m_data_arr);
   }
 
   /**
@@ -115,22 +123,22 @@ public:
    * @brief Get the trigger number for this TriggerRecordHeader
    * @return The trigger_number TriggerRecordHeaderData field
    */
-  trigger_number_t get_trigger_number() const { return header_()->trigger_number; }
+  trigger_number_t get_trigger_number() const { return header_()->m_trigger_number; }
   /**
    * @brief Set the trigger number for this TriggerRecordHeader
    * @param trigger_number Trigger nunmber to set
    */
-  void set_trigger_number(trigger_number_t trigger_number) { header_()->trigger_number = trigger_number; }
+  void set_trigger_number(trigger_number_t trigger_number) { header_()->m_trigger_number = trigger_number; }
   /**
    * @brief Get the trigger_timestamp stored in this TriggerRecordHeader
    * @return The trigger_timestamp TriggerRecordHeaderData field
    */
-  timestamp_t get_trigger_timestamp() const { return header_()->trigger_timestamp; }
+  timestamp_t get_trigger_timestamp() const { return header_()->m_trigger_timestamp; }
   /**
    * @brief Set the trigger timestamp for this TriggerRecordHeader
    * @param trigger_timestamp Trigger timestamp to set
    */
-  void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_()->trigger_timestamp = trigger_timestamp; }
+  void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_()->m_trigger_timestamp = trigger_timestamp; }
 
   /**
    * @brief Get the number of ComponentRequest objects stored in this TriggerRecordHeader
@@ -138,29 +146,29 @@ public:
    */
   uint64_t get_num_requested_components() const // NOLINT(build/unsigned)
   {
-    return header_()->num_requested_components;
+    return header_()->m_num_requested_components;
   }
 
   /**
    * @brief Get the run_number stored in this TriggerRecordHeader
    * @return The run_number TriggerRecordHeaderData field
    */
-  run_number_t get_run_number() const { return header_()->run_number; }
+  run_number_t get_run_number() const { return header_()->m_run_number; }
   /**
    * @brief Set the run number for this TriggerRecordHeader
    * @param run_number Run number to set
    */
-  void set_run_number(run_number_t run_number) { header_()->run_number = run_number; }
+  void set_run_number(run_number_t run_number) { header_()->m_run_number = run_number; }
   /**
    * @brief Get the error_bits header field as a bitset
    * @return bitset containing error_bits header field
    */
-  std::bitset<32> get_error_bits() const { return header_()->error_bits; }
+  std::bitset<32> get_error_bits() const { return header_()->m_error_bits; }
   /**
    * @brief Overwrite error bits using the given bitset
    * @param bits Bitset of error bits to set
    */
-  void set_error_bits(std::bitset<32> bits) { header_()->error_bits = bits.to_ulong(); }
+  void set_error_bits(std::bitset<32> bits) { header_()->m_error_bits = bits.to_ulong(); }
   /**
    * @brief Get the value of the given error bit
    * @param bit Bit to get
@@ -183,12 +191,12 @@ public:
    * @brief Get the trigger_type field from the data struct
    * @return The trigger_type field from the TriggerRecordHeaderData struct
    */
-  trigger_type_t get_trigger_type() const { return header_()->trigger_type; }
+  trigger_type_t get_trigger_type() const { return header_()->m_trigger_type; }
   /**
    * @brief Set the trigger_type header field to the given value
    * @param trigger_type Value of trigger_type to set
    */
-  void set_trigger_type(trigger_type_t trigger_type) { header_()->trigger_type = trigger_type; }
+  void set_trigger_type(trigger_type_t trigger_type) { header_()->m_trigger_type = trigger_type; }
 
   /**
    * @brief Get the total size of the TriggerRecordHeader
@@ -196,29 +204,25 @@ public:
    */
   size_t get_total_size_bytes() const
   {
-    return header_()->num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
+    return header_()->m_num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
   }
   /**
-   * @brief Get the location of the flat data array for I/O
+   * @brief Get the location of the flat data array for output
    * @return Pointer to the TriggerRecordHeader data array
    */
-  void* get_storage_location() const { return data_arr_; }
+
+  const void* get_storage_location() const { return m_data_arr; }
 
   /**
    * @brief Access ComponentRequest and copy result
    * @param idx Index to access
    * @return Copy of ComponentRequest at index
-   * @throws std::out_of_range exception if idx is outside of allowable range
+   * @throws ComponentRequestIndexError exception if idx is outside of allowable range
    */
   ComponentRequest at(size_t idx) const
   {
-    if (idx >= header_()->num_requested_components) {
-      /** @todo Eric Flumerfelt <eflumerf@fnal.gov>, 01/07/2021: Discuss whether throwing an ERS exception here would be
-       * more correct, given that this code may be shared with the Offline
-       */
-      throw std::out_of_range(std::string("Supplied ComponentRequest index ") + std::to_string(idx) +
-                              " is greater than the maximum index " +
-                              std::to_string(header_()->num_requested_components - 1));
+    if (idx >= header_()->m_num_requested_components) {
+      throw ComponentRequestIndexError(ERS_HERE, idx, header_()->m_num_requested_components - 1);
     }
     // Increment header pointer by one to skip header
     return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
@@ -228,17 +232,12 @@ public:
    * @brief Operator[] to access ComponentRequests by index
    * @param idx Index to access
    * @return ComponentRequest reference
-   * @throws std::out_of_range exception if idx is outside of allowable range
+   * @throws ComponentRequestIndexError exception if idx is outside of allowable range
    */
   ComponentRequest& operator[](size_t idx)
   {
-    if (idx >= header_()->num_requested_components) {
-      /** @todo Eric Flumerfelt <eflumerf@fnal.gov>, 01/07/2021: Discuss whether throwing an ERS exception here would be
-       * more correct, given that this code may be shared with the Offline
-       */
-      throw std::out_of_range(std::string("Supplied ComponentRequest index ") + std::to_string(idx) +
-                              " is greater than the maximum index " +
-                              std::to_string(header_()->num_requested_components - 1));
+    if (idx >= header_()->m_num_requested_components) {
+      throw ComponentRequestIndexError(ERS_HERE, idx, header_()->m_num_requested_components - 1);
     }
     // Increment header pointer by one to skip header
     return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
@@ -246,14 +245,15 @@ public:
 
 private:
   /**
-   * @brief Get the TriggerRecordHeaderData from the data_arr_ array
+   * @brief Get the TriggerRecordHeaderData from the m_data_arr array
    * @return Pointer to the TriggerRecordHeaderData
    */
-  TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(data_arr_); } // NOLINT
-  void* data_arr_{
+  TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr); }
+
+  void* m_data_arr{
     nullptr
-  };                    ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
-  bool alloc_{ false }; ///< Whether the TriggerRecordHeader owns the memory pointed by data_arr_
+  };                     ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
+  bool m_alloc{ false }; ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr
 };
 
 } // namespace dataformats

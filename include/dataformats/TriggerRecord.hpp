@@ -21,70 +21,71 @@ namespace dunedaq {
 namespace dataformats {
 
 /**
- * @brief C++ Representation of a DUNE TriggerRecord, consisting of a TriggerRecordHeader object and a vector of pointers to Fragment objects
-*/
+ * @brief C++ Representation of a DUNE TriggerRecord, consisting of a TriggerRecordHeader object and a vector of
+ * pointers to Fragment objects
+ */
 class TriggerRecord
 {
 public:
   /**
    * @brief Construct a TriggerRecord using the given vector of components to initialize the TriggerRecordHeader
    * @param components List of components requested for this TriggerRecord
-  */
-  explicit TriggerRecord(std::vector<ComponentRequest> components)
-    : header_(components)
-    , fragments_()
+   */
+  explicit TriggerRecord(std::vector<ComponentRequest> const& components)
+    : m_header(components)
+    , m_fragments()
   {}
 
   /**
    * @brief Construct a TriggerRecord using the given TriggerRecordHeader
    * @param header TriggerRecordHeader to *copy* into the TriggerRecord
-  */
+   */
   explicit TriggerRecord(TriggerRecordHeader const& header)
-    : header_(header)
-    , fragments_()
+    : m_header(header)
+    , m_fragments()
   {}
   virtual ~TriggerRecord() = default; ///< TriggerRecord default destructor
 
-  TriggerRecord(TriggerRecord const&) = delete; ///< TriggerRecords are not copy-constructible
-  TriggerRecord(TriggerRecord&&) = default; ///< Default TriggerRecord move constructor
+  TriggerRecord(TriggerRecord const&) = delete;            ///< TriggerRecords are not copy-constructible
+  TriggerRecord(TriggerRecord&&) = default;                ///< Default TriggerRecord move constructor
   TriggerRecord& operator=(TriggerRecord const&) = delete; ///< TriggerRecords are not copy-assignable
-  TriggerRecord& operator=(TriggerRecord&&) = default; ///< Default TriggerRecord move assignment operator
+  TriggerRecord& operator=(TriggerRecord&&) = default;     ///< Default TriggerRecord move assignment operator
 
   /**
    * @brief Get a handle to the TriggerRecordHeader
    * @return A reference to the TriggerRecordHeader
-  */
-  TriggerRecordHeader& get_header() { return header_; }
+   */
+  TriggerRecordHeader& get_header_ref() { return m_header; }
   /**
    * @brief Set the TriggerRecordHeader to the given TriggerRecordHeader object
    * @param header new TriggerRecordHeader to use
-  */
-  void set_header(TriggerRecordHeader header) { header_ = header; }
+   */
+  void set_header(TriggerRecordHeader header) { m_header = header; }
   /**
    * @brief Get a copy of the TriggerRecordHeaderData from the TriggerRecordHeader
    * @return Copy of the TriggerRecordHeaderData struct from the TriggerRecordHeader
-  */
-  TriggerRecordHeaderData get_header_data() const { return header_.get_header(); }
+   */
+  TriggerRecordHeaderData get_header_data() const { return m_header.get_header(); }
 
   /**
    * @brief Get a handle to the Fragments
    * @return A reference to the Fragments vector
-  */
-  std::vector<std::unique_ptr<Fragment>>& get_fragments() { return fragments_; }
+   */
+  std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() { return m_fragments; }
   /**
    * @brief Set the Fragments vector to the given vector of Fragments
    * @param fragments Fragments vector to use
-  */
-  void set_fragments(std::vector<std::unique_ptr<Fragment>>&& fragments) { fragments_ = std::move(fragments); }
+   */
+  void set_fragments(std::vector<std::unique_ptr<Fragment>>&& fragments) { m_fragments = std::move(fragments); }
   /**
    * @brief Add a Fragment pointer to the Fragments vector
    * @param fragment Fragment to add
-  */
-  void add_fragment(std::unique_ptr<Fragment>&& fragment) { fragments_.emplace_back(std::move(fragment)); }
+   */
+  void add_fragment(std::unique_ptr<Fragment>&& fragment) { m_fragments.emplace_back(std::move(fragment)); }
 
 private:
-  TriggerRecordHeader header_; ///< TriggerRecordHeader object
-  std::vector<std::unique_ptr<Fragment>> fragments_; ///< Vector of unique_ptrs to Fragment objects
+  TriggerRecordHeader m_header;                       ///< TriggerRecordHeader object
+  std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
 };
 } // namespace dataformats
 } // namespace dunedaq

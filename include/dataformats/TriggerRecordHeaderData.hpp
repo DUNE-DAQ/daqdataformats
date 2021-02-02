@@ -12,6 +12,7 @@
 #include "dataformats/ComponentRequest.hpp"
 #include "dataformats/Types.hpp"
 
+#include <limits>
 #include <ostream>
 #include <vector>
 
@@ -24,56 +25,71 @@ namespace dataformats {
  */
 struct TriggerRecordHeaderData
 {
-/**
- * @brief Magic bytes to identify a TriggerRecordHeader entry in a raw data stream
- */
-#define TRIGGER_RECORD_HEADER_MAGIC 0x33334444
-/**
- * @brief The current version of the TriggerRecordHeader
- */
-#define TRIGGER_RECORD_HEADER_VERSION 1
+  /**
+   * @brief Magic bytes to identify a TriggerRecordHeader entry in a raw data stream
+   */
+  static constexpr uint32_t s_trigger_record_header_magic = 0x33334444; // NOLINT(build/unsigned)
+
+  /**
+   * @brief The current version of the TriggerRecordHeader
+   */
+  static constexpr uint32_t s_trigger_record_header_version = 1; // NOLINT(build/unsigned)
+
+  /**
+   * @brief An invalid number of components
+   */
+  static constexpr uint64_t s_invalid_number_components = // NOLINT(build/unsigned)
+    std::numeric_limits<uint64_t>::max();                 // NOLINT(build/unsigned)
+
+  /**
+   * @brief By default, all error bits are unset
+   */
+  static constexpr uint32_t s_default_error_bits = 0; // NOLINT(build/unsigned)
 
   /**
    * @brief Magic bytes used to identify a TriggerRecordHeaderData struct in a raw data stream
    */
-  uint32_t trigger_record_header_marker = TRIGGER_RECORD_HEADER_MAGIC; // NOLINT(build/unsigned)
+  uint32_t m_trigger_record_header_marker = s_trigger_record_header_magic; // NOLINT(build/unsigned)
+
   /**
    * @brief Version of the TriggerRecordHeaderData structure
    */
-  uint32_t version = TRIGGER_RECORD_HEADER_VERSION; // NOLINT(build/unsigned)
+  uint32_t m_version = s_trigger_record_header_version; // NOLINT(build/unsigned)
 
   /**
    * @brief Trigger Number
    */
-  trigger_number_t trigger_number{ 0 };
+  trigger_number_t m_trigger_number{ TypeDefaults::s_invalid_trigger_number };
+
   /**
    * @brief Timestamp of the TriggerDecision
    */
-  timestamp_t trigger_timestamp{ 0 };
+  timestamp_t m_trigger_timestamp{ TypeDefaults::s_invalid_timestamp };
 
   /**
    * @brief Number of ComponentRequest objects stored in the TriggerRecordHeader
    */
-  uint64_t num_requested_components{ 0 }; // NOLINT(build/unsigned)
+  uint64_t m_num_requested_components{ s_invalid_number_components }; // NOLINT(build/unsigned)
 
   /**
    * @brief Run Number for the TriggerRecord
    */
-  run_number_t run_number{ 0 };
+  run_number_t m_run_number{ TypeDefaults::s_invalid_run_number };
+
   /**
    * @brief Error bits for the TriggerRecord
    */
-  uint32_t error_bits{ 0 }; // NOLINT(build/unsigned)
+  uint32_t m_error_bits{ s_default_error_bits }; // NOLINT(build/unsigned)
 
   /**
    * @brief Type of the TriggerDecision
    */
-  trigger_type_t trigger_type {0};
+  trigger_type_t m_trigger_type{ TypeDefaults::s_invalid_trigger_type };
 
   /**
    * @brief Padding to ensure 64-bit alignment
    */
-  uint64_t unused : 48; // NOLINT(build/unsigned)
+  uint64_t m_unused : 48; // NOLINT(build/unsigned)
 };
 
 /**
@@ -125,17 +141,17 @@ enum class TriggerRecordErrorBits : size_t
 inline std::ostream&
 operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr)
 {
-  return o << "check_word: " << std::hex << hdr.trigger_record_header_marker << std::dec << ", "
-           << "version: " << hdr.version << ", "
+  return o << "check_word: " << std::hex << hdr.m_trigger_record_header_marker << std::dec << ", "
+           << "version: " << hdr.m_version << ", "
 
-           << "trigger_number: " << hdr.trigger_number << ", "
-           << "run_number: " << hdr.run_number << ", "
-           << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
-           << "trigger_type: " << hdr.trigger_type << ", "
+           << "trigger_number: " << hdr.m_trigger_number << ", "
+           << "run_number: " << hdr.m_run_number << ", "
+           << "trigger_timestamp: " << hdr.m_trigger_timestamp << ", "
+           << "trigger_type: " << hdr.m_trigger_type << ", "
 
-           << "error_bits: " << hdr.error_bits << ", "
+           << "error_bits: " << hdr.m_error_bits << ", "
 
-           << "num_requested_components: " << hdr.num_requested_components;
+           << "num_requested_components: " << hdr.m_num_requested_components;
 }
 
 } // namespace dataformats
