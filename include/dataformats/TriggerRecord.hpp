@@ -31,7 +31,7 @@ public:
    * @brief Construct a TriggerRecord using the given vector of components to initialize the TriggerRecordHeader
    * @param components List of components requested for this TriggerRecord
    */
-  explicit TriggerRecord(std::vector<ComponentRequest> components)
+  explicit TriggerRecord(std::vector<ComponentRequest> const& components)
     : m_header(components)
     , m_fragments()
   {}
@@ -55,7 +55,7 @@ public:
    * @brief Get a handle to the TriggerRecordHeader
    * @return A reference to the TriggerRecordHeader
    */
-  TriggerRecordHeader& header_ref() { return m_header; }
+  TriggerRecordHeader& get_header_ref() { return m_header; }
   /**
    * @brief Set the TriggerRecordHeader to the given TriggerRecordHeader object
    * @param header new TriggerRecordHeader to use
@@ -71,7 +71,7 @@ public:
    * @brief Get a handle to the Fragments
    * @return A reference to the Fragments vector
    */
-  std::vector<std::unique_ptr<Fragment>>& fragments_ref() { return m_fragments; }
+  std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() { return m_fragments; }
   /**
    * @brief Set the Fragments vector to the given vector of Fragments
    * @param fragments Fragments vector to use

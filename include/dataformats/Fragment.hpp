@@ -235,7 +235,7 @@ public:
    * @brief Get a pointer to the data payload in the Fragmnet
    * @return Pointer to the data payload in the Fragment
    */
-  void* data() const
+  void* get_data() const
   {
     // Increment header pointer by one to skip header
     return static_cast<void*>(header_() + 1); // NOLINT
