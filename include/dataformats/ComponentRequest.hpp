@@ -12,6 +12,8 @@
 #include "dataformats/GeoID.hpp"
 #include "dataformats/Types.hpp"
 
+#include "serialization/Serialization.hpp"
+
 #include <ostream>
 
 namespace dunedaq {
@@ -44,6 +46,9 @@ struct ComponentRequest
    *                      ^ ts - offset + width
    */
   timestamp_diff_t m_window_width{ TypeDefaults::s_invalid_timestamp_diff };
+
+  MSGPACK_DEFINE(m_component, m_window_offset, m_window_width)
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(ComponentRequest, m_component, m_window_offset, m_window_width);
 };
 
 /**

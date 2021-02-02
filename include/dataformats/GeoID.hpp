@@ -9,6 +9,8 @@
 #ifndef DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
 #define DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
 
+#include "serialization/Serialization.hpp"
+
 #include <cstdint>
 #include <limits>
 #include <ostream>
@@ -49,6 +51,9 @@ struct GeoID
   {
     return std::tuple(m_apa_number, m_link_number) < std::tuple(other.m_apa_number, other.m_link_number);
   }
+
+  MSGPACK_DEFINE(m_apa_number, m_link_number)
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GeoID, m_apa_number, m_link_number);
 };
 
 /**
