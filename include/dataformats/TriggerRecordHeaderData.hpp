@@ -98,7 +98,7 @@ struct TriggerRecordHeaderData
 enum class TriggerRecordErrorBits : size_t
 {
   kIncomplete  = 0,   ///< Indicates a trigger record with incomplete fragments
-  kMissmatch   = 1,   ///< We have as many fragments as requested but they do not match the requested components
+  kMismatch    = 1,   ///< We have as many fragments as requested but they do not match the requested components
   kUnassigned2 = 2,   ///< Error bit 2 is not assigned
   kUnassigned3 = 3,   ///< Error bit 3 is not assigned
   kUnassigned4 = 4,   ///< Error bit 4 is not assigned
