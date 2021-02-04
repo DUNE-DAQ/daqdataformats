@@ -52,8 +52,7 @@ struct GeoID
     return std::tuple(m_apa_number, m_link_number) < std::tuple(other.m_apa_number, other.m_link_number);
   }
 
-  MSGPACK_DEFINE(m_apa_number, m_link_number)
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GeoID, m_apa_number, m_link_number);
+  DUNE_DAQ_SERIALIZE(GeoID, m_apa_number, m_link_number);
 };
 
 /**
