@@ -250,7 +250,70 @@ private:
   void* m_data_arr{ nullptr }; ///< Flat memory containing a FragmentHeader and the data payload
   bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };
+
+void
+to_json(nlohmann::json&, const Fragment&)
+{
+  throw std::runtime_error("Foo");
+}
+
+void
+from_json(const nlohmann::json&, Fragment&)
+{
+  throw std::runtime_error("Foo");
+}
+
 } // namespace dataformats
 } // namespace dunedaq
+
+// MsgPack serialization functions (which just put the raw bytes of
+// the fragment array into a MsgPack message)
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+{ 
+namespace adaptor {
+
+template<>
+struct pack<dunedaq::dataformats::Fragment>
+{
+  template<typename Stream>
+  packer<Stream>& operator()(msgpack::packer<Stream>& o, dunedaq::dataformats::Fragment const& frag) const
+  {
+    o.pack_bin(frag.get_size());         // pack header and size
+    o.pack_bin_body(static_cast<const char*>(frag.get_storage_location()), frag.get_size()); // pack payload
+    return o;
+  }
+};
+
+// Typically we use convert<> for deserialization, but Fragment isn't default constructible, so we have to use as<>. See: https://github.com/msgpack/msgpack-c/wiki/v2_0_cpp_adaptor#non-default-constructible-class-support-c11-only-since-120
+template<>
+struct as<dunedaq::dataformats::Fragment> {
+    dunedaq::dataformats::Fragment operator()(msgpack::object const& o) const {
+      return dunedaq::dataformats::Fragment(const_cast<char*>(o.via.bin.ptr), true);
+    }
+};
+
+} // namespace adaptor
+} // namespace MSGPACK_DEFAULT_API_NS
+} // namespace msgpack
+
+// nlohmann::json serialization function. As with MsgPack, we have to
+// do somethign special here because Fragment isn't default
+// constructible. See
+// https://nlohmann.github.io/json/features/arbitrary_types/#how-can-i-use-get-for-non-default-constructiblenon-copyable-types
+namespace nlohmann {
+template <>
+struct adl_serializer<dunedaq::dataformats::Fragment> {
+  // note: the return type is no longer 'void', and the method only takes
+  // one argument
+  static dunedaq::dataformats::Fragment from_json(const json&) {
+    throw std::runtime_error("Foo");
+  }
+  
+  static void to_json(json&, const dunedaq::dataformats::Fragment&) {
+    throw std::runtime_error("Foo");
+  }
+};
+} // namespace nlohmann
 
 #endif // DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENT_HPP_
