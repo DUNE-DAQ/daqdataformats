@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_trigger_number(10);
   header->set_trigger_timestamp(11);
   header->set_trigger_type(12);
-  header->set_error_bit(TriggerRecordErrorBits::kUnassigned1, true);
+  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
   header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
 
   BOOST_REQUIRE_THROW(header->at(header->get_header().m_num_requested_components),
