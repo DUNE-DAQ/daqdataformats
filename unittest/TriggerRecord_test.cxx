@@ -7,6 +7,7 @@
  */
 
 #include "dataformats/TriggerRecord.hpp"
+#include "serialization/Serialization.hpp"
 
 /**
  * @brief Name of this test module
@@ -93,4 +94,89 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
 
   free(buff);
 }
+
+/**
+ * @brief Check that TriggerRecordHeader serialization via MsgPack works
+ */
+BOOST_AUTO_TEST_CASE(Header_SerDes_MsgPack)
+{
+  std::vector<ComponentRequest> components;
+  components.emplace_back();
+  components.back().m_component.m_apa_number = 1;
+  components.back().m_component.m_link_number = 2;
+  components.back().m_window_offset = 3;
+  components.back().m_window_width = 4;
+  components.emplace_back();
+  components.back().m_component.m_apa_number = 5;
+  components.back().m_component.m_link_number = 6;
+  components.back().m_window_offset = 7;
+  components.back().m_window_width = 8;
+
+  auto header = new TriggerRecordHeader(components);
+  header->set_run_number(9);
+  header->set_trigger_number(10);
+  header->set_trigger_timestamp(11);
+  header->set_trigger_type(12);
+  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
+  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
+
+  auto bytes = dunedaq::serialization::serialize(*header, dunedaq::serialization::kMsgPack);
+  TriggerRecordHeader& header_orig=*header;
+  TriggerRecordHeader header_deserialized = dunedaq::serialization::deserialize<TriggerRecordHeader>(bytes);
+
+
+  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_number(), header_deserialized.get_trigger_number());
+  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_timestamp(), header_deserialized.get_trigger_timestamp());
+  BOOST_REQUIRE_EQUAL(header_orig.get_num_requested_components(), header_deserialized.get_num_requested_components());
+  BOOST_REQUIRE_EQUAL(header_orig.get_run_number(), header_deserialized.get_run_number());
+  BOOST_REQUIRE_EQUAL(header_orig.get_error_bits(), header_deserialized.get_error_bits());
+  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_type(), header_deserialized.get_trigger_type());
+  BOOST_REQUIRE_EQUAL(header_orig.get_total_size_bytes(), header_deserialized.get_total_size_bytes());
+  BOOST_REQUIRE_EQUAL(header_orig.at(0).m_window_offset, header_deserialized.at(0).m_window_offset);
+  BOOST_REQUIRE_EQUAL(header_orig.at(1).m_window_offset, header_deserialized.at(1).m_window_offset);
+  
+}
+
+/**
+ * @brief Check that TriggerRecordHeader serialization via MsgPack works
+ */
+BOOST_AUTO_TEST_CASE(Header_SerDes_JSON)
+{
+  std::vector<ComponentRequest> components;
+  components.emplace_back();
+  components.back().m_component.m_apa_number = 1;
+  components.back().m_component.m_link_number = 2;
+  components.back().m_window_offset = 3;
+  components.back().m_window_width = 4;
+  components.emplace_back();
+  components.back().m_component.m_apa_number = 5;
+  components.back().m_component.m_link_number = 6;
+  components.back().m_window_offset = 7;
+  components.back().m_window_width = 8;
+
+  auto header = new TriggerRecordHeader(components);
+  header->set_run_number(9);
+  header->set_trigger_number(10);
+  header->set_trigger_timestamp(11);
+  header->set_trigger_type(12);
+  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
+  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
+
+  auto bytes = dunedaq::serialization::serialize(*header, dunedaq::serialization::kJSON);
+  TriggerRecordHeader& header_orig=*header;
+  TriggerRecordHeader header_deserialized = dunedaq::serialization::deserialize<TriggerRecordHeader>(bytes);
+
+
+  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_number(), header_deserialized.get_trigger_number());
+  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_timestamp(), header_deserialized.get_trigger_timestamp());
+  BOOST_REQUIRE_EQUAL(header_orig.get_num_requested_components(), header_deserialized.get_num_requested_components());
+  BOOST_REQUIRE_EQUAL(header_orig.get_run_number(), header_deserialized.get_run_number());
+  BOOST_REQUIRE_EQUAL(header_orig.get_error_bits(), header_deserialized.get_error_bits());
+  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_type(), header_deserialized.get_trigger_type());
+  BOOST_REQUIRE_EQUAL(header_orig.get_total_size_bytes(), header_deserialized.get_total_size_bytes());
+  BOOST_REQUIRE_EQUAL(header_orig.at(0).m_window_offset, header_deserialized.at(0).m_window_offset);
+  BOOST_REQUIRE_EQUAL(header_orig.at(1).m_window_offset, header_deserialized.at(1).m_window_offset);
+  
+}
+
 BOOST_AUTO_TEST_SUITE_END()
