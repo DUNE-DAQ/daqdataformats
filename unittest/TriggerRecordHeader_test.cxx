@@ -116,6 +116,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   free(buff);
 }
 
+/**
+ * @brief Test header field manipulation methods
+*/
 BOOST_AUTO_TEST_CASE(HeaderFields) {
   std::vector<ComponentRequest> components;
   components.emplace_back();

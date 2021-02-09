@@ -19,10 +19,18 @@
 
 namespace dunedaq {
 
+/**
+ * @brief An ERS Error indicating that the requested index is out of range
+ * @param wib_index_supplied Index that caused the error
+ * @param wib_index_min Minium valid index for this function
+ * @param wib_index_max Maximum valid index for this function
+ * @cond Doxygen doesn't like ERS macros
+ */
 ERS_DECLARE_ISSUE(dataformats,
                   WibFrameRelatedIndexError,
                   "Supplied index " << wib_index_supplied << " is outside the allowed range of " << wib_index_min << " to " << wib_index_max,
                   ((int)wib_index_supplied)((int)wib_index_min)((int)wib_index_max)) // NOLINT
+    /// @endcond
 
 
 

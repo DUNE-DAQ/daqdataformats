@@ -33,6 +33,9 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
   BOOST_REQUIRE(std::is_move_assignable_v<TriggerRecord>);
 }
 
+/**
+ * @brief Test constructor that takes a vector of ComponentRequests 
+*/
 BOOST_AUTO_TEST_CASE(ComponentsConstructor)
 {
   std::vector<ComponentRequest> components;
@@ -52,6 +55,9 @@ BOOST_AUTO_TEST_CASE(ComponentsConstructor)
   delete record;
 }
 
+/**
+ * @brief Test constructor that uses and existing TriggerRecordHeader
+*/
 BOOST_AUTO_TEST_CASE(HeaderConstructor)
 {
   std::vector<ComponentRequest> components;
@@ -73,6 +79,9 @@ BOOST_AUTO_TEST_CASE(HeaderConstructor)
   delete header;
 }
 
+/**
+ * @brief Test TriggerRecordHeader manipulation methods
+*/
 BOOST_AUTO_TEST_CASE(HeaderManipulation) {
 
   std::vector<ComponentRequest> components;
@@ -103,6 +112,9 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation) {
   BOOST_REQUIRE_EQUAL(record.get_header_data().m_trigger_timestamp, 100);
 }
 
+/**
+ * @brief Test Fragment vector manipulation methods
+*/
 BOOST_AUTO_TEST_CASE(FragmentManipulation) {
 
   std::vector<ComponentRequest> components;

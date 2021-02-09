@@ -33,6 +33,9 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
   BOOST_REQUIRE(std::is_move_assignable_v<Fragment>);
 }
 
+/**
+ * @brief Test constructors that gather existing data buffers
+*/
 BOOST_AUTO_TEST_CASE(DataConstructors)
 {
   auto buf1 = malloc(10);
@@ -44,6 +47,9 @@ BOOST_AUTO_TEST_CASE(DataConstructors)
   BOOST_REQUIRE_EQUAL(collect_frag.get_size(), sizeof(FragmentHeader) + 30);
 }
 
+/**
+ * @brief Test construction of invalid Fragments
+*/
 BOOST_AUTO_TEST_CASE(BadConstructors)
 {
   Fragment* fragment_ptr;
@@ -132,6 +138,9 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   free(frag); // Should not cause errors
 }
 
+/**
+ * @brief Test header field manipulation methods
+*/
 BOOST_AUTO_TEST_CASE(HeaderFields)
 {
 
