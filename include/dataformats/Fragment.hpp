@@ -18,6 +18,7 @@
 #include "dataformats/Types.hpp"
 
 #include <bitset>
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <numeric>
@@ -251,18 +252,6 @@ private:
   bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };
 
-void
-to_json(nlohmann::json&, const Fragment&)
-{
-  throw std::runtime_error("Foo");
-}
-
-void
-from_json(const nlohmann::json&, Fragment&)
-{
-  throw std::runtime_error("Foo");
-}
-
 } // namespace dataformats
 } // namespace dunedaq
 
@@ -285,7 +274,9 @@ struct pack<dunedaq::dataformats::Fragment>
   }
 };
 
-// Typically we use convert<> for deserialization, but Fragment isn't default constructible, so we have to use as<>. See: https://github.com/msgpack/msgpack-c/wiki/v2_0_cpp_adaptor#non-default-constructible-class-support-c11-only-since-120
+// Typically we use convert<> for deserialization, but Fragment isn't
+// default constructible, so we have to use as<>. See:
+// https://github.com/msgpack/msgpack-c/wiki/v2_0_cpp_adaptor#non-default-constructible-class-support-c11-only-since-120
 template<>
 struct as<dunedaq::dataformats::Fragment> {
     dunedaq::dataformats::Fragment operator()(msgpack::object const& o) const {
@@ -297,8 +288,10 @@ struct as<dunedaq::dataformats::Fragment> {
 } // namespace MSGPACK_DEFAULT_API_NS
 } // namespace msgpack
 
+
+
 // nlohmann::json serialization function. As with MsgPack, we have to
-// do somethign special here because Fragment isn't default
+// do something special here because Fragment isn't default
 // constructible. See
 // https://nlohmann.github.io/json/features/arbitrary_types/#how-can-i-use-get-for-non-default-constructiblenon-copyable-types
 namespace nlohmann {
@@ -306,12 +299,21 @@ template <>
 struct adl_serializer<dunedaq::dataformats::Fragment> {
   // note: the return type is no longer 'void', and the method only takes
   // one argument
-  static dunedaq::dataformats::Fragment from_json(const json&) {
-    throw std::runtime_error("Foo");
+  static dunedaq::dataformats::Fragment from_json(const json& j) {
+    std::vector<uint8_t> tmp;
+    for(auto const& it : j.items()){
+      if(!it.value().is_number_integer()){
+        throw std::runtime_error("Foo");
+      }
+      tmp.push_back(it.value().get<uint8_t>());
+    }
+    return dunedaq::dataformats::Fragment(tmp.data(), true);
   }
   
-  static void to_json(json&, const dunedaq::dataformats::Fragment&) {
-    throw std::runtime_error("Foo");
+  static void to_json(json& j, const dunedaq::dataformats::Fragment& frag) {
+    const uint8_t* storage=static_cast<const uint8_t*>(frag.get_storage_location());
+    std::vector<uint8_t> bytes(storage, storage+frag.get_size());
+    j=bytes;
   }
 };
 } // namespace nlohmann
