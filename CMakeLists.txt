@@ -25,7 +25,7 @@ daq_add_library(*.cpp LINK_LIBRARIES ${RAWDATA_DEPENDENCIES})
 ##############################################################################
 # Integration tests
 
-#daq_add_application(test_raw_app test_raw_app.cxx TEST LINK_LIBRARIES daq-rawdata)
+daq_add_application(fragment_serialization_speed fragment_serialization_speed.cxx TEST LINK_LIBRARIES dataformats)
 
 ##############################################################################
 # Unit Tests
