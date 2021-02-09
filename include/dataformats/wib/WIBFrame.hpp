@@ -245,7 +245,7 @@ struct ColdataSegment
           return m_adc1ch3_1 | m_adc1ch3_2 << 4;
       }
     }
-    return 0;
+    throw WibFrameRelatedIndexError(ERS_HERE, adc, 0, 1);
   }
 
   void set_channel(const uint8_t adc, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)

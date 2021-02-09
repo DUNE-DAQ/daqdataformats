@@ -15,6 +15,7 @@
 
 #include "ers/ers.h"
 
+#include <bitset>
 #include <ostream>
 #include <string>
 #include <vector>
