@@ -42,7 +42,21 @@ BOOST_AUTO_TEST_CASE(DataConstructors)
   auto buf2 = malloc(20);
   Fragment collect_frag({ { buf1, 10 }, { buf2, 20 } });
   BOOST_REQUIRE_EQUAL(collect_frag.get_size(), sizeof(FragmentHeader) + 30);
+}
 
+BOOST_AUTO_TEST_CASE(BadConstructors)
+{
+  Fragment* fragment_ptr;
+  BOOST_REQUIRE_EXCEPTION(fragment_ptr = new Fragment(nullptr, size_t(100)),
+                          dunedaq::dataformats::FragmentBufferError,
+                          [&](dunedaq::dataformats::FragmentBufferError) { return true; });
+  BOOST_REQUIRE_EXCEPTION(fragment_ptr = new Fragment(nullptr, size_t(-1)),
+                          dunedaq::dataformats::FragmentSizeError,
+                          [&](dunedaq::dataformats::FragmentSizeError) { return true; });
+
+  auto buf1 = malloc(10);
+  fragment_ptr = new Fragment(buf1, size_t(10));
+  BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + 10);
 }
 
 /**
@@ -106,22 +120,20 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
 
     constexpr int blob1_num_elements = 123;
     constexpr int blob2_num_elements = 456;
-    blobtype_t blob1[ blob1_num_elements ];
-    blobtype_t blob2[ blob2_num_elements ];
+    blobtype_t blob1[blob1_num_elements];
+    blobtype_t blob2[blob2_num_elements];
 
     Fragment test_frag(
-    		      std::vector<std::pair<void*, size_t>>( { { &blob1, blob1_num_elements}, { &blob2, blob2_num_elements} } )
-    		      );
-      
-    BOOST_REQUIRE_EQUAL(sizeof(FragmentHeader) + blob1_num_elements + blob2_num_elements, 
-    			test_frag.get_size());
+      std::vector<std::pair<void*, size_t>>({ { &blob1, blob1_num_elements }, { &blob2, blob2_num_elements } }));
 
+    BOOST_REQUIRE_EQUAL(sizeof(FragmentHeader) + blob1_num_elements + blob2_num_elements, test_frag.get_size());
   }
 
   free(frag); // Should not cause errors
 }
 
-BOOST_AUTO_TEST_CASE(HeaderFields) {
+BOOST_AUTO_TEST_CASE(HeaderFields)
+{
 
   FragmentHeader header;
   header.m_size = sizeof(FragmentHeader) + 4;
