@@ -392,16 +392,24 @@ BOOST_AUTO_TEST_CASE(WIBFrame_StructMethods)
 }
 BOOST_AUTO_TEST_CASE(WIBFrame_HeaderMutators)
 {
-  WIBFrame frame;
-  auto zmode = frame.get_wib_header()->m_z;
-  frame.set_wib_errors(0xFC5F);
-  BOOST_REQUIRE_EQUAL(frame.get_wib_header()->m_wib_errors, 0xFC5F);
 
-  if (zmode) {
-    frame.set_timestamp(0x7333444455555555); // Try to toggle m_z bit
+  {
+    WIBFrame frame;
+    frame.set_wib_errors(0xFC5F);
+    BOOST_REQUIRE_EQUAL(frame.get_wib_header()->m_wib_errors, 0xFC5F);
+  }
+
+  {
+    WIBFrame frame;
+    frame.get_wib_header()->m_z = 1;
+    frame.set_timestamp(0x7333444455555555); 
     BOOST_REQUIRE_EQUAL(frame.get_wib_header()->get_timestamp(), 0x444455555555);
-  } else {
-    frame.set_timestamp(0xF333444455555555); // Try to toggle m_z bit
+  }
+
+  {
+    WIBFrame frame;
+    frame.get_wib_header()->m_z = 0;
+    frame.set_timestamp(0xF333444455555555); 
     BOOST_REQUIRE_EQUAL(frame.get_wib_header()->get_timestamp(), 0x7333444455555555);
   }
 }

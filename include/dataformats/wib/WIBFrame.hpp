@@ -369,6 +369,8 @@ public:
   static constexpr int s_num_frame_bytes = s_num_frame_words * sizeof(word_t);
 
   const WIBHeader* get_wib_header() const { return &m_head; }
+        WIBHeader* get_wib_header()       { return &m_head; }
+
   const ColdataHeader* get_coldata_header(const unsigned block_index) const
   {
     throw_if_invalid_block_index_(block_index);
