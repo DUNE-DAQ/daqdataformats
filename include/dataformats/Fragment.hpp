@@ -280,6 +280,11 @@ struct pack<dunedaq::dataformats::Fragment>
 template<>
 struct as<dunedaq::dataformats::Fragment> {
     dunedaq::dataformats::Fragment operator()(msgpack::object const& o) const {
+      // The second argument to the Fragment ctor is whether to copy
+      // the data array into the Fragment's own storage. Putting false
+      // here would be faster, but we have to copy, since the returned
+      // Fragment might outlast the msgpack::object which owns/points
+      // to the underlying data.
       return dunedaq::dataformats::Fragment(const_cast<char*>(o.via.bin.ptr), true);
     }
 };
