@@ -16,6 +16,7 @@
 #include "boost/test/unit_test.hpp"
 
 #include <string>
+#include <utility>
 #include <vector>
 
 using namespace dunedaq::dataformats;
@@ -54,7 +55,7 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &four, 1);  // NOLINT(build/unsigned)
 
   {
-    Fragment test_frag(frag); // frag memory now owned by Fragment
+    Fragment test_frag(frag, Fragment::BufferAdoptionMode::kUseExistingBuffer);
 
     BOOST_REQUIRE_EQUAL(test_frag.get_storage_location(), frag);
 
@@ -66,7 +67,9 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 1), two);   // NOLINT(build/unsigned)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 2), three); // NOLINT(build/unsigned)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 3), four);  // NOLINT(build/unsigned)
+    
   }
+  free(frag); // Should not cause errors
 
   frag = malloc(sizeof(FragmentHeader) + 4);
   memcpy(frag, &header, sizeof(FragmentHeader));
@@ -76,7 +79,7 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &one, 1);   // NOLINT(build/unsigned)
 
   {
-    Fragment test_frag(frag, true);
+    Fragment test_frag(frag, Fragment::BufferAdoptionMode::kCopyFromBuffer);
 
     BOOST_REQUIRE(test_frag.get_storage_location() != frag);
     BOOST_REQUIRE_EQUAL(test_frag.get_trigger_number(), 1);

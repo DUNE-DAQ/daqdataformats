@@ -34,6 +34,15 @@ class Fragment
 {
 public:
   /**
+   * @brief Describes how the "existing Fragment buffer" Constructor should treat the given buffer
+  */
+  enum class BufferAdoptionMode
+  {
+    kUseExistingBuffer, ///< Just use the buffer in non-owning mode
+    kCopyFromBuffer ///< Copy the contents of the buffer into a new Fragment array
+  };
+
+  /**
    * @brief Fragment constructor using a vector of buffer pointers
    * @param pieces Vector of pairs of pointer/size pairs used to initialize Fragment payload
    */
@@ -66,12 +75,11 @@ public:
   /**
    * @brief Framgnet constructor using existing Fragment array
    * @param existing_fragment_buffer Pointer to existing Fragment array
-   * @param copy_from_buffer Whether the Fragment should be a copy of the buffer (true), or just use the pointer (but
-   * not take ownership) (false)
+   * @param adoption_mode How the constructor should treat the existing_fragment_buffer
    */
-  explicit Fragment(void* existing_fragment_buffer, bool copy_from_buffer = false)
+  explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
   {
-    if (!copy_from_buffer) {
+    if (adoption_mode == BufferAdoptionMode::kUseExistingBuffer) {
       m_data_arr = existing_fragment_buffer;
     } else {
       auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
