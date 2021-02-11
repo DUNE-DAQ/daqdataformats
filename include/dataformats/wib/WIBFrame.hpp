@@ -19,10 +19,18 @@
 
 namespace dunedaq {
 
+/**
+ * @brief An ERS Error indicating that the requested index is out of range
+ * @param wib_index_supplied Index that caused the error
+ * @param wib_index_min Minium valid index for this function
+ * @param wib_index_max Maximum valid index for this function
+ * @cond Doxygen doesn't like ERS macros
+ */
 ERS_DECLARE_ISSUE(dataformats,
                   WibFrameRelatedIndexError,
                   "Supplied index " << wib_index_supplied << " is outside the allowed range of " << wib_index_min << " to " << wib_index_max,
                   ((int)wib_index_supplied)((int)wib_index_min)((int)wib_index_max)) // NOLINT
+    /// @endcond
 
 
 
@@ -245,7 +253,7 @@ struct ColdataSegment
           return m_adc1ch3_1 | m_adc1ch3_2 << 4;
       }
     }
-    return 0;
+    throw WibFrameRelatedIndexError(ERS_HERE, adc, 0, 1);
   }
 
   void set_channel(const uint8_t adc, const uint8_t ch, const uint16_t new_val) // NOLINT(build/unsigned)
@@ -361,6 +369,8 @@ public:
   static constexpr int s_num_frame_bytes = s_num_frame_words * sizeof(word_t);
 
   const WIBHeader* get_wib_header() const { return &m_head; }
+        WIBHeader* get_wib_header()       { return &m_head; }
+
   const ColdataHeader* get_coldata_header(const unsigned block_index) const
   {
     throw_if_invalid_block_index_(block_index);

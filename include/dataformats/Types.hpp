@@ -50,6 +50,9 @@ using timestamp_diff_t = int64_t;
  */
 using trigger_type_t = uint16_t; // NOLINT(build/unsigned)
 
+/**
+ * @brief Default values for dataformats types
+ */
 class TypeDefaults
 {
 public:

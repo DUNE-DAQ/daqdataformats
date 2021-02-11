@@ -17,6 +17,8 @@
 #include "dataformats/GeoID.hpp"
 #include "dataformats/Types.hpp"
 
+#include "ers/ers.h"
+
 #include <bitset>
 #include <cstdlib>
 #include <cstring>
@@ -25,6 +27,30 @@
 #include <vector>
 
 namespace dunedaq {
+/**
+ * @brief An ERS Error that indicates that one the buffers given to the Fragment constructor is invalid
+ * @param fb_addr Address of invalid buffer
+ * @param fb_size Size of invalid buffer
+ * @cond Doxygen doesn't like ERS macros
+*/
+ERS_DECLARE_ISSUE(dataformats,
+                  FragmentBufferError,
+                  "Fragment Buffer " << fb_addr << " with size " << fb_size << " is invalid",
+                  ((void*)fb_addr)((size_t)fb_size)) // NOLINT
+    /// @endcond
+/**
+ * @brief An ERS Error that indicates that an issue was detected with the requested Fragment Size
+ * @param fs_size Fragment size that caused issue
+ * @param fs_min Minimum allowable Fragment size
+ * @param fs_max Maximum allowable Fragment size
+ * @cond Doxygen doesn't like ERS macros
+*/
+ERS_DECLARE_ISSUE(dataformats,
+                  FragmentSizeError,
+                  "Fragment has a requested size of " << fs_size << ", which is outside the allowable range of " << fs_min << "-" << fs_max,
+                  ((size_t)fs_size)((size_t)fs_min)((size_t)fs_max)) // NOLINT
+    /// @endcond
+
 namespace dataformats {
 
 /**
@@ -51,6 +77,11 @@ public:
     size_t size = sizeof(FragmentHeader) +
                   std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
 
+    if (size < sizeof(FragmentHeader)) {
+      throw FragmentSizeError(ERS_HERE, size, sizeof(FragmentHeader), -1);
+    }
+
+
     m_data_arr = malloc(size); // NOLINT(build/unsigned)
     m_alloc = true;
 
@@ -60,6 +91,9 @@ public:
 
     size_t offset = sizeof(FragmentHeader);
     for (auto& piece : pieces) {
+      if (piece.first == nullptr) {
+        throw FragmentBufferError(ERS_HERE, piece.first, piece.second);
+      }
       memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
       offset += piece.second;
     }
