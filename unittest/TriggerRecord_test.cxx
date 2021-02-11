@@ -35,9 +35,9 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
 }
 
 /**
- * @brief Check that TriggerRecordHeader constructors function correctly
+ * @brief Test constructor that takes a vector of ComponentRequests
  */
-BOOST_AUTO_TEST_CASE(ExistingHeader)
+BOOST_AUTO_TEST_CASE(ComponentsConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
@@ -51,54 +51,15 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   components.back().m_window_offset = 7;
   components.back().m_window_width = 8;
 
-  auto header = new TriggerRecordHeader(components);
-  header->set_run_number(9);
-  header->set_trigger_number(10);
-  header->set_trigger_timestamp(11);
-  header->set_trigger_type(12);
-  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
-  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
-
-  BOOST_REQUIRE_THROW(header->at(header->get_header().m_num_requested_components),
-                      dunedaq::dataformats::ComponentRequestIndexError);
-  BOOST_REQUIRE_THROW((*header)[header->get_header().m_num_requested_components],
-                      dunedaq::dataformats::ComponentRequestIndexError);
-
-  void* buff = malloc(header->get_total_size_bytes());
-  memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
-
-  // Constructor should copy header
-  TriggerRecord record(*header);
-  delete header; // NOLINT(build/raw_ownership)
-
-  BOOST_REQUIRE_EQUAL(record.get_header_ref().get_run_number(), 9);
-  BOOST_REQUIRE_EQUAL(record.get_header_ref().get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
-  BOOST_REQUIRE_EQUAL(record.get_header_ref().get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-  BOOST_REQUIRE_EQUAL(record.get_header_data().m_error_bits, 10);
-  BOOST_REQUIRE_EQUAL(record.get_header_ref().at(0).m_window_offset, 3);
-  BOOST_REQUIRE_EQUAL(record.get_header_ref()[1].m_window_offset, 7);
-
-  {
-    TriggerRecordHeader bufferHeader(buff, false);
-
-    BOOST_REQUIRE_EQUAL(bufferHeader.get_run_number(), 9);
-    BOOST_REQUIRE_EQUAL(bufferHeader.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
-    BOOST_REQUIRE_EQUAL(bufferHeader.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-    BOOST_REQUIRE_EQUAL(bufferHeader.get_header().m_error_bits, 10);
-    BOOST_REQUIRE_EQUAL(bufferHeader.at(0).m_window_offset, 3);
-    BOOST_REQUIRE_EQUAL(bufferHeader[1].m_window_offset, 7);
-  }
-
-  BOOST_REQUIRE_EQUAL(*reinterpret_cast<uint32_t*>(buff), // NOLINT
-                      TriggerRecordHeaderData::s_trigger_record_header_magic);
-
-  free(buff);
+  auto record = new TriggerRecord(components);
+  BOOST_REQUIRE_EQUAL(record->get_header_data().m_num_requested_components, 2);
+  delete record;
 }
 
 /**
- * @brief Check that TriggerRecordHeader serialization via MsgPack works
+ * @brief Test constructor that uses and existing TriggerRecordHeader
  */
-BOOST_AUTO_TEST_CASE(Header_SerDes_MsgPack)
+BOOST_AUTO_TEST_CASE(HeaderConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
@@ -113,35 +74,18 @@ BOOST_AUTO_TEST_CASE(Header_SerDes_MsgPack)
   components.back().m_window_width = 8;
 
   auto header = new TriggerRecordHeader(components);
-  header->set_run_number(9);
-  header->set_trigger_number(10);
-  header->set_trigger_timestamp(11);
-  header->set_trigger_type(12);
-  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
-  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
-
-  auto bytes = dunedaq::serialization::serialize(*header, dunedaq::serialization::kMsgPack);
-  TriggerRecordHeader& header_orig=*header;
-  TriggerRecordHeader header_deserialized = dunedaq::serialization::deserialize<TriggerRecordHeader>(bytes);
-
-
-  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_number(), header_deserialized.get_trigger_number());
-  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_timestamp(), header_deserialized.get_trigger_timestamp());
-  BOOST_REQUIRE_EQUAL(header_orig.get_num_requested_components(), header_deserialized.get_num_requested_components());
-  BOOST_REQUIRE_EQUAL(header_orig.get_run_number(), header_deserialized.get_run_number());
-  BOOST_REQUIRE_EQUAL(header_orig.get_error_bits(), header_deserialized.get_error_bits());
-  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_type(), header_deserialized.get_trigger_type());
-  BOOST_REQUIRE_EQUAL(header_orig.get_total_size_bytes(), header_deserialized.get_total_size_bytes());
-  BOOST_REQUIRE_EQUAL(header_orig.at(0).m_window_offset, header_deserialized.at(0).m_window_offset);
-  BOOST_REQUIRE_EQUAL(header_orig.at(1).m_window_offset, header_deserialized.at(1).m_window_offset);
-  
+  auto record = new TriggerRecord(*header);
+  BOOST_REQUIRE_EQUAL(record->get_header_data().m_num_requested_components, 2);
+  delete record;
+  delete header;
 }
 
 /**
- * @brief Check that TriggerRecordHeader serialization via MsgPack works
+ *@brief Test TriggerRecordHeader manipulation methods
  */
-BOOST_AUTO_TEST_CASE(Header_SerDes_JSON)
+BOOST_AUTO_TEST_CASE(HeaderManipulation)
 {
+
   std::vector<ComponentRequest> components;
   components.emplace_back();
   components.back().m_component.m_apa_number = 1;
@@ -154,29 +98,53 @@ BOOST_AUTO_TEST_CASE(Header_SerDes_JSON)
   components.back().m_window_offset = 7;
   components.back().m_window_width = 8;
 
-  auto header = new TriggerRecordHeader(components);
-  header->set_run_number(9);
-  header->set_trigger_number(10);
-  header->set_trigger_timestamp(11);
-  header->set_trigger_type(12);
-  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
-  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
+  TriggerRecord record(components);
 
-  auto bytes = dunedaq::serialization::serialize(*header, dunedaq::serialization::kJSON);
-  TriggerRecordHeader& header_orig=*header;
-  TriggerRecordHeader header_deserialized = dunedaq::serialization::deserialize<TriggerRecordHeader>(bytes);
+  components.emplace_back();
+  components.back().m_component.m_apa_number = 9;
+  components.back().m_component.m_link_number = 10;
+  components.back().m_window_offset = 11;
+  components.back().m_window_width = 12;
 
+  TriggerRecordHeader new_header(components);
+  record.set_header(new_header);
+  BOOST_REQUIRE_EQUAL(record.get_header_ref().get_num_requested_components(), 3);
 
-  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_number(), header_deserialized.get_trigger_number());
-  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_timestamp(), header_deserialized.get_trigger_timestamp());
-  BOOST_REQUIRE_EQUAL(header_orig.get_num_requested_components(), header_deserialized.get_num_requested_components());
-  BOOST_REQUIRE_EQUAL(header_orig.get_run_number(), header_deserialized.get_run_number());
-  BOOST_REQUIRE_EQUAL(header_orig.get_error_bits(), header_deserialized.get_error_bits());
-  BOOST_REQUIRE_EQUAL(header_orig.get_trigger_type(), header_deserialized.get_trigger_type());
-  BOOST_REQUIRE_EQUAL(header_orig.get_total_size_bytes(), header_deserialized.get_total_size_bytes());
-  BOOST_REQUIRE_EQUAL(header_orig.at(0).m_window_offset, header_deserialized.at(0).m_window_offset);
-  BOOST_REQUIRE_EQUAL(header_orig.at(1).m_window_offset, header_deserialized.at(1).m_window_offset);
-  
+  record.get_header_ref().set_trigger_timestamp(100);
+  BOOST_REQUIRE_EQUAL(record.get_header_data().m_trigger_timestamp, 100);
+}
+
+/**
+ * @brief Test Fragment vector manipulation methods
+ */
+BOOST_AUTO_TEST_CASE(FragmentManipulation)
+{
+
+  std::vector<ComponentRequest> components;
+  components.emplace_back();
+  components.back().m_component.m_apa_number = 1;
+  components.back().m_component.m_link_number = 2;
+  components.back().m_window_offset = 3;
+  components.back().m_window_width = 4;
+  components.emplace_back();
+  components.back().m_component.m_apa_number = 5;
+  components.back().m_component.m_link_number = 6;
+  components.back().m_window_offset = 7;
+  components.back().m_window_width = 8;
+
+  TriggerRecord record(components);
+
+  BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 0);
+
+  auto buf1 = malloc(10);
+  auto frag = std::make_unique<Fragment>(buf1, size_t(10));
+  record.add_fragment(std::move(frag));
+  BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 1);
+  BOOST_REQUIRE_EQUAL(record.get_fragments_ref()[0]->get_size(), sizeof(FragmentHeader) + 10);
+
+  std::vector<std::unique_ptr<Fragment>> new_vector;
+  record.set_fragments(std::move(new_vector));
+  BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

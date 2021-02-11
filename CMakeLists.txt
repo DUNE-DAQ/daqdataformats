@@ -30,8 +30,14 @@ daq_add_application(fragment_serialization_speed fragment_serialization_speed.cx
 ##############################################################################
 # Unit Tests
 
-daq_add_unit_test(Fragment_test       LINK_LIBRARIES dataformats)
-daq_add_unit_test(TriggerRecord_test  LINK_LIBRARIES dataformats)
+daq_add_unit_test(ComponentRequest_test        LINK_LIBRARIES dataformats)
+daq_add_unit_test(Fragment_test                LINK_LIBRARIES dataformats)
+daq_add_unit_test(FragmentHeader_test          LINK_LIBRARIES dataformats)
+daq_add_unit_test(GeoID_test                   LINK_LIBRARIES dataformats)
+daq_add_unit_test(TriggerRecord_test           LINK_LIBRARIES dataformats)
+daq_add_unit_test(TriggerRecordHeader_test     LINK_LIBRARIES dataformats)
+daq_add_unit_test(TriggerRecordHeaderData_test LINK_LIBRARIES dataformats)
+daq_add_unit_test(WIBFrame_test                LINK_LIBRARIES dataformats)
 
 ##############################################################################
 
