@@ -7,6 +7,7 @@
  */
 
 #include "dataformats/TriggerRecord.hpp"
+#include "serialization/Serialization.hpp"
 
 /**
  * @brief Name of this test module
@@ -34,8 +35,8 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
 }
 
 /**
- * @brief Test constructor that takes a vector of ComponentRequests 
-*/
+ * @brief Test constructor that takes a vector of ComponentRequests
+ */
 BOOST_AUTO_TEST_CASE(ComponentsConstructor)
 {
   std::vector<ComponentRequest> components;
@@ -57,7 +58,7 @@ BOOST_AUTO_TEST_CASE(ComponentsConstructor)
 
 /**
  * @brief Test constructor that uses and existing TriggerRecordHeader
-*/
+ */
 BOOST_AUTO_TEST_CASE(HeaderConstructor)
 {
   std::vector<ComponentRequest> components;
@@ -80,9 +81,10 @@ BOOST_AUTO_TEST_CASE(HeaderConstructor)
 }
 
 /**
- * @brief Test TriggerRecordHeader manipulation methods
-*/
-BOOST_AUTO_TEST_CASE(HeaderManipulation) {
+ *@brief Test TriggerRecordHeader manipulation methods
+ */
+BOOST_AUTO_TEST_CASE(HeaderManipulation)
+{
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
@@ -114,8 +116,9 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation) {
 
 /**
  * @brief Test Fragment vector manipulation methods
-*/
-BOOST_AUTO_TEST_CASE(FragmentManipulation) {
+ */
+BOOST_AUTO_TEST_CASE(FragmentManipulation)
+{
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
