@@ -87,7 +87,8 @@ receiver_thread_no_serialization_fn(std::shared_ptr<dunedaq::ipm::Receiver> rece
   size_t total = 0;
   for (size_t i = 0; i < n_messages; ++i) {
     auto recvd = receiver->receive(10000000ms);
-    Fragment frag(recvd.m_data.data()+offset, copy_data);
+    Fragment frag(recvd.m_data.data()+offset,
+                  copy_data ? Fragment::BufferAdoptionMode::kCopyFromBuffer : Fragment::BufferAdoptionMode::kReadOnlyMode);
     total += frag.get_run_number();
   }
   if(total!=n_messages*(n_messages+1)/2){
