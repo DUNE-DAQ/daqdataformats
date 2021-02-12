@@ -39,7 +39,7 @@ dunedaq::dataformats::Fragment make_fragment(size_t fragment_size)
 void
 sender_thread_serialization_fn(dunedaq::serialization::networkobjectsender::Conf sender_conf, size_t n_messages, size_t fragment_size)
 {
-  dunedaq::NetworkObjectSender<dunedaq::dataformats::Fragment> sender(sender_conf);
+  dunedaq::serialization::NetworkObjectSender<dunedaq::dataformats::Fragment> sender(sender_conf);
   
   dunedaq::dataformats::Fragment frag=make_fragment(fragment_size);
 
@@ -56,7 +56,7 @@ receiver_thread_serialization_fn(dunedaq::serialization::networkobjectreceiver::
   using dunedaq::dataformats::FragmentHeader;
 
   size_t total = 0;
-  dunedaq::NetworkObjectReceiver<Fragment> receiver(receiver_conf);
+  dunedaq::serialization::NetworkObjectReceiver<Fragment> receiver(receiver_conf);
   for (size_t i = 0; i < n_messages; ++i) {
     Fragment frag = receiver.recv(10000000ms);
     total += frag.get_run_number();
