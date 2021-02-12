@@ -31,7 +31,7 @@ dunedaq::dataformats::Fragment make_fragment(size_t fragment_size)
     *(static_cast<uint8_t*>(frag_buff) + sizeof(FragmentHeader) + i)=i%255;
   }
 
-  Fragment frag(frag_buff); // frag memory now owned by Fragment
+  Fragment frag(frag_buff, Fragment::BufferAdoptionMode::kTakeOverBuffer);
 
   return frag;
 }

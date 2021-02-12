@@ -33,24 +33,25 @@ namespace dunedaq {
  * @param fb_addr Address of invalid buffer
  * @param fb_size Size of invalid buffer
  * @cond Doxygen doesn't like ERS macros
-*/
+ */
 ERS_DECLARE_ISSUE(dataformats,
                   FragmentBufferError,
                   "Fragment Buffer " << fb_addr << " with size " << fb_size << " is invalid",
                   ((void*)fb_addr)((size_t)fb_size)) // NOLINT
-    /// @endcond
+                                                     /// @endcond
 /**
  * @brief An ERS Error that indicates that an issue was detected with the requested Fragment Size
  * @param fs_size Fragment size that caused issue
  * @param fs_min Minimum allowable Fragment size
  * @param fs_max Maximum allowable Fragment size
  * @cond Doxygen doesn't like ERS macros
-*/
+ */
 ERS_DECLARE_ISSUE(dataformats,
                   FragmentSizeError,
-                  "Fragment has a requested size of " << fs_size << ", which is outside the allowable range of " << fs_min << "-" << fs_max,
+                  "Fragment has a requested size of " << fs_size << ", which is outside the allowable range of "
+                                                      << fs_min << "-" << fs_max,
                   ((size_t)fs_size)((size_t)fs_min)((size_t)fs_max)) // NOLINT
-    /// @endcond
+                                                                     /// @endcond
 
 namespace dataformats {
 
@@ -62,11 +63,12 @@ class Fragment
 public:
   /**
    * @brief Describes how the "existing Fragment buffer" Constructor should treat the given buffer
-  */
+   */
   enum class BufferAdoptionMode
   {
-    kUseExistingBuffer, ///< Just use the buffer in non-owning mode
-    kCopyFromBuffer ///< Copy the contents of the buffer into a new Fragment array
+    kReadOnlyMode,   ///< Just use the buffer in non-owning mode
+    kTakeOverBuffer, ///< Take over control of the buffer
+    kCopyFromBuffer  ///< Copy the contents of the buffer into a new Fragment array
   };
 
   /**
@@ -81,7 +83,6 @@ public:
     if (size < sizeof(FragmentHeader)) {
       throw FragmentSizeError(ERS_HERE, size, sizeof(FragmentHeader), -1);
     }
-
 
     m_data_arr = malloc(size); // NOLINT(build/unsigned)
     m_alloc = true;
@@ -114,9 +115,12 @@ public:
    */
   explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
   {
-    if (adoption_mode == BufferAdoptionMode::kUseExistingBuffer) {
+    if (adoption_mode == BufferAdoptionMode::kReadOnlyMode) {
       m_data_arr = existing_fragment_buffer;
-    } else {
+    } else if (adoption_mode == BufferAdoptionMode::kTakeOverBuffer) {
+      m_data_arr = existing_fragment_buffer;
+      m_alloc = true;
+    } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {
       auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
       m_data_arr = malloc(header->m_size);
       m_alloc = true;
@@ -301,66 +305,71 @@ private:
 // the fragment array into a MsgPack message)
 namespace msgpack {
 MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
-{ 
-namespace adaptor {
-
-template<>
-struct pack<dunedaq::dataformats::Fragment>
 {
-  template<typename Stream>
-  packer<Stream>& operator()(msgpack::packer<Stream>& o, dunedaq::dataformats::Fragment const& frag) const
-  {
-    o.pack_bin(frag.get_size());         // pack header and size
-    o.pack_bin_body(static_cast<const char*>(frag.get_storage_location()), frag.get_size()); // pack payload
-    return o;
-  }
-};
+  namespace adaptor {
 
-// Typically we use convert<> for deserialization, but Fragment isn't
-// default constructible, so we have to use as<>. See:
-// https://github.com/msgpack/msgpack-c/wiki/v2_0_cpp_adaptor#non-default-constructible-class-support-c11-only-since-120
-template<>
-struct as<dunedaq::dataformats::Fragment> {
-    dunedaq::dataformats::Fragment operator()(msgpack::object const& o) const {
+  template<>
+  struct pack<dunedaq::dataformats::Fragment>
+  {
+    template<typename Stream>
+    packer<Stream>& operator()(msgpack::packer<Stream>& o, dunedaq::dataformats::Fragment const& frag) const
+    {
+      o.pack_bin(frag.get_size());                                                             // pack header and size
+      o.pack_bin_body(static_cast<const char*>(frag.get_storage_location()), frag.get_size()); // pack payload
+      return o;
+    }
+  };
+
+  // Typically we use convert<> for deserialization, but Fragment isn't
+  // default constructible, so we have to use as<>. See:
+  // https://github.com/msgpack/msgpack-c/wiki/v2_0_cpp_adaptor#non-default-constructible-class-support-c11-only-since-120
+  template<>
+  struct as<dunedaq::dataformats::Fragment>
+  {
+    dunedaq::dataformats::Fragment operator()(msgpack::object const& o) const
+    {
       // The second argument to the Fragment ctor is whether to copy
       // the data array into the Fragment's own storage. Putting false
       // here would be faster, but we have to copy, since the returned
       // Fragment might outlast the msgpack::object which owns/points
       // to the underlying data.
-      return dunedaq::dataformats::Fragment(const_cast<char*>(o.via.bin.ptr), true);
+      return dunedaq::dataformats::Fragment(const_cast<char*>(o.via.bin.ptr),
+                                            dunedaq::dataformats::Fragment::BufferAdoptionMode::kCopyFromBuffer);
     }
-};
+  };
 
-} // namespace adaptor
+  } // namespace adaptor
 } // namespace MSGPACK_DEFAULT_API_NS
 } // namespace msgpack
-
-
 
 // nlohmann::json serialization function. As with MsgPack, we have to
 // do something special here because Fragment isn't default
 // constructible. See
 // https://nlohmann.github.io/json/features/arbitrary_types/#how-can-i-use-get-for-non-default-constructiblenon-copyable-types
 namespace nlohmann {
-template <>
-struct adl_serializer<dunedaq::dataformats::Fragment> {
+template<>
+struct adl_serializer<dunedaq::dataformats::Fragment>
+{
   // note: the return type is no longer 'void', and the method only takes
   // one argument
-  static dunedaq::dataformats::Fragment from_json(const json& j) {
+  static dunedaq::dataformats::Fragment from_json(const json& j)
+  {
     std::vector<uint8_t> tmp;
-    for(auto const& it : j.items()){
-      if(!it.value().is_number_integer()){
+    for (auto const& it : j.items()) {
+      if (!it.value().is_number_integer()) {
         throw std::runtime_error("Foo");
       }
       tmp.push_back(it.value().get<uint8_t>());
     }
-    return dunedaq::dataformats::Fragment(tmp.data(), true);
+    return dunedaq::dataformats::Fragment(tmp.data(),
+                                          dunedaq::dataformats::Fragment::BufferAdoptionMode::kCopyFromBuffer);
   }
-  
-  static void to_json(json& j, const dunedaq::dataformats::Fragment& frag) {
-    const uint8_t* storage=static_cast<const uint8_t*>(frag.get_storage_location());
-    std::vector<uint8_t> bytes(storage, storage+frag.get_size());
-    j=bytes;
+
+  static void to_json(json& j, const dunedaq::dataformats::Fragment& frag)
+  {
+    const uint8_t* storage = static_cast<const uint8_t*>(frag.get_storage_location());
+    std::vector<uint8_t> bytes(storage, storage + frag.get_size());
+    j = bytes;
   }
 };
 } // namespace nlohmann

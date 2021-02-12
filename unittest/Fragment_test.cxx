@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &four, 1);  // NOLINT(build/unsigned)
 
   {
-    Fragment test_frag(frag, Fragment::BufferAdoptionMode::kUseExistingBuffer);
+    Fragment test_frag(frag, Fragment::BufferAdoptionMode::kReadOnlyMode);
 
     BOOST_REQUIRE_EQUAL(test_frag.get_storage_location(), frag);
 
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE(SerDes_MsgPack)
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 2, &three, 1); // NOLINT(build/unsigned)
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &four, 1);  // NOLINT(build/unsigned)
 
-  Fragment test_frag(frag); // frag memory now owned by Fragment
+  Fragment test_frag(frag, Fragment::BufferAdoptionMode::kTakeOverBuffer);
   auto bytes = dunedaq::serialization::serialize(test_frag, dunedaq::serialization::kMsgPack);
 
   Fragment frag_deserialized = dunedaq::serialization::deserialize<Fragment>(bytes);
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE(SerDes_JSON)
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 2, &three, 1); // NOLINT(build/unsigned)
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &four, 1);  // NOLINT(build/unsigned)
 
-  Fragment test_frag(frag); // frag memory now owned by Fragment
+  Fragment test_frag(frag, Fragment::BufferAdoptionMode::kTakeOverBuffer);
 
   auto bytes = dunedaq::serialization::serialize(test_frag, dunedaq::serialization::kJSON);
 
