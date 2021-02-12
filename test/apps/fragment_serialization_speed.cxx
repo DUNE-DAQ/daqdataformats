@@ -31,7 +31,7 @@ dunedaq::dataformats::Fragment make_fragment(size_t fragment_size)
     *(static_cast<uint8_t*>(frag_buff) + sizeof(FragmentHeader) + i)=i%255;
   }
 
-  Fragment frag(frag_buff); // frag memory now owned by Fragment
+  Fragment frag(frag_buff, Fragment::BufferAdoptionMode::kTakeOverBuffer);
 
   return frag;
 }
@@ -87,7 +87,8 @@ receiver_thread_no_serialization_fn(std::shared_ptr<dunedaq::ipm::Receiver> rece
   size_t total = 0;
   for (size_t i = 0; i < n_messages; ++i) {
     auto recvd = receiver->receive(10000000ms);
-    Fragment frag(recvd.m_data.data()+offset, copy_data);
+    Fragment frag(recvd.m_data.data()+offset,
+                  copy_data ? Fragment::BufferAdoptionMode::kCopyFromBuffer : Fragment::BufferAdoptionMode::kReadOnlyMode);
     total += frag.get_run_number();
   }
   if(total!=n_messages*(n_messages+1)/2){
