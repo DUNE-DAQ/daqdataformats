@@ -24,30 +24,18 @@ namespace dataformats {
  */
 struct ComponentRequest
 {
-  GeoID m_component; ///< The Requested Component
+  GeoID component; ///< The Requested Component
 
   /**
-   * @brief Offset from the Trigger Decision timestamp
-   *
-   * Note that offsets are subtracted from the Trigger Decision timestamp (but may be themselves negative)
-   * Example: <=======|===>
-   *          ^ ts - offset
-   *                  ^ timestamp
-   *                      ^ ts - offset + width
+   * @brief Start of the data collection window
    */
-  timestamp_diff_t m_window_offset{ TypeDefaults::s_invalid_timestamp_diff };
+  timestamp_t window_start{ TypeDefaults::s_invalid_timestamp };
   /**
-   * @brief Width of the data collection window
-   *
-   * Width is applied starting from the offset start time
-   * Example: <=======|===>
-   *          ^ ts - offset
-   *                  ^ timestamp
-   *                      ^ ts - offset + width
+   * @brief End of the data collection window
    */
-  timestamp_diff_t m_window_width{ TypeDefaults::s_invalid_timestamp_diff };
+  timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
 
-  DUNE_DAQ_SERIALIZE(ComponentRequest, m_component, m_window_offset, m_window_width);
+  DUNE_DAQ_SERIALIZE(ComponentRequest, component, window_start, window_end);
 };
 
 /**
@@ -59,7 +47,7 @@ struct ComponentRequest
 inline std::ostream&
 operator<<(std::ostream& o, ComponentRequest const& cr)
 {
-  return o << cr.m_component << ", offset: " << cr.m_window_offset << ", width: " << cr.m_window_width;
+  return o << cr.component << ", start: " << cr.window_start << ", end: " << cr.window_end;
 }
 } // namespace dataformats
 } // namespace dunedaq

@@ -43,59 +43,59 @@ struct FragmentHeader
   /**
    * @brief Magic Bytes used to identify FragmentHeaders in a raw data stream
    */
-  uint32_t m_fragment_header_marker = s_fragment_header_magic; // NOLINT(build/unsigned)
+  uint32_t fragment_header_marker = s_fragment_header_magic; // NOLINT(build/unsigned)
 
   /**
    * @brief Version of the FragmentHeader
    */
-  uint32_t m_version = s_fragment_header_version; // NOLINT(build/unsigned)
+  uint32_t version = s_fragment_header_version; // NOLINT(build/unsigned)
 
   /**
    * @brief Size of the Fragment (including header and payload)
    */
-  fragment_size_t m_size{ TypeDefaults::s_invalid_fragment_size }; // NOLINT(build/unsigned)
+  fragment_size_t size{ TypeDefaults::s_invalid_fragment_size }; // NOLINT(build/unsigned)
 
   /**
    * @brief Trigger Number this Fragment is associated with
    */
-  trigger_number_t m_trigger_number{ TypeDefaults::s_invalid_trigger_number };
+  trigger_number_t trigger_number{ TypeDefaults::s_invalid_trigger_number };
 
   /**
    * @brief Timestamp of the TriggerDecision
    */
-  timestamp_t m_trigger_timestamp{ TypeDefaults::s_invalid_timestamp };
+  timestamp_t trigger_timestamp{ TypeDefaults::s_invalid_timestamp };
 
   /**
-   * @brief Window offset of data in the Fragment
+   * @brief Window start of data in the Fragment
    */
-  timestamp_diff_t m_window_offset{ TypeDefaults::s_invalid_timestamp_diff };
+  timestamp_t window_start{ TypeDefaults::s_invalid_timestamp };
 
   /**
-   * @brief Window width of data in the Fragment
+   * @brief Window end of data in the Fragment
    */
-  timestamp_diff_t m_window_width{ TypeDefaults::s_invalid_timestamp_diff };
+  timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
 
   /**
    * @brief Run number this Fragment is associated with
    */
-  run_number_t m_run_number{ TypeDefaults::s_invalid_run_number };
+  run_number_t run_number{ TypeDefaults::s_invalid_run_number };
 
   /**
    * @brief Component that generated the data in this Fragment
    */
-  GeoID m_link_id;
+  GeoID link_id;
 
   /**
    * @brief Error bits set by the Upstream DAQ
    *
    * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
    */
-  uint32_t m_error_bits{ s_default_error_bits }; // NOLINT(build/unsigned)
+  uint32_t error_bits{ s_default_error_bits }; // NOLINT(build/unsigned)
 
   /**
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
-  fragment_type_t m_fragment_type{ TypeDefaults::s_invalid_fragment_type };
+  fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
 };
 
 /**
@@ -135,7 +135,7 @@ enum class FragmentErrorBits : size_t
   kUnassigned29 = 29, ///< Error bit 29 is not assigned
   kUnassigned30 = 30, ///< Error bit 30 is not assigned
   kUnassigned31 = 31, ///< Error bit 31 is not assigned
-  kInvalid = 32       ///< Error bit 32 and higher are not valid (m_error_bits is only 32 bits)
+  kInvalid = 32       ///< Error bit 32 and higher are not valid (error_bits is only 32 bits)
 };
 
 /**
@@ -147,17 +147,17 @@ enum class FragmentErrorBits : size_t
 inline std::ostream&
 operator<<(std::ostream& o, FragmentHeader const& hdr)
 {
-  return o << "check_word: " << std::hex << hdr.m_fragment_header_marker << std::dec << ", "
-           << "version: " << hdr.m_version << ", "
-           << "size: " << hdr.m_size << ", "
-           << "trigger_number: " << hdr.m_trigger_number << ", "
-           << "run_number: " << hdr.m_run_number << ", "
-           << "trigger_timestamp: " << hdr.m_trigger_timestamp << ", "
-           << "window_offset: " << hdr.m_window_offset << ", "
-           << "window_width: " << hdr.m_window_width << ", "
-           << "link_id: " << hdr.m_link_id << ", "
-           << "error_bits: " << hdr.m_error_bits << ", "
-           << "fragment_type : " << hdr.m_fragment_type;
+  return o << "check_word: " << std::hex << hdr.fragment_header_marker << std::dec << ", "
+           << "version: " << hdr.version << ", "
+           << "size: " << hdr.size << ", "
+           << "trigger_number: " << hdr.trigger_number << ", "
+           << "run_number: " << hdr.run_number << ", "
+           << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
+           << "window_start: " << hdr.window_start << ", "
+           << "window_end: " << hdr.window_end << ", "
+           << "link_id: " << hdr.link_id << ", "
+           << "error_bits: " << hdr.error_bits << ", "
+           << "fragment_type : " << hdr.fragment_type;
 }
 
 } // namespace dataformats

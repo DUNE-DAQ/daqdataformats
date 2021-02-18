@@ -36,11 +36,11 @@ struct GeoID
   /**
    * @brief APA Number of the component
    */
-  uint32_t m_apa_number{ s_invalid_apa_number }; // NOLINT(build/unsigned)
+  uint32_t apa_number{ s_invalid_apa_number }; // NOLINT(build/unsigned)
   /**
    * @brief Link Number of the component
    */
-  uint32_t m_link_number{ s_invalid_link_number }; // NOLINT(build/unsigned)
+  uint32_t link_number{ s_invalid_link_number }; // NOLINT(build/unsigned)
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
@@ -49,10 +49,10 @@ struct GeoID
    */
   bool operator<(const GeoID& other) const
   {
-    return std::tuple(m_apa_number, m_link_number) < std::tuple(other.m_apa_number, other.m_link_number);
+    return std::tuple(apa_number, link_number) < std::tuple(other.apa_number, other.link_number);
   }
 
-  DUNE_DAQ_SERIALIZE(GeoID, m_apa_number, m_link_number);
+  DUNE_DAQ_SERIALIZE(GeoID, apa_number, link_number);
 };
 
 /**
@@ -64,7 +64,7 @@ struct GeoID
 inline std::ostream&
 operator<<(std::ostream& o, GeoID const& id)
 {
-  return o << "APA: " << id.m_apa_number << ", link: " << id.m_link_number;
+  return o << "APA: " << id.apa_number << ", link: " << id.link_number;
 }
 } // namespace dataformats
 } // namespace dunedaq

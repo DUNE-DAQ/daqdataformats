@@ -41,18 +41,18 @@ BOOST_AUTO_TEST_CASE(ComponentsConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 1;
-  components.back().m_component.m_link_number = 2;
-  components.back().m_window_offset = 3;
-  components.back().m_window_width = 4;
+  components.back().component.apa_number = 1;
+  components.back().component.link_number = 2;
+  components.back().window_start = 3;
+  components.back().window_end = 4;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 5;
-  components.back().m_component.m_link_number = 6;
-  components.back().m_window_offset = 7;
-  components.back().m_window_width = 8;
+  components.back().component.apa_number = 5;
+  components.back().component.link_number = 6;
+  components.back().window_start = 7;
+  components.back().window_end = 8;
 
   auto record = new TriggerRecord(components);
-  BOOST_REQUIRE_EQUAL(record->get_header_data().m_num_requested_components, 2);
+  BOOST_REQUIRE_EQUAL(record->get_header_data().num_requested_components, 2);
   delete record;
 }
 
@@ -63,19 +63,19 @@ BOOST_AUTO_TEST_CASE(HeaderConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 1;
-  components.back().m_component.m_link_number = 2;
-  components.back().m_window_offset = 3;
-  components.back().m_window_width = 4;
+  components.back().component.apa_number = 1;
+  components.back().component.link_number = 2;
+  components.back().window_start = 3;
+  components.back().window_end = 4;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 5;
-  components.back().m_component.m_link_number = 6;
-  components.back().m_window_offset = 7;
-  components.back().m_window_width = 8;
+  components.back().component.apa_number = 5;
+  components.back().component.link_number = 6;
+  components.back().window_start = 7;
+  components.back().window_end = 8;
 
   auto header = new TriggerRecordHeader(components);
   auto record = new TriggerRecord(*header);
-  BOOST_REQUIRE_EQUAL(record->get_header_data().m_num_requested_components, 2);
+  BOOST_REQUIRE_EQUAL(record->get_header_data().num_requested_components, 2);
   delete record;
   delete header;
 }
@@ -88,30 +88,30 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation)
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 1;
-  components.back().m_component.m_link_number = 2;
-  components.back().m_window_offset = 3;
-  components.back().m_window_width = 4;
+  components.back().component.apa_number = 1;
+  components.back().component.link_number = 2;
+  components.back().window_start = 3;
+  components.back().window_end = 4;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 5;
-  components.back().m_component.m_link_number = 6;
-  components.back().m_window_offset = 7;
-  components.back().m_window_width = 8;
+  components.back().component.apa_number = 5;
+  components.back().component.link_number = 6;
+  components.back().window_start = 7;
+  components.back().window_end = 8;
 
   TriggerRecord record(components);
 
   components.emplace_back();
-  components.back().m_component.m_apa_number = 9;
-  components.back().m_component.m_link_number = 10;
-  components.back().m_window_offset = 11;
-  components.back().m_window_width = 12;
+  components.back().component.apa_number = 9;
+  components.back().component.link_number = 10;
+  components.back().window_start = 11;
+  components.back().window_end = 12;
 
   TriggerRecordHeader new_header(components);
   record.set_header(new_header);
   BOOST_REQUIRE_EQUAL(record.get_header_ref().get_num_requested_components(), 3);
 
   record.get_header_ref().set_trigger_timestamp(100);
-  BOOST_REQUIRE_EQUAL(record.get_header_data().m_trigger_timestamp, 100);
+  BOOST_REQUIRE_EQUAL(record.get_header_data().trigger_timestamp, 100);
 }
 
 /**
@@ -122,15 +122,15 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 1;
-  components.back().m_component.m_link_number = 2;
-  components.back().m_window_offset = 3;
-  components.back().m_window_width = 4;
+  components.back().component.apa_number = 1;
+  components.back().component.link_number = 2;
+  components.back().window_start = 3;
+  components.back().window_end = 4;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 5;
-  components.back().m_component.m_link_number = 6;
-  components.back().m_window_offset = 7;
-  components.back().m_window_width = 8;
+  components.back().component.apa_number = 5;
+  components.back().component.link_number = 6;
+  components.back().window_start = 7;
+  components.back().window_end = 8;
 
   TriggerRecord record(components);
 

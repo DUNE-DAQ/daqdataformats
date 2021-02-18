@@ -88,7 +88,7 @@ public:
     m_alloc = true;
 
     FragmentHeader header;
-    header.m_size = size;
+    header.size = size;
     memcpy(m_data_arr, &header, sizeof(header));
 
     size_t offset = sizeof(FragmentHeader);
@@ -122,9 +122,9 @@ public:
       m_alloc = true;
     } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {
       auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
-      m_data_arr = malloc(header->m_size);
+      m_data_arr = malloc(header->size);
       m_alloc = true;
-      memcpy(m_data_arr, existing_fragment_buffer, header->m_size);
+      memcpy(m_data_arr, existing_fragment_buffer, header->size);
     }
   }
 
@@ -155,14 +155,14 @@ public:
    */
   void set_header_fields(const FragmentHeader& header)
   {
-    header_()->m_trigger_number = header.m_trigger_number;
-    header_()->m_trigger_timestamp = header.m_trigger_timestamp;
-    header_()->m_window_offset = header.m_window_offset;
-    header_()->m_window_width = header.m_window_width;
-    header_()->m_run_number = header.m_run_number;
-    header_()->m_link_id = header.m_link_id;
-    header_()->m_error_bits = header.m_error_bits;
-    header_()->m_fragment_type = header.m_fragment_type;
+    header_()->trigger_number = header.trigger_number;
+    header_()->trigger_timestamp = header.trigger_timestamp;
+    header_()->window_start = header.window_start;
+    header_()->window_end = header.window_end;
+    header_()->run_number = header.run_number;
+    header_()->link_id = header.link_id;
+    header_()->error_bits = header.error_bits;
+    header_()->fragment_type = header.fragment_type;
   }
   /**
    * @brief Get a pointer to the Fragment's data array to read its contents directly
@@ -175,74 +175,74 @@ public:
    * @brief Get the trigger_number field from the header
    * @return The trigger_number header field
    */
-  trigger_number_t get_trigger_number() const { return header_()->m_trigger_number; }
+  trigger_number_t get_trigger_number() const { return header_()->trigger_number; }
   /**
    * @brief Set the trigger_number for the Fragment
    * @param trigger_number Value of trigger_number to set
    */
-  void set_trigger_number(trigger_number_t trigger_number) { header_()->m_trigger_number = trigger_number; }
+  void set_trigger_number(trigger_number_t trigger_number) { header_()->trigger_number = trigger_number; }
   /**
    * @brief Get the run_number field from the header
    * @return The run_number header field
    */
-  run_number_t get_run_number() const { return header_()->m_run_number; }
+  run_number_t get_run_number() const { return header_()->run_number; }
   /**
    * @brief Set the run_number for the Fragment
    * @param run_number Value of run_number to set
    */
-  void set_run_number(run_number_t run_number) { header_()->m_run_number = run_number; }
+  void set_run_number(run_number_t run_number) { header_()->run_number = run_number; }
 
   /**
    * @brief Get the trigger_timestamp field from the header
    * @return The trigger_timestamp header field
    */
-  timestamp_t get_trigger_timestamp() const { return header_()->m_trigger_timestamp; }
+  timestamp_t get_trigger_timestamp() const { return header_()->trigger_timestamp; }
   /**
    * @brief Set the trigger_timestamp for the Fragment
    * @param trigger_timestamp Value of trigger_timestamp to set
    */
-  void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_()->m_trigger_timestamp = trigger_timestamp; }
+  void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_()->trigger_timestamp = trigger_timestamp; }
   /**
-   * @brief Get the window_offset field from the header
-   * @return The window_offset header field
+   * @brief Get the window_start field from the header
+   * @return The window_start header field
    */
-  timestamp_diff_t get_window_offset() const { return header_()->m_window_offset; }
+  timestamp_t get_window_start() const { return header_()->window_start; }
   /**
-   * @brief Set the window_offset for the Fragment
-   * @param window_offset Value of the window_offset to set
+   * @brief Set the window_start for the Fragment
+   * @param window_start Value of the window_start to set
    */
-  void set_window_offset(timestamp_diff_t window_offset) { header_()->m_window_offset = window_offset; }
+  void set_window_start(timestamp_t window_start) { header_()->window_start = window_start; }
   /**
-   * @brief Get the window_width field from the header
-   * @return The window_width header field
+   * @brief Get the window_end field from the header
+   * @return The window_end header field
    */
-  timestamp_diff_t get_window_width() const { return header_()->m_window_width; }
+  timestamp_t get_window_end() const { return header_()->window_end; }
   /**
-   * @brief Set the window_width for the Fragment
-   * @param window_width Value of the window_width to set
+   * @brief Set the window_end for the Fragment
+   * @param window_end Value of the window_end to set
    */
-  void set_window_width(timestamp_diff_t window_width) { header_()->m_window_width = window_width; }
+  void set_window_end(timestamp_t window_end) { header_()->window_end = window_end; }
 
   /**
    * @brief Get the GeoID for the Fragment
    * @return The link_id header field
    */
-  GeoID get_link_id() const { return header_()->m_link_id; }
+  GeoID get_link_id() const { return header_()->link_id; }
   /**
    * @brief Set the GeoID for the Fragment
    * @param link_id GeoID to use as link_id
    */
-  void set_link_id(GeoID link_id) { header_()->m_link_id = link_id; }
+  void set_link_id(GeoID link_id) { header_()->link_id = link_id; }
   /**
    * @brief Get the error_bits header field
    * @return Bitset generated from header's error_bits field
    */
-  std::bitset<32> get_error_bits() const { return header_()->m_error_bits; }
+  std::bitset<32> get_error_bits() const { return header_()->error_bits; }
   /**
    * @brief Overwrite the error_bits header field
    * @param error_bits Bitset of error bits to set
    */
-  void set_error_bits(std::bitset<32> error_bits) { header_()->m_error_bits = error_bits.to_ulong(); }
+  void set_error_bits(std::bitset<32> error_bits) { header_()->error_bits = error_bits.to_ulong(); }
   /**
    * @brief Get the value of a designated error bit
    * @param bit Bit to query
@@ -266,18 +266,18 @@ public:
    * @brief Get the fragment_type header field
    * @return Current value of the fragment_type header field
    */
-  fragment_type_t get_fragment_type() const { return header_()->m_fragment_type; }
+  fragment_type_t get_fragment_type() const { return header_()->fragment_type; }
   /**
    * @brief Set the fragment_type header field
    * @param fragment_type Value to set
    */
-  void set_type(fragment_type_t fragment_type) { header_()->m_fragment_type = fragment_type; }
+  void set_type(fragment_type_t fragment_type) { header_()->fragment_type = fragment_type; }
 
   /**
    * @brief Get the total size of the Fragment
    * @return The size of the Fragment, including header and all payload pieces
    */
-  fragment_size_t get_size() const { return header_()->m_size; }
+  fragment_size_t get_size() const { return header_()->size; }
   /**
    * @brief Get a pointer to the data payload in the Fragmnet
    * @return Pointer to the data payload in the Fragment

@@ -40,15 +40,15 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 1;
-  components.back().m_component.m_link_number = 2;
-  components.back().m_window_offset = 3;
-  components.back().m_window_width = 4;
+  components.back().component.apa_number = 1;
+  components.back().component.link_number = 2;
+  components.back().window_start = 3;
+  components.back().window_end = 4;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 5;
-  components.back().m_component.m_link_number = 6;
-  components.back().m_window_offset = 7;
-  components.back().m_window_width = 8;
+  components.back().component.apa_number = 5;
+  components.back().component.link_number = 6;
+  components.back().window_start = 7;
+  components.back().window_end = 8;
 
   auto header = new TriggerRecordHeader(components);
   header->set_run_number(9);
@@ -58,9 +58,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
   header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
 
-  BOOST_REQUIRE_THROW(header->at(header->get_header().m_num_requested_components),
+  BOOST_REQUIRE_THROW(header->at(header->get_header().num_requested_components),
                       dunedaq::dataformats::ComponentRequestIndexError);
-  BOOST_REQUIRE_THROW((*header)[header->get_header().m_num_requested_components],
+  BOOST_REQUIRE_THROW((*header)[header->get_header().num_requested_components],
                       dunedaq::dataformats::ComponentRequestIndexError);
 
   void* buff = malloc(header->get_total_size_bytes());
@@ -73,9 +73,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   BOOST_REQUIRE_EQUAL(copy_header.get_run_number(), 9);
   BOOST_REQUIRE_EQUAL(copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
   BOOST_REQUIRE_EQUAL(copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-  BOOST_REQUIRE_EQUAL(copy_header.get_header().m_error_bits, 10);
-  BOOST_REQUIRE_EQUAL(copy_header.at(0).m_window_offset, 3);
-  BOOST_REQUIRE_EQUAL(copy_header[1].m_window_offset, 7);
+  BOOST_REQUIRE_EQUAL(copy_header.get_header().error_bits, 10);
+  BOOST_REQUIRE_EQUAL(copy_header.at(0).window_start, 3);
+  BOOST_REQUIRE_EQUAL(copy_header[1].window_start, 7);
 
   {
     // Test copy constructor
@@ -83,9 +83,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_run_number(), 9);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-    BOOST_REQUIRE_EQUAL(copy_copy_header.get_header().m_error_bits, 10);
-    BOOST_REQUIRE_EQUAL(copy_copy_header.at(0).m_window_offset, 3);
-    BOOST_REQUIRE_EQUAL(copy_copy_header[1].m_window_offset, 7);
+    BOOST_REQUIRE_EQUAL(copy_copy_header.get_header().error_bits, 10);
+    BOOST_REQUIRE_EQUAL(copy_copy_header.at(0).window_start, 3);
+    BOOST_REQUIRE_EQUAL(copy_copy_header[1].window_start, 7);
   }
   {
     // Test copy assignment
@@ -93,9 +93,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_run_number(), 9);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-    BOOST_REQUIRE_EQUAL(copy_assign_header.get_header().m_error_bits, 10);
-    BOOST_REQUIRE_EQUAL(copy_assign_header.at(0).m_window_offset, 3);
-    BOOST_REQUIRE_EQUAL(copy_assign_header[1].m_window_offset, 7);
+    BOOST_REQUIRE_EQUAL(copy_assign_header.get_header().error_bits, 10);
+    BOOST_REQUIRE_EQUAL(copy_assign_header.at(0).window_start, 3);
+    BOOST_REQUIRE_EQUAL(copy_assign_header[1].window_start, 7);
   }
 
   {
@@ -105,9 +105,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(buffer_header.get_run_number(), 9);
     BOOST_REQUIRE_EQUAL(buffer_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
     BOOST_REQUIRE_EQUAL(buffer_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-    BOOST_REQUIRE_EQUAL(buffer_header.get_header().m_error_bits, 10);
-    BOOST_REQUIRE_EQUAL(buffer_header.at(0).m_window_offset, 3);
-    BOOST_REQUIRE_EQUAL(buffer_header[1].m_window_offset, 7);
+    BOOST_REQUIRE_EQUAL(buffer_header.get_header().error_bits, 10);
+    BOOST_REQUIRE_EQUAL(buffer_header.at(0).window_start, 3);
+    BOOST_REQUIRE_EQUAL(buffer_header[1].window_start, 7);
   }
 
   BOOST_REQUIRE_EQUAL(*reinterpret_cast<uint32_t*>(buff), // NOLINT
@@ -123,15 +123,15 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 1;
-  components.back().m_component.m_link_number = 2;
-  components.back().m_window_offset = 3;
-  components.back().m_window_width = 4;
+  components.back().component.apa_number = 1;
+  components.back().component.link_number = 2;
+  components.back().window_start = 3;
+  components.back().window_end = 4;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 5;
-  components.back().m_component.m_link_number = 6;
-  components.back().m_window_offset = 7;
-  components.back().m_window_width = 8;
+  components.back().component.apa_number = 5;
+  components.back().component.link_number = 6;
+  components.back().window_start = 7;
+  components.back().window_end = 8;
 
   auto header = new TriggerRecordHeader(components);
   header->set_run_number(9);
@@ -142,18 +142,18 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
 
   auto header_data = header->get_header();
-  BOOST_REQUIRE_EQUAL(header->get_run_number(), header_data.m_run_number);
-  BOOST_REQUIRE_EQUAL(header->get_trigger_number(), header_data.m_trigger_number);
-  BOOST_REQUIRE_EQUAL(header->get_trigger_timestamp(), header_data.m_trigger_timestamp);
-  BOOST_REQUIRE_EQUAL(header->get_trigger_type(), header_data.m_trigger_type);
+  BOOST_REQUIRE_EQUAL(header->get_run_number(), header_data.run_number);
+  BOOST_REQUIRE_EQUAL(header->get_trigger_number(), header_data.trigger_number);
+  BOOST_REQUIRE_EQUAL(header->get_trigger_timestamp(), header_data.trigger_timestamp);
+  BOOST_REQUIRE_EQUAL(header->get_trigger_type(), header_data.trigger_type);
   BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), 2);
-  BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), header_data.m_num_requested_components);
+  BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), header_data.num_requested_components);
 
   auto header_ptr = reinterpret_cast<const TriggerRecordHeaderData*>(header->get_storage_location());
-  BOOST_REQUIRE_EQUAL(header_ptr->m_run_number, header_data.m_run_number);
+  BOOST_REQUIRE_EQUAL(header_ptr->run_number, header_data.run_number);
   header->set_run_number(10);
-  BOOST_REQUIRE(header_ptr->m_run_number != header_data.m_run_number);
-  BOOST_REQUIRE_EQUAL(header_ptr->m_run_number, 10);
+  BOOST_REQUIRE(header_ptr->run_number != header_data.run_number);
+  BOOST_REQUIRE_EQUAL(header_ptr->run_number, 10);
 }
 
 /**
@@ -163,15 +163,15 @@ BOOST_AUTO_TEST_CASE(Header_SerDes_MsgPack)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 1;
-  components.back().m_component.m_link_number = 2;
-  components.back().m_window_offset = 3;
-  components.back().m_window_width = 4;
+  components.back().component.apa_number = 1;
+  components.back().component.link_number = 2;
+  components.back().window_start = 3;
+  components.back().window_end = 4;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 5;
-  components.back().m_component.m_link_number = 6;
-  components.back().m_window_offset = 7;
-  components.back().m_window_width = 8;
+  components.back().component.apa_number = 5;
+  components.back().component.link_number = 6;
+  components.back().window_start = 7;
+  components.back().window_end = 8;
 
   auto header = new TriggerRecordHeader(components);
   header->set_run_number(9);
@@ -192,8 +192,8 @@ BOOST_AUTO_TEST_CASE(Header_SerDes_MsgPack)
   BOOST_REQUIRE_EQUAL(header_orig.get_error_bits(), header_deserialized.get_error_bits());
   BOOST_REQUIRE_EQUAL(header_orig.get_trigger_type(), header_deserialized.get_trigger_type());
   BOOST_REQUIRE_EQUAL(header_orig.get_total_size_bytes(), header_deserialized.get_total_size_bytes());
-  BOOST_REQUIRE_EQUAL(header_orig.at(0).m_window_offset, header_deserialized.at(0).m_window_offset);
-  BOOST_REQUIRE_EQUAL(header_orig.at(1).m_window_offset, header_deserialized.at(1).m_window_offset);
+  BOOST_REQUIRE_EQUAL(header_orig.at(0).window_start, header_deserialized.at(0).window_start);
+  BOOST_REQUIRE_EQUAL(header_orig.at(1).window_start, header_deserialized.at(1).window_start);
 }
 
 /**
@@ -203,15 +203,15 @@ BOOST_AUTO_TEST_CASE(Header_SerDes_JSON)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 1;
-  components.back().m_component.m_link_number = 2;
-  components.back().m_window_offset = 3;
-  components.back().m_window_width = 4;
+  components.back().component.apa_number = 1;
+  components.back().component.link_number = 2;
+  components.back().window_start = 3;
+  components.back().window_end = 4;
   components.emplace_back();
-  components.back().m_component.m_apa_number = 5;
-  components.back().m_component.m_link_number = 6;
-  components.back().m_window_offset = 7;
-  components.back().m_window_width = 8;
+  components.back().component.apa_number = 5;
+  components.back().component.link_number = 6;
+  components.back().window_start = 7;
+  components.back().window_end = 8;
 
   auto header = new TriggerRecordHeader(components);
   header->set_run_number(9);
@@ -232,8 +232,8 @@ BOOST_AUTO_TEST_CASE(Header_SerDes_JSON)
   BOOST_REQUIRE_EQUAL(header_orig.get_error_bits(), header_deserialized.get_error_bits());
   BOOST_REQUIRE_EQUAL(header_orig.get_trigger_type(), header_deserialized.get_trigger_type());
   BOOST_REQUIRE_EQUAL(header_orig.get_total_size_bytes(), header_deserialized.get_total_size_bytes());
-  BOOST_REQUIRE_EQUAL(header_orig.at(0).m_window_offset, header_deserialized.at(0).m_window_offset);
-  BOOST_REQUIRE_EQUAL(header_orig.at(1).m_window_offset, header_deserialized.at(1).m_window_offset);
+  BOOST_REQUIRE_EQUAL(header_orig.at(0).window_start, header_deserialized.at(0).window_start);
+  BOOST_REQUIRE_EQUAL(header_orig.at(1).window_start, header_deserialized.at(1).window_start);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
