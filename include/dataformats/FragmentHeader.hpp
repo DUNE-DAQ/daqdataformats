@@ -103,9 +103,9 @@ struct FragmentHeader
  */
 enum class FragmentErrorBits : size_t
 {
-  kDataNotFound      = 0,   ///< The requested data was not found at all, so the fragment is empty
-  kIncomplete        = 1,   ///< Only part of the requested data is present in the fragment
-  kUnassigned2 = 2,   ///< Error bit 2 is not assigned
+  kDataNotFound = 0,  ///< The requested data was not found at all, so the fragment is empty
+  kIncomplete = 1,    ///< Only part of the requested data is present in the fragment
+  kInvalidWindow = 2, ///< The requested data window was too large
   kUnassigned3 = 3,   ///< Error bit 3 is not assigned
   kUnassigned4 = 4,   ///< Error bit 4 is not assigned
   kUnassigned5 = 5,   ///< Error bit 5 is not assigned
