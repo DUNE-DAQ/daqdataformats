@@ -266,12 +266,12 @@ public:
    * @brief Get the fragment_type header field
    * @return Current value of the fragment_type header field
    */
-  fragment_type_t get_fragment_type() const { return header_()->m_fragment_type; }
+  FragmentType get_fragment_type() const { return header_()->m_fragment_type; }
   /**
    * @brief Set the fragment_type header field
    * @param fragment_type Value to set
    */
-  void set_type(fragment_type_t fragment_type) { header_()->m_fragment_type = fragment_type; }
+  void set_type(FragmentType fragment_type) { header_()->m_fragment_type = static_cast<fragment_type_t>(fragment_type); }
 
   /**
    * @brief Get the total size of the Fragment

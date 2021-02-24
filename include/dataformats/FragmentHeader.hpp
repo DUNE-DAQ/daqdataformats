@@ -138,6 +138,32 @@ enum class FragmentErrorBits : size_t
   kInvalid = 32       ///< Error bit 32 and higher are not valid (m_error_bits is only 32 bits)
 };
 
+enum class FragmentType : fragment_type_t
+{
+    kInvalid // Should always be last
+};
+
+static const std::map<FragmentType, std::string> s_fragment_type_names{};
+
+inline std::string
+fragment_type_to_string(FragmentType type)
+{
+  if (!s_fragment_type_names.count(type))
+    return "INVALID";
+  return s_fragment_type_names.at(type);
+}
+
+inline FragmentType
+string_to_fragment_type(std::string name)
+{
+  std::transform(name.begin(), name.end(), name.begin(), toupper);
+  for (auto& it : s_fragment_type_names) {
+    if (it.second == name)
+      return it.first;
+  }
+  return FragmentType::kInvalid;
+}
+
 /**
  * @brief Stream a Fragment Header in human-readable form
  * @param o Stream to write to
