@@ -266,7 +266,7 @@ public:
    * @brief Get the fragment_type header field
    * @return Current value of the fragment_type header field
    */
-  FragmentType get_fragment_type() const { return header_()->m_fragment_type; }
+  FragmentType get_fragment_type() const { return static_cast<FragmentType>(header_()->m_fragment_type); }
   /**
    * @brief Set the fragment_type header field
    * @param fragment_type Value to set
