@@ -138,13 +138,26 @@ enum class FragmentErrorBits : size_t
   kInvalid = 32       ///< Error bit 32 and higher are not valid (m_error_bits is only 32 bits)
 };
 
+/**
+ * @brief This enumeration should list all defined Fragment types
+*/
 enum class FragmentType : fragment_type_t
 {
-    kInvalid // Should always be last
+    kInvalid ///< Not a valid fragment_type. Should always be last
 };
 
+/**
+ * @brief This map relates FragmentType values to string names
+ * 
+ * These names can be used, for example, as HDF5 Group names
+*/
 static const std::map<FragmentType, std::string> s_fragment_type_names{};
 
+/**
+ * @brief Convert a FragmentType enum value to string
+ * @param type Type to convert
+ * @return String representation of the given type 
+*/
 inline std::string
 fragment_type_to_string(FragmentType type)
 {
@@ -153,6 +166,13 @@ fragment_type_to_string(FragmentType type)
   return s_fragment_type_names.at(type);
 }
 
+/**
+ * @brief Convert a string to a FragmentType value
+ * @param name Name of the type
+ * @return FragmentType corresponding to given string
+ * 
+ * Note that this function assumes that string names given in map are all uppercase. This function should be modified if that is not the case.
+*/
 inline FragmentType
 string_to_fragment_type(std::string name)
 {
