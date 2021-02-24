@@ -29,13 +29,13 @@ struct ComponentRequest
   /**
    * @brief Start of the data collection window
    */
-  timestamp_t window_start{ TypeDefaults::s_invalid_timestamp };
+  timestamp_t window_begin{ TypeDefaults::s_invalid_timestamp };
   /**
    * @brief End of the data collection window
    */
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
 
-  DUNE_DAQ_SERIALIZE(ComponentRequest, component, window_start, window_end);
+  DUNE_DAQ_SERIALIZE(ComponentRequest, component, window_begin, window_end);
 };
 
 /**
@@ -47,7 +47,7 @@ struct ComponentRequest
 inline std::ostream&
 operator<<(std::ostream& o, ComponentRequest const& cr)
 {
-  return o << cr.component << ", start: " << cr.window_start << ", end: " << cr.window_end;
+  return o << cr.component << ", begin: " << cr.window_begin << ", end: " << cr.window_end;
 }
 } // namespace dataformats
 } // namespace dunedaq

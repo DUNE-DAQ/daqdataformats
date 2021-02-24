@@ -167,7 +167,7 @@ BOOST_AUTO_TEST_CASE(SerDes_MsgPack)
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_trigger_number(), test_frag.get_trigger_number());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_run_number(), test_frag.get_run_number());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_trigger_timestamp(), test_frag.get_trigger_timestamp());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_start(), test_frag.get_window_start());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_begin(), test_frag.get_window_begin());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_end(), test_frag.get_window_end());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().link_number, test_frag.get_link_id().link_number);
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().apa_number, test_frag.get_link_id().apa_number);
@@ -210,7 +210,7 @@ BOOST_AUTO_TEST_CASE(SerDes_JSON)
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_trigger_number(), test_frag.get_trigger_number());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_run_number(), test_frag.get_run_number());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_trigger_timestamp(), test_frag.get_trigger_timestamp());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_start(), test_frag.get_window_start());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_begin(), test_frag.get_window_begin());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_end(), test_frag.get_window_end());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().link_number, test_frag.get_link_id().link_number);
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().apa_number, test_frag.get_link_id().apa_number);
@@ -237,7 +237,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header.trigger_number = 1;
   header.trigger_timestamp = 2;
   header.run_number = 3;
-  header.window_start = 4;
+  header.window_begin = 4;
   header.window_end = 5;
 
   GeoID component;
@@ -258,7 +258,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(frag.get_trigger_number(), header.trigger_number);
   BOOST_REQUIRE_EQUAL(frag.get_run_number(), header.run_number);
   BOOST_REQUIRE_EQUAL(frag.get_trigger_timestamp(), header.trigger_timestamp);
-  BOOST_REQUIRE_EQUAL(frag.get_window_start(), header.window_start);
+  BOOST_REQUIRE_EQUAL(frag.get_window_begin(), header.window_begin);
   BOOST_REQUIRE_EQUAL(frag.get_window_end(), header.window_end);
   BOOST_REQUIRE_EQUAL(frag.get_link_id().apa_number, header.link_id.apa_number);
   BOOST_REQUIRE_EQUAL(frag.get_link_id().link_number, header.link_id.link_number);
@@ -275,8 +275,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(theHeader->run_number, 0x33);
   frag.set_trigger_timestamp(0x22);
   BOOST_REQUIRE_EQUAL(theHeader->trigger_timestamp, 0x22);
-  frag.set_window_start(0x44);
-  BOOST_REQUIRE_EQUAL(theHeader->window_start, 0x44);
+  frag.set_window_begin(0x44);
+  BOOST_REQUIRE_EQUAL(theHeader->window_begin, 0x44);
   frag.set_window_end(0x55);
   BOOST_REQUIRE_EQUAL(theHeader->window_end, 0x55);
   frag.set_type(0x88);

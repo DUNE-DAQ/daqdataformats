@@ -43,12 +43,12 @@ BOOST_AUTO_TEST_CASE(ComponentsConstructor)
   components.emplace_back();
   components.back().component.apa_number = 1;
   components.back().component.link_number = 2;
-  components.back().window_start = 3;
+  components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
   components.back().component.apa_number = 5;
   components.back().component.link_number = 6;
-  components.back().window_start = 7;
+  components.back().window_begin = 7;
   components.back().window_end = 8;
 
   auto record = new TriggerRecord(components);
@@ -65,12 +65,12 @@ BOOST_AUTO_TEST_CASE(HeaderConstructor)
   components.emplace_back();
   components.back().component.apa_number = 1;
   components.back().component.link_number = 2;
-  components.back().window_start = 3;
+  components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
   components.back().component.apa_number = 5;
   components.back().component.link_number = 6;
-  components.back().window_start = 7;
+  components.back().window_begin = 7;
   components.back().window_end = 8;
 
   auto header = new TriggerRecordHeader(components);
@@ -90,12 +90,12 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation)
   components.emplace_back();
   components.back().component.apa_number = 1;
   components.back().component.link_number = 2;
-  components.back().window_start = 3;
+  components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
   components.back().component.apa_number = 5;
   components.back().component.link_number = 6;
-  components.back().window_start = 7;
+  components.back().window_begin = 7;
   components.back().window_end = 8;
 
   TriggerRecord record(components);
@@ -103,7 +103,7 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation)
   components.emplace_back();
   components.back().component.apa_number = 9;
   components.back().component.link_number = 10;
-  components.back().window_start = 11;
+  components.back().window_begin = 11;
   components.back().window_end = 12;
 
   TriggerRecordHeader new_header(components);
@@ -124,12 +124,12 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
   components.emplace_back();
   components.back().component.apa_number = 1;
   components.back().component.link_number = 2;
-  components.back().window_start = 3;
+  components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
   components.back().component.apa_number = 5;
   components.back().component.link_number = 6;
-  components.back().window_start = 7;
+  components.back().window_begin = 7;
   components.back().window_end = 8;
 
   TriggerRecord record(components);

@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   test.apa_number = 1;
   test.link_number = 2;
   component.component = test;
-  component.window_start = 3;
+  component.window_begin = 3;
   component.window_end = 4;
 
   std::ostringstream ostr;

@@ -66,9 +66,9 @@ struct FragmentHeader
   timestamp_t trigger_timestamp{ TypeDefaults::s_invalid_timestamp };
 
   /**
-   * @brief Window start of data in the Fragment
+   * @brief Window begin of data in the Fragment
    */
-  timestamp_t window_start{ TypeDefaults::s_invalid_timestamp };
+  timestamp_t window_begin{ TypeDefaults::s_invalid_timestamp };
 
   /**
    * @brief Window end of data in the Fragment
@@ -153,7 +153,7 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "trigger_number: " << hdr.trigger_number << ", "
            << "run_number: " << hdr.run_number << ", "
            << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
-           << "window_start: " << hdr.window_start << ", "
+           << "window_begin: " << hdr.window_begin << ", "
            << "window_end: " << hdr.window_end << ", "
            << "link_id: " << hdr.link_id << ", "
            << "error_bits: " << hdr.error_bits << ", "

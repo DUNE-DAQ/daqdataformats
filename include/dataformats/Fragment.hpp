@@ -157,7 +157,7 @@ public:
   {
     header_()->trigger_number = header.trigger_number;
     header_()->trigger_timestamp = header.trigger_timestamp;
-    header_()->window_start = header.window_start;
+    header_()->window_begin = header.window_begin;
     header_()->window_end = header.window_end;
     header_()->run_number = header.run_number;
     header_()->link_id = header.link_id;
@@ -203,15 +203,15 @@ public:
    */
   void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_()->trigger_timestamp = trigger_timestamp; }
   /**
-   * @brief Get the window_start field from the header
-   * @return The window_start header field
+   * @brief Get the window_begin field from the header
+   * @return The window_begin header field
    */
-  timestamp_t get_window_start() const { return header_()->window_start; }
+  timestamp_t get_window_begin() const { return header_()->window_begin; }
   /**
-   * @brief Set the window_start for the Fragment
-   * @param window_start Value of the window_start to set
+   * @brief Set the window_begin for the Fragment
+   * @param window_begin Value of the window_begin to set
    */
-  void set_window_start(timestamp_t window_start) { header_()->window_start = window_start; }
+  void set_window_begin(timestamp_t window_begin) { header_()->window_begin = window_begin; }
   /**
    * @brief Get the window_end field from the header
    * @return The window_end header field
