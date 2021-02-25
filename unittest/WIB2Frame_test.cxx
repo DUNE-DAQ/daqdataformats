@@ -23,7 +23,7 @@
 using namespace dunedaq::dataformats;
 
 typedef std::array<uint16_t, 256> vals_type;
-BOOST_TEST_DONT_PRINT_LOG_VALUE(vals_type);
+BOOST_TEST_DONT_PRINT_LOG_VALUE(vals_type)
 
 BOOST_AUTO_TEST_SUITE(WIB2Frame_test)
 
@@ -85,22 +85,22 @@ BOOST_DATA_TEST_CASE(CompareToUnpack, boost::unit_test::data::make(make_vals()),
   // Create the packed array from the unpacked array
   dunedaq::dataformats::wib2::repack_frame(&unpacked, &packed);
 
-  dunedaq::dataformats::WIB2Frame& wib2frame = *reinterpret_cast<dunedaq::dataformats::WIB2Frame*>(&packed);
+  dunedaq::dataformats::WIB2Frame* wib2frame = reinterpret_cast<dunedaq::dataformats::WIB2Frame*>(&packed);
 
   for (int femb = 0; femb < 2; ++femb) {
     for (int i = 0; i < 40; ++i) {
       uint16_t gold = unpacked.femb[femb].u[i];
-      uint16_t test = wib2frame.get_u(femb, i);
+      uint16_t test = wib2frame->get_u(femb, i);
       BOOST_CHECK_EQUAL(gold, test);
     }
     for (int i = 0; i < 40; ++i) {
       uint16_t gold = unpacked.femb[femb].v[i];
-      uint16_t test = wib2frame.get_v(femb, i);
+      uint16_t test = wib2frame->get_v(femb, i);
       BOOST_CHECK_EQUAL(gold, test);
     }
     for (int i = 0; i < 48; ++i) {
       uint16_t gold = unpacked.femb[femb].x[i];
-      uint16_t test = wib2frame.get_x(femb, i);
+      uint16_t test = wib2frame->get_x(femb, i);
       BOOST_CHECK_EQUAL(gold, test);
     }
   } // loop over femb
