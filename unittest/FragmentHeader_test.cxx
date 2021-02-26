@@ -28,10 +28,10 @@ BOOST_AUTO_TEST_SUITE(FragmentHeader_test)
 BOOST_AUTO_TEST_CASE(StreamOperator) 
 {
   FragmentHeader header;
-  header.m_size = sizeof(FragmentHeader) + 4;
-  header.m_trigger_number = 1;
-  header.m_trigger_timestamp = 2;
-  header.m_run_number = 3;
+  header.size = sizeof(FragmentHeader) + 4;
+  header.trigger_number = 1;
+  header.trigger_timestamp = 2;
+  header.run_number = 3;
 
   std::ostringstream ostr;
   ostr << header;
