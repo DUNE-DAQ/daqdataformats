@@ -13,7 +13,7 @@
 #include "dataformats/TriggerRecordHeaderData.hpp"
 #include "dataformats/Types.hpp"
 
-#include "ers/ers.h"
+#include "ers/Issue.hpp"
 
 #include <bitset>
 #include <ostream>
