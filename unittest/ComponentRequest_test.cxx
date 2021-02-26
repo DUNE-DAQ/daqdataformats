@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE(pos != std::string::npos);
   pos = output.find("link: 2,");
   BOOST_REQUIRE(pos != std::string::npos);
-  pos = output.find("offset: 3,");
+  pos = output.find("begin: 3,");
   BOOST_REQUIRE(pos != std::string::npos);
 }
 
