@@ -262,11 +262,17 @@ public:
     bits[static_cast<size_t>(bit)] = value;
     set_error_bits(bits);
   }
+
+  /**
+   * @brief Get the fragment_type_t value stored in the header
+   * @return Current value of the fragment_type header field
+  */
+  fragment_type_t get_fragment_type_code() const { return header_()->fragment_type; }
   /**
    * @brief Get the fragment_type header field
    * @return Current value of the fragment_type header field
    */
-  FragmentType get_fragment_type() const { return static_cast<FragmentType>(header_()->fragment_type); }
+  FragmentType get_fragment_type() const { return static_cast<FragmentType>(get_fragment_type_code()); }
   /**
    * @brief Set the fragment_type header field
    * @param fragment_type Value to set

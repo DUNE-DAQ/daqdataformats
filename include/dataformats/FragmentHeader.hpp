@@ -12,12 +12,24 @@
 #include "dataformats/GeoID.hpp"
 #include "dataformats/Types.hpp"
 
+#include "logging/Logging.hpp"
+
 #include <bitset>
 #include <cstdlib>
 #include <numeric>
 #include <vector>
 
 namespace dunedaq {
+/**
+ * @brief An ERS Issue indicating that an attempted FragmentType conversion failed
+ * @param fragment_type_input Input that failed conversion
+ * @cond Doxygen doesn't like ERS macros
+ */
+ERS_DECLARE_ISSUE(dataformats,
+                  FragmentTypeConversionError,
+                  "Supplied input " << fragment_type_input << " did not match any in s_fragment_type_names",
+                  ((std::string)fragment_type_input)) // NOLINT
+                                                                 /// @endcond
 namespace dataformats {
 
 /**
@@ -161,8 +173,10 @@ static const std::map<FragmentType, std::string> s_fragment_type_names{};
 inline std::string
 fragment_type_to_string(FragmentType type)
 {
-  if (!s_fragment_type_names.count(type))
+  if (!s_fragment_type_names.count(type)) {
+    ers::error(FragmentTypeConversionError(ERS_HERE, std::to_string(static_cast<int>(type))));
     return "UNKNOWN";
+    }
   return s_fragment_type_names.at(type);
 }
 
@@ -181,6 +195,7 @@ string_to_fragment_type(std::string name)
     if (it.second == name)
       return it.first;
   }
+  ers::error(FragmentTypeConversionError(ERS_HERE, name));
   return FragmentType::kUnknown;
 }
 
