@@ -143,7 +143,7 @@ enum class FragmentErrorBits : size_t
 */
 enum class FragmentType : fragment_type_t
 {
-    kInvalid ///< Not a valid fragment_type. Should always be last
+    kUnknown ///< Used when given a string that does not match any in s_fragment_type_names
 };
 
 /**
@@ -162,7 +162,7 @@ inline std::string
 fragment_type_to_string(FragmentType type)
 {
   if (!s_fragment_type_names.count(type))
-    return "INVALID";
+    return "UNKNOWN";
   return s_fragment_type_names.at(type);
 }
 
@@ -181,7 +181,7 @@ string_to_fragment_type(std::string name)
     if (it.second == name)
       return it.first;
   }
-  return FragmentType::kInvalid;
+  return FragmentType::kUnknown;
 }
 
 /**
