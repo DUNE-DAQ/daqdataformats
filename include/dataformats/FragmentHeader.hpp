@@ -29,7 +29,7 @@ ERS_DECLARE_ISSUE(dataformats,
                   FragmentTypeConversionError,
                   "Supplied input " << fragment_type_input << " did not match any in s_fragment_type_names",
                   ((std::string)fragment_type_input)) // NOLINT
-                                                                 /// @endcond
+                                                      /// @endcond
 namespace dataformats {
 
 /**
@@ -152,31 +152,36 @@ enum class FragmentErrorBits : size_t
 
 /**
  * @brief This enumeration should list all defined Fragment types
-*/
+ */
 enum class FragmentType : fragment_type_t
 {
-    kUnknown ///< Used when given a string that does not match any in s_fragment_type_names
+  kFakeData = 0,   ///< Data created in dfmodules' FakeDataProducer
+  kReplayData = 1, ///< Data created from frame archive in readout
+  kEmuFEMB = 2,    ///< Data created in WIB's FEMB emulator
+  kUnknown         ///< Used when given a string that does not match any in s_fragment_type_names
 };
 
 /**
  * @brief This map relates FragmentType values to string names
- * 
+ *
  * These names can be used, for example, as HDF5 Group names
-*/
-static const std::map<FragmentType, std::string> s_fragment_type_names{};
+ */
+static const std::map<FragmentType, std::string> s_fragment_type_names{ { FragmentType::kFakeData, "FakeData" },
+                                                                        { FragmentType::kReplayData, "Replay" },
+                                                                        { FragmentType::kEmuFEMB, "EmuFEMB" } };
 
 /**
  * @brief Convert a FragmentType enum value to string
  * @param type Type to convert
- * @return String representation of the given type 
-*/
+ * @return String representation of the given type
+ */
 inline std::string
 fragment_type_to_string(FragmentType type)
 {
   if (!s_fragment_type_names.count(type)) {
     ers::error(FragmentTypeConversionError(ERS_HERE, std::to_string(static_cast<int>(type))));
     return "UNKNOWN";
-    }
+  }
   return s_fragment_type_names.at(type);
 }
 
@@ -184,13 +189,10 @@ fragment_type_to_string(FragmentType type)
  * @brief Convert a string to a FragmentType value
  * @param name Name of the type
  * @return FragmentType corresponding to given string
- * 
- * Note that this function assumes that string names given in map are all uppercase. This function should be modified if that is not the case.
-*/
+ */
 inline FragmentType
 string_to_fragment_type(std::string name)
 {
-  std::transform(name.begin(), name.end(), name.begin(), toupper);
   for (auto& it : s_fragment_type_names) {
     if (it.second == name)
       return it.first;
