@@ -156,8 +156,8 @@ enum class FragmentErrorBits : size_t
 enum class FragmentType : fragment_type_t
 {
   kFakeData = 0,   ///< Data created in dfmodules' FakeDataProducer
-  kReplayData = 1, ///< Data created from frame archive in readout
-  kEmuFEMB = 2,    ///< Data created in WIB's FEMB emulator
+  kTPCData = 1, ///< Data from the TPC
+  kPDSData = 2, ///< Data from the PDS
   kUnknown =
     TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in s_fragment_type_names
 };
@@ -168,8 +168,8 @@ enum class FragmentType : fragment_type_t
  * These names can be used, for example, as HDF5 Group names
  */
 static const std::map<FragmentType, std::string> s_fragment_type_names{ { FragmentType::kFakeData, "FakeData" },
-                                                                        { FragmentType::kReplayData, "Replay" },
-                                                                        { FragmentType::kEmuFEMB, "EmuFEMB" } };
+                                                                        { FragmentType::kTPCData, "TPC" },
+                                                                        { FragmentType::kPDSData, "PDS" } };
 
 /**
  * @brief Convert a FragmentType enum value to string
