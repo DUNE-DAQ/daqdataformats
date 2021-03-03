@@ -158,7 +158,8 @@ enum class FragmentType : fragment_type_t
   kFakeData = 0,   ///< Data created in dfmodules' FakeDataProducer
   kReplayData = 1, ///< Data created from frame archive in readout
   kEmuFEMB = 2,    ///< Data created in WIB's FEMB emulator
-  kUnknown         ///< Used when given a string that does not match any in s_fragment_type_names
+  kUnknown =
+    TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in s_fragment_type_names
 };
 
 /**
