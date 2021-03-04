@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
 
 /**
  * @brief Test constructors that gather existing data buffers
-*/
+ */
 BOOST_AUTO_TEST_CASE(DataConstructors)
 {
   auto buf1 = malloc(10);
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(DataConstructors)
 
 /**
  * @brief Test construction of invalid Fragments
-*/
+ */
 BOOST_AUTO_TEST_CASE(BadConstructors)
 {
   Fragment* fragment_ptr;
@@ -100,7 +100,6 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 1), two);   // NOLINT(build/unsigned)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 2), three); // NOLINT(build/unsigned)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 3), four);  // NOLINT(build/unsigned)
-    
   }
   free(frag); // Should not cause errors
 
@@ -172,15 +171,15 @@ BOOST_AUTO_TEST_CASE(SerDes_MsgPack)
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().link_number, test_frag.get_link_id().link_number);
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().apa_number, test_frag.get_link_id().apa_number);
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_error_bits(), test_frag.get_error_bits());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_fragment_type(), test_frag.get_fragment_type());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_fragment_type_code(), test_frag.get_fragment_type_code());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_size(), test_frag.get_size());
 
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 0),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 0));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 0));
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 1),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 1));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 1));
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 2),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 2));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 2));
 }
 
 BOOST_AUTO_TEST_CASE(SerDes_JSON)
@@ -215,20 +214,20 @@ BOOST_AUTO_TEST_CASE(SerDes_JSON)
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().link_number, test_frag.get_link_id().link_number);
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().apa_number, test_frag.get_link_id().apa_number);
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_error_bits(), test_frag.get_error_bits());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_fragment_type(), test_frag.get_fragment_type());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_fragment_type_code(), test_frag.get_fragment_type_code());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_size(), test_frag.get_size());
 
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 0),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 0));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 0));
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 1),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 1));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 1));
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 2),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 2));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 2));
 }
 
 /**
  * @brief Test header field manipulation methods
-*/
+ */
 BOOST_AUTO_TEST_CASE(HeaderFields)
 {
 
@@ -266,7 +265,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(frag.get_error_bits().to_ulong(), header.error_bits);
   BOOST_REQUIRE_EQUAL(frag.get_error_bit(static_cast<FragmentErrorBits>(3)), true);
 
-  BOOST_REQUIRE_EQUAL(frag.get_fragment_type(), header.fragment_type);
+  BOOST_REQUIRE_EQUAL(frag.get_fragment_type_code(), header.fragment_type);
+  BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(frag.get_fragment_type()), header.fragment_type);
 
   auto theHeader = reinterpret_cast<const FragmentHeader*>(frag.get_storage_location());
   frag.set_trigger_number(0x11);
@@ -279,7 +279,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(theHeader->window_begin, 0x44);
   frag.set_window_end(0x55);
   BOOST_REQUIRE_EQUAL(theHeader->window_end, 0x55);
-  frag.set_type(0x88);
+  frag.set_type(static_cast<FragmentType>(0x88));
   BOOST_REQUIRE_EQUAL(theHeader->fragment_type, 0x88);
 
   GeoID new_component;
