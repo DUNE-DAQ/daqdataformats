@@ -12,12 +12,24 @@
 #include "dataformats/GeoID.hpp"
 #include "dataformats/Types.hpp"
 
+#include "logging/Logging.hpp"
+
 #include <bitset>
 #include <cstdlib>
 #include <numeric>
 #include <vector>
 
 namespace dunedaq {
+/**
+ * @brief An ERS Issue indicating that an attempted FragmentType conversion failed
+ * @param fragment_type_input Input that failed conversion
+ * @cond Doxygen doesn't like ERS macros
+ */
+ERS_DECLARE_ISSUE(dataformats,
+                  FragmentTypeConversionError,
+                  "Supplied input " << fragment_type_input << " did not match any in s_fragment_type_names",
+                  ((std::string)fragment_type_input)) // NOLINT
+                                                      /// @endcond
 namespace dataformats {
 
 /**
@@ -137,6 +149,58 @@ enum class FragmentErrorBits : size_t
   kUnassigned31 = 31, ///< Error bit 31 is not assigned
   kInvalid = 32       ///< Error bit 32 and higher are not valid (error_bits is only 32 bits)
 };
+
+/**
+ * @brief This enumeration should list all defined Fragment types
+ */
+enum class FragmentType : fragment_type_t
+{
+  kFakeData = 0,   ///< Data created in dfmodules' FakeDataProducer
+  kTPCData = 1, ///< Data from the TPC
+  kPDSData = 2, ///< Data from the PDS
+  kUnknown =
+    TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in s_fragment_type_names
+};
+
+/**
+ * @brief This map relates FragmentType values to string names
+ *
+ * These names can be used, for example, as HDF5 Group names
+ */
+static const std::map<FragmentType, std::string> s_fragment_type_names{ { FragmentType::kFakeData, "FakeData" },
+                                                                        { FragmentType::kTPCData, "TPC" },
+                                                                        { FragmentType::kPDSData, "PDS" } };
+
+/**
+ * @brief Convert a FragmentType enum value to string
+ * @param type Type to convert
+ * @return String representation of the given type
+ */
+inline std::string
+fragment_type_to_string(FragmentType type)
+{
+  if (!s_fragment_type_names.count(type)) {
+    ers::error(FragmentTypeConversionError(ERS_HERE, std::to_string(static_cast<int>(type))));
+    return "UNKNOWN";
+  }
+  return s_fragment_type_names.at(type);
+}
+
+/**
+ * @brief Convert a string to a FragmentType value
+ * @param name Name of the type
+ * @return FragmentType corresponding to given string
+ */
+inline FragmentType
+string_to_fragment_type(std::string name)
+{
+  for (auto& it : s_fragment_type_names) {
+    if (it.second == name)
+      return it.first;
+  }
+  ers::error(FragmentTypeConversionError(ERS_HERE, name));
+  return FragmentType::kUnknown;
+}
 
 /**
  * @brief Stream a Fragment Header in human-readable form
