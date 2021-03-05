@@ -62,6 +62,10 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
                           dunedaq::dataformats::FragmentSizeError,
                           [&](dunedaq::dataformats::FragmentSizeError) { return true; });
 
+  BOOST_REQUIRE_EXCEPTION(fragment_ptr = new Fragment( {nullptr, size_t(-1) - sizeof(dunedaq::dataformats::FragmentHeader)} ),
+			  dunedaq::dataformats::MemoryAllocationFailed,
+			  [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
+
   auto buf1 = malloc(10);
   fragment_ptr = new Fragment(buf1, size_t(10));
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + 10);
