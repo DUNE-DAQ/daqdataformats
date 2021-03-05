@@ -85,6 +85,9 @@ public:
     }
 
     m_data_arr = malloc(size); // NOLINT(build/unsigned)
+    if (m_data_arr == nullptr) {
+        throw MemoryAllocationFailed(ERS_HERE, size);
+    }
     m_alloc = true;
 
     FragmentHeader header;
@@ -123,6 +126,9 @@ public:
     } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {
       auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
       m_data_arr = malloc(header->size);
+      if (m_data_arr == nullptr) {
+          throw MemoryAllocationFailed(ERS_HERE, header->size);
+      }
       m_alloc = true;
       memcpy(m_data_arr, existing_fragment_buffer, header->size);
     }

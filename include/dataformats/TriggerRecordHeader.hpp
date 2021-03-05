@@ -53,6 +53,9 @@ public:
     size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
 
     m_data_arr = malloc(size); // NOLINT(build/unsigned)
+    if (m_data_arr == nullptr) {
+        throw MemoryAllocationFailed(ERS_HERE, size);
+    }
     m_alloc = true;
 
     TriggerRecordHeaderData header;
@@ -81,6 +84,9 @@ public:
       size_t size = header->num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
 
       m_data_arr = malloc(size);
+      if (m_data_arr == nullptr) {
+          throw MemoryAllocationFailed(ERS_HERE, size);
+      }
       m_alloc = true;
       memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
     }
@@ -103,7 +109,11 @@ public:
     if (&other == this)
       return *this;
 
+    if (m_alloc) { free(m_data_arr); }
     m_data_arr = malloc(other.get_total_size_bytes());
+    if (m_data_arr == nullptr) {
+        throw MemoryAllocationFailed(ERS_HERE, other.get_total_size_bytes());
+    }
     m_alloc = true;
     memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());
     return *this;
