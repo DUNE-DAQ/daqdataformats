@@ -28,8 +28,8 @@ BOOST_AUTO_TEST_SUITE(GeoID_test)
 BOOST_AUTO_TEST_CASE(StreamOperator) 
 {
   GeoID test;
-  test.m_apa_number = 1;
-  test.m_link_number = 2;
+  test.apa_number = 1;
+  test.link_number = 2;
 
   std::ostringstream ostr;
   ostr << test;
@@ -48,10 +48,10 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
 BOOST_AUTO_TEST_CASE(ComparisonOperator)
 {
   GeoID lesser, greater;
-  lesser.m_apa_number = 1;
-  lesser.m_link_number = 2;
-  greater.m_apa_number = 3;
-  greater.m_link_number = 4;
+  lesser.apa_number = 1;
+  lesser.link_number = 2;
+  greater.apa_number = 3;
+  greater.link_number = 4;
 
   BOOST_REQUIRE(lesser < greater);
   BOOST_REQUIRE(!(greater < lesser));

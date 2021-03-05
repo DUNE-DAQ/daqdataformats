@@ -28,10 +28,10 @@ BOOST_AUTO_TEST_SUITE(TriggerRecordHeaderData_test)
 BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   TriggerRecordHeaderData header;
-  header.m_num_requested_components = 0;
-  header.m_trigger_number = 1;
-  header.m_trigger_timestamp = 2;
-  header.m_run_number = 3;
+  header.num_requested_components = 0;
+  header.trigger_number = 1;
+  header.trigger_timestamp = 2;
+  header.run_number = 3;
 
   std::ostringstream ostr;
   ostr << header;

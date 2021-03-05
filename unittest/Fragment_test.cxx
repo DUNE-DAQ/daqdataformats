@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
 
 /**
  * @brief Test constructors that gather existing data buffers
-*/
+ */
 BOOST_AUTO_TEST_CASE(DataConstructors)
 {
   auto buf1 = malloc(10);
@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(DataConstructors)
 
 /**
  * @brief Test construction of invalid Fragments
-*/
+ */
 BOOST_AUTO_TEST_CASE(BadConstructors)
 {
   Fragment* fragment_ptr;
@@ -73,10 +73,10 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
 BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
 {
   FragmentHeader header;
-  header.m_size = sizeof(FragmentHeader) + 4;
-  header.m_trigger_number = 1;
-  header.m_trigger_timestamp = 2;
-  header.m_run_number = 3;
+  header.size = sizeof(FragmentHeader) + 4;
+  header.trigger_number = 1;
+  header.trigger_timestamp = 2;
+  header.run_number = 3;
 
   auto frag = malloc(sizeof(FragmentHeader) + 4);
   memcpy(frag, &header, sizeof(FragmentHeader));
@@ -100,7 +100,6 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 1), two);   // NOLINT(build/unsigned)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 2), three); // NOLINT(build/unsigned)
     BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 3), four);  // NOLINT(build/unsigned)
-    
   }
   free(frag); // Should not cause errors
 
@@ -145,10 +144,10 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
 BOOST_AUTO_TEST_CASE(SerDes_MsgPack)
 {
   FragmentHeader header;
-  header.m_size = sizeof(FragmentHeader) + 4;
-  header.m_trigger_number = 1;
-  header.m_trigger_timestamp = 2;
-  header.m_run_number = 3;
+  header.size = sizeof(FragmentHeader) + 4;
+  header.trigger_number = 1;
+  header.trigger_timestamp = 2;
+  header.run_number = 3;
 
   auto frag = malloc(sizeof(FragmentHeader) + 4);
   memcpy(frag, &header, sizeof(FragmentHeader));
@@ -167,29 +166,29 @@ BOOST_AUTO_TEST_CASE(SerDes_MsgPack)
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_trigger_number(), test_frag.get_trigger_number());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_run_number(), test_frag.get_run_number());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_trigger_timestamp(), test_frag.get_trigger_timestamp());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_offset(), test_frag.get_window_offset());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_width(), test_frag.get_window_width());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().m_link_number, test_frag.get_link_id().m_link_number);
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().m_apa_number, test_frag.get_link_id().m_apa_number);
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_begin(), test_frag.get_window_begin());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_end(), test_frag.get_window_end());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().link_number, test_frag.get_link_id().link_number);
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().apa_number, test_frag.get_link_id().apa_number);
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_error_bits(), test_frag.get_error_bits());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_fragment_type(), test_frag.get_fragment_type());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_fragment_type_code(), test_frag.get_fragment_type_code());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_size(), test_frag.get_size());
 
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 0),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 0));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 0));
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 1),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 1));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 1));
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 2),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 2));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 2));
 }
 
 BOOST_AUTO_TEST_CASE(SerDes_JSON)
 {
   FragmentHeader header;
-  header.m_size = sizeof(FragmentHeader) + 4;
-  header.m_trigger_number = 1;
-  header.m_trigger_timestamp = 2;
-  header.m_run_number = 3;
+  header.size = sizeof(FragmentHeader) + 4;
+  header.trigger_number = 1;
+  header.trigger_timestamp = 2;
+  header.run_number = 3;
 
   auto frag = malloc(sizeof(FragmentHeader) + 4);
   memcpy(frag, &header, sizeof(FragmentHeader));
@@ -210,43 +209,43 @@ BOOST_AUTO_TEST_CASE(SerDes_JSON)
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_trigger_number(), test_frag.get_trigger_number());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_run_number(), test_frag.get_run_number());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_trigger_timestamp(), test_frag.get_trigger_timestamp());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_offset(), test_frag.get_window_offset());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_width(), test_frag.get_window_width());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().m_link_number, test_frag.get_link_id().m_link_number);
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().m_apa_number, test_frag.get_link_id().m_apa_number);
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_begin(), test_frag.get_window_begin());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_window_end(), test_frag.get_window_end());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().link_number, test_frag.get_link_id().link_number);
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_link_id().apa_number, test_frag.get_link_id().apa_number);
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_error_bits(), test_frag.get_error_bits());
-  BOOST_REQUIRE_EQUAL(frag_deserialized.get_fragment_type(), test_frag.get_fragment_type());
+  BOOST_REQUIRE_EQUAL(frag_deserialized.get_fragment_type_code(), test_frag.get_fragment_type_code());
   BOOST_REQUIRE_EQUAL(frag_deserialized.get_size(), test_frag.get_size());
 
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 0),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 0));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 0));
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 1),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 1));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 1));
   BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(frag_deserialized.get_data()) + 2),
-                      *(static_cast<uint8_t*>(test_frag.get_data())+ 2));
+                      *(static_cast<uint8_t*>(test_frag.get_data()) + 2));
 }
 
 /**
  * @brief Test header field manipulation methods
-*/
+ */
 BOOST_AUTO_TEST_CASE(HeaderFields)
 {
 
   FragmentHeader header;
-  header.m_size = sizeof(FragmentHeader) + 4;
-  header.m_trigger_number = 1;
-  header.m_trigger_timestamp = 2;
-  header.m_run_number = 3;
-  header.m_window_offset = 4;
-  header.m_window_width = 5;
+  header.size = sizeof(FragmentHeader) + 4;
+  header.trigger_number = 1;
+  header.trigger_timestamp = 2;
+  header.run_number = 3;
+  header.window_begin = 4;
+  header.window_end = 5;
 
   GeoID component;
-  component.m_apa_number = 6;
-  component.m_link_number = 7;
-  header.m_link_id = component;
+  component.apa_number = 6;
+  component.link_number = 7;
+  header.link_id = component;
 
-  header.m_error_bits = 0x12345678;
-  header.m_fragment_type = 8;
+  header.error_bits = 0x12345678;
+  header.fragment_type = 8;
 
   auto buf1 = malloc(10);
   Fragment frag(buf1, size_t(10));
@@ -254,48 +253,49 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
 
   frag.set_header_fields(header);
   BOOST_REQUIRE_EQUAL(frag.get_size(), sizeof(FragmentHeader) + 10);
-  BOOST_REQUIRE_EQUAL(frag.get_header().m_run_number, header.m_run_number);
-  BOOST_REQUIRE_EQUAL(frag.get_trigger_number(), header.m_trigger_number);
-  BOOST_REQUIRE_EQUAL(frag.get_run_number(), header.m_run_number);
-  BOOST_REQUIRE_EQUAL(frag.get_trigger_timestamp(), header.m_trigger_timestamp);
-  BOOST_REQUIRE_EQUAL(frag.get_window_offset(), header.m_window_offset);
-  BOOST_REQUIRE_EQUAL(frag.get_window_width(), header.m_window_width);
-  BOOST_REQUIRE_EQUAL(frag.get_link_id().m_apa_number, header.m_link_id.m_apa_number);
-  BOOST_REQUIRE_EQUAL(frag.get_link_id().m_link_number, header.m_link_id.m_link_number);
+  BOOST_REQUIRE_EQUAL(frag.get_header().run_number, header.run_number);
+  BOOST_REQUIRE_EQUAL(frag.get_trigger_number(), header.trigger_number);
+  BOOST_REQUIRE_EQUAL(frag.get_run_number(), header.run_number);
+  BOOST_REQUIRE_EQUAL(frag.get_trigger_timestamp(), header.trigger_timestamp);
+  BOOST_REQUIRE_EQUAL(frag.get_window_begin(), header.window_begin);
+  BOOST_REQUIRE_EQUAL(frag.get_window_end(), header.window_end);
+  BOOST_REQUIRE_EQUAL(frag.get_link_id().apa_number, header.link_id.apa_number);
+  BOOST_REQUIRE_EQUAL(frag.get_link_id().link_number, header.link_id.link_number);
 
-  BOOST_REQUIRE_EQUAL(frag.get_error_bits().to_ulong(), header.m_error_bits);
+  BOOST_REQUIRE_EQUAL(frag.get_error_bits().to_ulong(), header.error_bits);
   BOOST_REQUIRE_EQUAL(frag.get_error_bit(static_cast<FragmentErrorBits>(3)), true);
 
-  BOOST_REQUIRE_EQUAL(frag.get_fragment_type(), header.m_fragment_type);
+  BOOST_REQUIRE_EQUAL(frag.get_fragment_type_code(), header.fragment_type);
+  BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(frag.get_fragment_type()), header.fragment_type);
 
   auto theHeader = reinterpret_cast<const FragmentHeader*>(frag.get_storage_location());
   frag.set_trigger_number(0x11);
-  BOOST_REQUIRE_EQUAL(theHeader->m_trigger_number, 0x11);
+  BOOST_REQUIRE_EQUAL(theHeader->trigger_number, 0x11);
   frag.set_run_number(0x33);
-  BOOST_REQUIRE_EQUAL(theHeader->m_run_number, 0x33);
+  BOOST_REQUIRE_EQUAL(theHeader->run_number, 0x33);
   frag.set_trigger_timestamp(0x22);
-  BOOST_REQUIRE_EQUAL(theHeader->m_trigger_timestamp, 0x22);
-  frag.set_window_offset(0x44);
-  BOOST_REQUIRE_EQUAL(theHeader->m_window_offset, 0x44);
-  frag.set_window_width(0x55);
-  BOOST_REQUIRE_EQUAL(theHeader->m_window_width, 0x55);
-  frag.set_type(0x88);
-  BOOST_REQUIRE_EQUAL(theHeader->m_fragment_type, 0x88);
+  BOOST_REQUIRE_EQUAL(theHeader->trigger_timestamp, 0x22);
+  frag.set_window_begin(0x44);
+  BOOST_REQUIRE_EQUAL(theHeader->window_begin, 0x44);
+  frag.set_window_end(0x55);
+  BOOST_REQUIRE_EQUAL(theHeader->window_end, 0x55);
+  frag.set_type(static_cast<FragmentType>(0x88));
+  BOOST_REQUIRE_EQUAL(theHeader->fragment_type, 0x88);
 
   GeoID new_component;
-  new_component.m_apa_number = 0x66;
-  new_component.m_link_number = 0x77;
+  new_component.apa_number = 0x66;
+  new_component.link_number = 0x77;
   frag.set_link_id(new_component);
-  BOOST_REQUIRE_EQUAL(theHeader->m_link_id.m_apa_number, 0x66);
-  BOOST_REQUIRE_EQUAL(theHeader->m_link_id.m_link_number, 0x77);
+  BOOST_REQUIRE_EQUAL(theHeader->link_id.apa_number, 0x66);
+  BOOST_REQUIRE_EQUAL(theHeader->link_id.link_number, 0x77);
 
   std::bitset<32> no_errors(0);
   frag.set_error_bits(no_errors);
-  BOOST_REQUIRE_EQUAL(theHeader->m_error_bits, 0);
+  BOOST_REQUIRE_EQUAL(theHeader->error_bits, 0);
   frag.set_error_bit(static_cast<FragmentErrorBits>(1), true);
-  BOOST_REQUIRE_EQUAL(theHeader->m_error_bits, 2);
+  BOOST_REQUIRE_EQUAL(theHeader->error_bits, 2);
   frag.set_error_bit(static_cast<FragmentErrorBits>(1), false);
-  BOOST_REQUIRE_EQUAL(theHeader->m_error_bits, 0);
+  BOOST_REQUIRE_EQUAL(theHeader->error_bits, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
