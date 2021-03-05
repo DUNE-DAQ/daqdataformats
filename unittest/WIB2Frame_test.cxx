@@ -16,9 +16,9 @@
 #include "boost/test/data/test_case.hpp"
 #include "boost/test/unit_test.hpp"
 
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 // namespace wib2unpack contains functions for manipulating WIB2
 // frames in the format described by EDMS document 2088713:

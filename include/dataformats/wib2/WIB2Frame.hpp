@@ -33,7 +33,7 @@ public:
   static constexpr int s_x_channels_per_femb = 48;
   static constexpr int s_channels_per_femb = s_u_channels_per_femb + s_v_channels_per_femb + s_x_channels_per_femb;
   static constexpr int s_fembs_per_frame = 2;
-  static constexpr int s_num_channels = s_fembs_per_frame*s_channels_per_femb;
+  static constexpr int s_num_channels = s_fembs_per_frame * s_channels_per_femb;
   static constexpr int s_num_adc_words = s_num_channels * s_bits_per_adc / s_bits_per_word;
 
   struct Header
@@ -125,87 +125,70 @@ public:
 
   /** @brief Get the ith U-channel ADC in the given femb
    */
-  uint16_t get_u(int femb, int i) const
-  {
-    return get_adc(get_adc_index(kU, femb, i));
-  }
+  uint16_t get_u(int femb, int i) const { return get_adc(get_adc_index(kU, femb, i)); }
 
   /** @brief Get the ith V-channel ADC in the given femb
    */
-  uint16_t get_v(int femb, int i) const
-  {
-    return get_adc(get_adc_index(kV, femb, i));
-  }
+  uint16_t get_v(int femb, int i) const { return get_adc(get_adc_index(kV, femb, i)); }
 
   /** @brief Get the ith X-channel (ie, collection) ADC in the given femb
    */
-  uint16_t get_x(int femb, int i) const
-  {
-    return get_adc(get_adc_index(kX, femb, i));
-  }
+  uint16_t get_x(int femb, int i) const { return get_adc(get_adc_index(kX, femb, i)); }
 
   /** @brief Set the ith U-channel ADC in the given femb to val
    */
-  void set_u(int femb, int i, uint16_t val)
-  {
-    return set_adc(get_adc_index(kU, femb, i), val);
-  }
+  void set_u(int femb, int i, uint16_t val) { return set_adc(get_adc_index(kU, femb, i), val); }
 
   /** @brief Set the ith V-channel ADC in the given femb to val
    */
-  void set_v(int femb, int i, uint16_t val)
-  {
-    return set_adc(get_adc_index(kV, femb, i), val);
-  }
+  void set_v(int femb, int i, uint16_t val) { return set_adc(get_adc_index(kV, femb, i), val); }
 
   /** @brief Set the ith X-channel (ie, collection) ADC in the given femb to val
    */
-  void set_x(int femb, int i, uint16_t val)
-  {
-    return set_adc(get_adc_index(kX, femb, i), val);
-  }
+  void set_x(int femb, int i, uint16_t val) { return set_adc(get_adc_index(kX, femb, i), val); }
 
   /** @brief Get the 64-bit timestamp of the frame
    */
   uint64_t get_timestamp() const { return (uint64_t)header.timestamp_1 | ((uint64_t)header.timestamp_2 << 32); }
 
 private:
-
-  enum View {
-    kU, kV, kX
+  enum View
+  {
+    kU,
+    kV,
+    kX
   };
 
   int get_adc_index(View view, int femb, int i) const
   {
-    if (femb < 0 || femb >= s_fembs_per_frame){
+    if (femb < 0 || femb >= s_fembs_per_frame) {
       throw std::out_of_range("FEMB index out of range");
     }
 
-    int offset=0;
-    int n_channels=0;
+    int offset = 0;
+    int n_channels = 0;
 
-    switch(view){
-    case kU:
-      offset=0;
-      n_channels=s_u_channels_per_femb;
-      break;
-    case kV:
-      offset=s_u_channels_per_femb;
-      n_channels=s_v_channels_per_femb;
-      break;
-    case kX:
-      offset=s_u_channels_per_femb+s_v_channels_per_femb;
-      n_channels=s_x_channels_per_femb;
-      break;
+    switch (view) {
+      case kU:
+        offset = 0;
+        n_channels = s_u_channels_per_femb;
+        break;
+      case kV:
+        offset = s_u_channels_per_femb;
+        n_channels = s_v_channels_per_femb;
+        break;
+      case kX:
+        offset = s_u_channels_per_femb + s_v_channels_per_femb;
+        n_channels = s_x_channels_per_femb;
+        break;
     }
 
-    if (i < 0 || i >= n_channels){
+    if (i < 0 || i >= n_channels) {
       throw std::out_of_range("Channel index out of range");
     }
 
-    return s_channels_per_femb*femb + offset + i;
+    return s_channels_per_femb * femb + offset + i;
   }
-
 };
 
 }
