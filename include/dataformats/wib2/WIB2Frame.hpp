@@ -28,12 +28,13 @@ public:
 
   static constexpr int s_bits_per_adc = 14;
   static constexpr int s_bits_per_word = 8 * sizeof(word_t);
-  static constexpr int s_num_channels = 256;
-  static constexpr int s_num_adc_words = s_num_channels * s_bits_per_adc / s_bits_per_word;
   static constexpr int s_u_channels_per_femb = 40;
   static constexpr int s_v_channels_per_femb = 40;
   static constexpr int s_x_channels_per_femb = 48;
   static constexpr int s_channels_per_femb = s_u_channels_per_femb + s_v_channels_per_femb + s_x_channels_per_femb;
+  static constexpr int s_fembs_per_frame = 2;
+  static constexpr int s_num_channels = s_fembs_per_frame*s_channels_per_femb;
+  static constexpr int s_num_adc_words = s_num_channels * s_bits_per_adc / s_bits_per_word;
 
   struct Header
   {
@@ -176,7 +177,7 @@ private:
 
   int get_adc_index(View view, int femb, int i) const
   {
-    if (femb < 0 || femb > 1){
+    if (femb < 0 || femb >= s_fembs_per_frame){
       throw std::out_of_range("FEMB index out of range");
     }
 
