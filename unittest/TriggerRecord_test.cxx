@@ -7,7 +7,6 @@
  */
 
 #include "dataformats/TriggerRecord.hpp"
-#include "serialization/Serialization.hpp"
 
 /**
  * @brief Name of this test module

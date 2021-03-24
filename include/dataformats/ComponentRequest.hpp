@@ -12,8 +12,6 @@
 #include "dataformats/GeoID.hpp"
 #include "dataformats/Types.hpp"
 
-#include "serialization/Serialization.hpp"
-
 #include <ostream>
 
 namespace dunedaq {
@@ -34,8 +32,6 @@ struct ComponentRequest
    * @brief End of the data collection window
    */
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
-
-  DUNE_DAQ_SERIALIZE(ComponentRequest, component, window_begin, window_end);
 };
 
 /**
