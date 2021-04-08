@@ -8,10 +8,9 @@ daq_setup_environment()
 #find_package(cetlib REQUIRED)
 find_package(ers REQUIRED)
 find_package(Boost 1.70.0 COMPONENTS unit_test_framework REQUIRED)
-find_package(serialization REQUIRED)
 find_package(logging REQUIRED)
 
-set(RAWDATA_DEPENDENCIES ers::ers serialization::serialization logging::logging)
+set(RAWDATA_DEPENDENCIES ers::ers logging::logging)
 
 ##############################################################################
 # Main library

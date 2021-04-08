@@ -9,8 +9,6 @@
 #ifndef DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
 #define DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
 
-#include "serialization/Serialization.hpp"
-
 #include <cstdint>
 #include <limits>
 #include <ostream>
@@ -51,8 +49,6 @@ struct GeoID
   {
     return std::tuple(apa_number, link_number) < std::tuple(other.apa_number, other.link_number);
   }
-
-  DUNE_DAQ_SERIALIZE(GeoID, apa_number, link_number);
 };
 
 /**
