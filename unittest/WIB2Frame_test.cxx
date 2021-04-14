@@ -361,17 +361,20 @@ BOOST_DATA_TEST_CASE(CompareToUnpack, boost::unit_test::data::make(make_vals()),
     for (int i = 0; i < 40; ++i) {
       uint16_t gold = unpacked.femb[femb].u[i];
       uint16_t test = wib2frame->get_u(femb, i);
-      BOOST_CHECK_EQUAL(gold, test);
+      if (gold != test)
+        BOOST_CHECK_EQUAL(gold, test);
     }
     for (int i = 0; i < 40; ++i) {
       uint16_t gold = unpacked.femb[femb].v[i];
       uint16_t test = wib2frame->get_v(femb, i);
-      BOOST_CHECK_EQUAL(gold, test);
+      if (gold != test)
+        BOOST_CHECK_EQUAL(gold, test);
     }
     for (int i = 0; i < 48; ++i) {
       uint16_t gold = unpacked.femb[femb].x[i];
       uint16_t test = wib2frame->get_x(femb, i);
-      BOOST_CHECK_EQUAL(gold, test);
+      if (gold != test)
+        BOOST_CHECK_EQUAL(gold, test);
     }
   } // loop over femb
 }
