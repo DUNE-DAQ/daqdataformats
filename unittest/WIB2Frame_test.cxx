@@ -356,27 +356,36 @@ BOOST_DATA_TEST_CASE(CompareToUnpack, boost::unit_test::data::make(make_vals()),
   wib2unpack::repack_frame(&unpacked, &packed);
 
   dunedaq::dataformats::WIB2Frame* wib2frame = reinterpret_cast<dunedaq::dataformats::WIB2Frame*>(&packed);
+  size_t num_errors = 0;
 
   for (int femb = 0; femb < 2; ++femb) {
     for (int i = 0; i < 40; ++i) {
       uint16_t gold = unpacked.femb[femb].u[i];
       uint16_t test = wib2frame->get_u(femb, i);
-      if (gold != test)
+      if (gold != test) {
+        num_errors++;
         BOOST_CHECK_EQUAL(gold, test);
+      }
     }
     for (int i = 0; i < 40; ++i) {
       uint16_t gold = unpacked.femb[femb].v[i];
       uint16_t test = wib2frame->get_v(femb, i);
-      if (gold != test)
+      if (gold != test) {
+        num_errors++;
         BOOST_CHECK_EQUAL(gold, test);
+      }
     }
     for (int i = 0; i < 48; ++i) {
       uint16_t gold = unpacked.femb[femb].x[i];
       uint16_t test = wib2frame->get_x(femb, i);
-      if (gold != test)
+      if (gold != test) {
+        num_errors++;
         BOOST_CHECK_EQUAL(gold, test);
+      }
     }
   } // loop over femb
+
+  BOOST_REQUIRE_EQUAL(num_errors, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
