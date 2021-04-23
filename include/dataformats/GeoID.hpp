@@ -40,6 +40,7 @@ struct GeoID
    */
   uint32_t link_number{ s_invalid_link_number }; // NOLINT(build/unsigned)
 
+
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
    * @param other GeoID to compare
@@ -49,6 +50,28 @@ struct GeoID
   {
     return std::tuple(apa_number, link_number) < std::tuple(other.apa_number, other.link_number);
   }
+
+  /**
+   * @brief Comparison operator (to allow GeoID comparisons)
+   * @param other GeoID to compare
+   * @return The result of std::tuple compare using apa_number and link_number
+   */
+  bool operator != (const GeoID& other) const
+  {
+    return (*this) < other || other < (*this) ;
+  }
+  
+  /**
+   * @brief Comparison operator (to allow GeoID comparisons)
+   * @param other GeoID to compare
+   * @return The result of std::tuple compare using apa_number and link_number
+   */
+  bool operator == (const GeoID& other) const
+  {
+    return ! ((*this)!=other) ;
+  }
+
+
 };
 
 /**
