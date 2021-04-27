@@ -7,6 +7,8 @@
  */
 
 #include "dataformats/TriggerRecordHeader.hpp"
+#include "dataformats/TriggerRecordHeaderData.hpp"
+#include <sstream>
 
 /**
  * @brief Name of this test module
@@ -154,6 +156,17 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header->set_run_number(10);
   BOOST_REQUIRE(header_ptr->run_number != header_data.run_number);
   BOOST_REQUIRE_EQUAL(header_ptr->run_number, 10);
+
+  std::ostringstream oss;
+  oss << header_data;
+  std::istringstream iss(oss.str());
+  TriggerRecordHeaderData trhd;
+  iss >> trhd;
+  BOOST_REQUIRE_EQUAL(trhd.run_number, header_data.run_number);
+  BOOST_REQUIRE_EQUAL(trhd.trigger_number, header_data.trigger_number);
+  BOOST_REQUIRE_EQUAL(trhd.trigger_timestamp, header_data.trigger_timestamp);
+  BOOST_REQUIRE_EQUAL(trhd.trigger_type, header_data.trigger_type);
+  BOOST_REQUIRE_EQUAL(trhd.num_requested_components, header_data.num_requested_components);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

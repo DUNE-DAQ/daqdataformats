@@ -48,6 +48,13 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE(pos != std::string::npos);
   pos = output.find("begin: 3,");
   BOOST_REQUIRE(pos != std::string::npos);
+
+  std::istringstream istr(output);
+  ComponentRequest component_from_stream;
+  istr >> component_from_stream;
+  BOOST_REQUIRE_EQUAL(component_from_stream.component, component.component);
+  BOOST_REQUIRE_EQUAL(component_from_stream.window_begin, component.window_begin);
+  BOOST_REQUIRE_EQUAL(component_from_stream.window_end, component.window_end);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

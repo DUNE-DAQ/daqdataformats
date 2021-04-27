@@ -7,6 +7,7 @@
  */
 
 #include "dataformats/GeoID.hpp"
+#include <sstream>
 
 /**
  * @brief Name of this test module
@@ -40,6 +41,11 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE(!output.empty());
   auto pos = output.find("APA: 1,");
   BOOST_REQUIRE(pos != std::string::npos);
+
+  std::istringstream istr(output);
+  GeoID test2;
+  istr >> test2;
+  BOOST_REQUIRE_EQUAL(test2, test);
 }
 
 /**
