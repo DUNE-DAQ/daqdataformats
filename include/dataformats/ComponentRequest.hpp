@@ -45,6 +45,20 @@ operator<<(std::ostream& o, ComponentRequest const& cr)
 {
   return o << cr.component << ", begin: " << cr.window_begin << ", end: " << cr.window_end;
 }
+
+/**
+ * @brief Read a ComponentRequest from a string stream
+ * @param is Input stream
+ * @param cr ComponentRequest to read
+ * @return Stream instance for continued streaming
+ */
+inline std::istream&
+operator>>(std::istream& is, ComponentRequest & cr)
+{
+  std::string tmp;
+  return is >> cr.component >> tmp >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;
+}
+
 } // namespace dataformats
 } // namespace dunedaq
 
