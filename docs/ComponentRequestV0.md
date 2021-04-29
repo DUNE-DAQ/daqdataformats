@@ -4,10 +4,10 @@ This document describes the format of the ComponentRequest struct, version 0 (un
 
 # Description of ComponentRequest
 
-ComponentRequest consists of 6 32-bit words:
+ComponentRequest version 0 (unversioned) consists of 6 32-bit words:
 
-0. GeoID APA Number
-1. GeoID Link Number
+0. [GeoID version 0 (unversioned)](GeoIDV0.md) APA Number
+1. [GeoID version 0 (unversioned)](GeoIDV0.md) Link Number
 2. Window Begin (upper 32 bits)
 3. Window Begin (lower 32 bits)
 4. Window End (upper 32 bits)

@@ -4,7 +4,8 @@ This document describes the format of the GeoID struct, version 0 (unversioned).
 
 # Description of GeoID
 
-GeoID consists of two 32-bit words:
+GeoID version 0 (unversioned) consists of two 32-bit words:
+
 0. APA Number
 1. Link Number
 
