@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <limits>
 #include <ostream>
+#include <istream>
 #include <tuple>
 
 namespace dunedaq {
@@ -40,6 +41,7 @@ struct GeoID
    */
   uint32_t link_number{ s_invalid_link_number }; // NOLINT(build/unsigned)
 
+
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
    * @param other GeoID to compare
@@ -49,6 +51,28 @@ struct GeoID
   {
     return std::tuple(apa_number, link_number) < std::tuple(other.apa_number, other.link_number);
   }
+
+  /**
+   * @brief Comparison operator (to allow GeoID comparisons)
+   * @param other GeoID to compare
+   * @return The result of std::tuple compare using apa_number and link_number
+   */
+  bool operator != (const GeoID& other) const
+  {
+    return (*this) < other || other < (*this) ;
+  }
+  
+  /**
+   * @brief Comparison operator (to allow GeoID comparisons)
+   * @param other GeoID to compare
+   * @return The result of std::tuple compare using apa_number and link_number
+   */
+  bool operator == (const GeoID& other) const
+  {
+    return ! ((*this)!=other) ;
+  }
+
+
 };
 
 /**
@@ -62,6 +86,20 @@ operator<<(std::ostream& o, GeoID const& id)
 {
   return o << "APA: " << id.apa_number << ", link: " << id.link_number;
 }
+
+/**
+ * @brief Read a GeoID from a string stream
+ * @param is Stream to read from
+ * @param id GeoID to fill
+ * @return Stream instance for further streaming
+ */
+inline std::istream&
+operator>>(std::istream& is, GeoID& id)
+{
+  std::string tmp;
+  return is >> tmp >> id.apa_number >> tmp >> tmp >> id.link_number;
+}
+
 } // namespace dataformats
 } // namespace dunedaq
 

@@ -154,6 +154,26 @@ operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr)
            << "num_requested_components: " << hdr.num_requested_components;
 }
 
+/**
+ * @brief Read a TriggerRecordHeaderData instance from a string stream
+ * @param is Stream to read from
+ * @param hdr TriggerRecordHeaderData toread
+ * @return Stream instance for continued streaming
+ */
+inline std::istream&
+operator>>(std::istream& o, TriggerRecordHeaderData& hdr)
+{
+  std::string tmp;
+  return o >> tmp >> std::hex >> hdr.trigger_record_header_marker >> std::dec >> tmp
+           >> tmp >> hdr.version           >> tmp
+           >> tmp >> hdr.trigger_number    >> tmp
+           >> tmp >> hdr.run_number        >> tmp
+           >> tmp >> hdr.trigger_timestamp >> tmp
+           >> tmp >> hdr.trigger_type      >> tmp
+           >> tmp >> hdr.error_bits        >> tmp
+           >> tmp >> hdr.num_requested_components;
+}
+
 } // namespace dataformats
 } // namespace dunedaq
 
