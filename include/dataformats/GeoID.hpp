@@ -10,13 +10,21 @@
 #define DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
 
 #include <cstdint>
+#include <istream>
 #include <limits>
 #include <ostream>
-#include <istream>
 #include <tuple>
 
 namespace dunedaq {
 namespace dataformats {
+
+enum class GeoIDComponentType : uint16_t
+{
+  TPC = 1,
+  PDS = 2,
+  DataSelection = 3,
+  Invalid = 0
+};
 
 /**
  * @brief Represents a coordinate point in the DAQ's logical coordinate system (i.e. not physical coordinates)
@@ -24,23 +32,24 @@ namespace dataformats {
 struct GeoID
 {
   /**
-   * @brief An invalid APA number, used for initialization
+   * @brief An invalid element number, used for initialization
    */
-  static constexpr uint32_t s_invalid_apa_number = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
+  static constexpr uint16_t s_invalid_element_id = std::numeric_limits<uint16_t>::max(); // NOLINT(build/unsigned)
   /**
    * @brief An invalid link number, used for initialization
    */
-  static constexpr uint32_t s_invalid_link_number = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
+  static constexpr uint32_t s_invalid_link_id = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
+
+  GeoIDComponentType component_type{ GeoIDComponentType::Invalid };
 
   /**
    * @brief APA Number of the component
    */
-  uint32_t apa_number{ s_invalid_apa_number }; // NOLINT(build/unsigned)
+  uint16_t element_id{ s_invalid_element_id }; // NOLINT(build/unsigned)
   /**
    * @brief Link Number of the component
    */
-  uint32_t link_number{ s_invalid_link_number }; // NOLINT(build/unsigned)
-
+  uint32_t link_id{ s_invalid_link_id }; // NOLINT(build/unsigned)
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
@@ -49,7 +58,8 @@ struct GeoID
    */
   bool operator<(const GeoID& other) const
   {
-    return std::tuple(apa_number, link_number) < std::tuple(other.apa_number, other.link_number);
+    return std::tuple(component_type, element_id, link_id) <
+           std::tuple(other.component_type, other.element_id, other.link_id);
   }
 
   /**
@@ -57,22 +67,14 @@ struct GeoID
    * @param other GeoID to compare
    * @return The result of std::tuple compare using apa_number and link_number
    */
-  bool operator != (const GeoID& other) const
-  {
-    return (*this) < other || other < (*this) ;
-  }
-  
+  bool operator!=(const GeoID& other) const { return (*this) < other || other < (*this); }
+
   /**
    * @brief Comparison operator (to allow GeoID comparisons)
    * @param other GeoID to compare
    * @return The result of std::tuple compare using apa_number and link_number
    */
-  bool operator == (const GeoID& other) const
-  {
-    return ! ((*this)!=other) ;
-  }
-
-
+  bool operator==(const GeoID& other) const { return !((*this) != other); }
 };
 
 /**
@@ -84,7 +86,8 @@ struct GeoID
 inline std::ostream&
 operator<<(std::ostream& o, GeoID const& id)
 {
-  return o << "APA: " << id.apa_number << ", link: " << id.link_number;
+  return o << "type: " << static_cast<uint16_t>(id.component_type) << ", element: " << id.element_id
+           << ", link: " << id.link_id;
 }
 
 /**
@@ -97,7 +100,12 @@ inline std::istream&
 operator>>(std::istream& is, GeoID& id)
 {
   std::string tmp;
-  return is >> tmp >> id.apa_number >> tmp >> tmp >> id.link_number;
+  uint16_t type_temp;
+  is >> tmp >> type_temp >> tmp >> tmp >> id.element_id >> tmp >> tmp >> id.link_id;
+
+  id.component_type = static_cast<GeoIDComponentType>(type_temp);
+
+  return is;
 }
 
 } // namespace dataformats
