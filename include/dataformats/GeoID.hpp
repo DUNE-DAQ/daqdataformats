@@ -1,5 +1,5 @@
 /**
- * @file GeoID.hpp Geometric Identification for a link
+ * @file GeoID.hpp Geographic Identification for a DAQ component
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
@@ -34,22 +34,25 @@ struct GeoID
   /**
    * @brief An invalid element number, used for initialization
    */
-  static constexpr uint16_t s_invalid_element_id = std::numeric_limits<uint16_t>::max(); // NOLINT(build/unsigned)
+  static constexpr uint16_t s_invalid_region_id = std::numeric_limits<uint16_t>::max(); // NOLINT(build/unsigned)
   /**
    * @brief An invalid link number, used for initialization
    */
-  static constexpr uint32_t s_invalid_link_id = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
+  static constexpr uint32_t s_invalid_element_id = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
 
+  /**
+   * @brief The type of the component (i.e. which subsystem it belongs to)
+  */
   GeoIDComponentType component_type{ GeoIDComponentType::Invalid };
 
   /**
-   * @brief APA Number of the component
+   * @brief Region number of the component
    */
-  uint16_t element_id{ s_invalid_element_id }; // NOLINT(build/unsigned)
+  uint16_t region_id{ s_invalid_region_id }; // NOLINT(build/unsigned)
   /**
-   * @brief Link Number of the component
+   * @brief Number of the component within the region
    */
-  uint32_t link_id{ s_invalid_link_id }; // NOLINT(build/unsigned)
+  uint32_t element_id{ s_invalid_element_id }; // NOLINT(build/unsigned)
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
@@ -58,8 +61,8 @@ struct GeoID
    */
   bool operator<(const GeoID& other) const
   {
-    return std::tuple(component_type, element_id, link_id) <
-           std::tuple(other.component_type, other.element_id, other.link_id);
+    return std::tuple(component_type, region_id, element_id) <
+           std::tuple(other.component_type, other.region_id, other.element_id);
   }
 
   /**
@@ -86,8 +89,7 @@ struct GeoID
 inline std::ostream&
 operator<<(std::ostream& o, GeoID const& id)
 {
-  return o << "type: " << static_cast<uint16_t>(id.component_type) << ", element: " << id.element_id
-           << ", link: " << id.link_id;
+  return o << "type: " << static_cast<uint16_t>(id.component_type) << ", region:" << id.region_id << ", element: " << id.element_id;
 }
 
 /**
@@ -101,7 +103,7 @@ operator>>(std::istream& is, GeoID& id)
 {
   std::string tmp;
   uint16_t type_temp;
-  is >> tmp >> type_temp >> tmp >> tmp >> id.element_id >> tmp >> tmp >> id.link_id;
+  is >> tmp >> type_temp >> tmp >> tmp >> id.region_id >> tmp >> tmp >> id.element_id;
 
   id.component_type = static_cast<GeoIDComponentType>(type_temp);
 
