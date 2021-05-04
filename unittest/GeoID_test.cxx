@@ -29,8 +29,9 @@ BOOST_AUTO_TEST_SUITE(GeoID_test)
 BOOST_AUTO_TEST_CASE(StreamOperator) 
 {
   GeoID test;
-  test.apa_number = 1;
-  test.link_number = 2;
+  test.component_type = GeoIDComponentType::kTPC;
+  test.region_id = 1;
+  test.element_id = 2;
 
   std::ostringstream ostr;
   ostr << test;
@@ -54,11 +55,16 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
 BOOST_AUTO_TEST_CASE(ComparisonOperator)
 {
   GeoID lesser, greater;
-  lesser.apa_number = 1;
-  lesser.link_number = 2;
-  greater.apa_number = 3;
-  greater.link_number = 4;
+  lesser.component_type = GeoIDComponentType::kTPC;
+  lesser.region_id = 1;
+  lesser.element_id = 2;
+  greater.component_type = GeoIDComponentType::kTPC;
+  greater.region_id = 3;
+  greater.element_id = 4;
 
+  BOOST_REQUIRE(lesser != greater);
+  BOOST_REQUIRE(lesser == lesser);
+  BOOST_REQUIRE(greater == greater);
   BOOST_REQUIRE(lesser < greater);
   BOOST_REQUIRE(!(greater < lesser));
 }

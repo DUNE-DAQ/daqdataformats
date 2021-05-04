@@ -29,8 +29,9 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   ComponentRequest component;
   GeoID test;
-  test.apa_number = 1;
-  test.link_number = 2;
+  test.component_type = GeoIDComponentType::kTPC;
+  test.region_id = 1;
+  test.element_id = 2;
   component.component = test;
   component.window_begin = 3;
   component.window_end = 4;

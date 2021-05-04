@@ -42,13 +42,15 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component.apa_number = 1;
-  components.back().component.link_number = 2;
+  components.back().component.component_type = GeoIDComponentType::kTPC;
+  components.back().component.region_id = 1;
+  components.back().component.element_id = 2;
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component.apa_number = 5;
-  components.back().component.link_number = 6;
+  components.back().component.component_type = GeoIDComponentType::kTPC;
+  components.back().component.region_id = 5;
+  components.back().component.element_id = 6;
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -125,13 +127,15 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component.apa_number = 1;
-  components.back().component.link_number = 2;
+  components.back().component.component_type = GeoIDComponentType::kTPC;
+  components.back().component.region_id = 1;
+  components.back().component.element_id = 2;
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component.apa_number = 5;
-  components.back().component.link_number = 6;
+  components.back().component.component_type = GeoIDComponentType::kTPC;
+  components.back().component.region_id = 5;
+  components.back().component.element_id = 6;
   components.back().window_begin = 7;
   components.back().window_end = 8;
 

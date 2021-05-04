@@ -20,10 +20,10 @@ namespace dataformats {
 
 enum class GeoIDComponentType : uint16_t
 {
-  TPC = 1,
-  PDS = 2,
-  DataSelection = 3,
-  Invalid = 0
+  kTPC = 1,
+  kPDS = 2,
+  kDataSelection = 3,
+  kInvalid = 0
 };
 
 /**
@@ -43,7 +43,7 @@ struct GeoID
   /**
    * @brief The type of the component (i.e. which subsystem it belongs to)
   */
-  GeoIDComponentType component_type{ GeoIDComponentType::Invalid };
+  GeoIDComponentType component_type{ GeoIDComponentType::kInvalid };
 
   /**
    * @brief Region number of the component
@@ -57,7 +57,7 @@ struct GeoID
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
    * @param other GeoID to compare
-   * @return The result of std::tuple compare using apa_number and link_number
+   * @return The result of std::tuple compare using GeoID fields
    */
   bool operator<(const GeoID& other) const
   {
@@ -68,18 +68,29 @@ struct GeoID
   /**
    * @brief Comparison operator (to allow GeoID comparisons)
    * @param other GeoID to compare
-   * @return The result of std::tuple compare using apa_number and link_number
+   * @return The result of std::tuple compare using GeoID fields
    */
   bool operator!=(const GeoID& other) const { return (*this) < other || other < (*this); }
 
   /**
    * @brief Comparison operator (to allow GeoID comparisons)
    * @param other GeoID to compare
-   * @return The result of std::tuple compare using apa_number and link_number
+   * @return The result of std::tuple compare using GeoID fields
    */
   bool operator==(const GeoID& other) const { return !((*this) != other); }
 };
 
+/**
+ * @brief Stream a GeoIDComponentType instance in a human-readable form
+ * @param o Stream to output to
+ * @param id GeoIDComponentType to stream
+ * @return Stream instance for further streaming
+ */
+inline std::ostream&
+operator<<(std::ostream& o, GeoIDComponentType const& type)
+{
+  return o << static_cast<uint16_t>(type);
+}
 /**
  * @brief Stream a GeoID instance in a human-readable form
  * @param o Stream to output to
@@ -89,7 +100,7 @@ struct GeoID
 inline std::ostream&
 operator<<(std::ostream& o, GeoID const& id)
 {
-  return o << "type: " << static_cast<uint16_t>(id.component_type) << ", region:" << id.region_id << ", element: " << id.element_id;
+  return o << "type: " << id.component_type << ", region:" << id.region_id << ", element: " << id.element_id;
 }
 
 /**

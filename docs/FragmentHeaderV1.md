@@ -19,8 +19,8 @@ A FragmentHeader version 1 consists of 17 32-bit words:
 10. Data window end (upper 32 bits)
 11. Data window end (lower 32 bits)
 12. Run Number
-13. [GeoID version 0 (unversioned)](GeoIDV0.md) APA Number
-14. [GeoID version 0 (unversioned)](GeoIDV0.md) Link Number
+13. [GeoID version 0 (unversioned)](GeoIDV0.md) Component Type (upper 16 bits), Region ID (lower 16 bits)
+14. [GeoID version 0 (unversioned)](GeoIDV0.md) Element ID
 15. Error bits
 16. Fragment Type
 
@@ -33,11 +33,6 @@ using fragment_type_t = uint32_t;
 using fragment_size_t = uint64_t; 
 using timestamp_t = uint64_t;
 
-struct GeoID
-{
-  uint32_t apa_number{ std::numeric_limits<uint32_t>::max() };
-  uint32_t link_number{ std::numeric_limits<uint32_t>::max() };
-};
 struct FragmentHeader
 {
   static constexpr uint32_t s_fragment_header_magic = 0x11112222;
