@@ -32,11 +32,11 @@ enum class GeoIDComponentType : uint16_t
 struct GeoID
 {
   /**
-   * @brief An invalid element number, used for initialization
+   * @brief An invalid region number, used for initialization
    */
   static constexpr uint16_t s_invalid_region_id = std::numeric_limits<uint16_t>::max(); // NOLINT(build/unsigned)
   /**
-   * @brief An invalid link number, used for initialization
+   * @brief An invalid element number, used for initialization
    */
   static constexpr uint32_t s_invalid_element_id = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
 
