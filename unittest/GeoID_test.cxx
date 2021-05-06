@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_SUITE(GeoID_test)
 BOOST_AUTO_TEST_CASE(StreamOperator) 
 {
   GeoID test;
-  test.component_type = GeoIDComponentType::kTPC;
+  test.system_type = GeoID::SystemType::kTPC;
   test.region_id = 1;
   test.element_id = 2;
 
@@ -55,10 +55,10 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
 BOOST_AUTO_TEST_CASE(ComparisonOperator)
 {
   GeoID lesser, greater;
-  lesser.component_type = GeoIDComponentType::kTPC;
+  lesser.system_type = GeoID::SystemType::kTPC;
   lesser.region_id = 1;
   lesser.element_id = 2;
-  greater.component_type = GeoIDComponentType::kTPC;
+  greater.system_type = GeoID::SystemType::kTPC;
   greater.region_id = 3;
   greater.element_id = 4;
 

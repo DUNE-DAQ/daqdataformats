@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header.window_end = 5;
 
   GeoID component;
-  component.component_type = GeoIDComponentType::kTPC;
+  component.system_type = GeoID::SystemType::kTPC;
   component.region_id = 6;
   component.element_id = 7;
   header.link_id = component;
@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(frag.get_trigger_timestamp(), header.trigger_timestamp);
   BOOST_REQUIRE_EQUAL(frag.get_window_begin(), header.window_begin);
   BOOST_REQUIRE_EQUAL(frag.get_window_end(), header.window_end);
-  BOOST_REQUIRE_EQUAL(frag.get_link_id().component_type, header.link_id.component_type);
+  BOOST_REQUIRE_EQUAL(frag.get_link_id().system_type, header.link_id.system_type);
   BOOST_REQUIRE_EQUAL(frag.get_link_id().region_id, header.link_id.region_id);
   BOOST_REQUIRE_EQUAL(frag.get_link_id().element_id, header.link_id.element_id);
 
@@ -204,11 +204,11 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(theHeader->fragment_type, 0x88);
 
   GeoID new_component;
-  new_component.component_type = GeoIDComponentType::kTPC;
+  new_component.system_type = GeoID::SystemType::kTPC;
   new_component.region_id = 0x66;
   new_component.element_id = 0x77;
   frag.set_link_id(new_component);
-  BOOST_REQUIRE_EQUAL(theHeader->link_id.component_type, GeoIDComponentType::kTPC);
+  BOOST_REQUIRE_EQUAL(theHeader->link_id.system_type, GeoID::SystemType::kTPC);
   BOOST_REQUIRE_EQUAL(theHeader->link_id.region_id, 0x66);
   BOOST_REQUIRE_EQUAL(theHeader->link_id.element_id, 0x77);
 

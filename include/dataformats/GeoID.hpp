@@ -18,19 +18,22 @@
 namespace dunedaq {
 namespace dataformats {
 
-enum class GeoIDComponentType : uint16_t
-{
-  kTPC = 1,
-  kPDS = 2,
-  kDataSelection = 3,
-  kInvalid = 0
-};
 
 /**
  * @brief Represents a coordinate point in the DAQ's logical coordinate system (i.e. not physical coordinates)
  */
 struct GeoID
 {
+  /**
+   * @brief The readout system to which the component belongs
+   */
+  enum class SystemType : uint16_t
+  {
+    kTPC = 1,
+    kPDS = 2,
+    kDataSelection = 3,
+    kInvalid = 0
+  };
   /**
    * @brief An invalid region number, used for initialization
    */
@@ -41,9 +44,9 @@ struct GeoID
   static constexpr uint32_t s_invalid_element_id = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
 
   /**
-   * @brief The type of the component (i.e. which subsystem it belongs to)
+   * @brief The type of the component (i.e. which system it belongs to)
   */
-  GeoIDComponentType component_type{ GeoIDComponentType::kInvalid };
+  SystemType system_type{ SystemType::kInvalid };
 
   /**
    * @brief Region number of the component
@@ -59,10 +62,10 @@ struct GeoID
    * @param other GeoID to compare
    * @return The result of std::tuple compare using GeoID fields
    */
-  bool operator<(const GeoID& other) const
+  bool operator<(const GeoID& other) const noexcept
   {
-    return std::tuple(component_type, region_id, element_id) <
-           std::tuple(other.component_type, other.region_id, other.element_id);
+    return std::tuple(system_type, region_id, element_id) <
+           std::tuple(other.system_type, other.region_id, other.element_id);
   }
 
   /**
@@ -70,24 +73,24 @@ struct GeoID
    * @param other GeoID to compare
    * @return The result of std::tuple compare using GeoID fields
    */
-  bool operator!=(const GeoID& other) const { return (*this) < other || other < (*this); }
+  bool operator!=(const GeoID& other) const noexcept { return (*this) < other || other < (*this); }
 
   /**
    * @brief Comparison operator (to allow GeoID comparisons)
    * @param other GeoID to compare
    * @return The result of std::tuple compare using GeoID fields
    */
-  bool operator==(const GeoID& other) const { return !((*this) != other); }
+  bool operator==(const GeoID& other) const noexcept { return !((*this) != other); }
 };
 
 /**
- * @brief Stream a GeoIDComponentType instance in a human-readable form
+ * @brief Stream a SystemType instance in a human-readable form
  * @param o Stream to output to
- * @param id GeoIDComponentType to stream
+ * @param id SystemType to stream
  * @return Stream instance for further streaming
  */
 inline std::ostream&
-operator<<(std::ostream& o, GeoIDComponentType const& type)
+operator<<(std::ostream& o, GeoID::SystemType const& type)
 {
   return o << static_cast<uint16_t>(type);
 }
@@ -100,7 +103,7 @@ operator<<(std::ostream& o, GeoIDComponentType const& type)
 inline std::ostream&
 operator<<(std::ostream& o, GeoID const& id)
 {
-  return o << "type: " << id.component_type << ", region:" << id.region_id << ", element: " << id.element_id;
+  return o << "type: " << id.system_type << ", region:" << id.region_id << ", element: " << id.element_id;
 }
 
 /**
@@ -116,7 +119,7 @@ operator>>(std::istream& is, GeoID& id)
   uint16_t type_temp;
   is >> tmp >> type_temp >> tmp >> tmp >> id.region_id >> tmp >> tmp >> id.element_id;
 
-  id.component_type = static_cast<GeoIDComponentType>(type_temp);
+  id.system_type = static_cast<GeoID::SystemType>(type_temp);
 
   return is;
 }

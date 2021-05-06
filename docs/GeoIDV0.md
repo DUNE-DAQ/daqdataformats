@@ -6,7 +6,7 @@ This document describes the format of the GeoID struct, version 0 (unversioned).
 
 GeoID version 0 (unversioned) consists of four 16-bit words (for a total of 64 bits):
 
-0. Component Type
+0. System Type
 1. Region Number
 2. Element Number (upper 16 bits)
 3. Element Number (lower 16 bits)
@@ -14,17 +14,17 @@ GeoID version 0 (unversioned) consists of four 16-bit words (for a total of 64 b
 # C++ Code for GeoID
 
 ```CPP
-enum class GeoIDComponentType : uint16_t
-{
-  kTPC = 1,
-  kPDS = 2,
-  kDataSelection = 3,
-...
-  kInvalid = 0
-};
 struct GeoID
 {
-  GeoIDComponentType component_type{ GeoIDComponentType::kInvalid };
+  enum class SystemType : uint16_t
+  {
+    kTPC = 1,
+    kPDS = 2,
+    kDataSelection = 3,
+  ...
+    kInvalid = 0
+  };
+  SystemType system_type{ SystemType::kInvalid };
   uint16_t region_number{ std::numeric_limits<uint16_t>::max() };
   uint32_t element_number{ std::numeric_limits<uint32_t>::max() };
 };
