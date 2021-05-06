@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   std::cout << "Stream operator: " << output << std::endl;
 
   BOOST_REQUIRE(!output.empty());
-  auto pos = output.find("APA: 1,");
+  auto pos = output.find("region: 1,");
   BOOST_REQUIRE(pos != std::string::npos);
 
   std::istringstream istr(output);

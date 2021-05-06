@@ -81,6 +81,31 @@ struct GeoID
    * @return The result of std::tuple compare using GeoID fields
    */
   bool operator==(const GeoID& other) const noexcept { return !((*this) != other); }
+
+  static std::string system_type_to_string(SystemType type)
+  {
+    switch (type) {
+      case SystemType::kTPC:
+        return "TPC";
+      case SystemType::kPDS:
+        return "PDS";
+      case SystemType::kDataSelection:
+        return "DataSelection";
+      case SystemType::kInvalid:
+        return "Invalid";
+    }
+    return "Unknown";
+  }
+  static SystemType string_to_system_type(std::string typestring)
+  {
+    if (typestring.find("TPC") == 0)
+      return SystemType::kTPC;
+    if (typestring.find("PDS") == 0)
+      return SystemType::kPDS;
+    if (typestring.find("DataSelection") == 0)
+      return SystemType::kDataSelection;
+    return SystemType::kInvalid;
+  }
 };
 
 /**
@@ -92,7 +117,7 @@ struct GeoID
 inline std::ostream&
 operator<<(std::ostream& o, GeoID::SystemType const& type)
 {
-  return o << static_cast<uint16_t>(type);
+  return o << GeoID::system_type_to_string(type);
 }
 /**
  * @brief Stream a GeoID instance in a human-readable form
@@ -103,9 +128,25 @@ operator<<(std::ostream& o, GeoID::SystemType const& type)
 inline std::ostream&
 operator<<(std::ostream& o, GeoID const& id)
 {
-  return o << "type: " << id.system_type << ", region:" << id.region_id << ", element: " << id.element_id;
+  return o << "type: " << id.system_type << ", region: " << id.region_id << ", element: " << id.element_id;
 }
 
+/**
+ * @brief Read a GeoID::SystemType from a string stream
+ * @param is Stream to read from
+ * @param id SystemType to fill
+ * @return Stream instance for further streaming
+ */
+inline std::istream&
+operator>>(std::istream& is, GeoID::SystemType& t)
+{
+  std::string tmp;
+  is >> tmp;
+
+  t = GeoID::string_to_system_type(tmp);
+
+  return is;
+}
 /**
  * @brief Read a GeoID from a string stream
  * @param is Stream to read from
@@ -116,10 +157,7 @@ inline std::istream&
 operator>>(std::istream& is, GeoID& id)
 {
   std::string tmp;
-  uint16_t type_temp;
-  is >> tmp >> type_temp >> tmp >> tmp >> id.region_id >> tmp >> tmp >> id.element_id;
-
-  id.system_type = static_cast<GeoID::SystemType>(type_temp);
+  is >> tmp >> id.system_type >> tmp >> id.region_id >> tmp >> tmp >> id.element_id;
 
   return is;
 }
