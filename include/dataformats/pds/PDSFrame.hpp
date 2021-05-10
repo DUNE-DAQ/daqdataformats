@@ -13,7 +13,7 @@ namespace dunedaq::dataformats {
 /**
  *  @brief Class for accessing raw PDS frames, as produced by the DAPHNE boards
  *
- *  The canonical definition of the WIB format is given in EDMS document 2088726:
+ *  The canonical definition of the PDS DAPHNE format is given in EDMS document 2088726:
  *  https://edms.cern.ch/document/2088726/3
  */
 class PDSFrame
