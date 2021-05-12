@@ -29,8 +29,9 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   ComponentRequest component;
   GeoID test;
-  test.apa_number = 1;
-  test.link_number = 2;
+  test.system_type = GeoID::SystemType::kTPC;
+  test.region_id = 1;
+  test.element_id = 2;
   component.component = test;
   component.window_begin = 3;
   component.window_end = 4;
@@ -42,9 +43,9 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   std::cout << "Stream operator: " << output << std::endl;
 
   BOOST_REQUIRE(!output.empty());
-  auto pos = output.find("APA: 1,");
+  auto pos = output.find("region: 1,");
   BOOST_REQUIRE(pos != std::string::npos);
-  pos = output.find("link: 2,");
+  pos = output.find("element: 2,");
   BOOST_REQUIRE(pos != std::string::npos);
   pos = output.find("begin: 3,");
   BOOST_REQUIRE(pos != std::string::npos);

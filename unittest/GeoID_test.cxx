@@ -29,8 +29,9 @@ BOOST_AUTO_TEST_SUITE(GeoID_test)
 BOOST_AUTO_TEST_CASE(StreamOperator) 
 {
   GeoID test;
-  test.apa_number = 1;
-  test.link_number = 2;
+  test.system_type = GeoID::SystemType::kTPC;
+  test.region_id = 1;
+  test.element_id = 2;
 
   std::ostringstream ostr;
   ostr << test;
@@ -39,7 +40,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   std::cout << "Stream operator: " << output << std::endl;
 
   BOOST_REQUIRE(!output.empty());
-  auto pos = output.find("APA: 1,");
+  auto pos = output.find("region: 1,");
   BOOST_REQUIRE(pos != std::string::npos);
 
   std::istringstream istr(output);
@@ -54,11 +55,16 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
 BOOST_AUTO_TEST_CASE(ComparisonOperator)
 {
   GeoID lesser, greater;
-  lesser.apa_number = 1;
-  lesser.link_number = 2;
-  greater.apa_number = 3;
-  greater.link_number = 4;
+  lesser.system_type = GeoID::SystemType::kTPC;
+  lesser.region_id = 1;
+  lesser.element_id = 2;
+  greater.system_type = GeoID::SystemType::kTPC;
+  greater.region_id = 3;
+  greater.element_id = 4;
 
+  BOOST_REQUIRE(lesser != greater);
+  BOOST_REQUIRE(lesser == lesser);
+  BOOST_REQUIRE(greater == greater);
   BOOST_REQUIRE(lesser < greater);
   BOOST_REQUIRE(!(greater < lesser));
 }
