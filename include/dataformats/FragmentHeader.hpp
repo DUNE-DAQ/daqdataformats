@@ -45,7 +45,7 @@ struct FragmentHeader
   /**
    * @brief The current version of the Fragment
    */
-  static constexpr uint32_t s_fragment_header_version = 1; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_fragment_header_version = 2; // NOLINT(build/unsigned)
 
   /**
    * @brief By default, all error bits are unset

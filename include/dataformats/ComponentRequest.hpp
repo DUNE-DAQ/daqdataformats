@@ -22,6 +22,11 @@ namespace dataformats {
  */
 struct ComponentRequest
 {
+  /**
+   * @brief The current version of the GeoID
+   */
+  static constexpr uint32_t s_component_request_version = 1; // NOLINT(build/unsigned)
+
   GeoID component; ///< The Requested Component
 
   /**
@@ -32,6 +37,11 @@ struct ComponentRequest
    * @brief End of the data collection window
    */
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
+
+  /**
+   * @brief The version number of this ComponentRequest
+  */
+  uint32_t version{ s_component_request_version };
 };
 
 /**
