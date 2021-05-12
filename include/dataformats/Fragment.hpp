@@ -1,7 +1,7 @@
 /**
  * @file Fragment.hpp Data Fragment Interface
  *
- * This class respresents the data response of one link to a Dataflow DataRequest message.
+ * This class respresents the data response of one element to a Dataflow DataRequest message.
  * This version is not serializable, and classes wanting to stream it/write it to disk must
  * also fetch the data associated with the Fragment.
  *
@@ -166,7 +166,7 @@ public:
     header_()->window_begin = header.window_begin;
     header_()->window_end = header.window_end;
     header_()->run_number = header.run_number;
-    header_()->link_id = header.link_id;
+    header_()->element_id = header.element_id;
     header_()->error_bits = header.error_bits;
     header_()->fragment_type = header.fragment_type;
   }
@@ -231,14 +231,14 @@ public:
 
   /**
    * @brief Get the GeoID for the Fragment
-   * @return The link_id header field
+   * @return The element_id header field
    */
-  GeoID get_link_id() const { return header_()->link_id; }
+  GeoID get_element_id() const { return header_()->element_id; }
   /**
    * @brief Set the GeoID for the Fragment
-   * @param link_id GeoID to use as link_id
+   * @param element_id GeoID to use as element_id
    */
-  void set_link_id(GeoID link_id) { header_()->link_id = link_id; }
+  void set_element_id(GeoID element_id) { header_()->element_id = element_id; }
   /**
    * @brief Get the error_bits header field
    * @return Bitset generated from header's error_bits field

@@ -47,7 +47,7 @@ struct FragmentHeader
   timestamp_t window_begin{ TypeDefaults::s_invalid_timestamp };
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
-  GeoID link_id;
+  GeoID element_id;
   uint32_t error_bits{ s_default_error_bits }; 
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
 };

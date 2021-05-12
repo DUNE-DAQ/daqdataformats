@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   component.system_type = GeoID::SystemType::kTPC;
   component.region_id = 6;
   component.element_id = 7;
-  header.link_id = component;
+  header.element_id = component;
 
   header.error_bits = 0x12345678;
   header.fragment_type = 8;
@@ -179,9 +179,9 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(frag.get_trigger_timestamp(), header.trigger_timestamp);
   BOOST_REQUIRE_EQUAL(frag.get_window_begin(), header.window_begin);
   BOOST_REQUIRE_EQUAL(frag.get_window_end(), header.window_end);
-  BOOST_REQUIRE_EQUAL(frag.get_link_id().system_type, header.link_id.system_type);
-  BOOST_REQUIRE_EQUAL(frag.get_link_id().region_id, header.link_id.region_id);
-  BOOST_REQUIRE_EQUAL(frag.get_link_id().element_id, header.link_id.element_id);
+  BOOST_REQUIRE_EQUAL(frag.get_element_id().system_type, header.element_id.system_type);
+  BOOST_REQUIRE_EQUAL(frag.get_element_id().region_id, header.element_id.region_id);
+  BOOST_REQUIRE_EQUAL(frag.get_element_id().element_id, header.element_id.element_id);
 
   BOOST_REQUIRE_EQUAL(frag.get_error_bits().to_ulong(), header.error_bits);
   BOOST_REQUIRE_EQUAL(frag.get_error_bit(static_cast<FragmentErrorBits>(3)), true);
@@ -207,10 +207,10 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   new_component.system_type = GeoID::SystemType::kTPC;
   new_component.region_id = 0x66;
   new_component.element_id = 0x77;
-  frag.set_link_id(new_component);
-  BOOST_REQUIRE_EQUAL(theHeader->link_id.system_type, GeoID::SystemType::kTPC);
-  BOOST_REQUIRE_EQUAL(theHeader->link_id.region_id, 0x66);
-  BOOST_REQUIRE_EQUAL(theHeader->link_id.element_id, 0x77);
+  frag.set_element_id(new_component);
+  BOOST_REQUIRE_EQUAL(theHeader->element_id.system_type, GeoID::SystemType::kTPC);
+  BOOST_REQUIRE_EQUAL(theHeader->element_id.region_id, 0x66);
+  BOOST_REQUIRE_EQUAL(theHeader->element_id.element_id, 0x77);
 
   std::bitset<32> no_errors(0);
   frag.set_error_bits(no_errors);

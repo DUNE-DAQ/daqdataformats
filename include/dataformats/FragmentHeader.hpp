@@ -95,7 +95,7 @@ struct FragmentHeader
   /**
    * @brief Component that generated the data in this Fragment
    */
-  GeoID link_id;
+  GeoID element_id;
 
   /**
    * @brief Error bits set by the Upstream DAQ
@@ -219,7 +219,7 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
            << "window_begin: " << hdr.window_begin << ", "
            << "window_end: " << hdr.window_end << ", "
-           << "link_id: " << hdr.link_id << ", "
+           << "element_id: " << hdr.element_id << ", "
            << "error_bits: " << hdr.error_bits << ", "
            << "fragment_type : " << hdr.fragment_type;
 }
