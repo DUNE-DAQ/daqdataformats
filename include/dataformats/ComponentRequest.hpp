@@ -23,7 +23,7 @@ namespace dataformats {
 struct ComponentRequest
 {
   /**
-   * @brief The current version of the GeoID
+   * @brief The current version of the ComponentRequest
    */
   static constexpr uint32_t s_component_request_version = 1; // NOLINT(build/unsigned)
 
