@@ -27,21 +27,30 @@ struct ComponentRequest
    */
   static constexpr uint32_t s_component_request_version = 1; // NOLINT(build/unsigned)
 
+  /**
+   * @brief The version number of this ComponentRequest
+   */
+  uint32_t version{ s_component_request_version };
+
   GeoID component; ///< The Requested Component
 
   /**
    * @brief Start of the data collection window
    */
   timestamp_t window_begin{ TypeDefaults::s_invalid_timestamp };
+
   /**
    * @brief End of the data collection window
    */
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
 
-  /**
-   * @brief The version number of this ComponentRequest
-  */
-  uint32_t version{ s_component_request_version };
+  ComponentRequest() {}
+  ComponentRequest(GeoID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
+    : version(s_component_request_version)
+    , component(comp)
+    , window_begin(wbegin)
+    , window_end(wend)
+  {}
 };
 
 /**

@@ -48,6 +48,10 @@ struct GeoID
   static constexpr uint32_t s_invalid_element_id = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
 
   /**
+   * @brief Version number of the GeoID
+   */
+  uint32_t version{ s_geo_id_version };
+  /**
    * @brief The type of the component (i.e. which system it belongs to)
   */
   SystemType system_type{ SystemType::kInvalid };
@@ -61,10 +65,13 @@ struct GeoID
    */
   uint32_t element_id{ s_invalid_element_id }; // NOLINT(build/unsigned)
 
-  /**
-   * @brief Version number of the GeoID
-   */
-  uint32_t version{ s_geo_id_version };
+  GeoID() {}
+  GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element)
+    : version(s_geo_id_version)
+    , system_type(type)
+    , region_id(region)
+    , element_id(element)
+  {}
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)

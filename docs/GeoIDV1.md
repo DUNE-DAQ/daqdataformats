@@ -6,9 +6,9 @@ This document describes the format of the GeoID struct, version 1.
 
 GeoID version 1 consists of three 32-bit words:
 
-0. System Type (upper 16 bits), Region Number (lower 16 bits)
-1. Element Number
-2. Version Number
+0. Version Number
+1. System Type (upper 16 bits), Region Number (lower 16 bits)
+2. Element Number
 
 # C++ Code for GeoID
 
@@ -23,13 +23,16 @@ struct GeoID
   ...
     kInvalid = 0
   };
+  uint32_t version{ 1 };
   SystemType system_type{ SystemType::kInvalid };
   uint16_t region_number{ std::numeric_limits<uint16_t>::max() };
   uint32_t element_number{ std::numeric_limits<uint32_t>::max() };
-  uint32_t version{ 1 };
+
+  GeoID();
+  GeoID(SystemType type, uint16_t region, uint32_t element);
 };
 ```
 
 # Notes
 
-The version field is last so that brace-initialization works without specifying version.
+GeoID can no longer be brace-initialized since it provides a constructor.
