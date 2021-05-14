@@ -36,5 +36,3 @@ struct GeoID
 ```
 
 # Notes
-
-GeoID can no longer be brace-initialized since it provides a constructor.

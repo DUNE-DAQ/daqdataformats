@@ -34,5 +34,3 @@ struct ComponentRequest
 ```
 
 # Notes
-
-ComponentRequest can no longer be brace-initialized, as it provides a user constructor.
