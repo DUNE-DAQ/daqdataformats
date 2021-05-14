@@ -28,7 +28,7 @@ struct GeoID
   SystemType system_type{ SystemType::kInvalid };
   uint16_t region_number{ std::numeric_limits<uint16_t>::max() };
   uint32_t element_number{ std::numeric_limits<uint32_t>::max() };
-  uint32_t unused;
+  uint32_t unused {0xFFFFFFFF};
 
   GeoID();
   GeoID(SystemType type, uint16_t region, uint32_t element);

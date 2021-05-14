@@ -52,7 +52,7 @@ struct FragmentHeader
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
   uint32_t error_bits{ s_default_error_bits }; 
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
-  uint32_t unused;_
+  uint32_t unused {0xFFFFFFFF};
   GeoID link_id;
 };
 ```

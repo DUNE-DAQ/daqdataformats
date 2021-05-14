@@ -89,7 +89,8 @@ struct TriggerRecordHeaderData
   /**
    * @brief Padding to ensure 64-bit alignment
    */
-  uint64_t unused : 48; // NOLINT(build/unsigned)
+  uint16_t unusedA {0xFFFF}; // NOLINT(build/unsigned)
+  uint32_t unusedB{ 0xFFFFFFFF }; // NOLINT(build/unsigned)
 };
 
 /**

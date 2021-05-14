@@ -23,7 +23,7 @@ ComponentRequest version 1 consists of 10 32-bit words:
 struct ComponentRequest
 {
   uint32_t version{ 1 };
-  unit32_t unused;
+  unit32_t unused {0xFFFFFFFF};
   GeoID component;
   timestamp_t window_begin{ TypeDefaults::s_invalid_timestamp };
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
