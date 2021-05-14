@@ -65,6 +65,8 @@ struct GeoID
    */
   uint32_t element_id{ s_invalid_element_id }; // NOLINT(build/unsigned)
 
+  uint32_t unused; ///< Ensure 64bit alignment
+
   GeoID() {}
   GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element)
     : version(s_geo_id_version)

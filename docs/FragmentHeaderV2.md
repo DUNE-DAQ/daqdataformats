@@ -4,7 +4,7 @@ This document describes the format of the FragmentHeader class, version 1. It sh
 
 # FragmentHeader Description
 
-A FragmentHeader version 2 consists of 18 32-bit words:
+A FragmentHeader version 2 consists of 20 32-bit words:
 
 0. Marker (0x11112222)
 1. Version (0x00000002)
@@ -19,11 +19,13 @@ A FragmentHeader version 2 consists of 18 32-bit words:
 10. Data window end (upper 32 bits)
 11. Data window end (lower 32 bits)
 12. Run Number
-13. [GeoID version 1](GeoIDV1.md) Component Type (upper 16 bits), Region ID (lower 16 bits)
-14. [GeoID version 1](GeoIDV1.md) Element ID
-15. [GeoID version 1](GeoIDV1.md) Version
-16. Error bits
-17. Fragment Type
+13. Error bits
+14. Fragment Type
+15. Pad word (to ensure 64-bit alignment of FragmentHeader non-struct fields)
+16. [GeoID version 1](GeoIDV1.md) Component Type (upper 16 bits), Region ID (lower 16 bits)
+17. [GeoID version 1](GeoIDV1.md) Element ID
+18. [GeoID version 1](GeoIDV1.md) Version
+19. [GeoID version 1](GeoIDV1.md) Pad Word
 
 # C++ code for FragmentHeader
 
@@ -48,9 +50,10 @@ struct FragmentHeader
   timestamp_t window_begin{ TypeDefaults::s_invalid_timestamp };
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
-  GeoID link_id;
   uint32_t error_bits{ s_default_error_bits }; 
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
+  uint32_t unused;_
+  GeoID link_id;
 };
 ```
 

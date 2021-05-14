@@ -93,11 +93,6 @@ struct FragmentHeader
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
 
   /**
-   * @brief Component that generated the data in this Fragment
-   */
-  GeoID link_id;
-
-  /**
    * @brief Error bits set by the Upstream DAQ
    *
    * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
@@ -108,6 +103,13 @@ struct FragmentHeader
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
+
+  uint32_t unused; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+
+  /**
+   * @brief Component that generated the data in this Fragment
+   */
+  GeoID link_id;
 };
 
 /**
