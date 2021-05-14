@@ -44,7 +44,8 @@ struct TriggerRecordHeaderData
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
   uint32_t error_bits{ s_default_error_bits };
   trigger_type_t trigger_type{ TypeDefaults::s_invalid_trigger_type };
-  uint64_t unused : 48;
+  uint16_t unusedA { 0xFFFF};
+  uint32_t unusedB { 0xFFFFFFFF};
 };
 ```
 

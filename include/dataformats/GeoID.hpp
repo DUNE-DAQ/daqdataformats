@@ -35,6 +35,10 @@ struct GeoID
     kInvalid = 0
   };
   /**
+   * @brief The current version of the GeoID
+   */
+  static constexpr uint32_t s_geo_id_version = 1; // NOLINT(build/unsigned)
+  /**
    * @brief An invalid region number, used for initialization
    */
   static constexpr uint16_t s_invalid_region_id = std::numeric_limits<uint16_t>::max(); // NOLINT(build/unsigned)
@@ -43,6 +47,10 @@ struct GeoID
    */
   static constexpr uint32_t s_invalid_element_id = std::numeric_limits<uint32_t>::max(); // NOLINT(build/unsigned)
 
+  /**
+   * @brief Version number of the GeoID
+   */
+  uint32_t version{ s_geo_id_version };
   /**
    * @brief The type of the component (i.e. which system it belongs to)
   */
@@ -56,6 +64,16 @@ struct GeoID
    * @brief Number of the component within the region
    */
   uint32_t element_id{ s_invalid_element_id }; // NOLINT(build/unsigned)
+
+  uint32_t unused {0xFFFFFFFF}; ///< Ensure 64bit alignment
+
+  GeoID() {}
+  GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element)
+    : version(s_geo_id_version)
+    , system_type(type)
+    , region_id(region)
+    , element_id(element)
+  {}
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
