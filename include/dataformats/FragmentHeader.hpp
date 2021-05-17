@@ -104,12 +104,12 @@ struct FragmentHeader
    */
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
 
-  uint32_t unused {0xFFFFFFFF}; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+  uint32_t unused{ 0xFFFFFFFF }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 
   /**
    * @brief Component that generated the data in this Fragment
    */
-  GeoID link_id;
+  GeoID element_id;
 };
 
 /**
@@ -157,9 +157,9 @@ enum class FragmentErrorBits : size_t
  */
 enum class FragmentType : fragment_type_t
 {
-  kFakeData = 0,   ///< Data created in dfmodules' FakeDataProducer
-  kTPCData = 1, ///< Data from the TPC
-  kPDSData = 2, ///< Data from the PDS
+  kFakeData = 0, ///< Data created in dfmodules' FakeDataProducer
+  kTPCData = 1,  ///< Data from the TPC
+  kPDSData = 2,  ///< Data from the PDS
   kUnknown =
     TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in s_fragment_type_names
 };
@@ -221,7 +221,7 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
            << "window_begin: " << hdr.window_begin << ", "
            << "window_end: " << hdr.window_end << ", "
-           << "link_id: " << hdr.link_id << ", "
+           << "element_id: " << hdr.element_id << ", "
            << "error_bits: " << hdr.error_bits << ", "
            << "fragment_type : " << hdr.fragment_type;
 }
