@@ -45,7 +45,7 @@ struct FragmentHeader
   /**
    * @brief The current version of the Fragment
    */
-  static constexpr uint32_t s_fragment_header_version = 1; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_fragment_header_version = 2; // NOLINT(build/unsigned)
 
   /**
    * @brief By default, all error bits are unset
@@ -93,11 +93,6 @@ struct FragmentHeader
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
 
   /**
-   * @brief Component that generated the data in this Fragment
-   */
-  GeoID element_id;
-
-  /**
    * @brief Error bits set by the Upstream DAQ
    *
    * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
@@ -108,6 +103,13 @@ struct FragmentHeader
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
+
+  uint32_t unused{ 0xFFFFFFFF }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+
+  /**
+   * @brief Component that generated the data in this Fragment
+   */
+  GeoID element_id;
 };
 
 /**
@@ -155,9 +157,9 @@ enum class FragmentErrorBits : size_t
  */
 enum class FragmentType : fragment_type_t
 {
-  kFakeData = 0,   ///< Data created in dfmodules' FakeDataProducer
-  kTPCData = 1, ///< Data from the TPC
-  kPDSData = 2, ///< Data from the PDS
+  kFakeData = 0, ///< Data created in dfmodules' FakeDataProducer
+  kTPCData = 1,  ///< Data from the TPC
+  kPDSData = 2,  ///< Data from the PDS
   kUnknown =
     TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in s_fragment_type_names
 };
