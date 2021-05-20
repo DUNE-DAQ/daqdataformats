@@ -7,7 +7,6 @@
  */
 
 #include "dataformats/GeoID.hpp"
-#include <sstream>
 
 /**
  * @brief Name of this test module
@@ -16,6 +15,8 @@
 
 #include "boost/test/unit_test.hpp"
 
+#include <functional>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -24,9 +25,9 @@ using namespace dunedaq::dataformats;
 BOOST_AUTO_TEST_SUITE(GeoID_test)
 
 /**
- * @brief Test that GeoID::operator<< functions as expected 
-*/
-BOOST_AUTO_TEST_CASE(StreamOperator) 
+ * @brief Test that GeoID::operator<< functions as expected
+ */
+BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   GeoID test;
   test.system_type = GeoID::SystemType::kTPC;
@@ -37,7 +38,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   ostr << test;
 
   std::string output = ostr.str();
-  std::cout << "Stream operator: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Stream operator: " << output);
 
   BOOST_REQUIRE(!output.empty());
   auto pos = output.find("region: 1,");

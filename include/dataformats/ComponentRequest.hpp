@@ -13,6 +13,7 @@
 #include "dataformats/Types.hpp"
 
 #include <ostream>
+#include <string>
 
 namespace dunedaq {
 namespace dataformats {
@@ -30,8 +31,8 @@ struct ComponentRequest
   /**
    * @brief The version number of this ComponentRequest
    */
-  uint32_t version{ s_component_request_version };
-  uint32_t unused {0xFFFFFFFF}; ///< Padding to ensure 64b alignment
+  uint32_t version{ s_component_request_version }; // NOLINT(build/unsigned)
+  uint32_t unused{ 0xFFFFFFFF }; ///< Padding to ensure 64b alignment // NOLINT(build/unsigned)
 
   GeoID component; ///< The Requested Component
 
@@ -73,7 +74,7 @@ operator<<(std::ostream& o, ComponentRequest const& cr)
  * @return Stream instance for continued streaming
  */
 inline std::istream&
-operator>>(std::istream& is, ComponentRequest & cr)
+operator>>(std::istream& is, ComponentRequest& cr)
 {
   std::string tmp;
   return is >> cr.component >> tmp >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;

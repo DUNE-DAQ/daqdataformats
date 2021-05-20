@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_SUITE(FragmentHeader_test)
 /**
  * @brief Test that FragmentHeader::operator<< functions as expected
  */
-BOOST_AUTO_TEST_CASE(StreamOperator) 
+BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   FragmentHeader header;
   header.size = sizeof(FragmentHeader) + 4;
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   std::ostringstream ostr;
   ostr << header;
   std::string output = ostr.str();
-  std::cout << "Stream operator: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Stream operator: " << output);
 
   BOOST_REQUIRE(!output.empty());
   auto pos = output.find("trigger_number: 1,");

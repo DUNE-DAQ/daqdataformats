@@ -14,6 +14,7 @@
 
 #include <limits>
 #include <ostream>
+#include <string>
 #include <vector>
 
 namespace dunedaq {
@@ -89,7 +90,7 @@ struct TriggerRecordHeaderData
   /**
    * @brief Padding to ensure 64-bit alignment
    */
-  uint16_t unusedA {0xFFFF}; // NOLINT(build/unsigned)
+  uint16_t unusedA{ 0xFFFF };     // NOLINT(build/unsigned)
   uint32_t unusedB{ 0xFFFFFFFF }; // NOLINT(build/unsigned)
 };
 
@@ -98,8 +99,8 @@ struct TriggerRecordHeaderData
  */
 enum class TriggerRecordErrorBits : size_t
 {
-  kIncomplete  = 0,   ///< Indicates a trigger record with incomplete fragments
-  kMismatch    = 1,   ///< We have as many fragments as requested but they do not match the requested components
+  kIncomplete = 0,    ///< Indicates a trigger record with incomplete fragments
+  kMismatch = 1,      ///< We have as many fragments as requested but they do not match the requested components
   kUnassigned2 = 2,   ///< Error bit 2 is not assigned
   kUnassigned3 = 3,   ///< Error bit 3 is not assigned
   kUnassigned4 = 4,   ///< Error bit 4 is not assigned
@@ -165,14 +166,9 @@ inline std::istream&
 operator>>(std::istream& o, TriggerRecordHeaderData& hdr)
 {
   std::string tmp;
-  return o >> tmp >> std::hex >> hdr.trigger_record_header_marker >> std::dec >> tmp
-           >> tmp >> hdr.version           >> tmp
-           >> tmp >> hdr.trigger_number    >> tmp
-           >> tmp >> hdr.run_number        >> tmp
-           >> tmp >> hdr.trigger_timestamp >> tmp
-           >> tmp >> hdr.trigger_type      >> tmp
-           >> tmp >> hdr.error_bits        >> tmp
-           >> tmp >> hdr.num_requested_components;
+  return o >> tmp >> std::hex >> hdr.trigger_record_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >>
+         tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >> hdr.trigger_timestamp >> tmp >>
+         tmp >> hdr.trigger_type >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.num_requested_components;
 }
 
 } // namespace dataformats

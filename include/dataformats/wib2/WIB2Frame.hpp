@@ -3,10 +3,10 @@
 
 #include <algorithm> // For std::min
 #include <cassert>   // For assert()
+#include <cstdint>   // For uint32_t etc
 #include <cstdio>
 #include <cstdlib>
 #include <stdexcept> // For std::out_of_range
-#include <stdint.h>  // For uint32_t etc
 
 namespace dunedaq::dataformats {
 

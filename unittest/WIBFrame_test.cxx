@@ -402,14 +402,14 @@ BOOST_AUTO_TEST_CASE(WIBFrame_HeaderMutators)
   {
     WIBFrame frame;
     frame.get_wib_header()->z = 1;
-    frame.set_timestamp(0x7333444455555555); 
+    frame.set_timestamp(0x7333444455555555);
     BOOST_REQUIRE_EQUAL(frame.get_wib_header()->get_timestamp(), 0x444455555555);
   }
 
   {
     WIBFrame frame;
     frame.get_wib_header()->z = 0;
-    frame.set_timestamp(0xF333444455555555); 
+    frame.set_timestamp(0xF333444455555555);
     BOOST_REQUIRE_EQUAL(frame.get_wib_header()->get_timestamp(), 0x7333444455555555);
   }
 }

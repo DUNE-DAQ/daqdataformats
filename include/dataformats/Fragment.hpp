@@ -86,7 +86,7 @@ public:
 
     m_data_arr = malloc(size); // NOLINT(build/unsigned)
     if (m_data_arr == nullptr) {
-        throw MemoryAllocationFailed(ERS_HERE, size);
+      throw MemoryAllocationFailed(ERS_HERE, size);
     }
     m_alloc = true;
 
@@ -127,7 +127,7 @@ public:
       auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
       m_data_arr = malloc(header->size);
       if (m_data_arr == nullptr) {
-          throw MemoryAllocationFailed(ERS_HERE, header->size);
+        throw MemoryAllocationFailed(ERS_HERE, header->size);
       }
       m_alloc = true;
       memcpy(m_data_arr, existing_fragment_buffer, header->size);
@@ -272,7 +272,7 @@ public:
   /**
    * @brief Get the fragment_type_t value stored in the header
    * @return Current value of the fragment_type header field
-  */
+   */
   fragment_type_t get_fragment_type_code() const { return header_()->fragment_type; }
   /**
    * @brief Get the fragment_type header field

@@ -13,11 +13,11 @@
 #include <istream>
 #include <limits>
 #include <ostream>
+#include <string>
 #include <tuple>
 
 namespace dunedaq {
 namespace dataformats {
-
 
 /**
  * @brief Represents a coordinate point in the DAQ's logical coordinate system (i.e. not physical coordinates)
@@ -27,7 +27,7 @@ struct GeoID
   /**
    * @brief The readout system to which the component belongs
    */
-  enum class SystemType : uint16_t
+  enum class SystemType : uint16_t // NOLINT(build/unsigned)
   {
     kTPC = 1,
     kPDS = 2,
@@ -50,10 +50,10 @@ struct GeoID
   /**
    * @brief Version number of the GeoID
    */
-  uint32_t version{ s_geo_id_version };
+  uint32_t version{ s_geo_id_version }; // NOLINT(build/unsigned)
   /**
    * @brief The type of the component (i.e. which system it belongs to)
-  */
+   */
   SystemType system_type{ SystemType::kInvalid };
 
   /**
@@ -65,10 +65,10 @@ struct GeoID
    */
   uint32_t element_id{ s_invalid_element_id }; // NOLINT(build/unsigned)
 
-  uint32_t unused {0xFFFFFFFF}; ///< Ensure 64bit alignment
+  uint32_t unused{ 0xFFFFFFFF }; ///< Ensure 64bit alignment // NOLINT(build/unsigned)
 
   GeoID() {}
-  GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element)
+  GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element) // NOLINT(build/unsigned)
     : version(s_geo_id_version)
     , system_type(type)
     , region_id(region)

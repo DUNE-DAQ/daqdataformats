@@ -128,7 +128,6 @@ public:
   /** @brief Get the 64-bit timestamp of the frame
    */
   uint64_t get_timestamp() const { return (uint64_t)header.timestamp_wf_1 | ((uint64_t)header.timestamp_wf_2 << 32); }
-
 };
 
 } // namepsace dunedaq::dataformats

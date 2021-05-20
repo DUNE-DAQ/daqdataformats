@@ -8,7 +8,6 @@
 
 #include "dataformats/TriggerRecordHeader.hpp"
 #include "dataformats/TriggerRecordHeaderData.hpp"
-#include <sstream>
 
 /**
  * @brief Name of this test module
@@ -17,6 +16,7 @@
 
 #include "boost/test/unit_test.hpp"
 
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -155,7 +155,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), 2);
   BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), header_data.num_requested_components);
 
-  auto header_ptr = reinterpret_cast<const TriggerRecordHeaderData*>(header->get_storage_location());
+  auto header_ptr = static_cast<const TriggerRecordHeaderData*>(header->get_storage_location());
   BOOST_REQUIRE_EQUAL(header_ptr->run_number, header_data.run_number);
   header->set_run_number(10);
   BOOST_REQUIRE(header_ptr->run_number != header_data.run_number);

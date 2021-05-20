@@ -16,7 +16,9 @@
 
 #include <bitset>
 #include <cstdlib>
+#include <map>
 #include <numeric>
+#include <string>
 #include <vector>
 
 namespace dunedaq {
@@ -104,7 +106,9 @@ struct FragmentHeader
    */
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
 
-  uint32_t unused{ 0xFFFFFFFF }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+  uint32_t unused{// NOLINT(build/unsigned)
+    0xFFFFFFFF
+  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields 
 
   /**
    * @brief Component that generated the data in this Fragment
@@ -157,11 +161,11 @@ enum class FragmentErrorBits : size_t
  */
 enum class FragmentType : fragment_type_t
 {
-  kFakeData = 0, ///< Data created in dfmodules' FakeDataProducer
-  kTPCData = 1,  ///< Data from the TPC
-  kPDSData = 2,  ///< Data from the PDS
-  kUnknown =
-    TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in s_fragment_type_names
+  kFakeData = 0,                                   ///< Data created in dfmodules' FakeDataProducer
+  kTPCData = 1,                                    ///< Data from the TPC
+  kPDSData = 2,                                    ///< Data from the PDS
+  kUnknown = TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in
+                                                   ///< get_fragment_type_names
 };
 
 /**
@@ -169,9 +173,13 @@ enum class FragmentType : fragment_type_t
  *
  * These names can be used, for example, as HDF5 Group names
  */
-static const std::map<FragmentType, std::string> s_fragment_type_names{ { FragmentType::kFakeData, "FakeData" },
-                                                                        { FragmentType::kTPCData, "TPC" },
-                                                                        { FragmentType::kPDSData, "PDS" } };
+inline std::map<FragmentType, std::string>
+get_fragment_type_names()
+{
+  return { { FragmentType::kFakeData, "FakeData" },
+           { FragmentType::kTPCData, "TPC" },
+           { FragmentType::kPDSData, "PDS" } };
+}
 
 /**
  * @brief Convert a FragmentType enum value to string
@@ -181,11 +189,11 @@ static const std::map<FragmentType, std::string> s_fragment_type_names{ { Fragme
 inline std::string
 fragment_type_to_string(FragmentType type)
 {
-  if (!s_fragment_type_names.count(type)) {
+  if (!get_fragment_type_names().count(type)) {
     ers::error(FragmentTypeConversionError(ERS_HERE, std::to_string(static_cast<int>(type))));
     return "UNKNOWN";
   }
-  return s_fragment_type_names.at(type);
+  return get_fragment_type_names().at(type);
 }
 
 /**
@@ -196,7 +204,7 @@ fragment_type_to_string(FragmentType type)
 inline FragmentType
 string_to_fragment_type(std::string name)
 {
-  for (auto& it : s_fragment_type_names) {
+  for (auto& it : get_fragment_type_names()) {
     if (it.second == name)
       return it.first;
   }
