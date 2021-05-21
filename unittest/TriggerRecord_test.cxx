@@ -15,7 +15,9 @@
 
 #include "boost/test/unit_test.hpp"
 
+#include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 using namespace dunedaq::dataformats;
@@ -54,7 +56,7 @@ BOOST_AUTO_TEST_CASE(ComponentsConstructor)
 
   auto record = new TriggerRecord(components);
   BOOST_REQUIRE_EQUAL(record->get_header_data().num_requested_components, 2);
-  delete record;
+  delete record; // NOLINT(build/raw_ownership)
 }
 
 /**
@@ -79,8 +81,8 @@ BOOST_AUTO_TEST_CASE(HeaderConstructor)
   auto header = new TriggerRecordHeader(components);
   auto record = new TriggerRecord(*header);
   BOOST_REQUIRE_EQUAL(record->get_header_data().num_requested_components, 2);
-  delete record;
-  delete header;
+  delete record; // NOLINT(build/raw_ownership)
+  delete header; // NOLINT(build/raw_ownership)
 }
 
 /**

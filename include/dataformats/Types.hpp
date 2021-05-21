@@ -18,16 +18,16 @@
  * @brief The DUNE-DAQ namespace
  */
 namespace dunedaq {
-    /**
-     * @brief An ERS Error indicating that a malloc failed
-     * @param maf_bytes Bytes requested from malloc
-     * @cond Doxygen doesn't like ERS macros
-    */
-    ERS_DECLARE_ISSUE(dataformats,
-        MemoryAllocationFailed,
-        "Malloc of " << maf_bytes << " bytes failed",
-        ((size_t)maf_bytes)) // NOLINT
-    /// @endcond
+/**
+ * @brief An ERS Error indicating that a malloc failed
+ * @param maf_bytes Bytes requested from malloc
+ * @cond Doxygen doesn't like ERS macros
+ */
+ERS_DECLARE_ISSUE(dataformats,
+                  MemoryAllocationFailed,
+                  "Malloc of " << maf_bytes << " bytes failed",
+                  ((size_t)maf_bytes)) // NOLINT
+                                       /// @endcond
 /**
  * @brief Dataformats code
  */
@@ -52,7 +52,7 @@ using fragment_size_t = uint64_t; // NOLINT(build/unsigned)
 /**
  * @brief Type used to represent DUNE timing system timestamps
  */
-using timestamp_t = uint64_t; // NOLINT(build/unsigned)
+using timestamp_t = uint64_t;     // NOLINT(build/unsigned)
 using timestamp_diff_t = int64_t; ///< Used to represent differences between timestamps
 /**
  * @brief Type used to represent Trigger Decision trigger types
@@ -75,7 +75,7 @@ public:
     0; ///< Invalid size for a Fragment (as FragmentHeader is counted as well)
   static constexpr timestamp_t s_invalid_timestamp = std::numeric_limits<timestamp_t>::max(); ///< An invalid timestamp
   static constexpr timestamp_diff_t s_invalid_timestamp_diff =
-   std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid timestamp difference
+    std::numeric_limits<timestamp_diff_t>::max(); ///< An invalid timestamp difference
 
   static constexpr trigger_type_t s_invalid_trigger_type =
     std::numeric_limits<trigger_type_t>::max(); ///< An invalid trigger type

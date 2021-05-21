@@ -27,13 +27,13 @@ namespace dunedaq {
  * @param cri_index_supplied Index that caused the error
  * @param cri_index_max Maximum valid index for this function
  * @cond Doxygen doesn't like ERS macros
-*/
+ */
 ERS_DECLARE_ISSUE(dataformats,
                   ComponentRequestIndexError,
                   "Supplied ComponentRequest index " << cri_index_supplied << " is greater than the maximum index "
                                                      << cri_index_max,
                   ((int)cri_index_supplied)((int)cri_index_max)) // NOLINT
-    /// @endcond
+                                                                 /// @endcond
 
 namespace dataformats {
 
@@ -54,7 +54,7 @@ public:
 
     m_data_arr = malloc(size); // NOLINT(build/unsigned)
     if (m_data_arr == nullptr) {
-        throw MemoryAllocationFailed(ERS_HERE, size);
+      throw MemoryAllocationFailed(ERS_HERE, size);
     }
     m_alloc = true;
 
@@ -85,7 +85,7 @@ public:
 
       m_data_arr = malloc(size);
       if (m_data_arr == nullptr) {
-          throw MemoryAllocationFailed(ERS_HERE, size);
+        throw MemoryAllocationFailed(ERS_HERE, size);
       }
       m_alloc = true;
       memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
@@ -109,10 +109,12 @@ public:
     if (&other == this)
       return *this;
 
-    if (m_alloc) { free(m_data_arr); }
+    if (m_alloc) {
+      free(m_data_arr);
+    }
     m_data_arr = malloc(other.get_total_size_bytes());
     if (m_data_arr == nullptr) {
-        throw MemoryAllocationFailed(ERS_HERE, other.get_total_size_bytes());
+      throw MemoryAllocationFailed(ERS_HERE, other.get_total_size_bytes());
     }
     m_alloc = true;
     memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());

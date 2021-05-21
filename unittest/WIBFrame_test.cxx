@@ -1,3 +1,4 @@
+
 /**
  * @file WIBFrame_test.cxx WIBFrame class Unit Tests
  *
@@ -70,7 +71,7 @@ BOOST_AUTO_TEST_CASE(WIBHeader_StreamMethods)
   std::ostringstream ostr;
   header.print_hex(ostr);
   std::string output = ostr.str();
-  std::cout << "Print hex: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Print hex: " << output);
   BOOST_REQUIRE(!output.empty());
 
   ostr.str("");
@@ -78,7 +79,7 @@ BOOST_AUTO_TEST_CASE(WIBHeader_StreamMethods)
 
   header.print_bits(ostr);
   output = ostr.str();
-  std::cout << "Print bits: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Print bits: " << output);
   BOOST_REQUIRE(!output.empty());
 
   ostr.str("");
@@ -86,7 +87,7 @@ BOOST_AUTO_TEST_CASE(WIBHeader_StreamMethods)
 
   ostr << header;
   output = ostr.str();
-  std::cout << "Stream operator: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Stream operator: " << output);
   BOOST_REQUIRE(!output.empty());
 }
 
@@ -193,7 +194,7 @@ BOOST_AUTO_TEST_CASE(ColdataHeader_StreamMethods)
   std::ostringstream ostr;
   header.print_hex(ostr);
   std::string output = ostr.str();
-  std::cout << "Print hex: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Print hex: " << output);
   BOOST_REQUIRE(!output.empty());
 
   ostr.str("");
@@ -201,7 +202,7 @@ BOOST_AUTO_TEST_CASE(ColdataHeader_StreamMethods)
 
   header.print_bits(ostr);
   output = ostr.str();
-  std::cout << "Print bits: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Print bits: " << output);
   BOOST_REQUIRE(!output.empty());
 
   ostr.str("");
@@ -209,7 +210,7 @@ BOOST_AUTO_TEST_CASE(ColdataHeader_StreamMethods)
 
   ostr << header;
   output = ostr.str();
-  std::cout << "Stream operator: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Stream operator: " << output);
   BOOST_REQUIRE(!output.empty());
 }
 
@@ -358,7 +359,7 @@ BOOST_AUTO_TEST_CASE(ColdataBlock_ChannelMethods)
   BOOST_REQUIRE_EQUAL(block.segments[0].adc1ch0_1, 0x22);
   BOOST_REQUIRE_EQUAL(block.segments[0].adc0ch1_1, 0x4);
 
-  uint8_t invalid_adc = ColdataBlock::s_num_adc_per_block;
+  uint8_t invalid_adc = ColdataBlock::s_num_adc_per_block;   // NOLINT(build/unsigned)
   BOOST_REQUIRE_EXCEPTION(block.get_channel(invalid_adc, 0),
                           dunedaq::dataformats::WibFrameRelatedIndexError,
                           [&](dunedaq::dataformats::WibFrameRelatedIndexError) { return true; });
@@ -373,7 +374,7 @@ BOOST_AUTO_TEST_CASE(ColdataBlock_StreamOperator)
   std::ostringstream ostr;
   ostr << block;
   auto output = ostr.str();
-  std::cout << "Stream operator: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Stream operator: " << output);
   BOOST_REQUIRE(!output.empty());
 }
 
@@ -402,14 +403,14 @@ BOOST_AUTO_TEST_CASE(WIBFrame_HeaderMutators)
   {
     WIBFrame frame;
     frame.get_wib_header()->z = 1;
-    frame.set_timestamp(0x7333444455555555); 
+    frame.set_timestamp(0x7333444455555555);
     BOOST_REQUIRE_EQUAL(frame.get_wib_header()->get_timestamp(), 0x444455555555);
   }
 
   {
     WIBFrame frame;
     frame.get_wib_header()->z = 0;
-    frame.set_timestamp(0xF333444455555555); 
+    frame.set_timestamp(0xF333444455555555);
     BOOST_REQUIRE_EQUAL(frame.get_wib_header()->get_timestamp(), 0x7333444455555555);
   }
 }
@@ -465,7 +466,7 @@ BOOST_AUTO_TEST_CASE(WIBFrame_StreamOperator)
   std::ostringstream ostr;
   ostr << frame;
   auto output = ostr.str();
-  std::cout << "Stream operator: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Stream operator: " << output);
   BOOST_REQUIRE(!output.empty());
 }
 
@@ -482,11 +483,11 @@ BOOST_AUTO_TEST_CASE(WIBFrame_FromRawData)
   blocks[0].head.checksum_a_2 = 0x33;
   blocks[0].head.checksum_b_2 = 0x44;
 
-  uint8_t* buff = static_cast<uint8_t*>(malloc(sizeof(header) + sizeof(blocks)));
+  uint8_t* buff = static_cast<uint8_t*>(malloc(sizeof(header) + sizeof(blocks)));  // NOLINT(build/unsigned)
   memcpy(buff, &header, sizeof(header));
   memcpy(buff + sizeof(header), blocks, sizeof(ColdataBlock) * WIBFrame::s_num_block_per_frame);
 
-  WIBFrame* from_raw_data = reinterpret_cast<WIBFrame*>(buff);
+  WIBFrame* from_raw_data = reinterpret_cast<WIBFrame*>(buff);  // NOLINT
 
   BOOST_REQUIRE_EQUAL(from_raw_data->get_wib_header()->get_timestamp(), 0x9ABC12345678);
   BOOST_REQUIRE_EQUAL(from_raw_data->get_coldata_header(0)->get_checksum_a(), 0x3311);

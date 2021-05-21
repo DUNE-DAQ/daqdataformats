@@ -61,9 +61,10 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
                           dunedaq::dataformats::FragmentSizeError,
                           [&](dunedaq::dataformats::FragmentSizeError) { return true; });
 
-  BOOST_REQUIRE_EXCEPTION(fragment_ptr = new Fragment( {nullptr, size_t(-1) - sizeof(dunedaq::dataformats::FragmentHeader)} ),
-			  dunedaq::dataformats::MemoryAllocationFailed,
-			  [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
+  BOOST_REQUIRE_EXCEPTION(fragment_ptr =
+                            new Fragment({ nullptr, size_t(-1) - sizeof(dunedaq::dataformats::FragmentHeader) }),
+                          dunedaq::dataformats::MemoryAllocationFailed,
+                          [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
 
   auto buf1 = malloc(10);
   fragment_ptr = new Fragment(buf1, size_t(10));
@@ -128,15 +129,15 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   }
 
   {
-    using blobtype_t = uint8_t;
+    using blobtype_t = uint8_t; // NOLINT(build/unsigned)
 
     constexpr int blob1_num_elements = 123;
     constexpr int blob2_num_elements = 456;
-    blobtype_t blob1[blob1_num_elements];
-    blobtype_t blob2[blob2_num_elements];
+    std::array<blobtype_t, blob1_num_elements> blob1;
+    std::array<blobtype_t, blob2_num_elements> blob2;
 
     Fragment test_frag(
-      std::vector<std::pair<void*, size_t>>({ { &blob1, blob1_num_elements }, { &blob2, blob2_num_elements } }));
+      std::vector<std::pair<void*, size_t>>({ { &blob1[0], blob1_num_elements }, { &blob2[0], blob2_num_elements } }));
 
     BOOST_REQUIRE_EQUAL(sizeof(FragmentHeader) + blob1_num_elements + blob2_num_elements, test_frag.get_size());
   }
@@ -189,7 +190,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(frag.get_fragment_type_code(), header.fragment_type);
   BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(frag.get_fragment_type()), header.fragment_type);
 
-  auto theHeader = reinterpret_cast<const FragmentHeader*>(frag.get_storage_location());
+  auto theHeader = static_cast<const FragmentHeader*>(frag.get_storage_location());
   frag.set_trigger_number(0x11);
   BOOST_REQUIRE_EQUAL(theHeader->trigger_number, 0x11);
   frag.set_run_number(0x33);

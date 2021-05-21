@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   std::ostringstream ostr;
   ostr << header;
   std::string output = ostr.str();
-  std::cout << "Stream operator: " << output << std::endl;
+  BOOST_TEST_MESSAGE("Stream operator: " << output);
 
   BOOST_REQUIRE(!output.empty());
   auto pos = output.find("trigger_number: 1,");
