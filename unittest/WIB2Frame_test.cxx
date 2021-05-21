@@ -32,49 +32,49 @@ namespace wib2unpack {
 // Words in the binary format of the FELIX frame14 from the WIB
 typedef struct
 {
-  uint32_t start_frame;       // NOLINT(build/unsigned)
-  uint32_t wib_pre[4];        // NOLINT(build/unsigned)
-  uint32_t femb_a_seg[56];    // NOLINT(build/unsigned)
-  uint32_t femb_b_seg[56];    // NOLINT(build/unsigned)
-  uint32_t wib_post[2];       // NOLINT(build/unsigned)
-  uint32_t idle_frame;        // NOLINT(build/unsigned)
+  uint32_t start_frame;    // NOLINT(build/unsigned)
+  uint32_t wib_pre[4];     // NOLINT(build/unsigned)
+  uint32_t femb_a_seg[56]; // NOLINT(build/unsigned)
+  uint32_t femb_b_seg[56]; // NOLINT(build/unsigned)
+  uint32_t wib_post[2];    // NOLINT(build/unsigned)
+  uint32_t idle_frame;     // NOLINT(build/unsigned)
 } __attribute__((packed)) frame14;
 
 // Samples from the U, V, X channels in a femb_*_seg of a frame as 16bit arrays
 typedef struct
 {
-  uint16_t u[40], v[40], x[48];        // NOLINT(build/unsigned)
+  uint16_t u[40], v[40], x[48]; // NOLINT(build/unsigned)
 } __attribute__((packed)) femb_data;
 
 // Byte-aligned unpacked values in a felix_frame
 typedef struct
 {
-  uint8_t link_mask, femb_valid, fiber_num, wib_num, frame_version, crate_num;  // NOLINT(build/unsigned)
-  uint32_t wib_data;                                                            // NOLINT(build/unsigned)
-  uint64_t timestamp;                                                           // NOLINT(build/unsigned)
+  uint8_t link_mask, femb_valid, fiber_num, wib_num, frame_version, crate_num; // NOLINT(build/unsigned)
+  uint32_t wib_data;                                                           // NOLINT(build/unsigned)
+  uint64_t timestamp;                                                          // NOLINT(build/unsigned)
   femb_data femb[2];
-  uint32_t crc20;                                                               // NOLINT(build/unsigned)
-  uint16_t flex12;                                                              // NOLINT(build/unsigned)
-  uint32_t flex24;                                                              // NOLINT(build/unsigned)         
+  uint32_t crc20;  // NOLINT(build/unsigned)
+  uint16_t flex12; // NOLINT(build/unsigned)
+  uint32_t flex24; // NOLINT(build/unsigned)
 } frame14_unpacked;
 
 // Deframed data, where channels or u,v,x are time ordered uint16 samples for each channel
 typedef struct
 {
   size_t samples;
-  std::vector<uint16_t> channels[2][128];  // NOLINT(build/unsigned)
-  std::vector<uint64_t> timestamp;         // NOLINT(build/unsigned)
-  uint8_t crate_num, wib_num;              // NOLINT(build/unsigned)
+  std::vector<uint16_t> channels[2][128]; // NOLINT(build/unsigned)
+  std::vector<uint64_t> timestamp;        // NOLINT(build/unsigned)
+  uint8_t crate_num, wib_num;             // NOLINT(build/unsigned)
 } channel_data;
 
 typedef struct
 {
   size_t samples;
-  std::vector<uint16_t> u[2][40];     // NOLINT(build/unsigned)
-  std::vector<uint16_t> v[2][40];     // NOLINT(build/unsigned)  
-  std::vector<uint16_t> x[2][48];     // NOLINT(build/unsigned)
-  std::vector<uint64_t> timestamp;    // NOLINT(build/unsigned)
-  uint8_t crate_num, wib_num;         // NOLINT(build/unsigned)   
+  std::vector<uint16_t> u[2][40];  // NOLINT(build/unsigned)
+  std::vector<uint16_t> v[2][40];  // NOLINT(build/unsigned)
+  std::vector<uint16_t> x[2][48];  // NOLINT(build/unsigned)
+  std::vector<uint64_t> timestamp; // NOLINT(build/unsigned)
+  uint8_t crate_num, wib_num;      // NOLINT(build/unsigned)
 } uvx_data;
 
 void
@@ -99,7 +99,7 @@ unpack14(const uint32_t* packed, uint16_t* unpacked) // NOLINT(build/unsigned)
 }
 
 void
-repack14(const uint16_t* unpacked, uint32_t* packed)  // NOLINT(build/unsigned)
+repack14(const uint16_t* unpacked, uint32_t* packed) // NOLINT(build/unsigned)
 {
   // zero packed data first
   for (size_t i = 0; i < 56; i++)
@@ -134,7 +134,8 @@ unpack_frame(const frame14* frame, frame14_unpacked* data)
 
   data->wib_data = frame->wib_pre[1];
 
-  data->timestamp = (static_cast<uint64_t>(frame->wib_pre[3]) << 32) | (static_cast<uint64_t>(frame->wib_pre[2])); // NOLINT(build/unsigned)
+  data->timestamp = (static_cast<uint64_t>(frame->wib_pre[3]) << 32) | // NOLINT(build/unsigned)
+                    (static_cast<uint64_t>(frame->wib_pre[2]));        // NOLINT(build/unsigned)
 
   unpack14(frame->femb_a_seg, reinterpret_cast<uint16_t*>(&data->femb[0])); // NOLINT
   unpack14(frame->femb_b_seg, reinterpret_cast<uint16_t*>(&data->femb[1])); // NOLINT
@@ -158,11 +159,11 @@ repack_frame(frame14_unpacked* data, frame14* frame)
 
   frame->wib_pre[1] = 0xbabeface;
 
-  frame->wib_pre[2] = static_cast<uint32_t>(data->timestamp & 0xFFFFFFFF);          // NOLINT(build/unsigned)
-  frame->wib_pre[3] = static_cast<uint32_t>((data->timestamp >> 32) & 0xFFFFFFFF);  // NOLINT(build/unsigned)
+  frame->wib_pre[2] = static_cast<uint32_t>(data->timestamp & 0xFFFFFFFF);         // NOLINT(build/unsigned)
+  frame->wib_pre[3] = static_cast<uint32_t>((data->timestamp >> 32) & 0xFFFFFFFF); // NOLINT(build/unsigned)
 
-  repack14(reinterpret_cast<uint16_t*>(&data->femb[0]), frame->femb_a_seg);  // NOLINT
-  repack14(reinterpret_cast<uint16_t*>(&data->femb[1]), frame->femb_b_seg);  // NOLINT
+  repack14(reinterpret_cast<uint16_t*>(&data->femb[0]), frame->femb_a_seg); // NOLINT
+  repack14(reinterpret_cast<uint16_t*>(&data->femb[1]), frame->femb_b_seg); // NOLINT
 
   frame->wib_post[0] |= data->crc20 & 0xFFFFF; // FIXME calculate crc of something
   frame->wib_post[0] |= (data->flex12 & 0xFFF) << 20;
@@ -284,7 +285,7 @@ fake_data(frame14* buffer, size_t nframes)
   for (size_t i = 0; i < 128; i++) {
     data.channels[0][i].resize(nframes);
     data.channels[1][i].resize(nframes);
-    int phase = rand() % 500;
+    int phase = rand() % 500; // NOLINT(runtime/threadsafe_fn)
     for (size_t j = 0; j < nframes; j++) {
       data.channels[0][i][j] = 16384.0 * (sin(2 * 3.1415926 * j / (i * 5 + 100.0) + phase) + 1.0) / 2.0;
       data.channels[1][i][j] = 16384.0 * (cos(2 * 3.1415926 * j / (i * 5 + 100.0) + phase) + 1.0) / 2.0;
@@ -300,7 +301,7 @@ fake_data(frame14* buffer, size_t nframes)
 
 using namespace dunedaq::dataformats;
 
-typedef std::array<uint16_t, 256> vals_type;  // NOLINT(build/unsigned)
+typedef std::array<uint16_t, 256> vals_type; // NOLINT(build/unsigned)
 
 // Tell boost not to try to print vals_type objects with <<
 BOOST_TEST_DONT_PRINT_LOG_VALUE(vals_type)
@@ -317,7 +318,7 @@ make_vals()
 
   const int n_fuzz = 100;
   for (int i = 0; i < n_fuzz; ++i) {
-    std::array<uint16_t, 256> vals;               // NOLINT(build/unsigned)
+    std::array<uint16_t, 256> vals; // NOLINT(build/unsigned)
     for (size_t j = 0; j < vals.size(); ++j) {
       vals[j] = uniform_dist(e1);
     }
@@ -364,24 +365,24 @@ BOOST_DATA_TEST_CASE(CompareToUnpack, boost::unit_test::data::make(make_vals()),
 
   for (int femb = 0; femb < 2; ++femb) {
     for (int i = 0; i < 40; ++i) {
-      uint16_t gold = unpacked.femb[femb].u[i];    // NOLINT(build/unsigned)
-      uint16_t test = wib2frame->get_u(femb, i);   // NOLINT(build/unsigned)
+      uint16_t gold = unpacked.femb[femb].u[i];  // NOLINT(build/unsigned)
+      uint16_t test = wib2frame->get_u(femb, i); // NOLINT(build/unsigned)
       if (gold != test) {
         num_errors++;
         BOOST_CHECK_EQUAL(gold, test);
       }
     }
     for (int i = 0; i < 40; ++i) {
-      uint16_t gold = unpacked.femb[femb].v[i];    // NOLINT(build/unsigned)
-      uint16_t test = wib2frame->get_v(femb, i);   // NOLINT(build/unsigned)
+      uint16_t gold = unpacked.femb[femb].v[i];  // NOLINT(build/unsigned)
+      uint16_t test = wib2frame->get_v(femb, i); // NOLINT(build/unsigned)
       if (gold != test) {
         num_errors++;
         BOOST_CHECK_EQUAL(gold, test);
       }
     }
     for (int i = 0; i < 48; ++i) {
-      uint16_t gold = unpacked.femb[femb].x[i];   // NOLINT(build/unsigned)
-      uint16_t test = wib2frame->get_x(femb, i);  // NOLINT(build/unsigned)
+      uint16_t gold = unpacked.femb[femb].x[i];  // NOLINT(build/unsigned)
+      uint16_t test = wib2frame->get_x(femb, i); // NOLINT(build/unsigned)
       if (gold != test) {
         num_errors++;
         BOOST_CHECK_EQUAL(gold, test);

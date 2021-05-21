@@ -106,9 +106,9 @@ struct FragmentHeader
    */
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
 
-  uint32_t unused{// NOLINT(build/unsigned)
-    0xFFFFFFFF
-  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields 
+  uint32_t unused{ // NOLINT(build/unsigned)
+                   0xFFFFFFFF
+  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 
   /**
    * @brief Component that generated the data in this Fragment

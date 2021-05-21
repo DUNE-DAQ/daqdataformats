@@ -1,5 +1,5 @@
 /**
- * @file PDSFrame.hpp  
+ * @file PDSFrame.hpp
  *
  *  Contains declaration of PDSFrame, a class for accessing raw PDS frames, as produced by the DAPHNE boards
  *
@@ -126,18 +126,21 @@ public:
 
   /** @brief Get the ith T ADC in the given DAPHNE
    */
-  uint16_t get_t(int i) const { return get_adc(i); } // NOLINT
+  uint16_t get_t(int i) const { return get_adc(i); } // NOLINT(build/unsigned)
 
   /** @brief Set the ith U-channel ADC in the given femb to val
    */
-  void set_t(int i, uint16_t val) { return set_adc(i, val); } // NOLINT
+  void set_t(int i, uint16_t val) { return set_adc(i, val); } // NOLINT(build/unsigned)
 
   /** @brief Get the 64-bit timestamp of the frame
    */
-  uint64_t get_timestamp() const { return (uint64_t)header.timestamp_wf_1 | ((uint64_t)header.timestamp_wf_2 << 32); } // NOLINT
+  uint64_t get_timestamp() const // NOLINT(build/unsigned)
+  {
+    return (uint64_t)header.timestamp_wf_1 | ((uint64_t)header.timestamp_wf_2 << 32); // NOLINT(build/unsigned)
+  }
 };
 
-} // namespace dunedaq::dataformats 
+} // namespace dunedaq::dataformats
 
 #endif // DATAFORMATS_INCLUDE_DATAFORMATS_PDS_PDSFRAME_HPP_
 

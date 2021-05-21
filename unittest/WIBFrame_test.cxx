@@ -359,7 +359,7 @@ BOOST_AUTO_TEST_CASE(ColdataBlock_ChannelMethods)
   BOOST_REQUIRE_EQUAL(block.segments[0].adc1ch0_1, 0x22);
   BOOST_REQUIRE_EQUAL(block.segments[0].adc0ch1_1, 0x4);
 
-  uint8_t invalid_adc = ColdataBlock::s_num_adc_per_block;   // NOLINT(build/unsigned)
+  uint8_t invalid_adc = ColdataBlock::s_num_adc_per_block; // NOLINT(build/unsigned)
   BOOST_REQUIRE_EXCEPTION(block.get_channel(invalid_adc, 0),
                           dunedaq::dataformats::WibFrameRelatedIndexError,
                           [&](dunedaq::dataformats::WibFrameRelatedIndexError) { return true; });
@@ -483,11 +483,11 @@ BOOST_AUTO_TEST_CASE(WIBFrame_FromRawData)
   blocks[0].head.checksum_a_2 = 0x33;
   blocks[0].head.checksum_b_2 = 0x44;
 
-  uint8_t* buff = static_cast<uint8_t*>(malloc(sizeof(header) + sizeof(blocks)));  // NOLINT(build/unsigned)
+  uint8_t* buff = static_cast<uint8_t*>(malloc(sizeof(header) + sizeof(blocks))); // NOLINT(build/unsigned)
   memcpy(buff, &header, sizeof(header));
   memcpy(buff + sizeof(header), blocks, sizeof(ColdataBlock) * WIBFrame::s_num_block_per_frame);
 
-  WIBFrame* from_raw_data = reinterpret_cast<WIBFrame*>(buff);  // NOLINT
+  WIBFrame* from_raw_data = reinterpret_cast<WIBFrame*>(buff); // NOLINT
 
   BOOST_REQUIRE_EQUAL(from_raw_data->get_wib_header()->get_timestamp(), 0x9ABC12345678);
   BOOST_REQUIRE_EQUAL(from_raw_data->get_coldata_header(0)->get_checksum_a(), 0x3311);
