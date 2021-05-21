@@ -110,14 +110,14 @@ struct ColdataHeader
   word_t error_register : 16, reserved_2 : 16;
   word_t hdr_1 : 4, hdr_3 : 4, hdr_2 : 4, hdr_4 : 4, hdr_5 : 4, hdr_7 : 4, hdr_6 : 4, hdr_8 : 4;
 
-  uint16_t get_checksum_a() const
+  uint16_t get_checksum_a() const // NOLINT(build/unsigned)
   {
-    return static_cast<uint16_t>(checksum_a_1) | (checksum_a_2 << 8);
-  } // NOLINT(build/unsigned)
-  uint16_t get_checksum_b() const
+    return static_cast<uint16_t>(checksum_a_1) | (checksum_a_2 << 8); // NOLINT(build/unsigned)
+  } 
+  uint16_t get_checksum_b() const // NOLINT(build/unsigned)
   {
-    return static_cast<uint16_t>(checksum_b_1) | (checksum_b_2 << 8);
-  }                                      // NOLINT(build/unsigned)
+    return static_cast<uint16_t>(checksum_b_1) | (checksum_b_2 << 8); // NOLINT(build/unsigned)
+  } 
   uint8_t get_hdr(const uint8_t i) const // NOLINT(build/unsigned)
   {
     switch (i) {
@@ -380,8 +380,8 @@ public:
     throw_if_invalid_block_index_(block_index);
     return &m_blocks[block_index].head;
   }
-  const ColdataBlock& get_block(const uint8_t b) const
-  { // NOLINT(build/unsigned)
+  const ColdataBlock& get_block(const uint8_t b) const // NOLINT(build/unsigned)
+  { 
     throw_if_invalid_block_index_(b);
     return m_blocks[b];
   }
@@ -407,9 +407,9 @@ public:
   }
 
   // ColdataBlock channel mutators
-  void set_channel(const uint8_t block_num,
-                   const uint8_t adc,
-                   const uint8_t ch,
+  void set_channel(const uint8_t block_num,// NOLINT(build/unsigned)
+                   const uint8_t adc,      // NOLINT(build/unsigned)
+                   const uint8_t ch,       // NOLINT(build/unsigned)
                    const uint16_t new_val) // NOLINT(build/unsigned)
   {
     throw_if_invalid_block_index_(block_num);

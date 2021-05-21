@@ -1,3 +1,16 @@
+/**
+ * @file PDSFrame.hpp  
+ *
+ *  Contains declaration of PDSFrame, a class for accessing raw PDS frames, as produced by the DAPHNE boards
+ *
+ *  The canonical definition of the PDS DAPHNE format is given in EDMS document 2088726:
+ *  https://edms.cern.ch/document/2088726/3
+ *
+ * This is part of the DUNE DAQ Application Framework, copyright 2020.
+ * Licensing/copyright details are in the COPYING file that you should have
+ * received with this code.
+ */
+
 #ifndef DATAFORMATS_INCLUDE_DATAFORMATS_PDS_PDSFRAME_HPP_
 #define DATAFORMATS_INCLUDE_DATAFORMATS_PDS_PDSFRAME_HPP_
 
@@ -10,12 +23,6 @@
 
 namespace dunedaq::dataformats {
 
-/**
- *  @brief Class for accessing raw PDS frames, as produced by the DAPHNE boards
- *
- *  The canonical definition of the PDS DAPHNE format is given in EDMS document 2088726:
- *  https://edms.cern.ch/document/2088726/3
- */
 class PDSFrame
 {
 public:
@@ -24,7 +31,7 @@ public:
   // ===============================================================
 
   // The definition of the format is in terms of 32-bit words
-  typedef uint32_t word_t;
+  typedef uint32_t word_t; // NOLINT
 
   static constexpr int s_bits_per_adc = 14;
   static constexpr int s_bits_per_word = 8 * sizeof(word_t);
@@ -56,7 +63,7 @@ public:
   // Data members
   // ===============================================================
   Header header;
-  word_t adc_words[s_num_adc_words];
+  word_t adc_words[s_num_adc_words]; // NOLINT
   Trailer trailer;
 
   // ===============================================================
@@ -70,7 +77,7 @@ public:
    *
    * - 320 values from DAPHNE T channels
    */
-  uint16_t get_adc(int i) const
+  uint16_t get_adc(int i) const // NOLINT
   {
     if (i < 0 || i >= s_num_channels)
       throw std::out_of_range("ADC index out of range");
@@ -82,7 +89,7 @@ public:
     int first_bit_position = (s_bits_per_adc * i) % s_bits_per_word;
     // How many bits of our desired ADC are located in the `word_index`th word
     int bits_from_first_word = std::min(s_bits_per_adc, s_bits_per_word - first_bit_position);
-    uint16_t adc = adc_words[word_index] >> first_bit_position;
+    uint16_t adc = adc_words[word_index] >> first_bit_position; // NOLINT
     // If we didn't get the full 14 bits from this word, we need the rest from the next word
     if (bits_from_first_word < s_bits_per_adc) {
       assert(word_index + 1 < s_num_adc_words);
@@ -95,7 +102,7 @@ public:
   /**
    * @brief Set the ith ADC value in the frame to @p val
    */
-  void set_adc(int i, uint16_t val)
+  void set_adc(int i, uint16_t val) // NOLINT
   {
     if (i < 0 || i >= s_num_channels)
       throw std::out_of_range("ADC index out of range");
@@ -119,18 +126,18 @@ public:
 
   /** @brief Get the ith T ADC in the given DAPHNE
    */
-  uint16_t get_t(int i) const { return get_adc(i); }
+  uint16_t get_t(int i) const { return get_adc(i); } // NOLINT
 
   /** @brief Set the ith U-channel ADC in the given femb to val
    */
-  void set_t(int i, uint16_t val) { return set_adc(i, val); }
+  void set_t(int i, uint16_t val) { return set_adc(i, val); } // NOLINT
 
   /** @brief Get the 64-bit timestamp of the frame
    */
-  uint64_t get_timestamp() const { return (uint64_t)header.timestamp_wf_1 | ((uint64_t)header.timestamp_wf_2 << 32); }
+  uint64_t get_timestamp() const { return (uint64_t)header.timestamp_wf_1 | ((uint64_t)header.timestamp_wf_2 << 32); } // NOLINT
 };
 
-} // namepsace dunedaq::dataformats
+} // namespace dunedaq::dataformats 
 
 #endif // DATAFORMATS_INCLUDE_DATAFORMATS_PDS_PDSFRAME_HPP_
 

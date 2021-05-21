@@ -32,53 +32,53 @@ namespace wib2unpack {
 // Words in the binary format of the FELIX frame14 from the WIB
 typedef struct
 {
-  uint32_t start_frame;
-  uint32_t wib_pre[4];
-  uint32_t femb_a_seg[56];
-  uint32_t femb_b_seg[56];
-  uint32_t wib_post[2];
-  uint32_t idle_frame;
+  uint32_t start_frame;       // NOLINT(build/unsigned)
+  uint32_t wib_pre[4];        // NOLINT(build/unsigned)
+  uint32_t femb_a_seg[56];    // NOLINT(build/unsigned)
+  uint32_t femb_b_seg[56];    // NOLINT(build/unsigned)
+  uint32_t wib_post[2];       // NOLINT(build/unsigned)
+  uint32_t idle_frame;        // NOLINT(build/unsigned)
 } __attribute__((packed)) frame14;
 
 // Samples from the U, V, X channels in a femb_*_seg of a frame as 16bit arrays
 typedef struct
 {
-  uint16_t u[40], v[40], x[48];
+  uint16_t u[40], v[40], x[48];        // NOLINT(build/unsigned)
 } __attribute__((packed)) femb_data;
 
 // Byte-aligned unpacked values in a felix_frame
 typedef struct
 {
-  uint8_t link_mask, femb_valid, fiber_num, wib_num, frame_version, crate_num;
-  uint32_t wib_data;
-  uint64_t timestamp;
+  uint8_t link_mask, femb_valid, fiber_num, wib_num, frame_version, crate_num;  // NOLINT(build/unsigned)
+  uint32_t wib_data;                                                            // NOLINT(build/unsigned)
+  uint64_t timestamp;                                                           // NOLINT(build/unsigned)
   femb_data femb[2];
-  uint32_t crc20;
-  uint16_t flex12;
-  uint32_t flex24;
+  uint32_t crc20;                                                               // NOLINT(build/unsigned)
+  uint16_t flex12;                                                              // NOLINT(build/unsigned)
+  uint32_t flex24;                                                              // NOLINT(build/unsigned)         
 } frame14_unpacked;
 
 // Deframed data, where channels or u,v,x are time ordered uint16 samples for each channel
 typedef struct
 {
   size_t samples;
-  std::vector<uint16_t> channels[2][128];
-  std::vector<uint64_t> timestamp;
-  uint8_t crate_num, wib_num;
+  std::vector<uint16_t> channels[2][128];  // NOLINT(build/unsigned)
+  std::vector<uint64_t> timestamp;         // NOLINT(build/unsigned)
+  uint8_t crate_num, wib_num;              // NOLINT(build/unsigned)
 } channel_data;
 
 typedef struct
 {
   size_t samples;
-  std::vector<uint16_t> u[2][40];
-  std::vector<uint16_t> v[2][40];
-  std::vector<uint16_t> x[2][48];
-  std::vector<uint64_t> timestamp;
-  uint8_t crate_num, wib_num;
+  std::vector<uint16_t> u[2][40];     // NOLINT(build/unsigned)
+  std::vector<uint16_t> v[2][40];     // NOLINT(build/unsigned)  
+  std::vector<uint16_t> x[2][48];     // NOLINT(build/unsigned)
+  std::vector<uint64_t> timestamp;    // NOLINT(build/unsigned)
+  uint8_t crate_num, wib_num;         // NOLINT(build/unsigned)   
 } uvx_data;
 
 void
-unpack14(const uint32_t* packed, uint16_t* unpacked)
+unpack14(const uint32_t* packed, uint16_t* unpacked) // NOLINT(build/unsigned)
 {
   for (size_t i = 0; i < 128; i++) { // i == n'th U,V,X value
     const size_t low_bit = i * 14;
@@ -99,7 +99,7 @@ unpack14(const uint32_t* packed, uint16_t* unpacked)
 }
 
 void
-repack14(const uint16_t* unpacked, uint32_t* packed)
+repack14(const uint16_t* unpacked, uint32_t* packed)  // NOLINT(build/unsigned)
 {
   // zero packed data first
   for (size_t i = 0; i < 56; i++)
@@ -134,10 +134,10 @@ unpack_frame(const frame14* frame, frame14_unpacked* data)
 
   data->wib_data = frame->wib_pre[1];
 
-  data->timestamp = (((uint64_t)frame->wib_pre[3]) << 32) | ((uint64_t)frame->wib_pre[2]);
+  data->timestamp = (static_cast<uint64_t>(frame->wib_pre[3]) << 32) | (static_cast<uint64_t>(frame->wib_pre[2])); // NOLINT(build/unsigned)
 
-  unpack14(frame->femb_a_seg, (uint16_t*)&data->femb[0]);
-  unpack14(frame->femb_b_seg, (uint16_t*)&data->femb[1]);
+  unpack14(frame->femb_a_seg, reinterpret_cast<uint16_t*>(&data->femb[0])); // NOLINT
+  unpack14(frame->femb_b_seg, reinterpret_cast<uint16_t*>(&data->femb[1])); // NOLINT
 
   data->crc20 = frame->wib_post[0] & 0xFFFFF;
   data->flex12 = (frame->wib_post[0] >> 20) & 0xFFF;
@@ -145,7 +145,7 @@ unpack_frame(const frame14* frame, frame14_unpacked* data)
 }
 
 void
-repack_frame(const frame14_unpacked* data, frame14* frame)
+repack_frame(frame14_unpacked* data, frame14* frame)
 {
   memset(frame, 0, sizeof(frame14)); // zero out frame
   frame->start_frame = 0x3C;
@@ -158,11 +158,11 @@ repack_frame(const frame14_unpacked* data, frame14* frame)
 
   frame->wib_pre[1] = 0xbabeface;
 
-  frame->wib_pre[2] = (uint32_t)(data->timestamp & 0xFFFFFFFF);
-  frame->wib_pre[3] = (uint32_t)((data->timestamp >> 32) & 0xFFFFFFFF);
+  frame->wib_pre[2] = static_cast<uint32_t>(data->timestamp & 0xFFFFFFFF);          // NOLINT(build/unsigned)
+  frame->wib_pre[3] = static_cast<uint32_t>((data->timestamp >> 32) & 0xFFFFFFFF);  // NOLINT(build/unsigned)
 
-  repack14((uint16_t*)&data->femb[0], frame->femb_a_seg);
-  repack14((uint16_t*)&data->femb[1], frame->femb_b_seg);
+  repack14(reinterpret_cast<uint16_t*>(&data->femb[0]), frame->femb_a_seg);  // NOLINT
+  repack14(reinterpret_cast<uint16_t*>(&data->femb[1]), frame->femb_b_seg);  // NOLINT
 
   frame->wib_post[0] |= data->crc20 & 0xFFFFF; // FIXME calculate crc of something
   frame->wib_post[0] |= (data->flex12 & 0xFFF) << 20;
@@ -300,7 +300,8 @@ fake_data(frame14* buffer, size_t nframes)
 
 using namespace dunedaq::dataformats;
 
-typedef std::array<uint16_t, 256> vals_type;
+typedef std::array<uint16_t, 256> vals_type;  // NOLINT(build/unsigned)
+
 // Tell boost not to try to print vals_type objects with <<
 BOOST_TEST_DONT_PRINT_LOG_VALUE(vals_type)
 
@@ -316,7 +317,7 @@ make_vals()
 
   const int n_fuzz = 100;
   for (int i = 0; i < n_fuzz; ++i) {
-    std::array<uint16_t, 256> vals;
+    std::array<uint16_t, 256> vals;               // NOLINT(build/unsigned)
     for (size_t j = 0; j < vals.size(); ++j) {
       vals[j] = uniform_dist(e1);
     }
@@ -342,42 +343,45 @@ BOOST_DATA_TEST_CASE(CompareToUnpack, boost::unit_test::data::make(make_vals()),
   int counter = 0;
   for (int femb = 0; femb < 2; ++femb) {
     for (int i = 0; i < 40; ++i) {
-      unpacked.femb[femb].u[i] = vals[counter++];
+      unpacked.femb[femb].u[i] = vals[counter];
+      counter++;
     }
     for (int i = 0; i < 40; ++i) {
-      unpacked.femb[femb].v[i] = vals[counter++];
+      unpacked.femb[femb].v[i] = vals[counter];
+      counter++;
     }
     for (int i = 0; i < 48; ++i) {
-      unpacked.femb[femb].x[i] = vals[counter++];
+      unpacked.femb[femb].x[i] = vals[counter];
+      counter++;
     }
   }
 
   // Create the packed array from the unpacked array
   wib2unpack::repack_frame(&unpacked, &packed);
 
-  dunedaq::dataformats::WIB2Frame* wib2frame = reinterpret_cast<dunedaq::dataformats::WIB2Frame*>(&packed);
+  dunedaq::dataformats::WIB2Frame* wib2frame = reinterpret_cast<dunedaq::dataformats::WIB2Frame*>(&packed); // NOLINT
   size_t num_errors = 0;
 
   for (int femb = 0; femb < 2; ++femb) {
     for (int i = 0; i < 40; ++i) {
-      uint16_t gold = unpacked.femb[femb].u[i];
-      uint16_t test = wib2frame->get_u(femb, i);
+      uint16_t gold = unpacked.femb[femb].u[i];    // NOLINT(build/unsigned)
+      uint16_t test = wib2frame->get_u(femb, i);   // NOLINT(build/unsigned)
       if (gold != test) {
         num_errors++;
         BOOST_CHECK_EQUAL(gold, test);
       }
     }
     for (int i = 0; i < 40; ++i) {
-      uint16_t gold = unpacked.femb[femb].v[i];
-      uint16_t test = wib2frame->get_v(femb, i);
+      uint16_t gold = unpacked.femb[femb].v[i];    // NOLINT(build/unsigned)
+      uint16_t test = wib2frame->get_v(femb, i);   // NOLINT(build/unsigned)
       if (gold != test) {
         num_errors++;
         BOOST_CHECK_EQUAL(gold, test);
       }
     }
     for (int i = 0; i < 48; ++i) {
-      uint16_t gold = unpacked.femb[femb].x[i];
-      uint16_t test = wib2frame->get_x(femb, i);
+      uint16_t gold = unpacked.femb[femb].x[i];   // NOLINT(build/unsigned)
+      uint16_t test = wib2frame->get_x(femb, i);  // NOLINT(build/unsigned)
       if (gold != test) {
         num_errors++;
         BOOST_CHECK_EQUAL(gold, test);
