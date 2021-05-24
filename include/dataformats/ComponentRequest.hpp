@@ -32,7 +32,7 @@ struct ComponentRequest
    * @brief The version number of this ComponentRequest
    */
   uint32_t version{ s_component_request_version }; // NOLINT(build/unsigned)
-  uint32_t unused{ 0xFFFFFFFF }; ///< Padding to ensure 64b alignment // NOLINT(build/unsigned)
+  uint32_t unused{ 0xFFFFFFFF };                   ///< Padding to ensure 64b alignment // NOLINT(build/unsigned)
 
   GeoID component; ///< The Requested Component
 
