@@ -105,9 +105,13 @@ struct FragmentHeader
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
+  /**
+   * @brief Sequence number of this Fragment within a trigger record
+  */
+  sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
 
-  uint32_t unused{ // NOLINT(build/unsigned)
-                   0xFFFFFFFF
+  uint16_t unused{ // NOLINT(build/unsigned)
+                   0xFFFF
   }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 
   /**
@@ -231,7 +235,8 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "window_end: " << hdr.window_end << ", "
            << "element_id: " << hdr.element_id << ", "
            << "error_bits: " << hdr.error_bits << ", "
-           << "fragment_type : " << hdr.fragment_type;
+           << "fragment_type: " << hdr.fragment_type << ", "
+           << "sequence_number: " << hdr.sequence_number;
 }
 
 } // namespace dataformats

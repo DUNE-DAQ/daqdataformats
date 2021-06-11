@@ -58,6 +58,10 @@ using timestamp_diff_t = int64_t; ///< Used to represent differences between tim
  * @brief Type used to represent Trigger Decision trigger types
  */
 using trigger_type_t = uint16_t; // NOLINT(build/unsigned)
+/**
+ * @brief Type used to represent sequence within a trigger record
+ */
+using sequence_number_t = uint16_t; // NOLINT(build/unsigned)
 
 /**
  * @brief Default values for dataformats types
@@ -79,6 +83,8 @@ public:
 
   static constexpr trigger_type_t s_invalid_trigger_type =
     std::numeric_limits<trigger_type_t>::max(); ///< An invalid trigger type
+  static constexpr sequence_number_t s_invalid_sequence_number =
+    std::numeric_limits<sequence_number_t>::max(); // An invalid sequence number
 };
 
 } // namespace dataformats

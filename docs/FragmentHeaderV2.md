@@ -21,7 +21,7 @@ A FragmentHeader version 2 consists of 20 32-bit words:
 12. Run Number
 13. Error bits
 14. Fragment Type
-15. Pad word (to ensure 64-bit alignment of FragmentHeader non-struct fields)
+15. Sequence Number (16b) / Padding
 16. [GeoID version 1](GeoIDV1.md) Component Type (upper 16 bits), Region ID (lower 16 bits)
 17. [GeoID version 1](GeoIDV1.md) Element ID
 18. [GeoID version 1](GeoIDV1.md) Version
@@ -35,6 +35,7 @@ using trigger_number_t = uint64_t;
 using fragment_type_t = uint32_t;
 using fragment_size_t = uint64_t; 
 using timestamp_t = uint64_t;
+using sequence_number_t = uint16_t;
 
 struct FragmentHeader
 {
@@ -52,7 +53,8 @@ struct FragmentHeader
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
   uint32_t error_bits{ s_default_error_bits }; 
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
-  uint32_t unused {0xFFFFFFFF};
+  sequence_number_t sequence_number {TypeDefaults::s_invalid_sequence_number };
+  uint16_t unused {0xFFFF};
   GeoID link_id;
 };
 ```

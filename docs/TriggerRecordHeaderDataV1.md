@@ -16,8 +16,8 @@ A TriggerRecordHeaderData version 1 consists of 12 32-bit words:
 7. Number of Requested Components (lower 32 bits)
 8. Run number
 9. Error bits
-10. Upper 16 bits: Trigger type, Lower 16 bits: Unused
-11. Unused
+10. Upper 16 bits: Trigger type, Lower 16 bits: Sequence Number
+11. Upper 16 bits: Max Sequence Number, Lower 16 bits: Unused
 
 
 # C++ code for TriggerRecordHeaderData
@@ -27,6 +27,7 @@ using run_number_t = uint32_t;
 using trigger_number_t = uint64_t; 
 using timestamp_t = uint64_t;
 using trigger_type_t = uint16_t; 
+using sequence_number_t = uint16_t;
 
 struct TriggerRecordHeaderData
 {
@@ -44,8 +45,9 @@ struct TriggerRecordHeaderData
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
   uint32_t error_bits{ s_default_error_bits };
   trigger_type_t trigger_type{ TypeDefaults::s_invalid_trigger_type };
-  uint16_t unusedA { 0xFFFF};
-  uint32_t unusedB { 0xFFFFFFFF};
+  sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
+  sequence_number_t max_sequence_number{ TypeDefaults::s_invalid_sequence_number };
+  uint16_t unused { 0xFFFF};
 };
 ```
 

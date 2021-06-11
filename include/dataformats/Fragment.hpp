@@ -169,6 +169,7 @@ public:
     header_()->element_id = header.element_id;
     header_()->error_bits = header.error_bits;
     header_()->fragment_type = header.fragment_type;
+    header_()->sequence_number = header.sequence_number;
   }
   /**
    * @brief Get a pointer to the Fragment's data array to read its contents directly
