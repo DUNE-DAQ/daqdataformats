@@ -120,6 +120,37 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   free(buff);
 }
 
+BOOST_AUTO_TEST_CASE(BadConstructors) {
+  TriggerRecordHeaderData header_data;
+  header_data.num_requested_components = std::numeric_limits<uint64_t>::max() - 10;
+  header_data.run_number = 9;
+  header_data.trigger_number = 10;
+  header_data.trigger_timestamp = 11;
+  header_data.trigger_type = 12;
+
+  auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest));
+  memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
+
+  TriggerRecordHeader* header_ptr;
+  BOOST_REQUIRE_EXCEPTION(header_ptr = new TriggerRecordHeader(hdr, true),
+                          dunedaq::dataformats::MemoryAllocationFailed,
+                          [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });    
+
+  
+  header_data.num_requested_components = 1;
+  memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
+  header_ptr = new TriggerRecordHeader(hdr, false);
+  BOOST_REQUIRE_EQUAL(header_ptr->get_num_requested_components(), 1);
+
+  reinterpret_cast<TriggerRecordHeaderData*>(hdr)->num_requested_components = std::numeric_limits<uint64_t>::max() - 10;
+
+  BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader header_inst = *header_ptr,
+                      dunedaq::dataformats::MemoryAllocationFailed,
+                      [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
+  
+  free(hdr);
+}
+
 /**
  * @brief Test header field manipulation methods
  */

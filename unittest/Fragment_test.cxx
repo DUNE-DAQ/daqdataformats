@@ -69,6 +69,7 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   auto buf1 = malloc(10);
   fragment_ptr = new Fragment(buf1, size_t(10));
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + 10);
+  delete fragment_ptr;
 }
 
 /**
@@ -143,6 +144,29 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   }
 
   free(frag); // Should not cause errors
+}
+
+BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor) {
+  FragmentHeader header;
+  header.size = -1;
+  header.trigger_number = 1;
+  header.trigger_timestamp = 2;
+  header.run_number = 3;
+
+  auto frag = malloc(sizeof(FragmentHeader) + 4);
+  memcpy(frag, &header, sizeof(FragmentHeader));
+
+  Fragment* fragment_ptr = nullptr;
+  BOOST_REQUIRE_EXCEPTION(fragment_ptr = new Fragment(frag, Fragment::BufferAdoptionMode::kCopyFromBuffer),
+                          dunedaq::dataformats::MemoryAllocationFailed,
+                          [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
+  free(frag);
+
+  // Use fragment_ptr
+  auto buf1 = malloc(10);
+  fragment_ptr = new Fragment(buf1, size_t(10));
+  BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + 10);
+  delete fragment_ptr;
 }
 
 /**
