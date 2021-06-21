@@ -1,7 +1,7 @@
 /**
- * @file PDSFrame.hpp
+ * @file DAPHNEFrame.hpp
  *
- *  Contains declaration of PDSFrame, a class for accessing raw PDS frames, as produced by the DAPHNE boards
+ *  Contains declaration of DAPHNEFrame, a class for accessing raw DAPHNE frames, as produced by the DAPHNE boards
  *
  *  The canonical definition of the PDS DAPHNE format is given in EDMS document 2088726:
  *  https://edms.cern.ch/document/2088726/3
@@ -11,8 +11,8 @@
  * received with this code.
  */
 
-#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_PDS_PDSFRAME_HPP_
-#define DATAFORMATS_INCLUDE_DATAFORMATS_PDS_PDSFRAME_HPP_
+#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_DAPHNE_DAPHNEFRAME_HPP_
+#define DATAFORMATS_INCLUDE_DATAFORMATS_DAPHNE_DAPHNEFRAME_HPP_
 
 #include <algorithm> // For std::min
 #include <cassert>   // For assert()
@@ -23,7 +23,7 @@
 
 namespace dunedaq::dataformats {
 
-class PDSFrame
+class DAPHNEFrame
 {
 public:
   // ===============================================================
@@ -142,7 +142,7 @@ public:
 
 } // namespace dunedaq::dataformats
 
-#endif // DATAFORMATS_INCLUDE_DATAFORMATS_PDS_PDSFRAME_HPP_
+#endif // DATAFORMATS_INCLUDE_DATAFORMATS_DAPHNE_DAPHNEFRAME_HPP_
 
 // Local Variables:
 // c-basic-offset: 2
