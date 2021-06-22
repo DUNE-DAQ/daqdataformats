@@ -287,21 +287,16 @@ public:
   void set_type(FragmentType fragment_type) { header_()->fragment_type = static_cast<fragment_type_t>(fragment_type); }
 
   /**
-   * @brief Get the sequcne_number field from the header
+   * @brief Get the sequence_number field from the header
    * @return The sequence_number header field
    */
-  trigger_number_t get_sequence_number() const { return header_()->sequence_number; }
+  sequence_number_t get_sequence_number() const { return header_()->sequence_number; }
   /**
    * @brief Set the sequence_number for the Fragment
-   * @param sequence_number Value of trigger_number to set
+   * @param sequence_number Value of sequence_number to set
    */
-  void set_sequcne_number(sequence_number_t number) { header_()->sequence_number = number; }
-  /**
-   * @brief Get the run_number field from the header
-   * @return The run_number header field
-   */
-
-
+  void set_sequence_number(sequence_number_t number) { header_()->sequence_number = number; }
+ 
   /**
    * @brief Get the total size of the Fragment
    * @return The size of the Fragment, including header and all payload pieces

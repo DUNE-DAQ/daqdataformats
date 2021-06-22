@@ -92,7 +92,7 @@ struct TriggerRecordHeaderData
    */
   sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
   /**
-   * @brief Number of TriggerRecords corresponding to this trigger
+   * @brief Maximum sequence number of TriggerRecords corresponding to this trigger
    */
   sequence_number_t max_sequence_number{ TypeDefaults::s_invalid_sequence_number };
 

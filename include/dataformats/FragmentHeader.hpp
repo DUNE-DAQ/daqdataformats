@@ -107,7 +107,7 @@ struct FragmentHeader
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
   /**
    * @brief Sequence number of this Fragment within a trigger record
-  */
+   */
   sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
 
   uint16_t unused{ // NOLINT(build/unsigned)
@@ -239,6 +239,22 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "sequence_number: " << hdr.sequence_number;
 }
 
+/**
+ * @brief Read a FragmentHeader instance from a string stream
+ * @param is Stream to read from
+ * @param hdr FragmentHeader to read
+ * @return Stream instance for continued streaming
+ */
+inline std::istream&
+operator>>(std::istream& o, FragmentHeader& hdr)
+{
+  std::string tmp;
+  return o >> tmp >> std::hex >> hdr.fragment_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
+         hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
+         hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
+         hdr.element_id >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
+         hdr.sequence_number;
+}
 } // namespace dataformats
 } // namespace dunedaq
 

@@ -167,6 +167,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
 
   header.error_bits = 0x12345678;
   header.fragment_type = 8;
+  header.sequence_number = 9;
 
   auto buf1 = malloc(10);
   Fragment frag(buf1, size_t(10));
@@ -190,6 +191,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(frag.get_fragment_type_code(), header.fragment_type);
   BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(frag.get_fragment_type()), header.fragment_type);
 
+  BOOST_REQUIRE_EQUAL(frag.get_sequence_number(), header.sequence_number);
+
   auto theHeader = static_cast<const FragmentHeader*>(frag.get_storage_location());
   frag.set_trigger_number(0x11);
   BOOST_REQUIRE_EQUAL(theHeader->trigger_number, 0x11);
@@ -203,6 +206,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(theHeader->window_end, 0x55);
   frag.set_type(static_cast<FragmentType>(0x88));
   BOOST_REQUIRE_EQUAL(theHeader->fragment_type, 0x88);
+  frag.set_sequence_number(0x99);
+  BOOST_REQUIRE_EQUAL(theHeader->sequence_number, 0x99);
 
   GeoID new_component;
   new_component.system_type = GeoID::SystemType::kTPC;
