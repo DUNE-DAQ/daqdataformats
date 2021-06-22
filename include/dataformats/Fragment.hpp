@@ -32,26 +32,26 @@ namespace dunedaq {
  * @brief An ERS Error that indicates that one the buffers given to the Fragment constructor is invalid
  * @param fb_addr Address of invalid buffer
  * @param fb_size Size of invalid buffer
- * @cond Doxygen doesn't like ERS macros
+ * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
 ERS_DECLARE_ISSUE(dataformats,
                   FragmentBufferError,
                   "Fragment Buffer " << fb_addr << " with size " << fb_size << " is invalid",
                   ((void*)fb_addr)((size_t)fb_size)) // NOLINT
-                                                     /// @endcond
+                                                     /// @endcond LCOV_EXCL_STOP
 /**
  * @brief An ERS Error that indicates that an issue was detected with the requested Fragment Size
  * @param fs_size Fragment size that caused issue
  * @param fs_min Minimum allowable Fragment size
  * @param fs_max Maximum allowable Fragment size
- * @cond Doxygen doesn't like ERS macros
+ * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
 ERS_DECLARE_ISSUE(dataformats,
                   FragmentSizeError,
                   "Fragment has a requested size of " << fs_size << ", which is outside the allowable range of "
                                                       << fs_min << "-" << fs_max,
                   ((size_t)fs_size)((size_t)fs_min)((size_t)fs_max)) // NOLINT
-                                                                     /// @endcond
+                                                                     /// @endcond LCOV_EXCL_STOP
 
 namespace dataformats {
 
