@@ -180,6 +180,17 @@ public:
    */
   void set_run_number(run_number_t run_number) { header_()->run_number = run_number; }
   /**
+   * @brief Get the sequence number for this TriggerRecordHeader
+   * @return The sequence_number TriggerRecordHeaderData field
+   */
+  trigger_number_t get_sequence_number() const { return header_()->trigger_number; }
+  /**
+   * @brief Set the sequence number for this TriggerRecordHeader
+   * @param sequence_number Trigger nunmber to set
+   */
+  void set_sequence_number(sequence_number_t number) { header_()->sequence_number = number; }
+
+  /**
    * @brief Get the error_bits header field as a bitset
    * @return bitset containing error_bits header field
    */
