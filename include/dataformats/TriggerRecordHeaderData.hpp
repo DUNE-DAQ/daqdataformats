@@ -34,7 +34,7 @@ struct TriggerRecordHeaderData
   /**
    * @brief The current version of the TriggerRecordHeader
    */
-  static constexpr uint32_t s_trigger_record_header_version = 1; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_trigger_record_header_version = 2; // NOLINT(build/unsigned)
 
   /**
    * @brief An invalid number of components
