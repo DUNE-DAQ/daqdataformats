@@ -131,20 +131,20 @@ BOOST_AUTO_TEST_CASE(BadConstructors) {
   auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest));
   memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
 
-  TriggerRecordHeader* header_ptr;
-  BOOST_REQUIRE_EXCEPTION(header_ptr = new TriggerRecordHeader(hdr, true),
+  BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader oversize_header(hdr, true),
                           dunedaq::dataformats::MemoryAllocationFailed,
                           [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });    
 
   
   header_data.num_requested_components = 1;
   memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
-  header_ptr = new TriggerRecordHeader(hdr, false);
-  BOOST_REQUIRE_EQUAL(header_ptr->get_num_requested_components(), 1);
+  TriggerRecordHeader bad_header(hdr, false);
+  BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(), 1);
 
   reinterpret_cast<TriggerRecordHeaderData*>(hdr)->num_requested_components = std::numeric_limits<uint64_t>::max() - 10;
+  BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(), std::numeric_limits<uint64_t>::max() - 10);
 
-  BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader header_inst = *header_ptr,
+  BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader header_inst = bad_header,
                       dunedaq::dataformats::MemoryAllocationFailed,
                       [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
   
