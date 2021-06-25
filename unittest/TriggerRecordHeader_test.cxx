@@ -6,8 +6,19 @@
  * received with this code.
  */
 
+// Disable warnings in light of the use of intentially bad constructors during testing
+
+#pragma GCC diagnostic ignored "-Walloc-size-larger-than="
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#pragma GCC diagnostic ignored "-Wstringop-overflow="
+
 #include "dataformats/TriggerRecordHeader.hpp"
 #include "dataformats/TriggerRecordHeaderData.hpp"
+
+
+#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 
 /**
  * @brief Name of this test module
