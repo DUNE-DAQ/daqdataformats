@@ -24,6 +24,24 @@ using namespace dunedaq::dataformats;
 
 BOOST_AUTO_TEST_SUITE(GeoID_test)
 
+BOOST_AUTO_TEST_CASE(SystemTypeConversion) {
+  BOOST_REQUIRE_EQUAL(GeoID::system_type_to_string(GeoID::SystemType::kTPC), "TPC");
+  BOOST_REQUIRE_EQUAL(GeoID::string_to_system_type("TPC"), GeoID::SystemType::kTPC);
+  
+  BOOST_REQUIRE_EQUAL(GeoID::system_type_to_string(GeoID::SystemType::kPDS), "PDS");
+  BOOST_REQUIRE_EQUAL(GeoID::string_to_system_type("PDS"), GeoID::SystemType::kPDS);
+
+  BOOST_REQUIRE_EQUAL(GeoID::system_type_to_string(GeoID::SystemType::kDataSelection), "DataSelection");
+  BOOST_REQUIRE_EQUAL(GeoID::string_to_system_type("DataSelection"), GeoID::SystemType::kDataSelection);
+
+  BOOST_REQUIRE_EQUAL(GeoID::system_type_to_string(GeoID::SystemType::kInvalid), "Invalid");
+  BOOST_REQUIRE_EQUAL(GeoID::string_to_system_type("Invalid"), GeoID::SystemType::kInvalid);
+
+  auto test_type = static_cast<GeoID::SystemType>(0x1234);
+  BOOST_REQUIRE_EQUAL(GeoID::system_type_to_string(test_type), "Unknown");
+  BOOST_REQUIRE_EQUAL(GeoID::string_to_system_type("Unknown"), GeoID::SystemType::kInvalid);
+}
+
 /**
  * @brief Test that GeoID::operator<< functions as expected
  */
