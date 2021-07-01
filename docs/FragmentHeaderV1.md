@@ -1,4 +1,4 @@
-# Introduction
+# FragmentHeader v1 (Deprecated)
 
 This document describes the format of the FragmentHeader class, version 1. It should **not** be updated, but rather kept as a historic record of the data format for this version.
 
