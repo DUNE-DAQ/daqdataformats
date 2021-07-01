@@ -1,4 +1,4 @@
-# Introduction
+# ComponentRequest v0 (Deprecated)
 
 This document describes the format of the ComponentRequest struct, version 0 (unversioned).
 

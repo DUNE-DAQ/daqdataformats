@@ -1,4 +1,4 @@
-# Introduction
+# GeoID v0 (Deprecated)
 
 This document describes the format of the GeoID struct, version 0 (unversioned).
 

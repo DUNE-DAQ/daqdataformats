@@ -1,4 +1,4 @@
-# Introduction
+# ComponentRequest v1
 
 This document describes the format of the ComponentRequest struct, version 1.
 

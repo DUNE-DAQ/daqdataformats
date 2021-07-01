@@ -1,4 +1,4 @@
-# Introduction
+# GeoID v1
 
 This document describes the format of the GeoID struct, version 1.
 
