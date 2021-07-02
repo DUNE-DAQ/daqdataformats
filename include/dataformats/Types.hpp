@@ -21,13 +21,13 @@ namespace dunedaq {
 /**
  * @brief An ERS Error indicating that a malloc failed
  * @param maf_bytes Bytes requested from malloc
- * @cond Doxygen doesn't like ERS macros
+ * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
 ERS_DECLARE_ISSUE(dataformats,
                   MemoryAllocationFailed,
                   "Malloc of " << maf_bytes << " bytes failed",
                   ((size_t)maf_bytes)) // NOLINT
-                                       /// @endcond
+                                       /// @endcond LCOV_EXCL_STOP
 /**
  * @brief Dataformats code
  */

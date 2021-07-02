@@ -25,13 +25,13 @@ namespace dunedaq {
 /**
  * @brief An ERS Issue indicating that an attempted FragmentType conversion failed
  * @param fragment_type_input Input that failed conversion
- * @cond Doxygen doesn't like ERS macros
+ * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
 ERS_DECLARE_ISSUE(dataformats,
                   FragmentTypeConversionError,
                   "Supplied input " << fragment_type_input << " did not match any in s_fragment_type_names",
                   ((std::string)fragment_type_input)) // NOLINT
-                                                      /// @endcond
+                                                      /// @endcond LCOV_EXCL_STOP
 namespace dataformats {
 
 /**

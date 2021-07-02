@@ -26,14 +26,14 @@ namespace dunedaq {
  * @brief An ERS Error indicating that the requested index is out of range
  * @param cri_index_supplied Index that caused the error
  * @param cri_index_max Maximum valid index for this function
- * @cond Doxygen doesn't like ERS macros
+ * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
 ERS_DECLARE_ISSUE(dataformats,
                   ComponentRequestIndexError,
                   "Supplied ComponentRequest index " << cri_index_supplied << " is greater than the maximum index "
                                                      << cri_index_max,
                   ((int)cri_index_supplied)((int)cri_index_max)) // NOLINT
-                                                                 /// @endcond
+                                                                 /// @endcond LCOV_EXCL_STOP
 
 namespace dataformats {
 

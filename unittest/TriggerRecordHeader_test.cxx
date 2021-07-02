@@ -6,8 +6,19 @@
  * received with this code.
  */
 
+// Disable warnings in light of the use of intentially bad constructors during testing
+
+#pragma GCC diagnostic ignored "-Walloc-size-larger-than="
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#pragma GCC diagnostic ignored "-Wstringop-overflow="
+
 #include "dataformats/TriggerRecordHeader.hpp"
 #include "dataformats/TriggerRecordHeaderData.hpp"
+
+
+#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 
 /**
  * @brief Name of this test module
@@ -128,6 +139,37 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
                       TriggerRecordHeaderData::s_trigger_record_header_magic);
 
   free(buff);
+}
+
+BOOST_AUTO_TEST_CASE(BadConstructors) {
+  TriggerRecordHeaderData header_data;
+  header_data.num_requested_components = std::numeric_limits<uint64_t>::max() - 10;
+  header_data.run_number = 9;
+  header_data.trigger_number = 10;
+  header_data.trigger_timestamp = 11;
+  header_data.trigger_type = 12;
+
+  auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest));
+  memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
+
+  BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader oversize_header(hdr, true),
+                          dunedaq::dataformats::MemoryAllocationFailed,
+                          [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });    
+
+  
+  header_data.num_requested_components = 1;
+  memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
+  TriggerRecordHeader bad_header(hdr, false);
+  BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(), 1);
+
+  reinterpret_cast<TriggerRecordHeaderData*>(hdr)->num_requested_components = std::numeric_limits<uint64_t>::max() - 10;
+  BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(), std::numeric_limits<uint64_t>::max() - 10);
+
+  BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader header_inst = bad_header,
+                      dunedaq::dataformats::MemoryAllocationFailed,
+                      [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
+  
+  free(hdr);
 }
 
 /**

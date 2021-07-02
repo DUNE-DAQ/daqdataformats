@@ -1,4 +1,4 @@
-# Introduction
+# TriggerRecordHeaderData v1
 
 This document describes the format of the TriggerRecordHeaderData class, version 1. It should **not** be updated, but rather kept as a historic record of the data format for this version.
 
