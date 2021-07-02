@@ -1,4 +1,4 @@
-# Introduction
+# FragmentHeader v3
 
 This document describes the format of the FragmentHeader class, version 3. It should **not** be updated, but rather kept as a historic record of the data format for this version.
 
