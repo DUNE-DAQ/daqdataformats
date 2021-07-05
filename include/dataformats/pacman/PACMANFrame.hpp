@@ -16,6 +16,8 @@
 namespace dunedaq {
 namespace dataformats {
 
+using word_t = uint32_t; // NOLINT(build/unsigned)
+
 /**
  * @brief PACMAN frame
  */
@@ -27,6 +29,7 @@ class PACMANFrame
   
   struct PACMANHeader
   {
+    word_t version : 1;
     // Can be implemented on request, not currently necessary.
   };
   
