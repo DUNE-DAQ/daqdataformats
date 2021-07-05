@@ -111,7 +111,7 @@ struct GeoID
       case SystemType::kDataSelection:
         return "DataSelection";
       case SystemType::kNDLArTPC:
-        return "NDLArTPC"
+        return "NDLArTPC";
       case SystemType::kInvalid:
         return "Invalid";
     }
