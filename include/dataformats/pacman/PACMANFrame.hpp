@@ -29,7 +29,7 @@ class PACMANFrame
   
   struct PACMANHeader
   {
-    word_t version : 1;
+    word_t version : 5;
     // Can be implemented on request, not currently necessary.
   };
   
