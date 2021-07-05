@@ -164,6 +164,7 @@ enum class FragmentType : fragment_type_t
   kFakeData = 0,                                   ///< Data created in dfmodules' FakeDataProducer
   kTPCData = 1,                                    ///< Data from the TPC
   kPDSData = 2,                                    ///< Data from the PDS
+  kNDLArTPC = 3,                                   ///< Data from the NDLArTPC
   kUnknown = TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in
                                                    ///< get_fragment_type_names
 };
@@ -178,7 +179,8 @@ get_fragment_type_names()
 {
   return { { FragmentType::kFakeData, "FakeData" },
            { FragmentType::kTPCData, "TPC" },
-           { FragmentType::kPDSData, "PDS" } };
+           { FragmentType::kPDSData, "PDS" },
+           { FragmentType::kNDLArTPC, "NDLArTPC"} };
 }
 
 /**

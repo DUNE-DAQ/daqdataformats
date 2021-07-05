@@ -32,6 +32,7 @@ struct GeoID
     kTPC = 1,
     kPDS = 2,
     kDataSelection = 3,
+    kNDLArTPC = 4,
     kInvalid = 0
   };
   /**
@@ -109,6 +110,8 @@ struct GeoID
         return "PDS";
       case SystemType::kDataSelection:
         return "DataSelection";
+      case SystemType::kNDLArTPC:
+        return "NDLArTPC"
       case SystemType::kInvalid:
         return "Invalid";
     }
@@ -122,6 +125,8 @@ struct GeoID
       return SystemType::kPDS;
     if (typestring.find("DataSelection") == 0)
       return SystemType::kDataSelection;
+    if (typestring.find("NDLArTPC") == 0)
+      return SystemType::kNDLArTPC;
     return SystemType::kInvalid;
   }
 };
