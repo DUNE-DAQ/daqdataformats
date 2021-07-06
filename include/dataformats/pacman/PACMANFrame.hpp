@@ -120,77 +120,77 @@ class PACMANFrame
   }
 
   static constexpr int PACKET_TYPE_OFFSET = 0; // bits
-  #define PACKET_TYPE_MASK   0x3 // bitmask
+  static constexpr std::uint_fast8_t PACKET_TYPE_MASK{0x3}; // bitmask
   uint64_t get_packet_type(uint64_t* packet) {
    // bits [0:1]
    return get_packet_data(packet, PACKET_TYPE_OFFSET, PACKET_TYPE_MASK);
   }
 
   static constexpr int PACKET_CHIPID_OFFSET = 8; // bits
-  #define PACKET_CHIPID_MASK   0xFF // bitmask
+  static constexpr std::uint_fast8_t PACKET_CHIPID_MASK{0xFF}; // bitmask
   uint64_t get_packet_chipid(uint64_t* packet) {
     // bits [2:9]
     return get_packet_data(packet, PACKET_CHIPID_OFFSET, PACKET_CHIPID_MASK);
   }
 
   static constexpr int PACKET_CHANNELID_OFFSET = 10; // bits
-  #define PACKET_CHANNELID_MASK   0x3F // bitmask
+  static constexpr std::uint_fast8_t PACKET_CHANNELID_MASK{0x3F}; // bitmask
   uint64_t get_packet_channelid(uint64_t* packet) {
     // bits [10:15], only valid for data packets
     return get_packet_data(packet, PACKET_CHANNELID_OFFSET, PACKET_CHANNELID_MASK);
   }
 
   static constexpr int PACKET_TIMESTAMP_OFFSET = 16; // bits
-  #define PACKET_TIMESTAMP_MASK   0x7FFFFFFF // bitmask
+  static constexpr std::uint_fast32_t PACKET_TIMESTAMP_MASK{0x7FFFFFFF}; // bitmask
   uint64_t get_packet_timestamp(uint64_t* packet) {
     // bits [46:16], only valid for data packets
     return get_packet_data(packet, PACKET_TIMESTAMP_OFFSET, PACKET_TIMESTAMP_MASK);
   }
 
   static constexpr int PACKET_FIRST_PACKET_OFFSET = 47; // bits
-  #define PACKET_FIRST_PACKET_MASK   0x1 // bitmask
+  static constexpr std::uint_fast8_t PACKET_FIRST_PACKET_MASK{0x1}; // bitmask
   uint64_t get_packet_first_packet(uint64_t* packet) {
     // bits [47], only valid for data packets
     return get_packet_data(packet, PACKET_FIRST_PACKET_OFFSET, PACKET_FIRST_PACKET_MASK);
   }
 
   static constexpr int PACKET_DATAWORD_OFFSET = 48; // bits
-  #define PACKET_DATAWORD_MASK   0xFF // bitmask
+  static constexpr std::uint_fast8_t PACKET_DATAWORD_MASK{0xFF}; // bitmask
   uint64_t get_packet_dataword(uint64_t* packet) {
     // bits [48:55], only valid for data packets
     return get_packet_data(packet, PACKET_DATAWORD_OFFSET, PACKET_DATAWORD_MASK);
   }
 
   static constexpr int PACKET_TRIGGER_TYPE_OFFSET = 56; // bits
-  #define PACKET_TRIGGER_TYPE_MASK  0x3 // bitmask
+  static constexpr std::uint_fast8_t PACKET_TRIGGER_TYPE_MASK{0x3}; // bitmask
   uint64_t get_packet_trigger_type(uint64_t* packet) {
     // bits [56:57], only valid for data packets
     return get_packet_data(packet, PACKET_TRIGGER_TYPE_OFFSET, PACKET_TRIGGER_TYPE_MASK);
   }
 
   static constexpr int PACKET_LOCAL_FIFO_STATUS_OFFSET = 58;  // bits
-  #define PACKET_LOCAL_FIFO_STATUS_MASK   0x3 // bitmask
+  static constexpr std::uint_fast8_t PACKET_LOCAL_FIFO_STATUS_MASK{0x3}; // bitmask
   uint64_t get_packet_local_fifo_status(uint64_t* packet) {
     // bits [58:59], only valid for data packets
     return get_packet_data(packet, PACKET_LOCAL_FIFO_STATUS_OFFSET, PACKET_LOCAL_FIFO_STATUS_MASK);
   }
 
   static constexpr int PACKET_SHARED_FIFO_STATUS_OFFSET = 60; // bits
-  #define PACKET_SHARED_FIFO_STATUS_MASK   0x3 // bitmask
+  static constexpr std::uint_fast8_t PACKET_SHARED_FIFO_STATUS_MASK{0x3}; // bitmask
   uint64_t get_packet_shared_fifo_status(uint64_t* packet) {
     // bits [60:61], only valid for data packets
     return get_packet_data(packet, PACKET_SHARED_FIFO_STATUS_OFFSET, PACKET_SHARED_FIFO_STATUS_MASK);
   }
 
   static constexpr int PACKET_DOWNSTREAM_MARKER_OFFSET = 62; // bits
-  #define PACKET_DOWNSTREAM_MARKER_MASK   0x1 // bitmask
+  static constexpr std::uint_fast8_t PACKET_DOWNSTREAM_MARKER_MASK{0x1}; // bitmask
   uint64_t get_packet_downstream_marker(uint64_t* packet) {
     // bits [62], only valid for data packets
     return get_packet_data(packet, PACKET_DOWNSTREAM_MARKER_OFFSET, PACKET_DOWNSTREAM_MARKER_MASK);
   }
 
   static constexpr int PACKET_PARITY_BIT_MARKER_OFFSET = 63;  // bits
-  #define PACKET_PARITY_BIT_MARKER_MASK   0x1 // bitmask
+  static constexpr std::uint_fast8_t PACKET_PARITY_BIT_MARKER_MASK{0x1}; // bitmask
   uint64_t get_packet_parity_bit(uint64_t* packet) {
     // bits [63], only valid for data packets
     return get_packet_data(packet, PACKET_PARITY_BIT_MARKER_OFFSET, PACKET_PARITY_BIT_MARKER_MASK);
