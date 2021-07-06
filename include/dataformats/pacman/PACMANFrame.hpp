@@ -73,17 +73,17 @@ class PACMANFrame
 
   uint8_t* get_msg_type(void* msg) {
     // get pointer to message type
-    return (uint8_t*)(((uint8_t*)msg) + MSG_TYPE_OFFSET);
+    return static_cast<uint8_t*>(msg) + MSG_TYPE_OFFSET;
   }
 
   uint16_t* get_msg_words(void* msg) {
     // get pointer to number of message words
-    return (uint16_t*)(((uint8_t*)msg) + MSG_WORDS_OFFSET);
+    return static_cast<uint16_t*>(msg) + MSG_WORDS_OFFSET;
   }
 
   uint32_t* get_msg_unix_ts(void* msg) {
     // get pointer to message unix timestamp
-    return (uint32_t*)(((uint8_t*)msg) + UNIX_TS_OFFSET);
+    return static_cast<uint32_t*>(msg) + UNIX_TS_OFFSET;
   }
 
   void* get_msg_word(void* msg, const uint32_t i) {
@@ -96,19 +96,19 @@ class PACMANFrame
 
   uint8_t* get_word_type(void* word) {
     // get pointer to word type
-    return (uint8_t*)(((uint8_t*)word) + WORD_TYPE_OFFSET);
+    return static_cast<uint8_t*>(word) + WORD_TYPE_OFFSET;
   }
   uint8_t* get_word_io_channel(void* word) {
     // only valid for DATA type words, get pointer to the PACMAN io channel a word arrived on
-    return (uint8_t*)(((uint8_t*)word) + IO_CHANNEL_OFFSET);
+    return static_cast<uint8_t*>(word) + IO_CHANNEL_OFFSET;
   }
   uint32_t* get_word_receipt_timestamp(void* word) {
     // only valid for DATA type words, get pointer to the timestamp when word was received at the PACMAN
-    return (uint32_t*)(((uint8_t*)word) + RECEIPT_TIMESTAMP_OFFSET);
+    return static_cast<uint32_t*>(word) + RECEIPT_TIMESTAMP_OFFSET;
   }
   uint64_t* get_word_packet(void* word) {
     // only valid for DATA type words, get pointer to the LArPix word
-    return (uint64_t*)(((uint8_t*)word) + PACKET_OFFSET);
+    return static_cast<uint64_t*>(word) + PACKET_OFFSET;
   }
 
 
