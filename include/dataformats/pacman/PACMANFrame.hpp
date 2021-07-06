@@ -67,7 +67,7 @@ class PACMANFrame
 
   /* ~~~ Access into message header and message contents ~~~ */
 
-  const uint32_t get_msg_bytes(void* msg) {
+  uint32_t get_msg_bytes(void* msg) {
     // get total number of bytes in message, including header
     return HEADER_LEN + WORD_LEN * (*get_msg_words(msg));
   }
@@ -115,84 +115,84 @@ class PACMANFrame
 
   /* ~~~ Access into LArPix packets ~~~ */
 
-  const uint64_t get_packet_data(uint64_t* packet, const uint8_t bit_offset, const uint64_t bit_mask) {
+  uint64_t get_packet_data(uint64_t* packet, const uint8_t bit_offset, const uint64_t bit_mask) {
     // right-shift packet bits by bit_offset and then grab bits specified by bit_mask
     return (*packet >> bit_offset) & bit_mask;
   }
 
   #define PACKET_TYPE_OFFSET 0   // bits
   #define PACKET_TYPE_MASK   0x3 // bitmask
-  const uint64_t get_packet_type(uint64_t* packet) {
+  uint64_t get_packet_type(uint64_t* packet) {
    // bits [0:1]
    return get_packet_data(packet, PACKET_TYPE_OFFSET, PACKET_TYPE_MASK);
   }
 
   #define PACKET_CHIPID_OFFSET 8    // bits
   #define PACKET_CHIPID_MASK   0xFF // bitmask
-  const uint64_t get_packet_chipid(uint64_t* packet) {
+  uint64_t get_packet_chipid(uint64_t* packet) {
     // bits [2:9]
     return get_packet_data(packet, PACKET_CHIPID_OFFSET, PACKET_CHIPID_MASK);
   }
 
   #define PACKET_CHANNELID_OFFSET 10   // bits
   #define PACKET_CHANNELID_MASK   0x3F // bitmask
-  const uint64_t get_packet_channelid(uint64_t* packet) {
+  uint64_t get_packet_channelid(uint64_t* packet) {
     // bits [10:15], only valid for data packets
     return get_packet_data(packet, PACKET_CHANNELID_OFFSET, PACKET_CHANNELID_MASK);
   }
 
   #define PACKET_TIMESTAMP_OFFSET 16         // bits
   #define PACKET_TIMESTAMP_MASK   0x7FFFFFFF // bitmask
-  const uint64_t get_packet_timestamp(uint64_t* packet) {
+  uint64_t get_packet_timestamp(uint64_t* packet) {
     // bits [46:16], only valid for data packets
     return get_packet_data(packet, PACKET_TIMESTAMP_OFFSET, PACKET_TIMESTAMP_MASK);
   }
 
   #define PACKET_FIRST_PACKET_OFFSET 47  // bits
   #define PACKET_FIRST_PACKET_MASK   0x1 // bitmask
-  const uint64_t get_packet_first_packet(uint64_t* packet) {
+  uint64_t get_packet_first_packet(uint64_t* packet) {
     // bits [47], only valid for data packets
     return get_packet_data(packet, PACKET_FIRST_PACKET_OFFSET, PACKET_FIRST_PACKET_MASK);
   }
 
   #define PACKET_DATAWORD_OFFSET 48   // bits
   #define PACKET_DATAWORD_MASK   0xFF // bitmask
-  const uint64_t get_packet_dataword(uint64_t* packet) {
+  uint64_t get_packet_dataword(uint64_t* packet) {
     // bits [48:55], only valid for data packets
     return get_packet_data(packet, PACKET_DATAWORD_OFFSET, PACKET_DATAWORD_MASK);
   }
 
   #define PACKET_TRIGGER_TYPE_OFFSET 56  // bits
   #define PACKET_TRIGGER_TYPE_MASK  0x3 // bitmask
-  const uint64_t get_packet_trigger_type(uint64_t* packet) {
+  uint64_t get_packet_trigger_type(uint64_t* packet) {
     // bits [56:57], only valid for data packets
     return get_packet_data(packet, PACKET_TRIGGER_TYPE_OFFSET, PACKET_TRIGGER_TYPE_MASK);
   }
 
   #define PACKET_LOCAL_FIFO_STATUS_OFFSET 58  // bits
   #define PACKET_LOCAL_FIFO_STATUS_MASK   0x3 // bitmask
-  const uint64_t get_packet_local_fifo_status(uint64_t* packet) {
+  uint64_t get_packet_local_fifo_status(uint64_t* packet) {
     // bits [58:59], only valid for data packets
     return get_packet_data(packet, PACKET_LOCAL_FIFO_STATUS_OFFSET, PACKET_LOCAL_FIFO_STATUS_MASK);
   }
 
   #define PACKET_SHARED_FIFO_STATUS_OFFSET 60  // bits
   #define PACKET_SHARED_FIFO_STATUS_MASK   0x3 // bitmask
-  const uint64_t get_packet_shared_fifo_status(uint64_t* packet) {
+  uint64_t get_packet_shared_fifo_status(uint64_t* packet) {
     // bits [60:61], only valid for data packets
     return get_packet_data(packet, PACKET_SHARED_FIFO_STATUS_OFFSET, PACKET_SHARED_FIFO_STATUS_MASK);
   }
 
   #define PACKET_DOWNSTREAM_MARKER_OFFSET 62  // bits
   #define PACKET_DOWNSTREAM_MARKER_MASK   0x1 // bitmask
-  const uint64_t get_packet_downstream_marker(uint64_t* packet) {
+  uint64_t get_packet_downstream_marker(uint64_t* packet) {
     // bits [62], only valid for data packets
     return get_packet_data(packet, PACKET_DOWNSTREAM_MARKER_OFFSET, PACKET_DOWNSTREAM_MARKER_MASK);
   }
 
   #define PACKET_PARITY_BIT_MARKER_OFFSET 63  // bits
   #define PACKET_PARITY_BIT_MARKER_MASK   0x1 // bitmask
-  const uint64_t get_packet_parity_bit(uint64_t* packet) {
+  uint64_t get_packet_parity_bit(uint64_t* packet) {
     // bits [63], only valid for data packets
     return get_packet_data(packet, PACKET_PARITY_BIT_MARKER_OFFSET, PACKET_PARITY_BIT_MARKER_MASK);
   }
