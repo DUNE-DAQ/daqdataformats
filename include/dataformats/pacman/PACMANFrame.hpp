@@ -104,11 +104,11 @@ class PACMANFrame
   }
   uint32_t* get_word_receipt_timestamp(void* word) {
     // only valid for DATA type words, get pointer to the timestamp when word was received at the PACMAN
-    return reinterpret_cast<uint32_t*>((static_cast<uint8_t*>(word) + RECEIPT_TIMESTAMP_OFFSET);
+    return reinterpret_cast<uint32_t*>(static_cast<uint8_t*>(word) + RECEIPT_TIMESTAMP_OFFSET);
   }
   uint64_t* get_word_packet(void* word) {
     // only valid for DATA type words, get pointer to the LArPix word
-    return reinterpret_cast<uint64_t*>((static_cast<uint8_t*>(word) + PACKET_OFFSET);
+    return reinterpret_cast<uint64_t*>(static_cast<uint8_t*>(word) + PACKET_OFFSET);
   }
 
 
