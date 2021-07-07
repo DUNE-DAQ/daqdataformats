@@ -34,7 +34,7 @@ struct TriggerRecordHeaderData
   /**
    * @brief The current version of the TriggerRecordHeader
    */
-  static constexpr uint32_t s_trigger_record_header_version = 1; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_trigger_record_header_version = 2; // NOLINT(build/unsigned)
 
   /**
    * @brief An invalid number of components
@@ -88,10 +88,18 @@ struct TriggerRecordHeaderData
   trigger_type_t trigger_type{ TypeDefaults::s_invalid_trigger_type };
 
   /**
+   * @brief Sequence number of this TriggerRecord within the trigger response
+   */
+  sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
+  /**
+   * @brief Maximum sequence number of TriggerRecords corresponding to this trigger
+   */
+  sequence_number_t max_sequence_number{ TypeDefaults::s_invalid_sequence_number };
+
+  /**
    * @brief Padding to ensure 64-bit alignment
    */
-  uint16_t unusedA{ 0xFFFF };     // NOLINT(build/unsigned)
-  uint32_t unusedB{ 0xFFFFFFFF }; // NOLINT(build/unsigned)
+  uint16_t unused{ 0xFFFF }; // NOLINT(build/unsigned)
 };
 
 /**
@@ -153,7 +161,9 @@ operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr)
 
            << "error_bits: " << hdr.error_bits << ", "
 
-           << "num_requested_components: " << hdr.num_requested_components;
+           << "num_requested_components: " << hdr.num_requested_components << ", "
+           << "sequence_number: " << hdr.sequence_number << ", "
+           << "max_sequence_number: " << hdr.max_sequence_number;
 }
 
 /**
@@ -168,7 +178,8 @@ operator>>(std::istream& o, TriggerRecordHeaderData& hdr)
   std::string tmp;
   return o >> tmp >> std::hex >> hdr.trigger_record_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >>
          tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >> hdr.trigger_timestamp >> tmp >>
-         tmp >> hdr.trigger_type >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.num_requested_components;
+         tmp >> hdr.trigger_type >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.num_requested_components >> tmp >>
+         tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number;
 }
 
 } // namespace dataformats

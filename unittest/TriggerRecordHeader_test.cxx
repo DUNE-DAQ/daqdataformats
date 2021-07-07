@@ -70,6 +70,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_trigger_number(10);
   header->set_trigger_timestamp(11);
   header->set_trigger_type(12);
+  header->set_sequence_number(13);
+  header->set_max_sequence_number(14);
   header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
   header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
 
@@ -86,6 +88,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   delete header; // NOLINT(build/raw_ownership)
 
   BOOST_REQUIRE_EQUAL(copy_header.get_run_number(), 9);
+  BOOST_REQUIRE_EQUAL(copy_header.get_sequence_number(), 13);
+  BOOST_REQUIRE_EQUAL(copy_header.get_max_sequence_number(), 14);
   BOOST_REQUIRE_EQUAL(copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
   BOOST_REQUIRE_EQUAL(copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
   BOOST_REQUIRE_EQUAL(copy_header.get_header().error_bits, 10);
@@ -96,6 +100,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     // Test copy constructor
     TriggerRecordHeader copy_copy_header(copy_header);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_run_number(), 9);
+    BOOST_REQUIRE_EQUAL(copy_copy_header.get_sequence_number(), 13);
+    BOOST_REQUIRE_EQUAL(copy_copy_header.get_max_sequence_number(), 14);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_header().error_bits, 10);
@@ -106,6 +112,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     // Test copy assignment
     TriggerRecordHeader copy_assign_header = copy_header;
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_run_number(), 9);
+    BOOST_REQUIRE_EQUAL(copy_assign_header.get_sequence_number(), 13);
+    BOOST_REQUIRE_EQUAL(copy_assign_header.get_max_sequence_number(), 14);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_header().error_bits, 10);
@@ -118,6 +126,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     TriggerRecordHeader buffer_header(buff, false);
 
     BOOST_REQUIRE_EQUAL(buffer_header.get_run_number(), 9);
+    BOOST_REQUIRE_EQUAL(buffer_header.get_sequence_number(), 13);
+    BOOST_REQUIRE_EQUAL(buffer_header.get_max_sequence_number(), 14);
     BOOST_REQUIRE_EQUAL(buffer_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
     BOOST_REQUIRE_EQUAL(buffer_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
     BOOST_REQUIRE_EQUAL(buffer_header.get_header().error_bits, 10);
@@ -186,23 +196,58 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header->set_trigger_number(10);
   header->set_trigger_timestamp(11);
   header->set_trigger_type(12);
+  header->set_sequence_number(13);
+  header->set_max_sequence_number(14);
   header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
-  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
+  header->set_error_bit(TriggerRecordErrorBits::kUnassigned31, true);
 
   auto header_data = header->get_header();
   BOOST_REQUIRE_EQUAL(header->get_run_number(), header_data.run_number);
   BOOST_REQUIRE_EQUAL(header->get_trigger_number(), header_data.trigger_number);
   BOOST_REQUIRE_EQUAL(header->get_trigger_timestamp(), header_data.trigger_timestamp);
   BOOST_REQUIRE_EQUAL(header->get_trigger_type(), header_data.trigger_type);
+  BOOST_REQUIRE_EQUAL(header->get_sequence_number(), header_data.sequence_number);
+  BOOST_REQUIRE_EQUAL(header->get_max_sequence_number(), header_data.max_sequence_number);
   BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), 2);
   BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), header_data.num_requested_components);
+  BOOST_REQUIRE_EQUAL(header->get_error_bits().to_ulong(), 0x80000002);
 
   auto header_ptr = static_cast<const TriggerRecordHeaderData*>(header->get_storage_location());
   BOOST_REQUIRE_EQUAL(header_ptr->run_number, header_data.run_number);
   header->set_run_number(10);
   BOOST_REQUIRE(header_ptr->run_number != header_data.run_number);
   BOOST_REQUIRE_EQUAL(header_ptr->run_number, 10);
+  header->set_error_bits(std::bitset<32>(0x11111111));
+  BOOST_REQUIRE_EQUAL(header_ptr->error_bits, 0x11111111);
+}
 
+BOOST_AUTO_TEST_CASE(StreamOperator)
+{
+  std::vector<ComponentRequest> components;
+  components.emplace_back();
+  components.back().component.system_type = GeoID::SystemType::kTPC;
+  components.back().component.region_id = 1;
+  components.back().component.element_id = 2;
+  components.back().window_begin = 3;
+  components.back().window_end = 4;
+  components.emplace_back();
+  components.back().component.system_type = GeoID::SystemType::kTPC;
+  components.back().component.region_id = 5;
+  components.back().component.element_id = 6;
+  components.back().window_begin = 7;
+  components.back().window_end = 8;
+
+  auto header = new TriggerRecordHeader(components);
+  header->set_run_number(9);
+  header->set_trigger_number(10);
+  header->set_trigger_timestamp(11);
+  header->set_trigger_type(12);
+  header->set_sequence_number(13);
+  header->set_max_sequence_number(14);
+  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
+  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
+
+  auto header_data = header->get_header();
   std::ostringstream oss;
   oss << header_data;
   std::istringstream iss(oss.str());
@@ -212,6 +257,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(trhd.trigger_number, header_data.trigger_number);
   BOOST_REQUIRE_EQUAL(trhd.trigger_timestamp, header_data.trigger_timestamp);
   BOOST_REQUIRE_EQUAL(trhd.trigger_type, header_data.trigger_type);
+  BOOST_REQUIRE_EQUAL(trhd.sequence_number, header_data.sequence_number);
+  BOOST_REQUIRE_EQUAL(trhd.max_sequence_number, header_data.max_sequence_number);
   BOOST_REQUIRE_EQUAL(trhd.num_requested_components, header_data.num_requested_components);
 }
 

@@ -169,6 +169,7 @@ public:
     header_()->element_id = header.element_id;
     header_()->error_bits = header.error_bits;
     header_()->fragment_type = header.fragment_type;
+    header_()->sequence_number = header.sequence_number;
   }
   /**
    * @brief Get a pointer to the Fragment's data array to read its contents directly
@@ -285,6 +286,17 @@ public:
    */
   void set_type(FragmentType fragment_type) { header_()->fragment_type = static_cast<fragment_type_t>(fragment_type); }
 
+  /**
+   * @brief Get the sequence_number field from the header
+   * @return The sequence_number header field
+   */
+  sequence_number_t get_sequence_number() const { return header_()->sequence_number; }
+  /**
+   * @brief Set the sequence_number for the Fragment
+   * @param sequence_number Value of sequence_number to set
+   */
+  void set_sequence_number(sequence_number_t number) { header_()->sequence_number = number; }
+ 
   /**
    * @brief Get the total size of the Fragment
    * @return The size of the Fragment, including header and all payload pieces
