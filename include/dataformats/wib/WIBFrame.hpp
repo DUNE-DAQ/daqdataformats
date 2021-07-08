@@ -390,6 +390,8 @@ public:
   void set_wib_errors(const uint16_t new_wib_errors) { m_head.wib_errors = new_wib_errors; } // NOLINT(build/unsigned)
   void set_timestamp(const uint64_t new_timestamp) { m_head.set_timestamp(new_timestamp); }  // NOLINT(build/unsigned)
 
+  uint64_t get_timestamp() const { return m_head.get_timestamp(); } // NOLINT(build/unsigned)
+
   // ColdataBlock channel accessors
   uint16_t get_channel(const uint8_t block_num, const uint8_t adc, const uint8_t ch) const // NOLINT(build/unsigned)
   {
