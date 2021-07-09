@@ -60,13 +60,13 @@ class PACMANFrame
   {
     struct __attribute__((__packed__)) LArPixGenericPacket
     { // A generic type applicable to all LArPix packets
-      packet_type packet_type:2; // packet type indicator
+      packet_type type:2; // packet type indicator
       uint64_t _null:62; // packet data (specific for each packet type)
     } packet;
 
     struct __attribute__((__packed__)) LArPixDataPacket
     { // Specific for LArPix data packets
-      packet_type packet_type:2; // packet type indicator
+      packet_type type:2; // packet type indicator
       uint8_t chipid:8; // asic chip id
       uint8_t channelid:6; // asic channel id
       uint32_t timestamp:31; // packet timestamp
@@ -104,12 +104,12 @@ class PACMANFrame
     struct PACMANSyncWord { /* not implemented */ } sync_word;
   };
 
-  PACMANMessageHeader* get_msg_header(void* msg)
+  PACMANMessageHeader* get_msg_header(void* msg) const
   {
     return static_cast<PACMANMessageHeader*>(msg);
   }
 
-  PACMANMessageWord* get_msg_word(void* msg, const uint32_t i)
+  PACMANMessageWord* get_msg_word(void* msg, const uint32_t i) const
   {
     return reinterpret_cast<PACMANMessageWord*>(static_cast<uint8_t*>(msg) + HEADER_LEN + WORD_LEN * i);
   }
