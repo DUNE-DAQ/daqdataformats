@@ -163,7 +163,7 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(), 1);
 
   reinterpret_cast<TriggerRecordHeaderData*>(hdr)->num_requested_components = // NOLINT
-    std::numeric_limits<uint64_t>::max() - 10; // NOLINT(build/unsigned)
+    std::numeric_limits<uint64_t>::max() - 10;                                // NOLINT(build/unsigned)
   BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(),
                       std::numeric_limits<uint64_t>::max() - 10); // NOLINT(build/unsigned)
 
