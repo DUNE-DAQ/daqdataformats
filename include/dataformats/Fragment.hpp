@@ -296,7 +296,7 @@ public:
    * @param sequence_number Value of sequence_number to set
    */
   void set_sequence_number(sequence_number_t number) { header_()->sequence_number = number; }
- 
+
   /**
    * @brief Get the total size of the Fragment
    * @return The size of the Fragment, including header and all payload pieces

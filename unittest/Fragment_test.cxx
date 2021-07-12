@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   auto buf1 = malloc(10);
   fragment_ptr = new Fragment(buf1, size_t(10));
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + 10);
-  delete fragment_ptr;
+  delete fragment_ptr; // NOLINT
 }
 
 /**
@@ -156,7 +156,8 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   free(frag); // Should not cause errors
 }
 
-BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor) {
+BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
+{
   FragmentHeader header;
   header.size = -1;
   header.trigger_number = 1;
@@ -176,7 +177,7 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor) {
   auto buf1 = malloc(10);
   fragment_ptr = new Fragment(buf1, size_t(10));
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + 10);
-  delete fragment_ptr;
+  delete fragment_ptr; // NOLINT
 }
 
 /**
