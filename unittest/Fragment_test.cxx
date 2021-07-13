@@ -25,6 +25,7 @@
 
 #include "boost/test/unit_test.hpp"
 
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -63,23 +64,24 @@ BOOST_AUTO_TEST_CASE(DataConstructors)
  */
 BOOST_AUTO_TEST_CASE(BadConstructors)
 {
-  Fragment* fragment_ptr;
-  BOOST_REQUIRE_EXCEPTION(fragment_ptr = new Fragment(nullptr, size_t(100)),
+  std::unique_ptr<Fragment> fragment_ptr{};
+
+  BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(nullptr, size_t(100))),
                           dunedaq::dataformats::FragmentBufferError,
                           [&](dunedaq::dataformats::FragmentBufferError) { return true; });
-  BOOST_REQUIRE_EXCEPTION(fragment_ptr = new Fragment(nullptr, size_t(-1)),
+  BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(nullptr, size_t(-1))),
                           dunedaq::dataformats::FragmentSizeError,
                           [&](dunedaq::dataformats::FragmentSizeError) { return true; });
 
-  BOOST_REQUIRE_EXCEPTION(fragment_ptr =
-                            new Fragment({ nullptr, size_t(-1) - sizeof(dunedaq::dataformats::FragmentHeader) }),
-                          dunedaq::dataformats::MemoryAllocationFailed,
-                          [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
+  BOOST_REQUIRE_EXCEPTION(
+    fragment_ptr.reset(new Fragment({ nullptr, size_t(-1) - sizeof(dunedaq::dataformats::FragmentHeader) })),
+    dunedaq::dataformats::MemoryAllocationFailed,
+    [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
 
-  auto buf1 = malloc(10);
-  fragment_ptr = new Fragment(buf1, size_t(10));
-  BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + 10);
-  delete fragment_ptr;
+  auto bufsize = 10;
+  auto buf1 = malloc(bufsize);
+  fragment_ptr.reset(new Fragment(buf1, static_cast<size_t>(bufsize)));
+  BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
 /**
@@ -156,7 +158,8 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   free(frag); // Should not cause errors
 }
 
-BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor) {
+BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
+{
   FragmentHeader header;
   header.size = -1;
   header.trigger_number = 1;
@@ -166,17 +169,17 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor) {
   auto frag = malloc(sizeof(FragmentHeader) + 4);
   memcpy(frag, &header, sizeof(FragmentHeader));
 
-  Fragment* fragment_ptr = nullptr;
-  BOOST_REQUIRE_EXCEPTION(fragment_ptr = new Fragment(frag, Fragment::BufferAdoptionMode::kCopyFromBuffer),
+  std::unique_ptr<Fragment> fragment_ptr{};
+  BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(frag, Fragment::BufferAdoptionMode::kCopyFromBuffer)),
                           dunedaq::dataformats::MemoryAllocationFailed,
                           [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
   free(frag);
 
   // Use fragment_ptr
-  auto buf1 = malloc(10);
-  fragment_ptr = new Fragment(buf1, size_t(10));
-  BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + 10);
-  delete fragment_ptr;
+  auto bufsize = 10;
+  auto buf1 = malloc(bufsize);
+  fragment_ptr.reset(new Fragment(buf1, size_t(bufsize)));
+  BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
 /**

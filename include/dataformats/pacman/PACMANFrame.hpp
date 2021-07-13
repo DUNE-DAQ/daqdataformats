@@ -10,8 +10,8 @@
 
 #include <bitset>
 #include <iostream>
-#include <vector>
 #include <stdint.h>
+#include <vector>
 
 namespace dunedaq {
 namespace dataformats {
@@ -29,8 +29,8 @@ class PACMANFrame
 
   enum msg_type { // message type declarations
     DATA_MSG = 0x44,
-    REQ_MSG  = 0x3F,
-    REP_MSG  = 0x21
+    REQ_MSG = 0x3F,
+    REP_MSG = 0x21
   };
   enum word_type { // word type declarations
     DATA_WORD  = 0x44,
@@ -38,14 +38,15 @@ class PACMANFrame
     SYNC_WORD  = 0x53,
     PING_WORD  = 0x50,
     WRITE_WORD = 0x57,
-    READ_WORD  = 0x52,
-    TX_WORD    = 0x44,
-    ERR_WORD   = 0x45
+    READ_WORD = 0x52,
+    TX_WORD = 0x44,
+    ERR_WORD = 0x45
   };
-  enum packet_type { // packet type declarations
-    DATA_PACKET         = 0x0,
+  enum packet_type
+  { // packet type declarations
+    DATA_PACKET = 0x0,
     CONFIG_WRITE_PACKET = 0x2,
-    CONFIG_READ_PACKET  = 0x3
+    CONFIG_READ_PACKET = 0x3
   };
 
   struct __attribute__((__packed__)) PACMANMessageHeader
@@ -117,7 +118,6 @@ class PACMANFrame
   friend std::ostream& operator<<(std::ostream& o, PACMANFrame const& frame);
 
 private:
-  
 };
 
 } // namespace dataformats

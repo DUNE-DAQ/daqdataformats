@@ -47,7 +47,6 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   pos = output.find("run_number: 3,");
   BOOST_REQUIRE(pos != std::string::npos);
 
-  
   std::istringstream iss(ostr.str());
   FragmentHeader header_from_stream;
   iss >> header_from_stream;
@@ -55,7 +54,6 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE_EQUAL(header_from_stream.trigger_number, header.trigger_number);
   BOOST_REQUIRE_EQUAL(header_from_stream.trigger_timestamp, header.trigger_timestamp);
   BOOST_REQUIRE_EQUAL(header_from_stream.sequence_number, header.sequence_number);
-  
 }
 
 BOOST_AUTO_TEST_SUITE_END()

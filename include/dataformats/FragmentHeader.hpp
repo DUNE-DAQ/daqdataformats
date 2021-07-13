@@ -184,7 +184,7 @@ get_fragment_type_names()
   return { { FragmentType::kFakeData, "FakeData" },
            { FragmentType::kTPCData, "TPC" },
            { FragmentType::kPDSData, "PDS" },
-           { FragmentType::kNDLArTPC, "NDLArTPC"} };
+           { FragmentType::kNDLArTPC, "NDLArTPC" } };
 }
 
 /**

@@ -179,7 +179,7 @@ public:
    * @param run_number Run number to set
    */
   void set_run_number(run_number_t run_number) { header_()->run_number = run_number; }
- 
+
   /**
    * @brief Get the error_bits header field as a bitset
    * @return bitset containing error_bits header field
@@ -218,7 +218,7 @@ public:
    * @param trigger_type Value of trigger_type to set
    */
   void set_trigger_type(trigger_type_t trigger_type) { header_()->trigger_type = trigger_type; }
-  
+
   /**
    * @brief Get the sequence number for this TriggerRecordHeader
    * @return The sequence_number TriggerRecordHeaderData field

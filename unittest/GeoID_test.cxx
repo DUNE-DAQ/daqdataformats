@@ -24,10 +24,11 @@ using namespace dunedaq::dataformats;
 
 BOOST_AUTO_TEST_SUITE(GeoID_test)
 
-BOOST_AUTO_TEST_CASE(SystemTypeConversion) {
+BOOST_AUTO_TEST_CASE(SystemTypeConversion)
+{
   BOOST_REQUIRE_EQUAL(GeoID::system_type_to_string(GeoID::SystemType::kTPC), "TPC");
   BOOST_REQUIRE_EQUAL(GeoID::string_to_system_type("TPC"), GeoID::SystemType::kTPC);
-  
+
   BOOST_REQUIRE_EQUAL(GeoID::system_type_to_string(GeoID::SystemType::kPDS), "PDS");
   BOOST_REQUIRE_EQUAL(GeoID::string_to_system_type("PDS"), GeoID::SystemType::kPDS);
 
