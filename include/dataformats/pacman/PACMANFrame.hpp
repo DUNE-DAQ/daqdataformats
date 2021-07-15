@@ -69,13 +69,13 @@ class PACMANFrame
     { // Specific for LArPix data packets
       packet_type type:2; // packet type indicator
       uint16_t chipid:8; // asic chip id
-      uint8_t channelid:6; // asic channel id
+      uint16_t channelid:6; // asic channel id
       uint32_t timestamp:31; // packet timestamp
       bool first_packet:1; // first packet indicator
-      uint8_t dataword:8; // adc value
-      uint8_t trigger_type:2; // trigger type indicator
-      uint8_t local_fifo_status:2; // local fifo flag
-      uint8_t shared_fifo_status:2; // shared fifo flag
+      uint16_t dataword:8; // adc value
+      uint16_t trigger_type:2; // trigger type indicator
+      uint16_t local_fifo_status:2; // local fifo flag
+      uint16_t shared_fifo_status:2; // shared fifo flag
       bool downstream_marker:1; // upstream/downstream indicator
       bool parity_bit:1; // packet parity
     } data_packet;
