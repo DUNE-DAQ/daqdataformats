@@ -68,7 +68,7 @@ class PACMANFrame
     struct __attribute__((__packed__)) LArPixDataPacket
     { // Specific for LArPix data packets
       packet_type type:2; // packet type indicator
-      uint8_t chipid:8; // asic chip id
+      uint16_t chipid:8; // asic chip id
       uint8_t channelid:6; // asic channel id
       uint32_t timestamp:31; // packet timestamp
       bool first_packet:1; // first packet indicator
