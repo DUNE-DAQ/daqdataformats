@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(dataformats VERSION 2.1.0)
+project(dataformats VERSION 3.0.0)
 
 find_package(daq-cmake REQUIRED)
 
