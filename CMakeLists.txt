@@ -26,13 +26,13 @@ daq_add_library(LINK_LIBRARIES ers::ers)
 ##############################################################################
 # Unit Tests
 
-daq_add_unit_test(ComponentRequest_test        LINK_LIBRARIES daqdataformats ers::ers)
-daq_add_unit_test(Fragment_test                LINK_LIBRARIES daqdataformats ers::ers)
-daq_add_unit_test(FragmentHeader_test          LINK_LIBRARIES daqdataformats ers::ers)
-daq_add_unit_test(GeoID_test                   LINK_LIBRARIES daqdataformats ers::ers)
-daq_add_unit_test(TriggerRecord_test           LINK_LIBRARIES daqdataformats ers::ers)
-daq_add_unit_test(TriggerRecordHeader_test     LINK_LIBRARIES daqdataformats ers::ers)
-daq_add_unit_test(TriggerRecordHeaderData_test LINK_LIBRARIES daqdataformats ers::ers)
+daq_add_unit_test(ComponentRequest_test        LINK_LIBRARIES daqdataformats)
+daq_add_unit_test(Fragment_test                LINK_LIBRARIES daqdataformats)
+daq_add_unit_test(FragmentHeader_test          LINK_LIBRARIES daqdataformats)
+daq_add_unit_test(GeoID_test                   LINK_LIBRARIES daqdataformats)
+daq_add_unit_test(TriggerRecord_test           LINK_LIBRARIES daqdataformats)
+daq_add_unit_test(TriggerRecordHeader_test     LINK_LIBRARIES daqdataformats)
+daq_add_unit_test(TriggerRecordHeaderData_test LINK_LIBRARIES daqdataformats)
 
 ##############################################################################
 
