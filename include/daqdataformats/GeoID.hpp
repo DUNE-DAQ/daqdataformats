@@ -6,8 +6,8 @@
  * received with this code.
  */
 
-#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
-#define DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_GEOID_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_GEOID_HPP_
 
 #include <cstdint>
 #include <istream>
@@ -17,7 +17,7 @@
 #include <tuple>
 
 namespace dunedaq {
-namespace dataformats {
+namespace daqdataformats {
 
 /**
  * @brief Represents a coordinate point in the DAQ's logical coordinate system (i.e. not physical coordinates)
@@ -185,7 +185,7 @@ operator>>(std::istream& is, GeoID& id)
   return is;
 }
 
-} // namespace dataformats
+} // namespace daqdataformats
 } // namespace dunedaq
 
-#endif // DATAFORMATS_INCLUDE_DATAFORMATS_GEOID_HPP_
+#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_GEOID_HPP_

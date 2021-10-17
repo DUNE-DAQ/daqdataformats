@@ -6,13 +6,13 @@
  * received with this code.
  */
 
-#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENTHEADER_HPP_
-#define DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENTHEADER_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_
 
-#include "dataformats/GeoID.hpp"
-#include "dataformats/Types.hpp"
+#include "daqdataformats/GeoID.hpp"
+#include "daqdataformats/Types.hpp"
 
-#include "logging/Logging.hpp"
+#include "ers/Issue.hpp"
 
 #include <bitset>
 #include <cstdlib>
@@ -27,12 +27,12 @@ namespace dunedaq {
  * @param fragment_type_input Input that failed conversion
  * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
-ERS_DECLARE_ISSUE(dataformats,
+ERS_DECLARE_ISSUE(daqdataformats,
                   FragmentTypeConversionError,
                   "Supplied input " << fragment_type_input << " did not match any in s_fragment_type_names",
                   ((std::string)fragment_type_input)) // NOLINT
                                                       /// @endcond LCOV_EXCL_STOP
-namespace dataformats {
+namespace daqdataformats {
 
 /**
  * @brief The header for a DUNE Fragment
@@ -202,7 +202,7 @@ inline std::string
 fragment_type_to_string(FragmentType type)
 {
   if (!get_fragment_type_names().count(type)) {
-    ers::error(FragmentTypeConversionError(ERS_HERE, std::to_string(static_cast<int>(type))));
+    // ers::error(FragmentTypeConversionError(ERS_HERE, std::to_string(static_cast<int>(type))));
     return "UNKNOWN";
   }
   return get_fragment_type_names().at(type);
@@ -220,7 +220,7 @@ string_to_fragment_type(std::string name)
     if (it.second == name)
       return it.first;
   }
-  ers::error(FragmentTypeConversionError(ERS_HERE, name));
+  // ers::error(FragmentTypeConversionError(ERS_HERE, name));
   return FragmentType::kUnknown;
 }
 
@@ -263,7 +263,7 @@ operator>>(std::istream& o, FragmentHeader& hdr)
          hdr.element_id >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
          hdr.sequence_number;
 }
-} // namespace dataformats
+} // namespace daqdataformats
 } // namespace dunedaq
 
-#endif // DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENTHEADER_HPP_
+#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_

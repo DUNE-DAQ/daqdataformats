@@ -6,11 +6,11 @@
  * received with this code.
  */
 
-#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_
-#define DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_
 
-#include "dataformats/ComponentRequest.hpp"
-#include "dataformats/Types.hpp"
+#include "daqdataformats/ComponentRequest.hpp"
+#include "daqdataformats/Types.hpp"
 
 #include <limits>
 #include <ostream>
@@ -19,7 +19,7 @@
 
 namespace dunedaq {
 
-namespace dataformats {
+namespace daqdataformats {
 
 /**
  * @brief Additional data fields associated with a TriggerRecordHeader
@@ -182,7 +182,7 @@ operator>>(std::istream& o, TriggerRecordHeaderData& hdr)
          tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number;
 }
 
-} // namespace dataformats
+} // namespace daqdataformats
 } // namespace dunedaq
 
-#endif // DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_
+#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_

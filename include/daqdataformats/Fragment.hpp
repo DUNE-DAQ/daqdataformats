@@ -10,12 +10,12 @@
  * received with this code.
  */
 
-#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENT_HPP_
-#define DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENT_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENT_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENT_HPP_
 
-#include "dataformats/FragmentHeader.hpp"
-#include "dataformats/GeoID.hpp"
-#include "dataformats/Types.hpp"
+#include "daqdataformats/FragmentHeader.hpp"
+#include "daqdataformats/GeoID.hpp"
+#include "daqdataformats/Types.hpp"
 
 #include "ers/Issue.hpp"
 
@@ -34,7 +34,7 @@ namespace dunedaq {
  * @param fb_size Size of invalid buffer
  * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
-ERS_DECLARE_ISSUE(dataformats,
+ERS_DECLARE_ISSUE(daqdataformats,
                   FragmentBufferError,
                   "Fragment Buffer " << fb_addr << " with size " << fb_size << " is invalid",
                   ((void*)fb_addr)((size_t)fb_size)) // NOLINT
@@ -46,14 +46,14 @@ ERS_DECLARE_ISSUE(dataformats,
  * @param fs_max Maximum allowable Fragment size
  * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
-ERS_DECLARE_ISSUE(dataformats,
+ERS_DECLARE_ISSUE(daqdataformats,
                   FragmentSizeError,
                   "Fragment has a requested size of " << fs_size << ", which is outside the allowable range of "
                                                       << fs_min << "-" << fs_max,
                   ((size_t)fs_size)((size_t)fs_min)((size_t)fs_max)) // NOLINT
                                                                      /// @endcond LCOV_EXCL_STOP
 
-namespace dataformats {
+namespace daqdataformats {
 
 /**
  * @brief C++ Representation of a DUNE Fragment, wrapping the flat byte array that is the Fragment's "actual" form
@@ -322,7 +322,7 @@ private:
   bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };
 
-} // namespace dataformats
+} // namespace daqdataformats
 } // namespace dunedaq
 
-#endif // DATAFORMATS_INCLUDE_DATAFORMATS_FRAGMENT_HPP_
+#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENT_HPP_

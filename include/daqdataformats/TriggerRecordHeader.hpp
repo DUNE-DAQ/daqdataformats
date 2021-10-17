@@ -6,12 +6,12 @@
  * received with this code.
  */
 
-#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADER_HPP_
-#define DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADER_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADER_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADER_HPP_
 
-#include "dataformats/ComponentRequest.hpp"
-#include "dataformats/TriggerRecordHeaderData.hpp"
-#include "dataformats/Types.hpp"
+#include "daqdataformats/ComponentRequest.hpp"
+#include "daqdataformats/TriggerRecordHeaderData.hpp"
+#include "daqdataformats/Types.hpp"
 
 #include "ers/Issue.hpp"
 
@@ -28,14 +28,14 @@ namespace dunedaq {
  * @param cri_index_max Maximum valid index for this function
  * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
  */
-ERS_DECLARE_ISSUE(dataformats,
+ERS_DECLARE_ISSUE(daqdataformats,
                   ComponentRequestIndexError,
                   "Supplied ComponentRequest index " << cri_index_supplied << " is greater than the maximum index "
                                                      << cri_index_max,
                   ((int)cri_index_supplied)((int)cri_index_max)) // NOLINT
                                                                  /// @endcond LCOV_EXCL_STOP
 
-namespace dataformats {
+namespace daqdataformats {
 
 /**
  * @brief C++ representation of a TriggerRecordHeader, which wraps a flat array that is the TriggerRecordHeader's
@@ -299,7 +299,7 @@ private:
   bool m_alloc{ false }; ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr
 };
 
-} // namespace dataformats
+} // namespace daqdataformats
 } // namespace dunedaq
 
-#endif // DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORDHEADER_HPP_
+#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADER_HPP_

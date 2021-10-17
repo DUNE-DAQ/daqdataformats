@@ -6,7 +6,7 @@
  * received with this code.
  */
 
-#include "dataformats/TriggerRecord.hpp"
+#include "daqdataformats/TriggerRecord.hpp"
 
 /**
  * @brief Name of this test module
@@ -20,7 +20,7 @@
 #include <utility>
 #include <vector>
 
-using namespace dunedaq::dataformats;
+using namespace dunedaq::daqdataformats;
 
 BOOST_AUTO_TEST_SUITE(TriggerRecord_test)
 
