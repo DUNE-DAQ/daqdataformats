@@ -26,32 +26,10 @@
 #include <numeric>
 #include <utility>
 #include <vector>
+#include <stdexcept>
+#include <new>
 
 namespace dunedaq {
-/**
- * @brief An ERS Error that indicates that one the buffers given to the Fragment constructor is invalid
- * @param fb_addr Address of invalid buffer
- * @param fb_size Size of invalid buffer
- * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
- */
-ERS_DECLARE_ISSUE(daqdataformats,
-                  FragmentBufferError,
-                  "Fragment Buffer " << fb_addr << " with size " << fb_size << " is invalid",
-                  ((void*)fb_addr)((size_t)fb_size)) // NOLINT
-                                                     /// @endcond LCOV_EXCL_STOP
-/**
- * @brief An ERS Error that indicates that an issue was detected with the requested Fragment Size
- * @param fs_size Fragment size that caused issue
- * @param fs_min Minimum allowable Fragment size
- * @param fs_max Maximum allowable Fragment size
- * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
- */
-ERS_DECLARE_ISSUE(daqdataformats,
-                  FragmentSizeError,
-                  "Fragment has a requested size of " << fs_size << ", which is outside the allowable range of "
-                                                      << fs_min << "-" << fs_max,
-                  ((size_t)fs_size)((size_t)fs_min)((size_t)fs_max)) // NOLINT
-                                                                     /// @endcond LCOV_EXCL_STOP
 
 namespace daqdataformats {
 
@@ -81,12 +59,12 @@ public:
                   std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
 
     if (size < sizeof(FragmentHeader)) {
-      throw FragmentSizeError(ERS_HERE, size, sizeof(FragmentHeader), -1);
+      throw std::length_error("The Fragment size is smaller than the Fragment header size.");
     }
 
     m_data_arr = malloc(size); // NOLINT(build/unsigned)
     if (m_data_arr == nullptr) {
-      throw MemoryAllocationFailed(ERS_HERE, size);
+      throw std::bad_alloc();
     }
     m_alloc = true;
 
@@ -97,7 +75,7 @@ public:
     size_t offset = sizeof(FragmentHeader);
     for (auto& piece : pieces) {
       if (piece.first == nullptr) {
-        throw FragmentBufferError(ERS_HERE, piece.first, piece.second);
+        throw std::invalid_argument("The Fragment buffer point to NULL.");
       }
       memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
       offset += piece.second;
@@ -127,7 +105,7 @@ public:
       auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
       m_data_arr = malloc(header->size);
       if (m_data_arr == nullptr) {
-        throw MemoryAllocationFailed(ERS_HERE, header->size);
+        throw std::bad_alloc();
       }
       m_alloc = true;
       memcpy(m_data_arr, existing_fragment_buffer, header->size);

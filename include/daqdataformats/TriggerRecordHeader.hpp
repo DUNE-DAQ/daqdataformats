@@ -13,27 +13,14 @@
 #include "daqdataformats/TriggerRecordHeaderData.hpp"
 #include "daqdataformats/Types.hpp"
 
-#include "ers/Issue.hpp"
-
 #include <bitset>
 #include <ostream>
 #include <string>
 #include <vector>
-
+#include <stdexcept>
+#include <new>
+>
 namespace dunedaq {
-
-/**
- * @brief An ERS Error indicating that the requested index is out of range
- * @param cri_index_supplied Index that caused the error
- * @param cri_index_max Maximum valid index for this function
- * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
- */
-ERS_DECLARE_ISSUE(daqdataformats,
-                  ComponentRequestIndexError,
-                  "Supplied ComponentRequest index " << cri_index_supplied << " is greater than the maximum index "
-                                                     << cri_index_max,
-                  ((int)cri_index_supplied)((int)cri_index_max)) // NOLINT
-                                                                 /// @endcond LCOV_EXCL_STOP
 
 namespace daqdataformats {
 
@@ -54,7 +41,7 @@ public:
 
     m_data_arr = malloc(size); // NOLINT(build/unsigned)
     if (m_data_arr == nullptr) {
-      throw MemoryAllocationFailed(ERS_HERE, size);
+      throw std::bad_alloc(); 
     }
     m_alloc = true;
 
@@ -85,7 +72,7 @@ public:
 
       m_data_arr = malloc(size);
       if (m_data_arr == nullptr) {
-        throw MemoryAllocationFailed(ERS_HERE, size);
+        throw std::bad_alloc();
       }
       m_alloc = true;
       memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
@@ -114,7 +101,7 @@ public:
     }
     m_data_arr = malloc(other.get_total_size_bytes());
     if (m_data_arr == nullptr) {
-      throw MemoryAllocationFailed(ERS_HERE, other.get_total_size_bytes());
+      throw std::bad_alloc();
     }
     m_alloc = true;
     memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());
@@ -260,12 +247,12 @@ public:
    * @brief Access ComponentRequest and copy result
    * @param idx Index to access
    * @return Copy of ComponentRequest at index
-   * @throws ComponentRequestIndexError exception if idx is outside of allowable range
+   * @throws std::range_error exception if idx is outside of allowable range
    */
   ComponentRequest at(size_t idx) const
   {
     if (idx >= header_()->num_requested_components) {
-      throw ComponentRequestIndexError(ERS_HERE, idx, header_()->num_requested_components - 1);
+      throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
     }
     // Increment header pointer by one to skip header
     return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
@@ -275,12 +262,12 @@ public:
    * @brief Operator[] to access ComponentRequests by index
    * @param idx Index to access
    * @return ComponentRequest reference
-   * @throws ComponentRequestIndexError exception if idx is outside of allowable range
+   * @throws std::range_error exception if idx is outside of allowable range
    */
   ComponentRequest& operator[](size_t idx)
   {
     if (idx >= header_()->num_requested_components) {
-      throw ComponentRequestIndexError(ERS_HERE, idx, header_()->num_requested_components - 1);
+      throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
     }
     // Increment header pointer by one to skip header
     return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT

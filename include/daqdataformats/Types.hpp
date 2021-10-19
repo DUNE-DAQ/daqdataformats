@@ -9,8 +9,6 @@
 #ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TYPES_HPP_
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TYPES_HPP_
 
-#include "ers/Issue.hpp"
-
 #include <cstdint>
 #include <limits>
 
@@ -18,16 +16,6 @@
  * @brief The DUNE-DAQ namespace
  */
 namespace dunedaq {
-/**
- * @brief An ERS Error indicating that a malloc failed
- * @param maf_bytes Bytes requested from malloc
- * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
- */
-ERS_DECLARE_ISSUE(daqdataformats,
-                  MemoryAllocationFailed,
-                  "Malloc of " << maf_bytes << " bytes failed",
-                  ((size_t)maf_bytes)) // NOLINT
-                                       /// @endcond LCOV_EXCL_STOP
 /**
  * @brief daqdataformats code
  */

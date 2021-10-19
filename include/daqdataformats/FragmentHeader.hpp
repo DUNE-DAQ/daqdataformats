@@ -12,8 +12,6 @@
 #include "daqdataformats/GeoID.hpp"
 #include "daqdataformats/Types.hpp"
 
-#include "ers/Issue.hpp"
-
 #include <bitset>
 #include <cstdlib>
 #include <map>
@@ -22,16 +20,7 @@
 #include <vector>
 
 namespace dunedaq {
-/**
- * @brief An ERS Issue indicating that an attempted FragmentType conversion failed
- * @param fragment_type_input Input that failed conversion
- * @cond Doxygen doesn't like ERS macros LCOV_EXCL_START
- */
-ERS_DECLARE_ISSUE(daqdataformats,
-                  FragmentTypeConversionError,
-                  "Supplied input " << fragment_type_input << " did not match any in s_fragment_type_names",
-                  ((std::string)fragment_type_input)) // NOLINT
-                                                      /// @endcond LCOV_EXCL_STOP
+
 namespace daqdataformats {
 
 /**
@@ -202,7 +191,6 @@ inline std::string
 fragment_type_to_string(FragmentType type)
 {
   if (!get_fragment_type_names().count(type)) {
-    // ers::error(FragmentTypeConversionError(ERS_HERE, std::to_string(static_cast<int>(type))));
     return "UNKNOWN";
   }
   return get_fragment_type_names().at(type);
@@ -220,7 +208,6 @@ string_to_fragment_type(std::string name)
     if (it.second == name)
       return it.first;
   }
-  // ers::error(FragmentTypeConversionError(ERS_HERE, name));
   return FragmentType::kUnknown;
 }
 
