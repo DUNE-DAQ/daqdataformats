@@ -6,7 +6,7 @@
  * received with this code.
  */
 
-#include "dataformats/TriggerRecordHeaderData.hpp"
+#include "daqdataformats/TriggerRecordHeaderData.hpp"
 
 /**
  * @brief Name of this test module
@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-using namespace dunedaq::dataformats;
+using namespace dunedaq::daqdataformats;
 
 BOOST_AUTO_TEST_SUITE(TriggerRecordHeaderData_test)
 

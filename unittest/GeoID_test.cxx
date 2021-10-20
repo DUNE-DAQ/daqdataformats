@@ -6,7 +6,7 @@
  * received with this code.
  */
 
-#include "dataformats/GeoID.hpp"
+#include "daqdataformats/GeoID.hpp"
 
 /**
  * @brief Name of this test module
@@ -20,7 +20,7 @@
 #include <string>
 #include <vector>
 
-using namespace dunedaq::dataformats;
+using namespace dunedaq::daqdataformats;
 
 BOOST_AUTO_TEST_SUITE(GeoID_test)
 

@@ -6,19 +6,19 @@
  * received with this code.
  */
 
-#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORD_HPP_
-#define DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORD_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_
 
-#include "dataformats/Fragment.hpp"
-#include "dataformats/TriggerRecordHeader.hpp"
-#include "dataformats/Types.hpp"
+#include "daqdataformats/Fragment.hpp"
+#include "daqdataformats/TriggerRecordHeader.hpp"
+#include "daqdataformats/Types.hpp"
 
 #include <memory>
 #include <utility>
 #include <vector>
 
 namespace dunedaq {
-namespace dataformats {
+namespace daqdataformats {
 
 /**
  * @brief C++ Representation of a DUNE TriggerRecord, consisting of a TriggerRecordHeader object and a vector of
@@ -87,7 +87,7 @@ private:
   TriggerRecordHeader m_header;                       ///< TriggerRecordHeader object
   std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
 };
-} // namespace dataformats
+} // namespace daqdataformats
 } // namespace dunedaq
 
-#endif // DATAFORMATS_INCLUDE_DATAFORMATS_TRIGGERRECORD_HPP_
+#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_

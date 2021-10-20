@@ -6,17 +6,17 @@
  * received with this code.
  */
 
-#ifndef DATAFORMATS_INCLUDE_DATAFORMATS_COMPONENTREQUEST_HPP_
-#define DATAFORMATS_INCLUDE_DATAFORMATS_COMPONENTREQUEST_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_COMPONENTREQUEST_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_COMPONENTREQUEST_HPP_
 
-#include "dataformats/GeoID.hpp"
-#include "dataformats/Types.hpp"
+#include "daqdataformats/GeoID.hpp"
+#include "daqdataformats/Types.hpp"
 
 #include <ostream>
 #include <string>
 
 namespace dunedaq {
-namespace dataformats {
+namespace daqdataformats {
 
 /**
  * @brief A request sent to a Component, including the GeoID of the component and the window offset and width
@@ -80,7 +80,7 @@ operator>>(std::istream& is, ComponentRequest& cr)
   return is >> cr.component >> tmp >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;
 }
 
-} // namespace dataformats
+} // namespace daqdataformats
 } // namespace dunedaq
 
-#endif // DATAFORMATS_INCLUDE_DATAFORMATS_COMPONENTREQUEST_HPP_
+#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_COMPONENTREQUEST_HPP_

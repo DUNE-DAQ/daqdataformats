@@ -12,8 +12,8 @@
 #pragma GCC diagnostic ignored "-Warray-bounds"
 #pragma GCC diagnostic ignored "-Wstringop-overflow="
 
-#include "dataformats/TriggerRecordHeader.hpp"
-#include "dataformats/TriggerRecordHeaderData.hpp"
+#include "daqdataformats/TriggerRecordHeader.hpp"
+#include "daqdataformats/TriggerRecordHeaderData.hpp"
 
 #pragma GCC diagnostic pop
 #pragma GCC diagnostic pop
@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 
-using namespace dunedaq::dataformats;
+using namespace dunedaq::daqdataformats;
 
 BOOST_AUTO_TEST_SUITE(TriggerRecordHeader_test)
 
@@ -76,9 +76,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
 
   BOOST_REQUIRE_THROW(header->at(header->get_header().num_requested_components),
-                      dunedaq::dataformats::ComponentRequestIndexError);
+                      dunedaq::daqdataformats::ComponentRequestIndexError);
   BOOST_REQUIRE_THROW((*header)[header->get_header().num_requested_components],
-                      dunedaq::dataformats::ComponentRequestIndexError);
+                      dunedaq::daqdataformats::ComponentRequestIndexError);
 
   void* buff = malloc(header->get_total_size_bytes());
   memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
@@ -154,8 +154,8 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
 
   BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader oversize_header(hdr, true),
-                          dunedaq::dataformats::MemoryAllocationFailed,
-                          [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
+                          dunedaq::daqdataformats::MemoryAllocationFailed,
+                          [&](dunedaq::daqdataformats::MemoryAllocationFailed) { return true; });
 
   header_data.num_requested_components = 1;
   memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
@@ -168,8 +168,8 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
                       std::numeric_limits<uint64_t>::max() - 10); // NOLINT(build/unsigned)
 
   BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader header_inst = bad_header,
-                          dunedaq::dataformats::MemoryAllocationFailed,
-                          [&](dunedaq::dataformats::MemoryAllocationFailed) { return true; });
+                          dunedaq::daqdataformats::MemoryAllocationFailed,
+                          [&](dunedaq::daqdataformats::MemoryAllocationFailed) { return true; });
 
   free(hdr);
 }
