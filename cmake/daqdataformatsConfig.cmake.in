@@ -3,9 +3,6 @@
 
 include(CMakeFindDependencyMacro)
 
-find_dependency(ers)
-find_dependency(Boost 1.70.0 COMPONENTS unit_test_framework)
-
 if (EXISTS ${CMAKE_SOURCE_DIR}/@PROJECT_NAME@)
 
 message(STATUS "Project \"@PROJECT_NAME@\" will be treated as repo (found in ${CMAKE_SOURCE_DIR}/@PROJECT_NAME@)")
