@@ -19,7 +19,7 @@
 #include <vector>
 #include <stdexcept>
 #include <new>
->
+
 namespace dunedaq {
 
 namespace daqdataformats {
