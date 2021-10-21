@@ -17,8 +17,6 @@
 #include "daqdataformats/GeoID.hpp"
 #include "daqdataformats/Types.hpp"
 
-#include "ers/Issue.hpp"
-
 #include <bitset>
 #include <cstdint>
 #include <cstdlib>
