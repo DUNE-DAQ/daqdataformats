@@ -47,7 +47,7 @@ struct ComponentRequest
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
 
   ComponentRequest() {}
-  ComponentRequest(GeoID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
+  inline ComponentRequest(GeoID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
 };
 
 /**

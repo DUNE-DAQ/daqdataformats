@@ -69,14 +69,14 @@ struct GeoID
   uint32_t unused{ 0xFFFFFFFF }; ///< Ensure 64bit alignment // NOLINT(build/unsigned)
 
   GeoID() {}
-  GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element); // NOLINT(build/unsigned)
+  inline GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element); // NOLINT(build/unsigned)
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
    * @param other GeoID to compare
    * @return The result of std::tuple compare using GeoID fields
    */
-  bool operator<(const GeoID& other) const noexcept;
+  inline bool operator<(const GeoID& other) const noexcept;
 
   /**
    * @brief Comparison operator (to allow GeoID comparisons)
@@ -92,8 +92,8 @@ struct GeoID
    */
   bool operator==(const GeoID& other) const noexcept { return !((*this) != other); }
 
-  static std::string system_type_to_string(SystemType type);
-  static SystemType string_to_system_type(std::string typestring);
+  inline static std::string system_type_to_string(SystemType type);
+  inline static SystemType string_to_system_type(std::string typestring);
 
 };
 

@@ -51,19 +51,19 @@ public:
    * @brief Fragment constructor using a vector of buffer pointers
    * @param pieces Vector of pairs of pointer/size pairs used to initialize Fragment payload
    */
-  explicit Fragment(const std::vector<std::pair<void*, size_t>>& pieces);
+  inline explicit Fragment(const std::vector<std::pair<void*, size_t>>& pieces);
   /**
    * @brief Fragment constructor using a buffer and size
    * @param buffer Pointer to Fragment payload
    * @param size Size of payload
    */
-  Fragment(void* buffer, size_t size);
+  inline Fragment(void* buffer, size_t size);
   /**
    * @brief Framgnet constructor using existing Fragment array
    * @param existing_fragment_buffer Pointer to existing Fragment array
    * @param adoption_mode How the constructor should treat the existing_fragment_buffer
    */
-  explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode);
+  inline explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode);
 
   Fragment(Fragment const&) = delete;            ///< Fragment copy constructor is deleted
   Fragment(Fragment&&) = default;                ///< Default Fragment move constructor
@@ -73,7 +73,7 @@ public:
   /**
    * @brief Fragment destructor
    */
-  ~Fragment();
+  inline ~Fragment();
   /**
    * @brief Get a copy of the FragmentHeader struct
    * @return A copy of the FragmentHeader struct stored in this Fragment
@@ -85,7 +85,7 @@ public:
    *
    * The size FragmentHeader field is *not* copied from the given FragmentHeader
    */
-  void set_header_fields(const FragmentHeader& header);
+  inline void set_header_fields(const FragmentHeader& header);
 
   /**
    * @brief Get a pointer to the Fragment's data array to read its contents directly
@@ -178,7 +178,7 @@ public:
    * @param bit Bit to set
    * @param value Value (true/false) for the error bit
    */
-  void set_error_bit(FragmentErrorBits bit, bool value);
+  inline void set_error_bit(FragmentErrorBits bit, bool value);
 
   /**
    * @brief Get the fragment_type_t value stored in the header

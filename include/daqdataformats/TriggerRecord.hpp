@@ -31,13 +31,13 @@ public:
    * @brief Construct a TriggerRecord using the given vector of components to initialize the TriggerRecordHeader
    * @param components List of components requested for this TriggerRecord
    */
-  explicit TriggerRecord(std::vector<ComponentRequest> const& components);
+  inline explicit TriggerRecord(std::vector<ComponentRequest> const& components);
 
   /**
    * @brief Construct a TriggerRecord using the given TriggerRecordHeader
    * @param header TriggerRecordHeader to *copy* into the TriggerRecord
    */
-  explicit TriggerRecord(TriggerRecordHeader const& header);
+  inline explicit TriggerRecord(TriggerRecordHeader const& header);
   
   virtual ~TriggerRecord() = default; ///< TriggerRecord default destructor
 

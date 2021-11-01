@@ -36,7 +36,7 @@ public:
    * @brief Construct a TriggerRecordHeader using a vector of ComponentRequest objects
    * @param components Vector of ComponentRequests to copy into TriggerRecordHeader
    */
-  explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components);
+  inline explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components);
 
   /**
    * @brief Construct a TriggerRecordHeader using an existing TriggerRecordHeader data array
@@ -44,19 +44,19 @@ public:
    * @param copy_from_buffer Whether to create a copy of the exiting buffer (true) or use that memory without taking
    * ownership (false)
    */
-  explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false);
+  inline explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false);
 
   /**
    * @brief TriggerRecordHeader Copy Constructor
    * @param other TriggerRecordHeader to copy
    */
-  TriggerRecordHeader(TriggerRecordHeader const& other);
+  inline TriggerRecordHeader(TriggerRecordHeader const& other);
   /**
    * @brief TriggerRecordHeader copy assignment operator
    * @param other TriggerRecordHeader to copy
    * @return Reference to TriggerRecordHeader copy
    */
-  TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
+  inline TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
 
   TriggerRecordHeader(TriggerRecordHeader&&) = default;            ///< Default move constructor
   TriggerRecordHeader& operator=(TriggerRecordHeader&&) = default; ///< Default move assignment operator
@@ -199,7 +199,7 @@ public:
    * @return Copy of ComponentRequest at index
    * @throws std::range_error exception if idx is outside of allowable range
    */
-  ComponentRequest at(size_t idx) const;
+  inline ComponentRequest at(size_t idx) const;
 
   /**
    * @brief Operator[] to access ComponentRequests by index
@@ -207,7 +207,7 @@ public:
    * @return ComponentRequest reference
    * @throws std::range_error exception if idx is outside of allowable range
    */
-  ComponentRequest& operator[](size_t idx);
+  inline ComponentRequest& operator[](size_t idx);
 
 private:
   /**
