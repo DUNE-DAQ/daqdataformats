@@ -51,64 +51,19 @@ public:
    * @brief Fragment constructor using a vector of buffer pointers
    * @param pieces Vector of pairs of pointer/size pairs used to initialize Fragment payload
    */
-  explicit Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
-  {
-    size_t size = sizeof(FragmentHeader) +
-                  std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
-
-    if (size < sizeof(FragmentHeader)) {
-      throw std::length_error("The Fragment size is smaller than the Fragment header size.");
-    }
-
-    m_data_arr = malloc(size); // NOLINT(build/unsigned)
-    if (m_data_arr == nullptr) {
-      throw std::bad_alloc();
-    }
-    m_alloc = true;
-
-    FragmentHeader header;
-    header.size = size;
-    memcpy(m_data_arr, &header, sizeof(header));
-
-    size_t offset = sizeof(FragmentHeader);
-    for (auto& piece : pieces) {
-      if (piece.first == nullptr) {
-        throw std::invalid_argument("The Fragment buffer point to NULL.");
-      }
-      memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
-      offset += piece.second;
-    }
-  }
+  explicit Fragment(const std::vector<std::pair<void*, size_t>>& pieces);
   /**
    * @brief Fragment constructor using a buffer and size
    * @param buffer Pointer to Fragment payload
    * @param size Size of payload
    */
-  Fragment(void* buffer, size_t size)
-    : Fragment({ std::make_pair(buffer, size) })
-  {}
+  Fragment(void* buffer, size_t size);
   /**
    * @brief Framgnet constructor using existing Fragment array
    * @param existing_fragment_buffer Pointer to existing Fragment array
    * @param adoption_mode How the constructor should treat the existing_fragment_buffer
    */
-  explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
-  {
-    if (adoption_mode == BufferAdoptionMode::kReadOnlyMode) {
-      m_data_arr = existing_fragment_buffer;
-    } else if (adoption_mode == BufferAdoptionMode::kTakeOverBuffer) {
-      m_data_arr = existing_fragment_buffer;
-      m_alloc = true;
-    } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {
-      auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
-      m_data_arr = malloc(header->size);
-      if (m_data_arr == nullptr) {
-        throw std::bad_alloc();
-      }
-      m_alloc = true;
-      memcpy(m_data_arr, existing_fragment_buffer, header->size);
-    }
-  }
+  explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode);
 
   Fragment(Fragment const&) = delete;            ///< Fragment copy constructor is deleted
   Fragment(Fragment&&) = default;                ///< Default Fragment move constructor
@@ -118,12 +73,7 @@ public:
   /**
    * @brief Fragment destructor
    */
-  ~Fragment()
-  {
-    if (m_alloc)
-      free(m_data_arr);
-  }
-
+  ~Fragment();
   /**
    * @brief Get a copy of the FragmentHeader struct
    * @return A copy of the FragmentHeader struct stored in this Fragment
@@ -135,18 +85,8 @@ public:
    *
    * The size FragmentHeader field is *not* copied from the given FragmentHeader
    */
-  void set_header_fields(const FragmentHeader& header)
-  {
-    header_()->trigger_number = header.trigger_number;
-    header_()->trigger_timestamp = header.trigger_timestamp;
-    header_()->window_begin = header.window_begin;
-    header_()->window_end = header.window_end;
-    header_()->run_number = header.run_number;
-    header_()->element_id = header.element_id;
-    header_()->error_bits = header.error_bits;
-    header_()->fragment_type = header.fragment_type;
-    header_()->sequence_number = header.sequence_number;
-  }
+  void set_header_fields(const FragmentHeader& header);
+
   /**
    * @brief Get a pointer to the Fragment's data array to read its contents directly
    * @return Pointer to the Fragment's data array
@@ -238,13 +178,7 @@ public:
    * @param bit Bit to set
    * @param value Value (true/false) for the error bit
    */
-  void set_error_bit(FragmentErrorBits bit, bool value)
-
-  {
-    auto bits = get_error_bits();
-    bits[static_cast<size_t>(bit)] = value;
-    set_error_bits(bits);
-  }
+  void set_error_bit(FragmentErrorBits bit, bool value);
 
   /**
    * @brief Get the fragment_type_t value stored in the header
@@ -297,6 +231,87 @@ private:
   void* m_data_arr{ nullptr }; ///< Flat memory containing a FragmentHeader and the data payload
   bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };
+
+// ------
+
+Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
+{
+  size_t size = sizeof(FragmentHeader) +
+                std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
+
+  if (size < sizeof(FragmentHeader)) {
+    throw std::length_error("The Fragment size is smaller than the Fragment header size.");
+  }
+
+  m_data_arr = malloc(size); // NOLINT(build/unsigned)
+  if (m_data_arr == nullptr) {
+    throw std::bad_alloc();
+  }
+  m_alloc = true;
+
+  FragmentHeader header;
+  header.size = size;
+  memcpy(m_data_arr, &header, sizeof(header));
+
+  size_t offset = sizeof(FragmentHeader);
+  for (auto& piece : pieces) {
+    if (piece.first == nullptr) {
+      throw std::invalid_argument("The Fragment buffer point to NULL.");
+    }
+    memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
+    offset += piece.second;
+  }
+}
+
+Fragment::Fragment(void* buffer, size_t size)
+  : Fragment({ std::make_pair(buffer, size) })
+{}
+
+Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
+{
+  if (adoption_mode == BufferAdoptionMode::kReadOnlyMode) {
+    m_data_arr = existing_fragment_buffer;
+  } else if (adoption_mode == BufferAdoptionMode::kTakeOverBuffer) {
+    m_data_arr = existing_fragment_buffer;
+    m_alloc = true;
+  } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {
+    auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
+    m_data_arr = malloc(header->size);
+    if (m_data_arr == nullptr) {
+      throw std::bad_alloc();
+    }
+    m_alloc = true;
+    memcpy(m_data_arr, existing_fragment_buffer, header->size);
+  }
+}
+
+Fragment::~Fragment()
+{
+  if (m_alloc)
+    free(m_data_arr);
+}
+
+void Fragment::set_header_fields(const FragmentHeader& header)
+{
+  header_()->trigger_number = header.trigger_number;
+  header_()->trigger_timestamp = header.trigger_timestamp;
+  header_()->window_begin = header.window_begin;
+  header_()->window_end = header.window_end;
+  header_()->run_number = header.run_number;
+  header_()->element_id = header.element_id;
+  header_()->error_bits = header.error_bits;
+  header_()->fragment_type = header.fragment_type;
+  header_()->sequence_number = header.sequence_number;
+}
+
+
+void Fragment::set_error_bit(FragmentErrorBits bit, bool value)
+
+{
+  auto bits = get_error_bits();
+  bits[static_cast<size_t>(bit)] = value;
+  set_error_bits(bits);
+}
 
 } // namespace daqdataformats
 } // namespace dunedaq
