@@ -77,12 +77,12 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
 
   BOOST_REQUIRE_THROW(header->at(header->get_header().num_requested_components),
-                      dunedaq::daqdataformats::ComponentRequestIndexError);
+                      std::range_error);
   BOOST_REQUIRE_THROW((*header)[header->get_header().num_requested_components],
-                      dunedaq::daqdataformats::ComponentRequestIndexError);
+                      std::range_error);
 
   void* buff = malloc(header->get_total_size_bytes());
-  memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
+  std::memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
 
   // Constructor should copy header
   TriggerRecordHeader copy_header(const_cast<void*>(header->get_storage_location()), true);
@@ -152,14 +152,14 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   header_data.trigger_type = 12;
 
   auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest));
-  memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
+  std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
 
   BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader oversize_header(hdr, true),
-                          dunedaq::daqdataformats::MemoryAllocationFailed,
-                          [&](dunedaq::daqdataformats::MemoryAllocationFailed) { return true; });
+                          std::bad_alloc,
+                          [&](std::bad_alloc) { return true; });
 
   header_data.num_requested_components = 1;
-  memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
+  std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
   TriggerRecordHeader bad_header(hdr, false);
   BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(), 1);
 
@@ -169,8 +169,8 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
                       std::numeric_limits<uint64_t>::max() - 10); // NOLINT(build/unsigned)
 
   BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader header_inst = bad_header,
-                          dunedaq::daqdataformats::MemoryAllocationFailed,
-                          [&](dunedaq::daqdataformats::MemoryAllocationFailed) { return true; });
+                          std::bad_alloc,
+                          [&](std::bad_alloc) { return true; });
 
   free(hdr);
 }

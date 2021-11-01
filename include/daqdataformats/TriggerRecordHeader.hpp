@@ -16,6 +16,7 @@
 #include <bitset>
 #include <ostream>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <stdexcept>
 #include <new>
@@ -47,11 +48,11 @@ public:
 
     TriggerRecordHeaderData header;
     header.num_requested_components = components.size();
-    memcpy(m_data_arr, &header, sizeof(header));
+    std::memcpy(m_data_arr, &header, sizeof(header));
 
     size_t offset = sizeof(header);
     for (auto const& component : components) {
-      memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(component)); // NOLINT
+      std::memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(component)); // NOLINT
       offset += sizeof(component);
     }
   }
@@ -75,7 +76,7 @@ public:
         throw std::bad_alloc();
       }
       m_alloc = true;
-      memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
+      std::memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
     }
   }
 
@@ -104,7 +105,7 @@ public:
       throw std::bad_alloc();
     }
     m_alloc = true;
-    memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());
+    std::memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());
     return *this;
   }
 

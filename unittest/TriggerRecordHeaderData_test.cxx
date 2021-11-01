@@ -6,7 +6,7 @@
  * received with this code.
  */
 
-$#include "daqdataformats/TriggerRecordHeaderData.hpp"
+#include "daqdataformats/TriggerRecordHeaderData.hpp"
 
 /**
  * @brief Name of this test module
