@@ -36,26 +36,7 @@ public:
    * @brief Construct a TriggerRecordHeader using a vector of ComponentRequest objects
    * @param components Vector of ComponentRequests to copy into TriggerRecordHeader
    */
-  explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components)
-  {
-    size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
-
-    m_data_arr = malloc(size); // NOLINT(build/unsigned)
-    if (m_data_arr == nullptr) {
-      throw std::bad_alloc(); 
-    }
-    m_alloc = true;
-
-    TriggerRecordHeaderData header;
-    header.num_requested_components = components.size();
-    std::memcpy(m_data_arr, &header, sizeof(header));
-
-    size_t offset = sizeof(header);
-    for (auto const& component : components) {
-      std::memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(component)); // NOLINT
-      offset += sizeof(component);
-    }
-  }
+  explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components);
 
   /**
    * @brief Construct a TriggerRecordHeader using an existing TriggerRecordHeader data array
@@ -63,51 +44,19 @@ public:
    * @param copy_from_buffer Whether to create a copy of the exiting buffer (true) or use that memory without taking
    * ownership (false)
    */
-  explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false)
-  {
-    if (!copy_from_buffer) {
-      m_data_arr = existing_trigger_record_header_buffer;
-    } else {
-      auto header = reinterpret_cast<TriggerRecordHeaderData*>(existing_trigger_record_header_buffer); // NOLINT
-      size_t size = header->num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
-
-      m_data_arr = malloc(size);
-      if (m_data_arr == nullptr) {
-        throw std::bad_alloc();
-      }
-      m_alloc = true;
-      std::memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
-    }
-  }
+  explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false);
 
   /**
    * @brief TriggerRecordHeader Copy Constructor
    * @param other TriggerRecordHeader to copy
    */
-  TriggerRecordHeader(TriggerRecordHeader const& other)
-    : TriggerRecordHeader(other.m_data_arr, true)
-  {}
+  TriggerRecordHeader(TriggerRecordHeader const& other);
   /**
    * @brief TriggerRecordHeader copy assignment operator
    * @param other TriggerRecordHeader to copy
    * @return Reference to TriggerRecordHeader copy
    */
-  TriggerRecordHeader& operator=(TriggerRecordHeader const& other)
-  {
-    if (&other == this)
-      return *this;
-
-    if (m_alloc) {
-      free(m_data_arr);
-    }
-    m_data_arr = malloc(other.get_total_size_bytes());
-    if (m_data_arr == nullptr) {
-      throw std::bad_alloc();
-    }
-    m_alloc = true;
-    std::memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());
-    return *this;
-  }
+  TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
 
   TriggerRecordHeader(TriggerRecordHeader&&) = default;            ///< Default move constructor
   TriggerRecordHeader& operator=(TriggerRecordHeader&&) = default; ///< Default move assignment operator
@@ -250,14 +199,7 @@ public:
    * @return Copy of ComponentRequest at index
    * @throws std::range_error exception if idx is outside of allowable range
    */
-  ComponentRequest at(size_t idx) const
-  {
-    if (idx >= header_()->num_requested_components) {
-      throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
-    }
-    // Increment header pointer by one to skip header
-    return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
-  }
+  ComponentRequest at(size_t idx) const;
 
   /**
    * @brief Operator[] to access ComponentRequests by index
@@ -265,14 +207,7 @@ public:
    * @return ComponentRequest reference
    * @throws std::range_error exception if idx is outside of allowable range
    */
-  ComponentRequest& operator[](size_t idx)
-  {
-    if (idx >= header_()->num_requested_components) {
-      throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
-    }
-    // Increment header pointer by one to skip header
-    return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
-  }
+  ComponentRequest& operator[](size_t idx);
 
 private:
   /**
@@ -281,11 +216,94 @@ private:
    */
   TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr); }
 
-  void* m_data_arr{
-    nullptr
-  };                     ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
+  void* m_data_arr{ nullptr }; ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
   bool m_alloc{ false }; ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr
 };
+
+
+//------
+
+TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& components)
+{
+  size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
+
+  m_data_arr = malloc(size); // NOLINT(build/unsigned)
+  if (m_data_arr == nullptr) {
+    throw std::bad_alloc(); 
+  }
+  m_alloc = true;
+
+  TriggerRecordHeaderData header;
+  header.num_requested_components = components.size();
+  std::memcpy(m_data_arr, &header, sizeof(header));
+
+  size_t offset = sizeof(header);
+  for (auto const& component : components) {
+    std::memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(component)); // NOLINT
+    offset += sizeof(component);
+  }
+}
+
+
+TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer)
+{
+  if (!copy_from_buffer) {
+    m_data_arr = existing_trigger_record_header_buffer;
+  } else {
+    auto header = reinterpret_cast<TriggerRecordHeaderData*>(existing_trigger_record_header_buffer); // NOLINT
+    size_t size = header->num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
+
+    m_data_arr = malloc(size);
+    if (m_data_arr == nullptr) {
+      throw std::bad_alloc();
+    }
+    m_alloc = true;
+    std::memcpy(m_data_arr, existing_trigger_record_header_buffer, size);
+  }
+}
+
+
+TriggerRecordHeader::TriggerRecordHeader(TriggerRecordHeader const& other)
+  : TriggerRecordHeader(other.m_data_arr, true)
+{}
+
+
+TriggerRecordHeader& TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
+{
+  if (&other == this)
+    return *this;
+
+  if (m_alloc) {
+    free(m_data_arr);
+  }
+  m_data_arr = malloc(other.get_total_size_bytes());
+  if (m_data_arr == nullptr) {
+    throw std::bad_alloc();
+  }
+  m_alloc = true;
+  std::memcpy(m_data_arr, other.m_data_arr, other.get_total_size_bytes());
+  return *this;
+}
+
+ComponentRequest TriggerRecordHeader::at(size_t idx) const
+{
+  if (idx >= header_()->num_requested_components) {
+    throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
+  }
+  // Increment header pointer by one to skip header
+  return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
+}
+
+
+ComponentRequest& TriggerRecordHeader::operator[](size_t idx)
+{
+  if (idx >= header_()->num_requested_components) {
+    throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
+  }
+  // Increment header pointer by one to skip header
+  return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
+}
+
 
 } // namespace daqdataformats
 } // namespace dunedaq

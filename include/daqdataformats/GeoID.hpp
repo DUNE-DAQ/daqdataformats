@@ -69,23 +69,14 @@ struct GeoID
   uint32_t unused{ 0xFFFFFFFF }; ///< Ensure 64bit alignment // NOLINT(build/unsigned)
 
   GeoID() {}
-  GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element) // NOLINT(build/unsigned)
-    : version(s_geo_id_version)
-    , system_type(type)
-    , region_id(region)
-    , element_id(element)
-  {}
+  GeoID(SystemType const& type, uint16_t const& region, uint32_t const& element); // NOLINT(build/unsigned)
 
   /**
    * @brief Comparison operator (to allow GeoID to be used in std::map)
    * @param other GeoID to compare
    * @return The result of std::tuple compare using GeoID fields
    */
-  bool operator<(const GeoID& other) const noexcept
-  {
-    return std::tuple(system_type, region_id, element_id) <
-           std::tuple(other.system_type, other.region_id, other.element_id);
-  }
+  bool operator<(const GeoID& other) const noexcept;
 
   /**
    * @brief Comparison operator (to allow GeoID comparisons)
@@ -101,34 +92,9 @@ struct GeoID
    */
   bool operator==(const GeoID& other) const noexcept { return !((*this) != other); }
 
-  static std::string system_type_to_string(SystemType type)
-  {
-    switch (type) {
-      case SystemType::kTPC:
-        return "TPC";
-      case SystemType::kPDS:
-        return "PDS";
-      case SystemType::kDataSelection:
-        return "DataSelection";
-      case SystemType::kNDLArTPC:
-        return "NDLArTPC";
-      case SystemType::kInvalid:
-        return "Invalid";
-    }
-    return "Unknown";
-  }
-  static SystemType string_to_system_type(std::string typestring)
-  {
-    if (typestring.find("TPC") == 0)
-      return SystemType::kTPC;
-    if (typestring.find("PDS") == 0)
-      return SystemType::kPDS;
-    if (typestring.find("DataSelection") == 0)
-      return SystemType::kDataSelection;
-    if (typestring.find("NDLArTPC") == 0)
-      return SystemType::kNDLArTPC;
-    return SystemType::kInvalid;
-  }
+  static std::string system_type_to_string(SystemType type);
+  static SystemType string_to_system_type(std::string typestring);
+
 };
 
 /**
@@ -184,6 +150,51 @@ operator>>(std::istream& is, GeoID& id)
 
   return is;
 }
+
+
+GeoID::GeoID(GeoID::SystemType const& type, uint16_t const& region, uint32_t const& element) // NOLINT(build/unsigned)
+  : version(s_geo_id_version)
+  , system_type(type)
+  , region_id(region)
+  , element_id(element)
+{}
+
+bool GeoID::operator<(const GeoID& other) const noexcept
+{
+  return std::tuple(system_type, region_id, element_id) <
+         std::tuple(other.system_type, other.region_id, other.element_id);
+}
+
+std::string GeoID::system_type_to_string(SystemType type)
+{
+  switch (type) {
+    case SystemType::kTPC:
+      return "TPC";
+    case SystemType::kPDS:
+      return "PDS";
+    case SystemType::kDataSelection:
+      return "DataSelection";
+    case SystemType::kNDLArTPC:
+      return "NDLArTPC";
+    case SystemType::kInvalid:
+      return "Invalid";
+  }
+  return "Unknown";
+}
+
+GeoID::SystemType GeoID::string_to_system_type(std::string typestring)
+{
+  if (typestring.find("TPC") == 0)
+    return SystemType::kTPC;
+  if (typestring.find("PDS") == 0)
+    return SystemType::kPDS;
+  if (typestring.find("DataSelection") == 0)
+    return SystemType::kDataSelection;
+  if (typestring.find("NDLArTPC") == 0)
+    return SystemType::kNDLArTPC;
+  return SystemType::kInvalid;
+}
+
 
 } // namespace daqdataformats
 } // namespace dunedaq
