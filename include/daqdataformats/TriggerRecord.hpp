@@ -31,19 +31,14 @@ public:
    * @brief Construct a TriggerRecord using the given vector of components to initialize the TriggerRecordHeader
    * @param components List of components requested for this TriggerRecord
    */
-  explicit TriggerRecord(std::vector<ComponentRequest> const& components)
-    : m_header(components)
-    , m_fragments()
-  {}
+  explicit TriggerRecord(std::vector<ComponentRequest> const& components);
 
   /**
    * @brief Construct a TriggerRecord using the given TriggerRecordHeader
    * @param header TriggerRecordHeader to *copy* into the TriggerRecord
    */
-  explicit TriggerRecord(TriggerRecordHeader const& header)
-    : m_header(header)
-    , m_fragments()
-  {}
+  explicit TriggerRecord(TriggerRecordHeader const& header);
+  
   virtual ~TriggerRecord() = default; ///< TriggerRecord default destructor
 
   TriggerRecord(TriggerRecord const&) = delete;            ///< TriggerRecords are not copy-constructible
@@ -87,6 +82,20 @@ private:
   TriggerRecordHeader m_header;                       ///< TriggerRecordHeader object
   std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
 };
+
+//-------
+
+TriggerRecord::TriggerRecord(std::vector<ComponentRequest> const& components)
+  : m_header(components)
+  , m_fragments()
+{}
+
+
+TriggerRecord::TriggerRecord(TriggerRecordHeader const& header)
+  : m_header(header)
+  , m_fragments()
+{}
+
 } // namespace daqdataformats
 } // namespace dunedaq
 
