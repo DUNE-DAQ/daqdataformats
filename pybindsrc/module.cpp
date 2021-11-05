@@ -1,5 +1,5 @@
 /**
- * @file timing_wrapper.cpp
+ * @file module.cpp
  *
  * This is part of the DUNE DAQ Software Suite, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
@@ -17,6 +17,8 @@ namespace python {
 
     extern void register_geoid(py::module &);
     extern void register_fragment(py::module &);
+    extern void register_component_request(py::module &);
+    extern void register_trigger_record(py::module &);
 
 PYBIND11_MODULE(_daq_daqdataformats_py, m) {
 
@@ -24,6 +26,8 @@ PYBIND11_MODULE(_daq_daqdataformats_py, m) {
 
     register_geoid(m);
     register_fragment(m);
+    register_component_request(m);
+    register_trigger_record(m);
 }
 
 } // namespace python

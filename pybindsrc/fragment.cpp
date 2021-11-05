@@ -1,5 +1,5 @@
 /**
- * @file wib.cpp
+ * @file fragment.cpp
  *
  * This is part of the DUNE DAQ Software Suite, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
@@ -86,5 +86,5 @@ register_fragment(py::module& m)
 }
 
 } // namespace python
-} // namespace timing
+} // namespace daqdataformats
 } // namespace dunedaq
