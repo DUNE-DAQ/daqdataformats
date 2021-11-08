@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(daqdataformats VERSION 3.2.0)
+project(daqdataformats VERSION 3.2.1)
 
 find_package(daq-cmake REQUIRED)
 find_package(Boost 1.70.0 COMPONENTS unit_test_framework REQUIRED)
