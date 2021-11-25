@@ -12,7 +12,7 @@ The following are brief descriptions of the various structs in this package, inc
 
 **FragmentHeader**: data-about-the-data, e.g. run number, trigger timestamp, etc.
 
-[FragmentHeader description](FragmentHeaderV1.md)
+[FragmentHeader description](FragmentHeaderV3.md)
 
 ---------------
 
@@ -22,15 +22,9 @@ The following are brief descriptions of the various structs in this package, inc
 
 **TriggerRecord**: contains an instance of TriggerRecordHeader and a set of fragments
 
-[TriggerRecordHeader description](TriggerRecordHeaderDataV1.md)
+[TriggerRecordHeader description](TriggerRecordHeaderDataV2.md)
 
-[ComponentRequest description](ComponentRequestV0.md)
+[ComponentRequest description](ComponentRequestV1.md)
 
 --------------
-
-**WIBFrame**: WIB1 bit fields and accessors
-
-**WIB2Frame**: Class for accessing raw WIB v2 frames, as used in ProtoDUNE-SP-II
-
-----------------
 
