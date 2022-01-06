@@ -69,9 +69,8 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(nullptr, size_t(100))),
                           std::invalid_argument,
                           [&](std::invalid_argument) { return true; });
-  BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(nullptr, size_t(-1))),
-                          std::length_error,
-                          [&](std::length_error) { return true; });
+  BOOST_REQUIRE_EXCEPTION(
+    fragment_ptr.reset(new Fragment(nullptr, size_t(-1))), std::length_error, [&](std::length_error) { return true; });
 
   BOOST_REQUIRE_EXCEPTION(
     fragment_ptr.reset(new Fragment({ nullptr, size_t(-1) - sizeof(dunedaq::daqdataformats::FragmentHeader) })),
