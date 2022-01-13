@@ -14,12 +14,12 @@
 #include "daqdataformats/Types.hpp"
 
 #include <bitset>
-#include <ostream>
-#include <string>
 #include <cstring>
-#include <vector>
-#include <stdexcept>
 #include <new>
+#include <ostream>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace dunedaq {
 
@@ -216,10 +216,11 @@ private:
    */
   TriggerRecordHeaderData* header_() const { return static_cast<TriggerRecordHeaderData*>(m_data_arr); }
 
-  void* m_data_arr{ nullptr }; ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
+  void* m_data_arr{
+    nullptr
+  };                     ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
   bool m_alloc{ false }; ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr
 };
-
 
 //------
 
@@ -229,7 +230,7 @@ TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& co
 
   m_data_arr = malloc(size); // NOLINT(build/unsigned)
   if (m_data_arr == nullptr) {
-    throw std::bad_alloc(); 
+    throw std::bad_alloc();
   }
   m_alloc = true;
 
@@ -243,7 +244,6 @@ TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& co
     offset += sizeof(component);
   }
 }
-
 
 TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer)
 {
@@ -262,13 +262,12 @@ TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_bu
   }
 }
 
-
 TriggerRecordHeader::TriggerRecordHeader(TriggerRecordHeader const& other)
   : TriggerRecordHeader(other.m_data_arr, true)
 {}
 
-
-TriggerRecordHeader& TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
+TriggerRecordHeader&
+TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
 {
   if (&other == this)
     return *this;
@@ -285,7 +284,8 @@ TriggerRecordHeader& TriggerRecordHeader::operator=(TriggerRecordHeader const& o
   return *this;
 }
 
-ComponentRequest TriggerRecordHeader::at(size_t idx) const
+ComponentRequest
+TriggerRecordHeader::at(size_t idx) const
 {
   if (idx >= header_()->num_requested_components) {
     throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
@@ -293,7 +293,6 @@ ComponentRequest TriggerRecordHeader::at(size_t idx) const
   // Increment header pointer by one to skip header
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
-
 
 ComponentRequest& TriggerRecordHeader::operator[](size_t idx)
 {
@@ -303,7 +302,6 @@ ComponentRequest& TriggerRecordHeader::operator[](size_t idx)
   // Increment header pointer by one to skip header
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
-
 
 } // namespace daqdataformats
 } // namespace dunedaq

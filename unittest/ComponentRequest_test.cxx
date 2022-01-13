@@ -24,15 +24,15 @@ BOOST_AUTO_TEST_SUITE(ComponentRequest_test)
 
 BOOST_AUTO_TEST_CASE(Constructor)
 {
-	GeoID test;
-	test.system_type = GeoID::SystemType::kTPC;
-	test.region_id = 1;
-	test.element_id = 2;
+  GeoID test;
+  test.system_type = GeoID::SystemType::kTPC;
+  test.region_id = 1;
+  test.element_id = 2;
 
-	ComponentRequest component(test, 3, 4);
-	BOOST_REQUIRE_EQUAL(component.window_begin, 3);
-	BOOST_REQUIRE_EQUAL(component.window_end, 4);
-	BOOST_REQUIRE_EQUAL(component.component, test);
+  ComponentRequest component(test, 3, 4);
+  BOOST_REQUIRE_EQUAL(component.window_begin, 3);
+  BOOST_REQUIRE_EQUAL(component.window_end, 4);
+  BOOST_REQUIRE_EQUAL(component.component, test);
 }
 
 /**

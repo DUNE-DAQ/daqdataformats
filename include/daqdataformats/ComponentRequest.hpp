@@ -75,8 +75,6 @@ operator>>(std::istream& is, ComponentRequest& cr)
   return is >> cr.component >> tmp >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;
 }
 
-
-
 ComponentRequest::ComponentRequest(GeoID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
   : version(s_component_request_version)
   , component(comp)

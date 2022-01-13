@@ -24,8 +24,7 @@ register_fragment(py::module& m)
 
   py::class_<Fragment> py_fragment(m, "Fragment", py::buffer_protocol());
 
-  py_fragment
-    .def("get_header", &Fragment::get_header, py::return_value_policy::reference_internal)
+  py_fragment.def("get_header", &Fragment::get_header, py::return_value_policy::reference_internal)
     .def("get_storage_location", &Fragment::get_storage_location, py::return_value_policy::reference_internal)
     .def("get_trigger_number", &Fragment::get_trigger_number)
     .def("get_run_number", &Fragment::get_run_number)
@@ -40,8 +39,9 @@ register_fragment(py::module& m)
     .def("get_sequence_number", &Fragment::get_sequence_number)
     .def("get_size", &Fragment::get_size)
     .def("get_data", &Fragment::get_data, py::return_value_policy::reference_internal)
-    .def("get_data", [](Fragment& self, size_t offset){  return static_cast<void*>(static_cast<char*>(self.get_data())+offset); }, py::return_value_policy::reference_internal)
-  ;
+    .def("get_data",
+         [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); },
+         py::return_value_policy::reference_internal);
 
   py::enum_<Fragment::BufferAdoptionMode>(py_fragment, "BufferAdoptionMode")
     .value("kReadOnlyMode", Fragment::BufferAdoptionMode::kReadOnlyMode)
@@ -50,26 +50,33 @@ register_fragment(py::module& m)
     .export_values();
 
   py::class_<FragmentHeader>(m, "FragmentHeader")
-    .def_property_readonly("fragment_header_marker",[](const FragmentHeader& self) -> uint32_t {return self.fragment_header_marker;})
-    .def_property_readonly("version", [](const FragmentHeader& self) -> uint32_t {return self.version;})
-    .def_property_readonly("size", [](const FragmentHeader& self) -> fragment_size_t {return self.size;})
-    .def_property_readonly("trigger_number", [](const FragmentHeader& self) -> trigger_number_t {return self.trigger_number;})
-    .def_property_readonly("trigger_timestamp", [](const FragmentHeader& self) -> timestamp_t {return self.trigger_timestamp;})
-    .def_property_readonly("window_begin", [](const FragmentHeader& self) -> timestamp_t {return self.window_begin;})
-    .def_property_readonly("window_end", [](const FragmentHeader& self) -> timestamp_t {return self.window_end;})
-    .def_property_readonly("run_number", [](const FragmentHeader& self) -> run_number_t {return self.run_number;})
-    .def_property_readonly("error_bits", [](const FragmentHeader& self) -> uint32_t {return self.error_bits;})
-    .def_property_readonly("fragment_type", [](const FragmentHeader& self) -> fragment_type_t {return self.fragment_type;})
-    .def_property_readonly("sequence_number", [](const FragmentHeader& self) -> sequence_number_t {return self.sequence_number;})
-    .def_property_readonly("element_id", [](const FragmentHeader& self) -> GeoID {return self.element_id;})
-    .def_static("sizeof", [](){ return sizeof(FragmentHeader); })
-  ;
+    .def_property_readonly(
+      "fragment_header_marker",
+      [](const FragmentHeader& self) -> uint32_t { return self.fragment_header_marker; }) // NOLINT(build/unsigned)
+    .def_property_readonly(
+      "version", [](const FragmentHeader& self) -> uint32_t { return self.version; }) // NOLINT(build/unsigned)
+    .def_property_readonly("size", [](const FragmentHeader& self) -> fragment_size_t { return self.size; })
+    .def_property_readonly("trigger_number",
+                           [](const FragmentHeader& self) -> trigger_number_t { return self.trigger_number; })
+    .def_property_readonly("trigger_timestamp",
+                           [](const FragmentHeader& self) -> timestamp_t { return self.trigger_timestamp; })
+    .def_property_readonly("window_begin", [](const FragmentHeader& self) -> timestamp_t { return self.window_begin; })
+    .def_property_readonly("window_end", [](const FragmentHeader& self) -> timestamp_t { return self.window_end; })
+    .def_property_readonly("run_number", [](const FragmentHeader& self) -> run_number_t { return self.run_number; })
+    .def_property_readonly(
+      "error_bits", [](const FragmentHeader& self) -> uint32_t { return self.error_bits; }) // NOLINT(build/unsigned)
+    .def_property_readonly("fragment_type",
+                           [](const FragmentHeader& self) -> fragment_type_t { return self.fragment_type; })
+    .def_property_readonly("sequence_number",
+                           [](const FragmentHeader& self) -> sequence_number_t { return self.sequence_number; })
+    .def_property_readonly("element_id", [](const FragmentHeader& self) -> GeoID { return self.element_id; })
+    .def_static("sizeof", []() { return sizeof(FragmentHeader); });
 
   py::enum_<FragmentErrorBits>(m, "FragmentErrorBits")
     .value("kDataNotFound", FragmentErrorBits::kDataNotFound)
     .value("kIncomplete", FragmentErrorBits::kIncomplete)
     .value("kInvalidWindow", FragmentErrorBits::kInvalidWindow)
-    // TODO:  Add unassigned
+    // TODO, Alessandro Thea <thea@github.com> Oct-31-2021:  Add unassigned
     .export_values();
 
   py::enum_<FragmentType>(m, "FragmentType")
@@ -82,7 +89,6 @@ register_fragment(py::module& m)
     .value("kTriggerCandidates", FragmentType::kTriggerCandidates)
     .value("kUnknown", FragmentType::kUnknown)
     .export_values();
-
 }
 
 } // namespace python

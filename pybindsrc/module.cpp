@@ -15,19 +15,24 @@ namespace dunedaq {
 namespace daqdataformats {
 namespace python {
 
-    extern void register_geoid(py::module &);
-    extern void register_fragment(py::module &);
-    extern void register_component_request(py::module &);
-    extern void register_trigger_record(py::module &);
+extern void
+register_geoid(py::module&);
+extern void
+register_fragment(py::module&);
+extern void
+register_component_request(py::module&);
+extern void
+register_trigger_record(py::module&);
 
-PYBIND11_MODULE(_daq_daqdataformats_py, m) {
+PYBIND11_MODULE(_daq_daqdataformats_py, m)
+{
 
-    m.doc() = "c++ implementation of the dunedaq daqdataformats modules"; // optional module docstring
+  m.doc() = "c++ implementation of the dunedaq daqdataformats modules"; // optional module docstring
 
-    register_geoid(m);
-    register_fragment(m);
-    register_component_request(m);
-    register_trigger_record(m);
+  register_geoid(m);
+  register_fragment(m);
+  register_component_request(m);
+  register_trigger_record(m);
 }
 
 } // namespace python

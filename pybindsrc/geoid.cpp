@@ -31,16 +31,12 @@ register_geoid(py::module& m)
     .value("kInvalid", GeoID::SystemType::kInvalid)
     .export_values();
 
-
-  py_geoid
-    .def_readwrite("version", &GeoID::version)
+  py_geoid.def_readwrite("version", &GeoID::version)
     .def_readwrite("system_type", &GeoID::system_type)
     .def_readwrite("region_id", &GeoID::region_id)
-    .def_readwrite("element_id", &GeoID::element_id)
-  ;
-
+    .def_readwrite("element_id", &GeoID::element_id);
 }
 
 } // namespace python
-} // namespace timing
+} // namespace daqdataformats
 } // namespace dunedaq

@@ -26,11 +26,11 @@
 
 #include "boost/test/unit_test.hpp"
 
+#include <cstring>
 #include <limits>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <cstring>
 
 using namespace dunedaq::daqdataformats;
 
@@ -76,10 +76,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
   header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
 
-  BOOST_REQUIRE_THROW(header->at(header->get_header().num_requested_components),
-                      std::range_error);
-  BOOST_REQUIRE_THROW((*header)[header->get_header().num_requested_components],
-                      std::range_error);
+  BOOST_REQUIRE_THROW(header->at(header->get_header().num_requested_components), std::range_error);
+  BOOST_REQUIRE_THROW((*header)[header->get_header().num_requested_components], std::range_error);
 
   void* buff = malloc(header->get_total_size_bytes());
   std::memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
@@ -154,9 +152,8 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest));
   std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
 
-  BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader oversize_header(hdr, true),
-                          std::bad_alloc,
-                          [&](std::bad_alloc) { return true; });
+  BOOST_REQUIRE_EXCEPTION(
+    TriggerRecordHeader oversize_header(hdr, true), std::bad_alloc, [&](std::bad_alloc) { return true; });
 
   header_data.num_requested_components = 1;
   std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
@@ -168,9 +165,8 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(),
                       std::numeric_limits<uint64_t>::max() - 10); // NOLINT(build/unsigned)
 
-  BOOST_REQUIRE_EXCEPTION(TriggerRecordHeader header_inst = bad_header,
-                          std::bad_alloc,
-                          [&](std::bad_alloc) { return true; });
+  BOOST_REQUIRE_EXCEPTION(
+    TriggerRecordHeader header_inst = bad_header, std::bad_alloc, [&](std::bad_alloc) { return true; });
 
   free(hdr);
 }

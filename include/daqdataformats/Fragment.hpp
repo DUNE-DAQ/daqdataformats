@@ -21,11 +21,11 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <new>
 #include <numeric>
+#include <stdexcept>
 #include <utility>
 #include <vector>
-#include <stdexcept>
-#include <new>
 
 namespace dunedaq {
 
@@ -291,7 +291,8 @@ Fragment::~Fragment()
     free(m_data_arr);
 }
 
-void Fragment::set_header_fields(const FragmentHeader& header)
+void
+Fragment::set_header_fields(const FragmentHeader& header)
 {
   header_()->trigger_number = header.trigger_number;
   header_()->trigger_timestamp = header.trigger_timestamp;
@@ -304,8 +305,8 @@ void Fragment::set_header_fields(const FragmentHeader& header)
   header_()->sequence_number = header.sequence_number;
 }
 
-
-void Fragment::set_error_bit(FragmentErrorBits bit, bool value)
+void
+Fragment::set_error_bit(FragmentErrorBits bit, bool value)
 
 {
   auto bits = get_error_bits();
