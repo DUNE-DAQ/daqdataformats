@@ -139,17 +139,16 @@ register_trigger_record(py::module& m)
     .def("get_header_ref", &TriggerRecord::get_header_ref, py::return_value_policy::reference_internal)
     //    .def("set_header", &TriggerRecord::set_header)
     .def("get_header_data", &TriggerRecord::get_header_data)
-    .def(
-      "get_fragments_ref",
-      [](TriggerRecord& self) {
-        auto fragments = py::list();
-        for (auto& fragment : self.get_fragments_ref()) {
-          auto py_fragment = py::cast(*fragment, py::return_value_policy::reference);
-          fragments.append(py_fragment);
-        }
-        return fragments;
-      },
-      py::return_value_policy::reference_internal);
+    .def("get_fragments_ref",
+         [](TriggerRecord& self) {
+           auto fragments = py::list();
+           for (auto& fragment : self.get_fragments_ref()) {
+             auto py_fragment = py::cast(*fragment, py::return_value_policy::reference);
+             fragments.append(py_fragment);
+           }
+           return fragments;
+         },
+         py::return_value_policy::reference_internal);
 } // NOLINT
 
 } // namespace python

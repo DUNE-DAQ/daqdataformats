@@ -39,10 +39,9 @@ register_fragment(py::module& m)
     .def("get_sequence_number", &Fragment::get_sequence_number)
     .def("get_size", &Fragment::get_size)
     .def("get_data", &Fragment::get_data, py::return_value_policy::reference_internal)
-    .def(
-      "get_data",
-      [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); },
-      py::return_value_policy::reference_internal);
+    .def("get_data",
+         [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); },
+         py::return_value_policy::reference_internal);
 
   py::enum_<Fragment::BufferAdoptionMode>(py_fragment, "BufferAdoptionMode")
     .value("kReadOnlyMode", Fragment::BufferAdoptionMode::kReadOnlyMode)
