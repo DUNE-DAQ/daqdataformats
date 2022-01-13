@@ -94,7 +94,6 @@ struct GeoID
 
   inline static std::string system_type_to_string(SystemType type);
   inline static SystemType string_to_system_type(std::string typestring);
-
 };
 
 /**
@@ -151,7 +150,6 @@ operator>>(std::istream& is, GeoID& id)
   return is;
 }
 
-
 GeoID::GeoID(GeoID::SystemType const& type, uint16_t const& region, uint32_t const& element) // NOLINT(build/unsigned)
   : version(s_geo_id_version)
   , system_type(type)
@@ -159,13 +157,15 @@ GeoID::GeoID(GeoID::SystemType const& type, uint16_t const& region, uint32_t con
   , element_id(element)
 {}
 
-bool GeoID::operator<(const GeoID& other) const noexcept
+bool
+GeoID::operator<(const GeoID& other) const noexcept
 {
   return std::tuple(system_type, region_id, element_id) <
          std::tuple(other.system_type, other.region_id, other.element_id);
 }
 
-std::string GeoID::system_type_to_string(SystemType type)
+std::string
+GeoID::system_type_to_string(SystemType type)
 {
   switch (type) {
     case SystemType::kTPC:
@@ -182,7 +182,8 @@ std::string GeoID::system_type_to_string(SystemType type)
   return "Unknown";
 }
 
-GeoID::SystemType GeoID::string_to_system_type(std::string typestring)
+GeoID::SystemType
+GeoID::string_to_system_type(std::string typestring)
 {
   if (typestring.find("TPC") == 0)
     return SystemType::kTPC;
@@ -194,7 +195,6 @@ GeoID::SystemType GeoID::string_to_system_type(std::string typestring)
     return SystemType::kNDLArTPC;
   return SystemType::kInvalid;
 }
-
 
 } // namespace daqdataformats
 } // namespace dunedaq

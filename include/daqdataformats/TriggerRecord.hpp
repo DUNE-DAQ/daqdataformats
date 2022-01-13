@@ -38,7 +38,7 @@ public:
    * @param header TriggerRecordHeader to *copy* into the TriggerRecord
    */
   inline explicit TriggerRecord(TriggerRecordHeader const& header);
-  
+
   virtual ~TriggerRecord() = default; ///< TriggerRecord default destructor
 
   TriggerRecord(TriggerRecord const&) = delete;            ///< TriggerRecords are not copy-constructible
@@ -89,7 +89,6 @@ TriggerRecord::TriggerRecord(std::vector<ComponentRequest> const& components)
   : m_header(components)
   , m_fragments()
 {}
-
 
 TriggerRecord::TriggerRecord(TriggerRecordHeader const& header)
   : m_header(header)
