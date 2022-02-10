@@ -50,6 +50,7 @@ public:
    * @brief Get a handle to the TriggerRecordHeader
    * @return A reference to the TriggerRecordHeader
    */
+  const TriggerRecordHeader& get_header_ref() const { return m_header; }
   TriggerRecordHeader& get_header_ref() { return m_header; }
   /**
    * @brief Set the TriggerRecordHeader to the given TriggerRecordHeader object
@@ -66,6 +67,7 @@ public:
    * @brief Get a handle to the Fragments
    * @return A reference to the Fragments vector
    */
+  const std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() const { return m_fragments; }
   std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() { return m_fragments; }
   /**
    * @brief Set the Fragments vector to the given vector of Fragments
