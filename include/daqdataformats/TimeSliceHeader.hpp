@@ -24,7 +24,7 @@ namespace daqdataformats {
 /**
  * @brief Additional data fields associated with a TimeSliceHeader
  */
-struct TimeSliceHeaderData
+struct TimeSliceHeader
 {
   /**
    * @brief Magic bytes to identify a TimeSliceHeader entry in a raw data stream
@@ -37,12 +37,12 @@ struct TimeSliceHeaderData
   static constexpr uint32_t s_timeslice_header_version = 1; // NOLINT(build/unsigned)
 
   /**
-   * @brief Magic bytes used to identify a TimeSliceHeaderData struct in a raw data stream
+   * @brief Magic bytes used to identify a TimeSliceHeader struct in a raw data stream
    */
   uint32_t timeslice_header_marker = s_timeslice_header_magic; // NOLINT(build/unsigned)
 
   /**
-   * @brief Version of the TimeSliceHeaderData structure
+   * @brief Version of the TimeSliceHeader structure
    */
   uint32_t version = s_timeslice_header_version; // NOLINT(build/unsigned)
 
@@ -63,41 +63,33 @@ struct TimeSliceHeaderData
 };
 
 /**
- * @brief Stream a TimeSliceHeaderData instance in human-readable form
+ * @brief Stream a TimeSliceHeader instance in human-readable form
  * @param o Stream to write to
- * @param hdr TimeSliceHeaderData to write
+ * @param hdr TimeSliceHeader to write
  * @return Stream instance for continued streaming
  */
 inline std::ostream&
-operator<<(std::ostream& o, TimeSliceHeaderData const& hdr)
+operator<<(std::ostream& o, TimeSliceHeader const& hdr)
 {
   return o << "check_word: " << std::hex << hdr.timeslice_header_marker << std::dec << ", "
            << "version: " << hdr.version << ", "
 
-           << "trigger_number: " << hdr.trigger_number << ", "
-           << "run_number: " << hdr.run_number << ", "
-           << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
-           << "trigger_type: " << hdr.trigger_type << ", "
-
-           << "num_requested_components: " << hdr.num_requested_components << ", "
-           << "sequence_number: " << hdr.sequence_number << ", "
-           << "max_sequence_number: " << hdr.max_sequence_number;
+           << "timeslice_number: " << hdr.timeslice_number << ", "
+           << "run_number: " << hdr.run_number;
 }
 
 /**
- * @brief Read a TimeSliceHeaderData instance from a string stream
+ * @brief Read a TimeSliceHeader instance from a string stream
  * @param is Stream to read from
- * @param hdr TimeSliceHeaderData toread
+ * @param hdr TimeSliceHeader toread
  * @return Stream instance for continued streaming
  */
 inline std::istream&
-operator>>(std::istream& o, TimeSliceHeaderData& hdr)
+operator>>(std::istream& o, TimeSliceHeader& hdr)
 {
   std::string tmp;
-  return o >> tmp >> std::hex >> hdr.timeslice_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >>
-         tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >> hdr.trigger_timestamp >> tmp >>
-         tmp >> hdr.trigger_type >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.num_requested_components >> tmp >>
-         tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number;
+  return o >> tmp >> std::hex >> hdr.timeslice_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
+         hdr.timeslice_number >> tmp >> tmp >> hdr.run_number;
 }
 
 } // namespace daqdataformats
