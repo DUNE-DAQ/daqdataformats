@@ -181,6 +181,33 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
+BOOST_AUTO_TEST_CASE(MoveConstructor)
+{
+  auto buf1 = malloc(10);
+  auto single_frag = new Fragment(buf1, size_t(10));
+  BOOST_REQUIRE_EQUAL(single_frag->get_size(), sizeof(FragmentHeader) + 10);
+
+  Fragment another_frag(std::move(*single_frag));
+
+  delete single_frag;
+
+  BOOST_REQUIRE_EQUAL(another_frag.get_size(), sizeof(FragmentHeader) + 10);
+}
+
+BOOST_AUTO_TEST_CASE(MoveAssignment)
+{
+  auto buf1 = malloc(10);
+  auto single_frag = new Fragment(buf1, size_t(10));
+  BOOST_REQUIRE_EQUAL(single_frag->get_size(), sizeof(FragmentHeader) + 10);
+
+  auto another_frag = std::move(*single_frag);
+
+  delete single_frag;
+
+  BOOST_REQUIRE_EQUAL(another_frag.get_size(), sizeof(FragmentHeader) + 10);
+}
+
+
 /**
  * @brief Test header field manipulation methods
  */
