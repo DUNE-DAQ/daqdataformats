@@ -86,6 +86,35 @@ BOOST_AUTO_TEST_CASE(HeaderConstructor)
 }
 
 /**
+ * @brief Test TR move constroctor
+ */
+BOOST_AUTO_TEST_CASE(MoveConstructor)
+{
+
+  std::vector<ComponentRequest> components;
+  components.emplace_back();
+  components.back().component.system_type = GeoID::SystemType::kTPC;
+  components.back().component.region_id = 1;
+  components.back().component.element_id = 2;
+  components.back().window_begin = 3;
+  components.back().window_end = 4;
+  components.emplace_back();
+  components.back().component.system_type = GeoID::SystemType::kTPC;
+  components.back().component.region_id = 5;
+  components.back().component.element_id = 6;
+  components.back().window_begin = 7;
+  components.back().window_end = 8;
+
+  TriggerRecord record(components);
+  auto buf1 = malloc(10);
+  auto frag = std::make_unique<Fragment>(buf1, size_t(10));
+  record.add_fragment(std::move(frag));
+
+  auto second_record = std::move(record);
+  BOOST_REQUIRE_EQUAL(second_record.get_header_data().num_requested_components, 2);
+}
+
+/**
  *@brief Test TriggerRecordHeader manipulation methods
  */
 BOOST_AUTO_TEST_CASE(HeaderManipulation)
