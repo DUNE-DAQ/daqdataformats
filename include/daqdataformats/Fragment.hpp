@@ -66,9 +66,17 @@ public:
   inline explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode);
 
   Fragment(Fragment const&) = delete;            ///< Fragment copy constructor is deleted
-  Fragment(Fragment&&) = default;                ///< Default Fragment move constructor
   Fragment& operator=(Fragment const&) = delete; ///< Fragment copy assignment operator is deleted
-  Fragment& operator=(Fragment&&) = default;     ///< Default move assignment operator
+  Fragment(Fragment&& other) { m_alloc = other.m_alloc;
+    other.m_alloc = false;
+    m_data_arr = other.m_data_arr;
+  }
+  Fragment& operator=(Fragment&& other) {
+    m_alloc = other.m_alloc;
+    other.m_alloc = false;
+    m_data_arr = other.m_data_arr;
+    return *this;
+  }
 
   /**
    * @brief Fragment destructor
