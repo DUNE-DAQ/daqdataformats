@@ -39,7 +39,7 @@ For sorting members, the following is fine:
 struct MySortedStruct {
   uint16_t version; // These three fields together form a 64-bit block
   uint16_t first_field;
-  uint32_t second_field; // Note that if second_field precedes first_field, 6 bytes of padding will be inserted
+  uint32_t second_field;
   
   uint64_t third_field;
 
@@ -51,4 +51,6 @@ struct MySortedStruct {
 static_assert(sizeof(MySortedStruct) == 24, "MySortedStruct size different than expected");
 ```
 
-In the general case, sorting members from largest to smallest will guarantee no internal padding is inserted by the compiler.
+In the general case, sorting members from largest to smallest will guarantee no internal padding is inserted by the compiler. 
+
+In the above struct, if `first_field` and `second_field` are swapped, the compiler will insert 8 bytes of padding: 2 bytes between `version` and `second_field` to align `second_field` to a 32-bit address, then 6 bytes after `first_field` to align `third_field` to a 64-bit address.
