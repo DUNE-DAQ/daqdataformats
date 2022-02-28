@@ -96,6 +96,8 @@ struct GeoID
   inline static SystemType string_to_system_type(std::string typestring);
 };
 
+static_assert(sizeof(GeoID) == 16, "GeoID struct size different than expected!");
+
 /**
  * @brief Stream a SystemType instance in a human-readable form
  * @param o Stream to output to

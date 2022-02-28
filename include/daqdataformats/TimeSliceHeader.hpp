@@ -61,6 +61,7 @@ struct TimeSliceHeader
    */
   uint32_t unused{ 0xFFFFFFFF }; // NOLINT(build/unsigned)
 };
+static_assert(sizeof(TimeSliceHeader) == 24, "TimeSliceHeader struct size different than expected!");
 
 /**
  * @brief Stream a TimeSliceHeader instance in human-readable form

@@ -101,6 +101,7 @@ struct TriggerRecordHeaderData
    */
   uint16_t unused{ 0xFFFF }; // NOLINT(build/unsigned)
 };
+static_assert(sizeof(TriggerRecordHeaderData) == 48, "TriggerRecordHeaderData struct size different than expected!");
 
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning

@@ -108,6 +108,7 @@ struct FragmentHeader
    */
   GeoID element_id;
 };
+static_assert(sizeof(FragmentHeader) == 80, "FragmentHeader struct size different than expected!");
 
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
