@@ -85,9 +85,9 @@ public:
    */
   size_t get_total_size_bytes() const
   {
-    size_t total_size=get_header_ref().get_total_size_bytes();
-    
-    for(auto const& frag_ptr : m_fragments)
+    size_t total_size = get_header_ref().get_total_size_bytes();
+
+    for (auto const& frag_ptr : m_fragments)
       total_size += frag_ptr->get_size();
 
     return total_size;
