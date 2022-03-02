@@ -74,6 +74,19 @@ public:
    */
   void add_fragment(std::unique_ptr<Fragment>&& fragment) { m_fragments.emplace_back(std::move(fragment)); }
 
+  /**
+   * @brief Get size of trigger record from underlying TriggerRecordHeader and Fragments
+   */
+  size_t get_total_size_bytes() const
+  {
+    size_t total_size=sizeof(get_header());
+    
+    for(auto const& frag_ptr : m_fragments)
+      total_size += frag_ptr->get_size();
+
+    return total_size;
+  }
+
 private:
   TimeSliceHeader m_header;                       ///< TimeSliceHeader object
   std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
