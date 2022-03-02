@@ -6,8 +6,8 @@
  * received with this code.
  */
 
-#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_
-#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICE_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICE_HPP_
 
 #include "daqdataformats/Fragment.hpp"
 #include "daqdataformats/TimeSliceHeader.hpp"
@@ -67,7 +67,7 @@ public:
    * @param fragments Fragments vector to use
    */
   void set_fragments(std::vector<std::unique_ptr<Fragment>>&& fragments) { m_fragments = std::move(fragments); }
-  
+
   /**
    * @brief Add a Fragment pointer to the Fragments vector
    * @param fragment Fragment to add
@@ -75,7 +75,7 @@ public:
   void add_fragment(std::unique_ptr<Fragment>&& fragment) { m_fragments.emplace_back(std::move(fragment)); }
 
 private:
-  TimeSliceHeader m_header;                       ///< TimeSliceHeader object
+  TimeSliceHeader m_header;                           ///< TimeSliceHeader object
   std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
 };
 
@@ -97,4 +97,4 @@ TimeSlice::TimeSlice(TimeSliceHeader const& header)
 } // namespace daqdataformats
 } // namespace dunedaq
 
-#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_
+#endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICE_HPP_

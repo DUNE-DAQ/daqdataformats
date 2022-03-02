@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation)
  */
 BOOST_AUTO_TEST_CASE(FragmentManipulation)
 {
-  TimeSlice record(1,2);
+  TimeSlice record(1, 2);
 
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 0);
 

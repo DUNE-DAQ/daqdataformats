@@ -31,6 +31,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <utility>
 
 using namespace dunedaq::daqdataformats;
 
@@ -140,7 +141,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   free(buff);
 }
 
-BOOST_AUTO_TEST_CASE(MoveConstructor) {
+BOOST_AUTO_TEST_CASE(MoveConstructor)
+{
   std::vector<ComponentRequest> components;
   components.emplace_back();
   components.back().component.system_type = GeoID::SystemType::kTPC;
@@ -157,11 +159,11 @@ BOOST_AUTO_TEST_CASE(MoveConstructor) {
 
   auto header = new TriggerRecordHeader(components);
 
- TriggerRecordHeader another_header(std::move(*header));
+  TriggerRecordHeader another_header(std::move(*header));
 
- delete header;
+  delete header; // NOLINT
 
- BOOST_REQUIRE_EQUAL(another_header.get_num_requested_components(), 2);
+  BOOST_REQUIRE_EQUAL(another_header.get_num_requested_components(), 2);
 }
 
 BOOST_AUTO_TEST_CASE(MoveAssignment)
@@ -184,7 +186,7 @@ BOOST_AUTO_TEST_CASE(MoveAssignment)
 
   auto another_header = std::move(*header);
 
-  delete header;
+  delete header; // NOLINT
 
   BOOST_REQUIRE_EQUAL(another_header.get_num_requested_components(), 2);
 }

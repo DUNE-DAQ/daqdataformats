@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE(MoveConstructor)
 
   Fragment another_frag(std::move(*single_frag));
 
-  delete single_frag;
+  delete single_frag; // NOLINT
 
   BOOST_REQUIRE_EQUAL(another_frag.get_size(), sizeof(FragmentHeader) + 10);
 }
@@ -202,11 +202,10 @@ BOOST_AUTO_TEST_CASE(MoveAssignment)
 
   auto another_frag = std::move(*single_frag);
 
-  delete single_frag;
+  delete single_frag; // NOLINT
 
   BOOST_REQUIRE_EQUAL(another_frag.get_size(), sizeof(FragmentHeader) + 10);
 }
-
 
 /**
  * @brief Test header field manipulation methods
