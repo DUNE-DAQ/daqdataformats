@@ -49,6 +49,7 @@ struct ComponentRequest
   ComponentRequest() {}
   inline ComponentRequest(GeoID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
 };
+static_assert(sizeof(ComponentRequest) == 40, "ComponentRequest struct size different than expected!");
 
 /**
  * @brief Write out a ComponentRequest in human-readable form

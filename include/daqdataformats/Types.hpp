@@ -50,6 +50,10 @@ using trigger_type_t = uint16_t; // NOLINT(build/unsigned)
  * @brief Type used to represent sequence within a trigger record
  */
 using sequence_number_t = uint16_t; // NOLINT(build/unsigned)
+/**
+ * @brief Type used to represent timeslice number
+ */
+using timeslice_number_t = uint64_t; // NOLINT(build/unsigned)
 
 /**
  * @brief Default values for daqdataformats types
@@ -73,6 +77,8 @@ public:
     std::numeric_limits<trigger_type_t>::max(); ///< An invalid trigger type
   static constexpr sequence_number_t s_invalid_sequence_number =
     std::numeric_limits<sequence_number_t>::max(); // An invalid sequence number
+  static constexpr timeslice_number_t s_invalid_timeslice_number =
+    std::numeric_limits<timeslice_number_t>::max(); ///< An invalid timeslice number
 };
 
 } // namespace daqdataformats
