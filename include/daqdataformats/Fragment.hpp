@@ -67,7 +67,8 @@ public:
 
   Fragment(Fragment const&) = delete;            ///< Fragment copy constructor is deleted
   Fragment& operator=(Fragment const&) = delete; ///< Fragment copy assignment operator is deleted
-  Fragment(Fragment&& other) { m_alloc = other.m_alloc;
+  Fragment(Fragment&& other) {
+    m_alloc = other.m_alloc;
     other.m_alloc = false;
     m_data_arr = other.m_data_arr;
   }
