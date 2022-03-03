@@ -6,8 +6,8 @@
  * received with this code.
  */
 
-#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_
-#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_
+#ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICE_HPP_
+#define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICE_HPP_
 
 #include "daqdataformats/Fragment.hpp"
 #include "daqdataformats/TimeSliceHeader.hpp"
@@ -73,6 +73,19 @@ public:
    * @param fragment Fragment to add
    */
   void add_fragment(std::unique_ptr<Fragment>&& fragment) { m_fragments.emplace_back(std::move(fragment)); }
+
+  /**
+   * @brief Get size of trigger record from underlying TriggerRecordHeader and Fragments
+   */
+  size_t get_total_size_bytes() const
+  {
+    size_t total_size=sizeof(get_header());
+    
+    for(auto const& frag_ptr : m_fragments)
+      total_size += frag_ptr->get_size();
+
+    return total_size;
+  }
 
 private:
   TimeSliceHeader m_header;                       ///< TimeSliceHeader object
