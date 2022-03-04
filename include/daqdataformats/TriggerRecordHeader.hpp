@@ -64,7 +64,8 @@ public:
     other.m_alloc = false;
     m_data_arr = other.m_data_arr;
   }
-  TriggerRecordHeader& operator=(TriggerRecordHeader&& other) {
+  TriggerRecordHeader& operator=(TriggerRecordHeader&& other)
+  {
     m_alloc = other.m_alloc;
     other.m_alloc = false;
     m_data_arr = other.m_data_arr;
@@ -304,8 +305,7 @@ TriggerRecordHeader::at(size_t idx) const
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
 
-ComponentRequest&
-TriggerRecordHeader::operator[](size_t idx)
+ComponentRequest& TriggerRecordHeader::operator[](size_t idx)
 {
   if (idx >= header_()->num_requested_components) {
     throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");

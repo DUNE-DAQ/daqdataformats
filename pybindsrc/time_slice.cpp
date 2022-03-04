@@ -24,7 +24,7 @@ namespace python {
 void
 register_timeslice(py::module& m)
 {
-   py::class_<TimeSliceHeader>(m, "TimeSliceHeader")
+  py::class_<TimeSliceHeader>(m, "TimeSliceHeader")
     .def_property_readonly_static("s_timeslice_header_magic",
                                   [](const TimeSliceHeader& self) -> uint32_t { // NOLINT(build/unsigned)
                                     return self.s_timeslice_header_magic;
@@ -47,22 +47,18 @@ register_timeslice(py::module& m)
   py::class_<TimeSlice> py_timeslice(m, "TimeSlice", pybind11::buffer_protocol());
   py_timeslice.def(py::init<TimeSliceHeader const&>())
     .def(py::init<timeslice_number_t, run_number_t>())
-    .def(
-      "get_header",
-      [](TimeSlice& self) { return self.get_header(); },
-      py::return_value_policy::reference_internal)
+    .def("get_header", [](TimeSlice& self) { return self.get_header(); }, py::return_value_policy::reference_internal)
     //    .def("set_header", &TimeSlice::set_header)
-    .def(
-      "get_fragments_ref",
-      [](TimeSlice& self) {
-        auto fragments = py::list();
-        for (auto& fragment : self.get_fragments_ref()) {
-          auto py_fragment = py::cast(*fragment, py::return_value_policy::reference);
-          fragments.append(py_fragment);
-        }
-        return fragments;
-      },
-      py::return_value_policy::reference_internal);
+    .def("get_fragments_ref",
+         [](TimeSlice& self) {
+           auto fragments = py::list();
+           for (auto& fragment : self.get_fragments_ref()) {
+             auto py_fragment = py::cast(*fragment, py::return_value_policy::reference);
+             fragments.append(py_fragment);
+           }
+           return fragments;
+         },
+         py::return_value_policy::reference_internal);
 } // NOLINT
 
 } // namespace python
