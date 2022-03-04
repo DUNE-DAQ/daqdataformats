@@ -136,9 +136,9 @@ register_trigger_record(py::module& m)
   py::class_<TriggerRecord> py_trigger_record(m, "TriggerRecord", pybind11::buffer_protocol());
   py_trigger_record.def(py::init<TriggerRecordHeader const&>())
     .def(py::init<std::vector<ComponentRequest> const&>())
-      .def("get_header_ref", [](TriggerRecord& self) {
-      return self.get_header_ref();
-          }, py::return_value_policy::reference_internal)
+    .def("get_header_ref",
+         [](TriggerRecord& self) { return self.get_header_ref(); },
+         py::return_value_policy::reference_internal)
     //    .def("set_header", &TriggerRecord::set_header)
     .def("get_header_data", &TriggerRecord::get_header_data)
     .def("get_fragments_ref",
