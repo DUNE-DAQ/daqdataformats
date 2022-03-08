@@ -23,6 +23,8 @@ extern void
 register_component_request(py::module&);
 extern void
 register_trigger_record(py::module&);
+extern void
+register_timeslice(py::module&);
 
 PYBIND11_MODULE(_daq_daqdataformats_py, m)
 {
@@ -33,6 +35,7 @@ PYBIND11_MODULE(_daq_daqdataformats_py, m)
   register_fragment(m);
   register_component_request(m);
   register_trigger_record(m);
+  register_timeslice(m);
 }
 
 } // namespace python
