@@ -12,6 +12,7 @@
 #include "daqdataformats/ComponentRequest.hpp"
 #include "daqdataformats/Types.hpp"
 
+#include <cstddef>
 #include <limits>
 #include <ostream>
 #include <string>
@@ -27,9 +28,9 @@ namespace daqdataformats {
 struct TimeSliceHeader
 {
   /**
-   * @brief Magic bytes to identify a TimeSliceHeader entry in a raw data stream
+   * @brief Marker bytes to identify a TimeSliceHeader entry in a raw data stream
    */
-  static constexpr uint32_t s_timeslice_header_magic = 0x55556666; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_timeslice_header_marker = 0x55556666; // NOLINT(build/unsigned)
 
   /**
    * @brief The current version of the TimeSliceHeader
@@ -37,9 +38,9 @@ struct TimeSliceHeader
   static constexpr uint32_t s_timeslice_header_version = 1; // NOLINT(build/unsigned)
 
   /**
-   * @brief Magic bytes used to identify a TimeSliceHeader struct in a raw data stream
+   * @brief Marker bytes used to identify a TimeSliceHeader struct in a raw data stream
    */
-  uint32_t timeslice_header_marker = s_timeslice_header_magic; // NOLINT(build/unsigned)
+  uint32_t timeslice_header_marker = s_timeslice_header_marker; // NOLINT(build/unsigned)
 
   /**
    * @brief Version of the TimeSliceHeader structure
@@ -62,6 +63,13 @@ struct TimeSliceHeader
   uint32_t unused{ 0xFFFFFFFF }; // NOLINT(build/unsigned)
 };
 static_assert(sizeof(TimeSliceHeader) == 24, "TimeSliceHeader struct size different than expected!");
+static_assert(offsetof(TimeSliceHeader, timeslice_header_marker) == 0,
+              "TimeSliceHeader timeslice_header_marker field not at expected offset!");
+static_assert(offsetof(TimeSliceHeader, version) == 4, "TimeSliceHeader version field not at expected offset!");
+static_assert(offsetof(TimeSliceHeader, timeslice_number) == 8,
+              "TimeSliceHeader timeslice_number field not at expected offset!");
+static_assert(offsetof(TimeSliceHeader, run_number) == 16, "TimeSliceHeader run_number field not at expected offset!");
+static_assert(offsetof(TimeSliceHeader, unused) == 20, "TimeSliceHeader unused field not at expected offset!");
 
 /**
  * @brief Stream a TimeSliceHeader instance in human-readable form

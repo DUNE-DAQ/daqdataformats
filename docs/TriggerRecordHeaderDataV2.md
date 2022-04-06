@@ -32,12 +32,12 @@ using sequence_number_t = uint16_t;
 struct TriggerRecordHeaderData
 {
   
-  static constexpr uint32_t s_trigger_record_header_magic = 0x33334444;
+  static constexpr uint32_t s_trigger_record_header_marker = 0x33334444;
   static constexpr uint32_t s_trigger_record_header_version = 2;
   static constexpr uint64_t s_invalid_number_components = std::numeric_limits<uint64_t>::max();
   static constexpr uint32_t s_default_error_bits = 0;
 
-  uint32_t trigger_record_header_marker = s_trigger_record_header_magic;
+  uint32_t trigger_record_header_marker = s_trigger_record_header_marker;
   uint32_t version = s_trigger_record_header_version;
   trigger_number_t trigger_number{ TypeDefaults::s_invalid_trigger_number };
   timestamp_t trigger_timestamp{ TypeDefaults::s_invalid_timestamp };

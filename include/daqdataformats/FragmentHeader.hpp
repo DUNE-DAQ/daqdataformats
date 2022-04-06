@@ -13,6 +13,7 @@
 #include "daqdataformats/Types.hpp"
 
 #include <bitset>
+#include <cstddef>
 #include <cstdlib>
 #include <map>
 #include <numeric>
@@ -29,9 +30,9 @@ namespace daqdataformats {
 struct FragmentHeader
 {
   /**
-   * @brief Magic bytes to identify a FragmentHeader entry in a raw data stream
+   * @brief Marker bytes to identify a FragmentHeader entry in a raw data stream
    */
-  static constexpr uint32_t s_fragment_header_magic = 0x11112222; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_fragment_header_marker = 0x11112222; // NOLINT(build/unsigned)
 
   /**
    * @brief The current version of the Fragment
@@ -44,9 +45,9 @@ struct FragmentHeader
   static constexpr uint32_t s_default_error_bits = 0; // NOLINT(build/unsigned)
 
   /**
-   * @brief Magic Bytes used to identify FragmentHeaders in a raw data stream
+   * @brief Marker Bytes used to identify FragmentHeaders in a raw data stream
    */
-  uint32_t fragment_header_marker = s_fragment_header_magic; // NOLINT(build/unsigned)
+  uint32_t fragment_header_marker = s_fragment_header_marker; // NOLINT(build/unsigned)
 
   /**
    * @brief Version of the FragmentHeader
@@ -109,6 +110,25 @@ struct FragmentHeader
   GeoID element_id;
 };
 static_assert(sizeof(FragmentHeader) == 80, "FragmentHeader struct size different than expected!");
+static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
+              "FragmentHeader fragment_header_marker field not at expected offset!");
+static_assert(offsetof(FragmentHeader, version) == 4, "FragmentHeader version field not at expected offset!");
+static_assert(offsetof(FragmentHeader, size) == 8, "FragmentHeader size field not at expected offset!");
+static_assert(offsetof(FragmentHeader, trigger_number) == 16,
+              "FragmentHeader trigger_number field not at expected offset!");
+static_assert(offsetof(FragmentHeader, trigger_timestamp) == 24,
+              "FragmentHeader trigger_timestamp field not at expected offset!");
+static_assert(offsetof(FragmentHeader, window_begin) == 32,
+              "FragmentHeader window_begin field not at expected offset!");
+static_assert(offsetof(FragmentHeader, window_end) == 40, "FragmentHeader window_end field not at expected offset!");
+static_assert(offsetof(FragmentHeader, run_number) == 48, "FragmentHeader run_number field not at expected offset!");
+static_assert(offsetof(FragmentHeader, error_bits) == 52, "FragmentHeader error_bits field not at expected offset!");
+static_assert(offsetof(FragmentHeader, fragment_type) == 56,
+              "FragmentHeader fragment_type field not at expected offset!");
+static_assert(offsetof(FragmentHeader, sequence_number) == 60,
+              "FragmentHeader sequence_number field not at expected offset!");
+static_assert(offsetof(FragmentHeader, unused) == 62, "FragmentHeader unused field not at expected offset!");
+static_assert(offsetof(FragmentHeader, element_id) == 64, "FragmentHeader element_id field not at expected offset!");
 
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning

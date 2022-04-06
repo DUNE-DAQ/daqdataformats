@@ -14,6 +14,7 @@
 #include "daqdataformats/Types.hpp"
 
 #include <bitset>
+#include <cstddef>
 #include <cstring>
 #include <new>
 #include <ostream>
