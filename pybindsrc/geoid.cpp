@@ -8,9 +8,9 @@
 
 #include "daqdataformats/GeoID.hpp"
 
+#include <pybind11/operators.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/operators.h>
 
 #include <sstream>
 
@@ -25,13 +25,11 @@ register_geoid(py::module& m)
 {
 
   py::class_<GeoID> py_geoid(m, "GeoID");
-  py_geoid.def(py::self < py::self)
-          .def("__repr__",
-               [](const GeoID &gid){
-                 std::ostringstream oss;
-                 oss << "<daqdataformats::GeoID " << gid << ">";
-                 return oss.str();
-               });
+  py_geoid.def(py::self < py::self).def("__repr__", [](const GeoID& gid) {
+    std::ostringstream oss;
+    oss << "<daqdataformats::GeoID " << gid << ">";
+    return oss.str();
+  });
 
   py::enum_<GeoID::SystemType>(py_geoid, "SystemType")
     .value("kTPC", GeoID::SystemType::kTPC)

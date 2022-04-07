@@ -9,6 +9,7 @@
 #ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_GEOID_HPP_
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_GEOID_HPP_
 
+#include <cstddef>
 #include <cstdint>
 #include <istream>
 #include <limits>
@@ -97,6 +98,11 @@ struct GeoID
 };
 
 static_assert(sizeof(GeoID) == 16, "GeoID struct size different than expected!");
+static_assert(offsetof(GeoID, version) == 0, "GeoID version field not at expected offset");
+static_assert(offsetof(GeoID, system_type) == 4, "GeoID system_type field not at expected offset");
+static_assert(offsetof(GeoID, region_id) == 6, "GeoID region_id field not at expected offset");
+static_assert(offsetof(GeoID, element_id) == 8, "GeoID element_id field not at expected offset");
+static_assert(offsetof(GeoID, unused) == 12, "GeoID unused field not at expected offset");
 
 /**
  * @brief Stream a SystemType instance in a human-readable form

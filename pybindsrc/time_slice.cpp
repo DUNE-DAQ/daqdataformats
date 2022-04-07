@@ -25,9 +25,9 @@ void
 register_timeslice(py::module& m)
 {
   py::class_<TimeSliceHeader>(m, "TimeSliceHeader")
-    .def_property_readonly_static("s_timeslice_header_magic",
+    .def_property_readonly_static("s_timeslice_header_marker",
                                   [](const TimeSliceHeader& self) -> uint32_t { // NOLINT(build/unsigned)
-                                    return self.s_timeslice_header_magic;
+                                    return self.s_timeslice_header_marker;
                                   })
     .def_property_readonly_static("s_timeslice_header_version",
                                   [](const TimeSliceHeader& self) -> uint32_t { // NOLINT(build/unsigned)

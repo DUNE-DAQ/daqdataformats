@@ -39,11 +39,11 @@ using sequence_number_t = uint16_t;
 
 struct FragmentHeader
 {
-  static constexpr uint32_t s_fragment_header_magic = 0x11112222;
+  static constexpr uint32_t s_fragment_header_marker = 0x11112222;
   static constexpr uint32_t s_fragment_header_version = 3;
   static constexpr uint32_t s_default_error_bits = 0;
 
-  uint32_t fragment_header_marker = s_fragment_header_magic;
+  uint32_t fragment_header_marker = s_fragment_header_marker;
   uint32_t version = s_fragment_header_version;
   fragment_size_t size{ TypeDefaults::s_invalid_fragment_size };
   trigger_number_t trigger_number{ TypeDefaults::s_invalid_trigger_number };

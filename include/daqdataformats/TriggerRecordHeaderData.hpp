@@ -12,6 +12,7 @@
 #include "daqdataformats/ComponentRequest.hpp"
 #include "daqdataformats/Types.hpp"
 
+#include <cstddef>
 #include <limits>
 #include <ostream>
 #include <string>
@@ -102,6 +103,28 @@ struct TriggerRecordHeaderData
   uint16_t unused{ 0xFFFF }; // NOLINT(build/unsigned)
 };
 static_assert(sizeof(TriggerRecordHeaderData) == 48, "TriggerRecordHeaderData struct size different than expected!");
+static_assert(offsetof(TriggerRecordHeaderData, trigger_record_header_marker) == 0,
+              "TriggerRecordHeaderData trigger_record_header_marker field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, version) == 4,
+              "TriggerRecordHeaderData version field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, trigger_number) == 8,
+              "TriggerRecordHeaderData trigger_number field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, trigger_timestamp) == 16,
+              "TriggerRecordHeaderData trigger_timestamp field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, num_requested_components) == 24,
+              "TriggerRecordHeaderData num_requested_components field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, run_number) == 32,
+              "TriggerRecordHeaderData run_number field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, error_bits) == 36,
+              "TriggerRecordHeaderData error_bits field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, trigger_type) == 40,
+              "TriggerRecordHeaderData trigger_type field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, sequence_number) == 42,
+              "TriggerRecordHeaderData sequence_number field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, max_sequence_number) == 44,
+              "TriggerRecordHeaderData max_sequence_number field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, unused) == 46,
+              "TriggerRecordHeaderData unused field not at expected offset!");
 
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
