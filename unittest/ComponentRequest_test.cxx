@@ -24,8 +24,8 @@ BOOST_AUTO_TEST_SUITE(ComponentRequest_test)
 
 BOOST_AUTO_TEST_CASE(Constructor)
 {
-  GeoID test;
-  test.system_type = GeoID::SystemType::kTPC;
+  SourceID test;
+  test.system_type = SourceID::SystemType::kTPC;
   test.region_id = 1;
   test.element_id = 2;
 
@@ -41,8 +41,8 @@ BOOST_AUTO_TEST_CASE(Constructor)
 BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   ComponentRequest component;
-  GeoID test;
-  test.system_type = GeoID::SystemType::kTPC;
+  SourceID test;
+  test.system_type = SourceID::SystemType::kTPC;
   test.region_id = 1;
   test.element_id = 2;
   component.component = test;

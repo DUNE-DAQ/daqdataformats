@@ -69,7 +69,7 @@ register_fragment(py::module& m)
                            [](const FragmentHeader& self) -> fragment_type_t { return self.fragment_type; })
     .def_property_readonly("sequence_number",
                            [](const FragmentHeader& self) -> sequence_number_t { return self.sequence_number; })
-    .def_property_readonly("element_id", [](const FragmentHeader& self) -> GeoID { return self.element_id; })
+    .def_property_readonly("element_id", [](const FragmentHeader& self) -> SourceID { return self.element_id; })
     .def_static("sizeof", []() { return sizeof(FragmentHeader); });
 
   py::enum_<FragmentErrorBits>(m, "FragmentErrorBits")

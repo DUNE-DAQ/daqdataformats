@@ -9,7 +9,7 @@
 #ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_
 
-#include "daqdataformats/GeoID.hpp"
+#include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/Types.hpp"
 
 #include <bitset>
@@ -107,7 +107,7 @@ struct FragmentHeader
   /**
    * @brief Component that generated the data in this Fragment
    */
-  GeoID element_id;
+  SourceID element_id;
 };
 static_assert(sizeof(FragmentHeader) == 80, "FragmentHeader struct size different than expected!");
 static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,

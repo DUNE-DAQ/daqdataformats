@@ -221,8 +221,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header.window_begin = 4;
   header.window_end = 5;
 
-  GeoID component;
-  component.system_type = GeoID::SystemType::kTPC;
+  SourceID component;
+  component.system_type = SourceID::SystemType::kTPC;
   component.region_id = 6;
   component.element_id = 7;
   header.element_id = component;
@@ -271,12 +271,12 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   frag.set_sequence_number(0x99);
   BOOST_REQUIRE_EQUAL(theHeader->sequence_number, 0x99);
 
-  GeoID new_component;
-  new_component.system_type = GeoID::SystemType::kTPC;
+  SourceID new_component;
+  new_component.system_type = SourceID::SystemType::kTPC;
   new_component.region_id = 0x66;
   new_component.element_id = 0x77;
   frag.set_element_id(new_component);
-  BOOST_REQUIRE_EQUAL(theHeader->element_id.system_type, GeoID::SystemType::kTPC);
+  BOOST_REQUIRE_EQUAL(theHeader->element_id.system_type, SourceID::SystemType::kTPC);
   BOOST_REQUIRE_EQUAL(theHeader->element_id.region_id, 0x66);
   BOOST_REQUIRE_EQUAL(theHeader->element_id.element_id, 0x77);
 
