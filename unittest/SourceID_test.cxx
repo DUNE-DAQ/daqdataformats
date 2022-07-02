@@ -24,26 +24,22 @@ using namespace dunedaq::daqdataformats;
 
 BOOST_AUTO_TEST_SUITE(SourceID_test)
 
-BOOST_AUTO_TEST_CASE(SystemTypeConversion)
+BOOST_AUTO_TEST_CASE(CategoryConversion)
 {
-  BOOST_REQUIRE_EQUAL(SourceID::system_type_to_string(SourceID::SystemType::kTPC), "TPC");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_system_type("TPC"), SourceID::SystemType::kTPC);
+  BOOST_REQUIRE_EQUAL(SourceID::category_to_string(SourceID::Category::kTPC), "TPC");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_category("TPC"), SourceID::Category::kTPC);
 
-  BOOST_REQUIRE_EQUAL(SourceID::system_type_to_string(SourceID::SystemType::kPDS), "PDS");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_system_type("PDS"), SourceID::SystemType::kPDS);
+  BOOST_REQUIRE_EQUAL(SourceID::category_to_string(SourceID::Category::kPDS), "PDS");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_category("PDS"), SourceID::Category::kPDS);
 
-  BOOST_REQUIRE_EQUAL(SourceID::system_type_to_string(SourceID::SystemType::kDataSelection), "DataSelection");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_system_type("DataSelection"), SourceID::SystemType::kDataSelection);
+  BOOST_REQUIRE_EQUAL(SourceID::category_to_string(SourceID::Category::kDataSelection), "DataSelection");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_category("DataSelection"), SourceID::Category::kDataSelection);
 
-  BOOST_REQUIRE_EQUAL(SourceID::system_type_to_string(SourceID::SystemType::kNDLArTPC), "NDLArTPC");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_system_type("NDLArTPC"), SourceID::SystemType::kNDLArTPC);
+  BOOST_REQUIRE_EQUAL(SourceID::category_to_string(SourceID::Category::kNDLArTPC), "NDLArTPC");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_category("NDLArTPC"), SourceID::Category::kNDLArTPC);
 
-  BOOST_REQUIRE_EQUAL(SourceID::system_type_to_string(SourceID::SystemType::kInvalid), "Invalid");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_system_type("Invalid"), SourceID::SystemType::kInvalid);
-
-  auto test_type = static_cast<SourceID::SystemType>(0x1234);
-  BOOST_REQUIRE_EQUAL(SourceID::system_type_to_string(test_type), "Unknown");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_system_type("Unknown"), SourceID::SystemType::kInvalid);
+  BOOST_REQUIRE_EQUAL(SourceID::category_to_string(SourceID::Category::kInvalid), "Invalid");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_category("Invalid"), SourceID::Category::kInvalid);
 }
 
 /**
@@ -52,9 +48,11 @@ BOOST_AUTO_TEST_CASE(SystemTypeConversion)
 BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   SourceID test;
-  test.system_type = SourceID::SystemType::kTPC;
-  test.region_id = 1;
-  test.element_id = 2;
+  const SourceID::ID_upper_t upper = 314;
+  const SourceID::ID_lower_t lower = 159;
+
+  test.category = SourceID::Category::kTPC;
+  test.id = SourceID::compose_id(upper, lower);
 
   std::ostringstream ostr;
   ostr << test;
@@ -63,13 +61,38 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_TEST_MESSAGE("Stream operator: " << output);
 
   BOOST_REQUIRE(!output.empty());
-  auto pos = output.find("region: 1,");
-  BOOST_REQUIRE(pos != std::string::npos);
 
+  // Test that the "id -> (upper, lower)" output of the stream operator holds
+  auto pos = output.find(std::to_string(test.id));
+  BOOST_REQUIRE(pos != std::string::npos);  
+
+  pos = output.find(std::to_string(upper));
+  BOOST_REQUIRE(pos != std::string::npos);  
+
+  pos = output.find(std::to_string(lower));
+  BOOST_REQUIRE(pos != std::string::npos);  
+
+  BOOST_TEST_MESSAGE("About to try to input from \"" << output << "\"");
   std::istringstream istr(output);
   SourceID test2;
   istr >> test2;
-  BOOST_REQUIRE_EQUAL(test2, test);
+  BOOST_TEST_MESSAGE("Looks like the output-from-the-input is \"" << test2) << "\"";
+  BOOST_REQUIRE_EQUAL(test, test2); // Recall that output was generated from streaming out a SourceID instance
+
+
+}
+
+BOOST_AUTO_TEST_CASE(ComposeDecompose)
+{
+  static_assert(sizeof(SourceID::ID_t) == 4); // Otherwise the DEADBEEF below should change
+  SourceID test { SourceID::Category::kTPC, 0xDEADBEEF };
+
+  // Test the splitting / combining of the upper and lower half of SourceID's id member
+  SourceID::ID_upper_t upper;
+  SourceID::ID_lower_t lower;
+  SourceID::decompose_id(test.id, upper, lower);
+  auto recomposed_id = SourceID::compose_id(upper, lower);
+  BOOST_REQUIRE_EQUAL(test.id, recomposed_id);
 }
 
 /**
@@ -78,18 +101,29 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
 BOOST_AUTO_TEST_CASE(ComparisonOperator)
 {
   SourceID lesser, greater;
-  lesser.system_type = SourceID::SystemType::kTPC;
-  lesser.region_id = 1;
-  lesser.element_id = 2;
-  greater.system_type = SourceID::SystemType::kTPC;
-  greater.region_id = 3;
-  greater.element_id = 4;
+  lesser.category = SourceID::Category::kTPC;
+  lesser.id = 1;
+  greater.category = SourceID::Category::kTPC;
+  greater.id = 3;
 
   BOOST_REQUIRE(lesser != greater);
   BOOST_REQUIRE(lesser == lesser);
   BOOST_REQUIRE(greater == greater);
   BOOST_REQUIRE(lesser < greater);
   BOOST_REQUIRE(!(greater < lesser));
+}
+
+BOOST_AUTO_TEST_CASE(Validity)
+{
+  SourceID test;
+  BOOST_REQUIRE( ! test.is_in_valid_state() );
+
+  test = { SourceID::Category::kPDS, 3141592 }; 
+  BOOST_REQUIRE( test.is_in_valid_state() );
+  
+  test.id = SourceID::s_invalid_id;
+  BOOST_REQUIRE( ! test.is_in_valid_state() );
+  
 }
 
 BOOST_AUTO_TEST_SUITE_END()
