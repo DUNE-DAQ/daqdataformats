@@ -18,9 +18,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief Additional data fields associated with a TriggerRecordHeader
@@ -206,7 +204,6 @@ operator>>(std::istream& o, TriggerRecordHeaderData& hdr)
          tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number;
 }
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_

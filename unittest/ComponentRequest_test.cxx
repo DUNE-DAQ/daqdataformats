@@ -24,10 +24,7 @@ BOOST_AUTO_TEST_SUITE(ComponentRequest_test)
 
 BOOST_AUTO_TEST_CASE(Constructor)
 {
-  SourceID test;
-  test.system_type = SourceID::SystemType::kTPC;
-  test.region_id = 1;
-  test.element_id = 2;
+  SourceID test { SourceID::Category::kTPC, 12345 };
 
   ComponentRequest component(test, 3, 4);
   BOOST_REQUIRE_EQUAL(component.window_begin, 3);
@@ -41,10 +38,10 @@ BOOST_AUTO_TEST_CASE(Constructor)
 BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   ComponentRequest component;
-  SourceID test;
-  test.system_type = SourceID::SystemType::kTPC;
-  test.region_id = 1;
-  test.element_id = 2;
+
+  SourceID::ID_t arbitrary_id = 6789;
+  SourceID test = { SourceID::Category::kTPC, arbitrary_id};
+
   component.component = test;
   component.window_begin = 3;
   component.window_end = 4;
@@ -56,9 +53,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_TEST_MESSAGE("Stream operator: " << output);
 
   BOOST_REQUIRE(!output.empty());
-  auto pos = output.find("region: 1,");
-  BOOST_REQUIRE(pos != std::string::npos);
-  pos = output.find("element: 2,");
+  auto pos = output.find(std::to_string(arbitrary_id));
   BOOST_REQUIRE(pos != std::string::npos);
   pos = output.find("begin: 3,");
   BOOST_REQUIRE(pos != std::string::npos);

@@ -50,13 +50,13 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
  */
 BOOST_AUTO_TEST_CASE(DataConstructors)
 {
-  auto buf1 = malloc(10);
-  Fragment single_frag(buf1, size_t(10));
-  BOOST_REQUIRE_EQUAL(single_frag.get_size(), sizeof(FragmentHeader) + 10);
+  std::vector<uint8_t> buf1(10);
+  Fragment single_frag(buf1.data(), buf1.size());
+  BOOST_REQUIRE_EQUAL(single_frag.get_size(), sizeof(FragmentHeader) + buf1.size());
 
-  auto buf2 = malloc(20);
-  Fragment collect_frag({ { buf1, 10 }, { buf2, 20 } });
-  BOOST_REQUIRE_EQUAL(collect_frag.get_size(), sizeof(FragmentHeader) + 30);
+  std::vector<uint8_t> buf2(20);
+  Fragment collect_frag({ { buf1.data(), buf1.size() }, { buf2.data(), buf2.size() } });
+  BOOST_REQUIRE_EQUAL(collect_frag.get_size(), sizeof(FragmentHeader) + buf1.size() + buf2.size());
 }
 
 /**
@@ -78,8 +78,8 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
     [&](std::bad_alloc) { return true; });
 
   auto bufsize = 10;
-  auto buf1 = malloc(bufsize);
-  fragment_ptr.reset(new Fragment(buf1, static_cast<size_t>(bufsize)));
+  std::vector<uint8_t> buf1(bufsize);
+  fragment_ptr.reset(new Fragment(buf1.data(), buf1.size()));
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
@@ -221,10 +221,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header.window_begin = 4;
   header.window_end = 5;
 
-  SourceID component;
-  component.system_type = SourceID::SystemType::kTPC;
-  component.region_id = 6;
-  component.element_id = 7;
+  SourceID component { SourceID::Category::kTPC, 123456789 };
   header.element_id = component;
 
   header.error_bits = 0x12345678;
@@ -243,9 +240,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(frag.get_trigger_timestamp(), header.trigger_timestamp);
   BOOST_REQUIRE_EQUAL(frag.get_window_begin(), header.window_begin);
   BOOST_REQUIRE_EQUAL(frag.get_window_end(), header.window_end);
-  BOOST_REQUIRE_EQUAL(frag.get_element_id().system_type, header.element_id.system_type);
-  BOOST_REQUIRE_EQUAL(frag.get_element_id().region_id, header.element_id.region_id);
-  BOOST_REQUIRE_EQUAL(frag.get_element_id().element_id, header.element_id.element_id);
+  BOOST_REQUIRE_EQUAL(frag.get_element_id(), header.element_id);
 
   BOOST_REQUIRE_EQUAL(frag.get_error_bits().to_ulong(), header.error_bits);
   BOOST_REQUIRE_EQUAL(frag.get_error_bit(static_cast<FragmentErrorBits>(3)), true);
@@ -271,14 +266,10 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   frag.set_sequence_number(0x99);
   BOOST_REQUIRE_EQUAL(theHeader->sequence_number, 0x99);
 
-  SourceID new_component;
-  new_component.system_type = SourceID::SystemType::kTPC;
-  new_component.region_id = 0x66;
-  new_component.element_id = 0x77;
+  SourceID new_component { SourceID::Category::kTPC, SourceID::compose_id( 0x66, 0x77 ) };
   frag.set_element_id(new_component);
-  BOOST_REQUIRE_EQUAL(theHeader->element_id.system_type, SourceID::SystemType::kTPC);
-  BOOST_REQUIRE_EQUAL(theHeader->element_id.region_id, 0x66);
-  BOOST_REQUIRE_EQUAL(theHeader->element_id.element_id, 0x77);
+  BOOST_REQUIRE_EQUAL(theHeader->element_id.category, SourceID::Category::kTPC);
+  BOOST_REQUIRE_EQUAL(theHeader->element_id.id, SourceID::compose_id(0x66, 0x77 ));
 
   std::bitset<32> no_errors(0);
   frag.set_error_bits(no_errors);

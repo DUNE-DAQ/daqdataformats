@@ -16,9 +16,7 @@
 
 namespace py = pybind11;
 
-namespace dunedaq {
-namespace daqdataformats {
-namespace python {
+namespace dunedaq::daqdataformats::python {
 
 void
 register_sourceid(py::module& m)
@@ -31,20 +29,20 @@ register_sourceid(py::module& m)
     return oss.str();
   });
 
-  py::enum_<SourceID::SystemType>(py_sourceid, "SystemType")
-    .value("kTPC", SourceID::SystemType::kTPC)
-    .value("kPDS", SourceID::SystemType::kPDS)
-    .value("kDataSelection", SourceID::SystemType::kDataSelection)
-    .value("kNDLArTPC", SourceID::SystemType::kNDLArTPC)
-    .value("kInvalid", SourceID::SystemType::kInvalid)
+  py::enum_<SourceID::Category>(py_sourceid, "Category")
+    .value("kInvalid", SourceID::Category::kInvalid)
+    .value("kTPC", SourceID::Category::kTPC)
+    .value("kPDS", SourceID::Category::kPDS)
+    .value("kDataSelection", SourceID::Category::kDataSelection)
+    .value("kNDLArTPC", SourceID::Category::kNDLArTPC)
+    .value("kTriggerPrimitive", SourceID::Category::kTriggerPrimitive)
+    .value("kTriggerActivity", SourceID::Category::kTriggerActivity)
+    .value("kTriggerCandidate", SourceID::Category::kTriggerCandidate)
     .export_values();
 
   py_sourceid.def_readwrite("version", &SourceID::version)
-    .def_readwrite("system_type", &SourceID::system_type)
-    .def_readwrite("region_id", &SourceID::region_id)
-    .def_readwrite("element_id", &SourceID::element_id);
+    .def_readwrite("category", &SourceID::category)
+    .def_readwrite("id", &SourceID::id);
 }
 
-} // namespace python
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats::python

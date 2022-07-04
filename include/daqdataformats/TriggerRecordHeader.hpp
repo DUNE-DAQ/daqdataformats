@@ -22,9 +22,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief C++ representation of a TriggerRecordHeader, which wraps a flat array that is the TriggerRecordHeader's
@@ -315,7 +313,6 @@ ComponentRequest& TriggerRecordHeader::operator[](size_t idx)
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADER_HPP_

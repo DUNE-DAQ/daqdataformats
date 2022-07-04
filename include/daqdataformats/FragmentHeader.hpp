@@ -20,9 +20,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief The header for a DUNE Fragment
@@ -209,7 +207,7 @@ get_fragment_type_names()
  * @return String representation of the given type
  */
 inline std::string
-fragment_type_to_string(FragmentType type)
+fragment_type_to_string(const FragmentType& type)
 {
   if (!get_fragment_type_names().count(type)) {
     return "UNKNOWN";
@@ -223,7 +221,7 @@ fragment_type_to_string(FragmentType type)
  * @return FragmentType corresponding to given string
  */
 inline FragmentType
-string_to_fragment_type(std::string name)
+string_to_fragment_type(const std::string& name)
 {
   for (auto& it : get_fragment_type_names()) {
     if (it.second == name)
@@ -268,10 +266,9 @@ operator>>(std::istream& o, FragmentHeader& hdr)
   return o >> tmp >> std::hex >> hdr.fragment_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
          hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
          hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
-         hdr.element_id >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
+         hdr.element_id >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
          hdr.sequence_number;
 }
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_

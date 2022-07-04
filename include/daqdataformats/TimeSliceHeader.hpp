@@ -18,9 +18,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief Additional data fields associated with a TimeSliceHeader
@@ -101,7 +99,6 @@ operator>>(std::istream& o, TimeSliceHeader& hdr)
          hdr.timeslice_number >> tmp >> tmp >> hdr.run_number;
 }
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICEHEADER_HPP_

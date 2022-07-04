@@ -79,7 +79,14 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_TEST_MESSAGE("Looks like the output-from-the-input is \"" << test2) << "\"";
   BOOST_REQUIRE_EQUAL(test, test2); // Recall that output was generated from streaming out a SourceID instance
 
+  SourceID::Category cat { SourceID::Category::kNDLArTPC };
+  std::ostringstream cat_ostr;
+  cat_ostr << cat;
+  std::istringstream cat_istr(cat_ostr.str());
+  SourceID::Category cat2 { SourceID::Category::kInvalid };
+  cat_istr >> cat2;
 
+  BOOST_REQUIRE_EQUAL(cat, cat2);
 }
 
 BOOST_AUTO_TEST_CASE(ComposeDecompose)
@@ -88,8 +95,8 @@ BOOST_AUTO_TEST_CASE(ComposeDecompose)
   SourceID test { SourceID::Category::kTPC, 0xDEADBEEF };
 
   // Test the splitting / combining of the upper and lower half of SourceID's id member
-  SourceID::ID_upper_t upper;
-  SourceID::ID_lower_t lower;
+  SourceID::ID_upper_t upper {0};
+  SourceID::ID_lower_t lower {0};
   SourceID::decompose_id(test.id, upper, lower);
   auto recomposed_id = SourceID::compose_id(upper, lower);
   BOOST_REQUIRE_EQUAL(test.id, recomposed_id);
@@ -100,11 +107,8 @@ BOOST_AUTO_TEST_CASE(ComposeDecompose)
  */
 BOOST_AUTO_TEST_CASE(ComparisonOperator)
 {
-  SourceID lesser, greater;
-  lesser.category = SourceID::Category::kTPC;
-  lesser.id = 1;
-  greater.category = SourceID::Category::kTPC;
-  greater.id = 3;
+  SourceID lesser {SourceID::Category::kTPC, 1};
+  SourceID greater {SourceID::Category::kTPC, 2};
 
   BOOST_REQUIRE(lesser != greater);
   BOOST_REQUIRE(lesser == lesser);

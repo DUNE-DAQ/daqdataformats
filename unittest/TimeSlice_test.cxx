@@ -82,8 +82,8 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
 
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 0);
 
-  auto buf1 = malloc(10);
-  auto frag = std::make_unique<Fragment>(buf1, size_t(10));
+  std::vector<uint8_t> buf1(10);
+  auto frag = std::make_unique<Fragment>(buf1.data(), buf1.size());
   record.add_fragment(std::move(frag));
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 1);
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref()[0]->get_size(), sizeof(FragmentHeader) + 10);

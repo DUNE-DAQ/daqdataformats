@@ -16,8 +16,7 @@
 #include <ostream>
 #include <string>
 
-namespace dunedaq {
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief A request sent to a Component, including the SourceID of the component and the window offset and width
@@ -80,7 +79,7 @@ inline std::istream&
 operator>>(std::istream& is, ComponentRequest& cr)
 {
   std::string tmp;
-  return is >> cr.component >> tmp >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;
+  return is >> cr.component >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;
 }
 
 ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
@@ -89,7 +88,6 @@ ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbeg
   , window_begin(wbegin)
   , window_end(wend)
 {}
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_COMPONENTREQUEST_HPP_

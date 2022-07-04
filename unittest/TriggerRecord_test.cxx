@@ -42,15 +42,11 @@ BOOST_AUTO_TEST_CASE(ComponentsConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 1;
-  components.back().component.element_id = 2;
+  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 5;
-  components.back().component.element_id = 6;
+  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -66,15 +62,11 @@ BOOST_AUTO_TEST_CASE(HeaderConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 1;
-  components.back().component.element_id = 2;
+  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 5;
-  components.back().component.element_id = 6;
+  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -93,21 +85,17 @@ BOOST_AUTO_TEST_CASE(MoveConstructor)
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 1;
-  components.back().component.element_id = 2;
+  components.back().component = {SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 5;
-  components.back().component.element_id = 6;
+  components.back().component = {SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
   TriggerRecord record(components);
-  auto buf1 = malloc(10);
-  auto frag = std::make_unique<Fragment>(buf1, size_t(10));
+  std::vector<uint8_t> buf1(10);
+  auto frag = std::make_unique<Fragment>(buf1.data(), buf1.size());
   record.add_fragment(std::move(frag));
 
   auto second_record = std::move(record);
@@ -122,24 +110,18 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation)
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 1;
-  components.back().component.element_id = 2;
+  components.back().component = {SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 5;
-  components.back().component.element_id = 6;
+  components.back().component = {SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
   TriggerRecord record(components);
 
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 9;
-  components.back().component.element_id = 10;
+  components.back().component = {SourceID::Category::kTPC, SourceID::compose_id(9, 10) };
   components.back().window_begin = 11;
   components.back().window_end = 12;
 
@@ -159,15 +141,11 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 1;
-  components.back().component.element_id = 2;
+  components.back().component = {SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component.system_type = SourceID::SystemType::kTPC;
-  components.back().component.region_id = 5;
-  components.back().component.element_id = 6;
+  components.back().component = {SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -175,8 +153,8 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
 
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 0);
 
-  auto buf1 = malloc(10);
-  auto frag = std::make_unique<Fragment>(buf1, size_t(10));
+  std::vector<uint8_t> buf1(10);
+  auto frag = std::make_unique<Fragment>(buf1.data(), buf1.size());
   record.add_fragment(std::move(frag));
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 1);
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref()[0]->get_size(), sizeof(FragmentHeader) + 10);

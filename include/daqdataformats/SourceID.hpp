@@ -29,13 +29,13 @@ namespace dunedaq::daqdataformats {
 struct SourceID
 {
 
-  using Version_t = uint32_t;
-  using Category_t = uint16_t;
-  using ID_t = uint32_t;
+  using Version_t = uint32_t;  // NOLINT(build/unsigned)
+  using Category_t = uint16_t; // NOLINT(build/unsigned)
+  using ID_t = uint32_t;       // NOLINT(build/unsigned)
 
   // Break the ID_t into two parts users can examine separately
-  using ID_upper_t = uint16_t; 
-  using ID_lower_t = ID_upper_t;
+  using ID_upper_t = uint16_t;    // NOLINT(build/unsigned)
+  using ID_lower_t = ID_upper_t;  
 
   /**
    * @brief The Category enum describes the kind of source we're dealing with
@@ -88,10 +88,10 @@ struct SourceID
     , id(id_arg)
   {}
 
-  static ID_t compose_id(const ID_upper_t& upper, const ID_lower_t& lower);
-  static void decompose_id(const ID_t& id_arg, ID_upper_t& upper, ID_lower_t& lower);
+  inline static ID_t compose_id(const ID_upper_t& upper, const ID_lower_t& lower);
+  inline static void decompose_id(const ID_t& id_arg, ID_upper_t& upper, ID_lower_t& lower);
 
-  inline bool is_in_valid_state() const noexcept { return category != Category::kInvalid && id != s_invalid_id ; }
+  bool is_in_valid_state() const noexcept { return category != Category::kInvalid && id != s_invalid_id ; }
 
   /**
    * @brief Comparison operators to allow SourceID to be used in std::map
@@ -118,8 +118,8 @@ static_assert(offsetof(SourceID, unused) == 12, "SourceID unused field not at ex
   // functions only works for certain categories which are
   // meaningfully described by two elements (e.g. TPC) and not for
   // those which aren't (e.g. TriggerCandidate)
-
-  SourceID::ID_t SourceID::compose_id(const ID_upper_t& upper, const ID_lower_t& lower) {
+  
+   SourceID::ID_t SourceID::compose_id(const ID_upper_t& upper, const ID_lower_t& lower) {
     static_assert(std::is_unsigned<ID_t>::value, "In SourceID::compose_id, code currently only supports an unsigned type for SourceID::ID_t");
     return ( (static_cast<ID_t>(upper) << 8*sizeof(ID_upper_t)) + static_cast<ID_t>(lower));
   }
@@ -192,7 +192,7 @@ inline std::istream&
 operator>>(std::istream& is, SourceID& source_id)
 {
   std::string tmp;
-  is >> tmp >> source_id.category >> tmp >> source_id.id;
+  is >> tmp >> source_id.category >> tmp >> source_id.id >> tmp >> tmp >> tmp; // Eat last three tokens, e.g. "-> (314, 159)"
 
   return is;
 }
