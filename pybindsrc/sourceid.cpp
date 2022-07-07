@@ -29,19 +29,16 @@ register_sourceid(py::module& m)
     return oss.str();
   });
 
-  py::enum_<SourceID::Category>(py_sourceid, "Category")
-    .value("kInvalid", SourceID::Category::kInvalid)
-    .value("kTPC", SourceID::Category::kTPC)
-    .value("kPDS", SourceID::Category::kPDS)
-    .value("kDataSelection", SourceID::Category::kDataSelection)
-    .value("kNDLArTPC", SourceID::Category::kNDLArTPC)
-    .value("kTriggerPrimitive", SourceID::Category::kTriggerPrimitive)
-    .value("kTriggerActivity", SourceID::Category::kTriggerActivity)
-    .value("kTriggerCandidate", SourceID::Category::kTriggerCandidate)
+  py::enum_<SourceID::Subsystem>(py_sourceid, "Subsystem")
+    .value("kDRO", SourceID::Subsystem::kDRO)
+    .value("kHSI", SourceID::Subsystem::kHSI)
+    .value("kTRG", SourceID::Subsystem::kTRG)
+    .value("kTRB", SourceID::Subsystem::kTRB)
+    .value("kUNDEFINED", SourceID::Subsystem::kUNDEFINED)
     .export_values();
 
   py_sourceid.def_readwrite("version", &SourceID::version)
-    .def_readwrite("category", &SourceID::category)
+    .def_readwrite("subsystem", &SourceID::subsystem)
     .def_readwrite("id", &SourceID::id);
 }
 

@@ -221,7 +221,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header.window_begin = 4;
   header.window_end = 5;
 
-  SourceID component { SourceID::Category::kTPC, 123456789 };
+  SourceID component { SourceID::Subsystem::kDRO, 123456789 };
   header.element_id = component;
 
   header.error_bits = 0x12345678;
@@ -266,10 +266,10 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   frag.set_sequence_number(0x99);
   BOOST_REQUIRE_EQUAL(theHeader->sequence_number, 0x99);
 
-  SourceID new_component { SourceID::Category::kTPC, SourceID::compose_id( 0x66, 0x77 ) };
+  SourceID new_component { SourceID::Subsystem::kDRO, 0x6677 };
   frag.set_element_id(new_component);
-  BOOST_REQUIRE_EQUAL(theHeader->element_id.category, SourceID::Category::kTPC);
-  BOOST_REQUIRE_EQUAL(theHeader->element_id.id, SourceID::compose_id(0x66, 0x77 ));
+  BOOST_REQUIRE_EQUAL(theHeader->element_id.subsystem, SourceID::Subsystem::kDRO);
+  BOOST_REQUIRE_EQUAL(theHeader->element_id.id, 0x6677 );
 
   std::bitset<32> no_errors(0);
   frag.set_error_bits(no_errors);

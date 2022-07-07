@@ -107,7 +107,7 @@ struct FragmentHeader
    */
   SourceID element_id;
 };
-static_assert(sizeof(FragmentHeader) == 80, "FragmentHeader struct size different than expected!");
+static_assert(sizeof(FragmentHeader) == 72, "FragmentHeader struct size different than expected!");
 static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
               "FragmentHeader fragment_header_marker field not at expected offset!");
 static_assert(offsetof(FragmentHeader, version) == 4, "FragmentHeader version field not at expected offset!");
@@ -266,7 +266,7 @@ operator>>(std::istream& o, FragmentHeader& hdr)
   return o >> tmp >> std::hex >> hdr.fragment_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
          hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
          hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
-         hdr.element_id >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
+         hdr.element_id >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
          hdr.sequence_number;
 }
 } // namespace dunedaq::daqdataformats

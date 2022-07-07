@@ -55,11 +55,11 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
+  components.back().component = { SourceID::Subsystem::kDRO, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
+  components.back().component = { SourceID::Subsystem::kDRO, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -141,11 +141,11 @@ BOOST_AUTO_TEST_CASE(MoveConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
+  components.back().component = { SourceID::Subsystem::kDRO, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
+  components.back().component = { SourceID::Subsystem::kDRO, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -162,11 +162,11 @@ BOOST_AUTO_TEST_CASE(MoveAssignment)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
+  components.back().component = { SourceID::Subsystem::kDRO, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
+  components.back().component = { SourceID::Subsystem::kDRO, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -217,11 +217,11 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
+  components.back().component = { SourceID::Subsystem::kDRO, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
+  components.back().component = { SourceID::Subsystem::kDRO, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -259,15 +259,15 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(1, 2) };
+  components.back().component = { SourceID::Subsystem::kDRO, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Category::kTPC, SourceID::compose_id(5, 6) };
+  components.back().component = { SourceID::Subsystem::kDRO, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
-  auto header = new TriggerRecordHeader(components);
+  auto header = std::make_unique<TriggerRecordHeader>(components);
   header->set_run_number(9);
   header->set_trigger_number(10);
   header->set_trigger_timestamp(11);

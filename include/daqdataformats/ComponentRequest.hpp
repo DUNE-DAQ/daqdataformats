@@ -13,6 +13,7 @@
 #include "daqdataformats/Types.hpp"
 
 #include <cstddef>
+#include <iostream>
 #include <ostream>
 #include <string>
 
@@ -49,13 +50,13 @@ struct ComponentRequest
   ComponentRequest() {}
   inline ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
 };
-static_assert(sizeof(ComponentRequest) == 40, "ComponentRequest struct size different than expected!");
+static_assert(sizeof(ComponentRequest) == 32, "ComponentRequest struct size different than expected!");
 static_assert(offsetof(ComponentRequest, version) == 0, "ComponentRequest version field not at expected offset");
 static_assert(offsetof(ComponentRequest, unused) == 4, "ComponentRequest unused field not at expected offset");
 static_assert(offsetof(ComponentRequest, component) == 8, "ComponentRequest component field not at expected offset");
-static_assert(offsetof(ComponentRequest, window_begin) == 24,
+static_assert(offsetof(ComponentRequest, window_begin) == 16,
               "ComponentRequest window_begin field not at expected offset");
-static_assert(offsetof(ComponentRequest, window_end) == 32, "ComponentRequest window_end field not at expected offset");
+static_assert(offsetof(ComponentRequest, window_end) == 24, "ComponentRequest window_end field not at expected offset");
 
 /**
  * @brief Write out a ComponentRequest in human-readable form
@@ -79,7 +80,7 @@ inline std::istream&
 operator>>(std::istream& is, ComponentRequest& cr)
 {
   std::string tmp;
-  return is >> cr.component >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;
+  return is >> cr.component >> tmp >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;
 }
 
 ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
