@@ -304,7 +304,8 @@ TriggerRecordHeader::at(size_t idx) const
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
 
-ComponentRequest& TriggerRecordHeader::operator[](size_t idx)
+ComponentRequest&
+TriggerRecordHeader::operator[](size_t idx)
 {
   if (idx >= header_()->num_requested_components) {
     throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");

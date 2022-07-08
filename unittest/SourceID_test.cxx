@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(SubsystemConversion)
  */
 BOOST_AUTO_TEST_CASE(StreamOperator)
 {
-  SourceID test = {SourceID::Subsystem::kDRO, 314159 };
+  SourceID test = { SourceID::Subsystem::kDRO, 314159 };
 
   std::ostringstream ostr;
   ostr << test;
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE(!output.empty());
 
   auto pos = output.find(std::to_string(test.id));
-  BOOST_REQUIRE(pos != std::string::npos);  
+  BOOST_REQUIRE(pos != std::string::npos);
 
   BOOST_TEST_MESSAGE("About to try to input from \"" << output << "\"");
   std::istringstream istr(output);
@@ -68,24 +68,23 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_TEST_MESSAGE("Looks like the output-from-the-input is \"" << test2) << "\"";
   BOOST_REQUIRE_EQUAL(test, test2); // Recall that output was generated from streaming out a SourceID instance
 
-  SourceID::Subsystem cat { SourceID::Subsystem::kTRB };
+  SourceID::Subsystem cat{ SourceID::Subsystem::kTRB };
   std::ostringstream cat_ostr;
   cat_ostr << cat;
   std::istringstream cat_istr(cat_ostr.str());
-  SourceID::Subsystem cat2 { SourceID::Subsystem::kUNDEFINED };
+  SourceID::Subsystem cat2{ SourceID::Subsystem::kUNDEFINED };
   cat_istr >> cat2;
 
   BOOST_REQUIRE_EQUAL(cat, cat2);
 }
-
 
 /**
  * @brief Test that SourceID::operator< functions as expected
  */
 BOOST_AUTO_TEST_CASE(ComparisonOperator)
 {
-  SourceID lesser {SourceID::Subsystem::kDRO, 1};
-  SourceID greater {SourceID::Subsystem::kDRO, 2};
+  SourceID lesser{ SourceID::Subsystem::kDRO, 1 };
+  SourceID greater{ SourceID::Subsystem::kDRO, 2 };
 
   BOOST_REQUIRE(lesser != greater);
   BOOST_REQUIRE(lesser == lesser);
@@ -97,14 +96,13 @@ BOOST_AUTO_TEST_CASE(ComparisonOperator)
 BOOST_AUTO_TEST_CASE(Validity)
 {
   SourceID test;
-  BOOST_REQUIRE( ! test.is_in_valid_state() );
+  BOOST_REQUIRE(!test.is_in_valid_state());
 
-  test = { SourceID::Subsystem::kHSI, 3141592 }; 
-  BOOST_REQUIRE( test.is_in_valid_state() );
-  
+  test = { SourceID::Subsystem::kHSI, 3141592 };
+  BOOST_REQUIRE(test.is_in_valid_state());
+
   test.id = SourceID::s_invalid_id;
-  BOOST_REQUIRE( ! test.is_in_valid_state() );
-  
+  BOOST_REQUIRE(!test.is_in_valid_state());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_SUITE(ComponentRequest_test)
 
 BOOST_AUTO_TEST_CASE(Constructor)
 {
-  SourceID test { SourceID::Subsystem::kDRO, 12345 };
+  SourceID test{ SourceID::Subsystem::kDRO, 12345 };
 
   ComponentRequest component(test, 3, 4);
   BOOST_REQUIRE_EQUAL(component.window_begin, 3);
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   ComponentRequest component;
 
   SourceID::ID_t arbitrary_id = 6789;
-  SourceID test = { SourceID::Subsystem::kDRO, arbitrary_id};
+  SourceID test = { SourceID::Subsystem::kDRO, arbitrary_id };
 
   component.component = test;
   component.window_begin = 3;

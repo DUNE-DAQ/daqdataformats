@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_SUITE(FragmentHeader_test)
 BOOST_AUTO_TEST_CASE(FragmentTypeConversion)
 {
   BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(string_to_fragment_type("ProtoWIB")),
-                        static_cast<fragment_type_t>(FragmentType::kProtoWIB));
+                      static_cast<fragment_type_t>(FragmentType::kProtoWIB));
   BOOST_REQUIRE_EQUAL(fragment_type_to_string(FragmentType::kProtoWIB), "ProtoWIB");
 
   auto type_map = get_fragment_type_names();

@@ -174,9 +174,9 @@ enum class FragmentErrorBits : size_t
 enum class FragmentType : fragment_type_t
 {
   kProtoWIB = 0,
-  kWIB = 1, 
+  kWIB = 1,
   kDAPHNE = 2,
-  kTDE_AMC = 3, 
+  kTDE_AMC = 3,
   kTP = 4,
   kTA = 5,
   kTC = 6,
@@ -193,15 +193,16 @@ enum class FragmentType : fragment_type_t
 inline std::map<FragmentType, std::string>
 get_fragment_type_names()
 {
-  return { { FragmentType::kProtoWIB, "ProtoWIB" },
-           { FragmentType::kWIB, "WIB" },
-           { FragmentType::kDAPHNE, "DAPHNE" },
-           { FragmentType::kTDE_AMC, "TDE_AMC" },
-           { FragmentType::kTP, "TP" },
-           { FragmentType::kTA, "TA" },
-           { FragmentType::kTC, "TC" },
-           { FragmentType::kHS_type, "HS_type" },
-	     };
+  return {
+    { FragmentType::kProtoWIB, "ProtoWIB" },
+    { FragmentType::kWIB, "WIB" },
+    { FragmentType::kDAPHNE, "DAPHNE" },
+    { FragmentType::kTDE_AMC, "TDE_AMC" },
+    { FragmentType::kTP, "TP" },
+    { FragmentType::kTA, "TA" },
+    { FragmentType::kTC, "TC" },
+    { FragmentType::kHS_type, "HS_type" },
+  };
 }
 
 /**
