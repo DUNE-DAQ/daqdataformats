@@ -12,9 +12,11 @@
 #include <cassert>
 #include <cstddef>
 #include <cstdint>
+#include <iomanip>
 #include <istream>
 #include <limits>
 #include <ostream>
+#include <sstream>
 #include <string>
 #include <tuple>
 
@@ -78,6 +80,12 @@ struct SourceID
     : subsystem(subsystem_arg)
     , id(id_arg)
   {}
+
+  std::string to_string() const { 
+    std::ostringstream ostr;
+    ostr << subsystem_to_string(subsystem) << "_0x" << std::hex << std::setfill('0') << std::setw(2*sizeof(id)) << id;
+    return ostr.str(); 
+  }
 
   bool is_in_valid_state() const noexcept { return subsystem != Subsystem::kUNDEFINED && id != s_invalid_id ; }
 

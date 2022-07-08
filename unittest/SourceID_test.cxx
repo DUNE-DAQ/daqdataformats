@@ -16,6 +16,7 @@
 #include "boost/test/unit_test.hpp"
 
 #include <functional>
+#include <limits>
 #include <sstream>
 #include <string>
 #include <vector>

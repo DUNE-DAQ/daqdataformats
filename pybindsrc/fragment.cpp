@@ -80,13 +80,14 @@ register_fragment(py::module& m)
     .export_values();
 
   py::enum_<FragmentType>(m, "FragmentType")
-    .value("kFakeData", FragmentType::kFakeData)
-    .value("kTPCData", FragmentType::kTPCData)
-    .value("kPDSData", FragmentType::kPDSData)
-    .value("kNDLArTPC", FragmentType::kNDLArTPC)
-    .value("kTriggerPrimitives", FragmentType::kTriggerPrimitives)
-    .value("kTriggerActivities", FragmentType::kTriggerActivities)
-    .value("kTriggerCandidates", FragmentType::kTriggerCandidates)
+    .value("kProtoWIB", FragmentType::kProtoWIB)
+    .value("kWIB", FragmentType::kWIB)
+    .value("kDAPHNE", FragmentType::kDAPHNE)
+    .value("kTDE_AMC", FragmentType::kTDE_AMC)
+    .value("kTP", FragmentType::kTP)
+    .value("kTA", FragmentType::kTA)
+    .value("kTC", FragmentType::kTC)
+    .value("kHS_type", FragmentType::kHS_type)
     .value("kUnknown", FragmentType::kUnknown)
     .export_values();
 }

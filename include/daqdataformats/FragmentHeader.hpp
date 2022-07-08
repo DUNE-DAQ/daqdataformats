@@ -173,13 +173,14 @@ enum class FragmentErrorBits : size_t
  */
 enum class FragmentType : fragment_type_t
 {
-  kFakeData = 0,                                   ///< Data created in dfmodules' FakeDataProducer
-  kTPCData = 1,                                    ///< Data from the TPC
-  kPDSData = 2,                                    ///< Data from the PDS
-  kNDLArTPC = 3,                                   ///< Data from the NDLArTPC
-  kTriggerPrimitives = 4,                          ///< A DataSelection TriggerPrimitivesFragment
-  kTriggerActivities = 5,                          ///< A DataSelection TriggerActivitiesFragment
-  kTriggerCandidates = 6,                          ///< A DataSelection TriggerCandidatesFragment
+  kProtoWIB = 0,
+  kWIB = 1, 
+  kDAPHNE = 2,
+  kTDE_AMC = 3, 
+  kTP = 4,
+  kTA = 5,
+  kTC = 6,
+  kHS_type = 7,
   kUnknown = TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in
                                                    ///< get_fragment_type_names
 };
@@ -192,13 +193,15 @@ enum class FragmentType : fragment_type_t
 inline std::map<FragmentType, std::string>
 get_fragment_type_names()
 {
-  return { { FragmentType::kFakeData, "FakeData" },
-           { FragmentType::kTPCData, "TPC" },
-           { FragmentType::kPDSData, "PDS" },
-           { FragmentType::kNDLArTPC, "NDLArTPC" },
-           { FragmentType::kTriggerPrimitives, "TriggerPrimitives" },
-           { FragmentType::kTriggerActivities, "TriggerActivities" },
-           { FragmentType::kTriggerCandidates, "TriggerCandidates" } };
+  return { { FragmentType::kProtoWIB, "ProtoWIB" },
+           { FragmentType::kWIB, "WIB" },
+           { FragmentType::kDAPHNE, "DAPHNE" },
+           { FragmentType::kTDE_AMC, "TDE_AMC" },
+           { FragmentType::kTP, "TP" },
+           { FragmentType::kTA, "TA" },
+           { FragmentType::kTC, "TC" },
+           { FragmentType::kHS_type, "HS_type" },
+	     };
 }
 
 /**
