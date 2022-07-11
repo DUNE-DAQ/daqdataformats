@@ -35,7 +35,7 @@ struct FragmentHeader
   /**
    * @brief The current version of the Fragment
    */
-  static constexpr uint32_t s_fragment_header_version = 3; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_fragment_header_version = 4; // NOLINT(build/unsigned)
 
   /**
    * @brief By default, all error bits are unset
@@ -107,6 +107,11 @@ struct FragmentHeader
    */
   SourceID element_id;
 };
+
+static_assert(FragmentHeader::s_fragment_header_version == 4,
+             "This is intentionally designed to tell the developer to update the static_assert checks (including this "
+             "one) when the version is bumped");
+
 static_assert(sizeof(FragmentHeader) == 72, "FragmentHeader struct size different than expected!");
 static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
               "FragmentHeader fragment_header_marker field not at expected offset!");
