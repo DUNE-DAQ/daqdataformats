@@ -34,7 +34,7 @@ struct TriggerRecordHeaderData
   /**
    * @brief The current version of the TriggerRecordHeader
    */
-  static constexpr uint32_t s_trigger_record_header_version = 2; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_trigger_record_header_version = 3; // NOLINT(build/unsigned)
 
   /**
    * @brief An invalid number of components
@@ -103,6 +103,9 @@ struct TriggerRecordHeaderData
 
   SourceID source_id;
 };
+
+static_assert(TriggerRecordHeaderData::s_trigger_record_header_version == 3, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped"
+
 static_assert(sizeof(TriggerRecordHeaderData) == 56, "TriggerRecordHeaderData struct size different than expected!");
 static_assert(offsetof(TriggerRecordHeaderData, trigger_record_header_marker) == 0,
               "TriggerRecordHeaderData trigger_record_header_marker field not at expected offset!");
