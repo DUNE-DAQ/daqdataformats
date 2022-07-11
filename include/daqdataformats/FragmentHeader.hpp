@@ -186,6 +186,8 @@ enum class FragmentType : fragment_type_t
   kTA = 5,
   kTC = 6,
   kHS_type = 7,
+  kSSP = 8, // retired
+  kPACMAN = 9,
   kUnknown = TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in
                                                    ///< get_fragment_type_names
 };
@@ -207,6 +209,8 @@ get_fragment_type_names()
     { FragmentType::kTA, "TA" },
     { FragmentType::kTC, "TC" },
     { FragmentType::kHS_type, "HS_type" },
+      {FragmentType::kSSP, "SSP"},
+      {FragmentType::kPACMAN, "PACMAN"},
   };
 }
 
