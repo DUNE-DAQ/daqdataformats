@@ -8,23 +8,29 @@ The following are brief descriptions of the various structs in this package, inc
 
 ----------
 
-**Fragment**: the data fragment interface, representing the data response of one part of the detector (TPC link, etc.) to a Dataflow DataRequest message. Contains a FragmentHeader and the data payload.
+**Fragment**: the data fragment interface, representing the data response of one part of the detector (TPC link, etc.) to a dataflow `DataRequest` message. Contains a `FragmentHeader` and the data payload.
 
-**FragmentHeader**: data-about-the-data, e.g. run number, trigger timestamp, etc.
+**FragmentHeader**: data-about-the-data, e.g. source, run number, trigger timestamp, etc.
 
-[FragmentHeader description](FragmentHeaderV3.md)
+[FragmentHeader description](FragmentHeaderV4.md)
 
 ---------------
 
-**TriggerRecordHeaderData**: An assortment of information about the trigger. Trigger timestamp, trigger type, etc.
+**TriggerRecordHeaderData**: An assortment of information about a trigger. Trigger timestamp, trigger type, etc.
 
-**TriggerRecordHeader**: contains an instance of TriggerRecordHeaderData and a set of component requests
+[TriggerRecordHeaderData description](TriggerRecordHeaderDataV3.md)
 
-**TriggerRecord**: contains an instance of TriggerRecordHeader and a set of fragments
+**TriggerRecordHeader**: contains an instance of `TriggerRecordHeaderData` and a set of component requests
 
-[TriggerRecordHeader description](TriggerRecordHeaderDataV2.md)
+**TriggerRecord**: contains an instance of `TriggerRecordHeader` and a set of fragments
 
-[ComponentRequest description](ComponentRequestV1.md)
+---------------
+
+[SourceID description](SourceIDV2.md)
+
+---------------
+
+[ComponentRequest description](ComponentRequestV2.md)
 
 --------------
 

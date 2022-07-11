@@ -101,7 +101,7 @@ struct TriggerRecordHeaderData
    */
   uint16_t unused{ 0xFFFF }; // NOLINT(build/unsigned)
 
-  SourceID source_id;
+  SourceID element_id;
 };
 
   static_assert(TriggerRecordHeaderData::s_trigger_record_header_version == 3, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped");
