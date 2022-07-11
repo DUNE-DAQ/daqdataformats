@@ -51,7 +51,7 @@ struct ComponentRequest
   inline ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
 };
 
-static_assert(ComponentRequest::s_component_request_version == 2, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped"
+  static_assert(ComponentRequest::s_component_request_version == 2, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped");
 
 static_assert(sizeof(ComponentRequest) == 32, "ComponentRequest struct size different than expected!");
 static_assert(offsetof(ComponentRequest, version) == 0, "ComponentRequest version field not at expected offset");
