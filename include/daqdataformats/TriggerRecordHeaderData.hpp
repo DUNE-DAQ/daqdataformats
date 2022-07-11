@@ -10,6 +10,7 @@
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_
 
 #include "daqdataformats/ComponentRequest.hpp"
+#include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/Types.hpp"
 
 #include <cstddef>
@@ -99,8 +100,10 @@ struct TriggerRecordHeaderData
    * @brief Padding to ensure 64-bit alignment
    */
   uint16_t unused{ 0xFFFF }; // NOLINT(build/unsigned)
+
+  SourceID source_id;
 };
-static_assert(sizeof(TriggerRecordHeaderData) == 48, "TriggerRecordHeaderData struct size different than expected!");
+static_assert(sizeof(TriggerRecordHeaderData) == 56, "TriggerRecordHeaderData struct size different than expected!");
 static_assert(offsetof(TriggerRecordHeaderData, trigger_record_header_marker) == 0,
               "TriggerRecordHeaderData trigger_record_header_marker field not at expected offset!");
 static_assert(offsetof(TriggerRecordHeaderData, version) == 4,
@@ -123,6 +126,8 @@ static_assert(offsetof(TriggerRecordHeaderData, max_sequence_number) == 44,
               "TriggerRecordHeaderData max_sequence_number field not at expected offset!");
 static_assert(offsetof(TriggerRecordHeaderData, unused) == 46,
               "TriggerRecordHeaderData unused field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, source_id) == 48,
+              "TriggerRecordHeaderData source_id field not at expected offset!");
 
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
