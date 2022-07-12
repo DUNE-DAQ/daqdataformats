@@ -129,7 +129,7 @@ static_assert(offsetof(TriggerRecordHeaderData, max_sequence_number) == 44,
               "TriggerRecordHeaderData max_sequence_number field not at expected offset!");
 static_assert(offsetof(TriggerRecordHeaderData, unused) == 46,
               "TriggerRecordHeaderData unused field not at expected offset!");
-static_assert(offsetof(TriggerRecordHeaderData, source_id) == 48,
+static_assert(offsetof(TriggerRecordHeaderData, element_id) == 48,
               "TriggerRecordHeaderData source_id field not at expected offset!");
 
 /**
