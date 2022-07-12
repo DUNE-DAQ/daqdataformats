@@ -41,12 +41,11 @@ struct SourceID
 
   enum class Subsystem : Subsystem_t
   {
-    kDRO = 0,
-    kHSI = 1,
-    kTRG = 2,
-    kTRB = 3,
-    kUNDEFINED = 4,
-    kCountOfEnums // Add any new Subsystem enums above this line. This is the count of enums besides itself.
+    kUNDEFINED = 0,
+    kDRO = 1,
+    kHSI = 2,
+    kTRG = 3,
+    kTRB = 4
   };
 
   /**

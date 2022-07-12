@@ -4,8 +4,6 @@ namespace dunedaq::daqdataformats {
 static_assert(SourceID::s_source_id_version == 2,
               "This is intentionally designed to tell the developer to update the static_assert checks (including this "
               "one) when the version is bumped");
-static_assert(static_cast<int>(SourceID::Subsystem::kCountOfEnums) == 5,
-              "Unexpected number of SourceID::Subsystem enums found");
 static_assert(sizeof(SourceID) == 8, "SourceID struct size different than expected!");
 static_assert(offsetof(SourceID, version) == 0, "SourceID version field not at expected offset");
 static_assert(offsetof(SourceID, subsystem) == 2, "SourceID subsystem field not at expected offset");
@@ -88,6 +86,8 @@ std::string
 SourceID::subsystem_to_string(const Subsystem& type)
 {
   switch (type) {
+    case Subsystem::kUNDEFINED:
+      return "UNDEFINED";
     case Subsystem::kDRO:
       return "DRO";
     case Subsystem::kHSI:
@@ -96,12 +96,8 @@ SourceID::subsystem_to_string(const Subsystem& type)
       return "TRG";
     case Subsystem::kTRB:
       return "TRB";
-    case Subsystem::kUNDEFINED:
-      return "UNDEFINED";
-    default:
-      // See https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html. Possibly too severe.
-      __builtin_unreachable();
   }
+  return "Unknown";
 }
 
 SourceID::Subsystem

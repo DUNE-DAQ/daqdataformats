@@ -20,11 +20,11 @@ struct SourceID
 
   enum class Subsystem : Subsystem_t
   {
-    kDRO = 0,
-    kHSI = 1,
-    kTRG = 2,
-    kTRB = 3,
-    kUNDEFINED = 4,
+    kUNDEFINED = 0,
+    kDRO = 1,
+    kHSI = 2,
+    kTRG = 3,
+    kTRB = 4,
     kCountOfEnums
   };
   

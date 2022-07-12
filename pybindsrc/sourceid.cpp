@@ -30,11 +30,11 @@ register_sourceid(py::module& m)
   });
 
   py::enum_<SourceID::Subsystem>(py_sourceid, "Subsystem")
+    .value("kUNDEFINED", SourceID::Subsystem::kUNDEFINED)
     .value("kDRO", SourceID::Subsystem::kDRO)
     .value("kHSI", SourceID::Subsystem::kHSI)
     .value("kTRG", SourceID::Subsystem::kTRG)
     .value("kTRB", SourceID::Subsystem::kTRB)
-    .value("kUNDEFINED", SourceID::Subsystem::kUNDEFINED)
     .export_values();
 
   py_sourceid.def_readwrite("version", &SourceID::version)

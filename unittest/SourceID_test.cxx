@@ -27,6 +27,9 @@ BOOST_AUTO_TEST_SUITE(SourceID_test)
 
 BOOST_AUTO_TEST_CASE(SubsystemConversion)
 {
+  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kUNDEFINED), "UNDEFINED");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("UNDEFINED"), SourceID::Subsystem::kUNDEFINED);
+
   BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kDRO), "DRO");
   BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("DRO"), SourceID::Subsystem::kDRO);
 
@@ -38,9 +41,6 @@ BOOST_AUTO_TEST_CASE(SubsystemConversion)
 
   BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kTRB), "TRB");
   BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("TRB"), SourceID::Subsystem::kTRB);
-
-  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kUNDEFINED), "UNDEFINED");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("UNDEFINED"), SourceID::Subsystem::kUNDEFINED);
 }
 
 /**
