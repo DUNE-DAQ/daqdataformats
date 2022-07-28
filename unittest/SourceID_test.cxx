@@ -27,20 +27,20 @@ BOOST_AUTO_TEST_SUITE(SourceID_test)
 
 BOOST_AUTO_TEST_CASE(SubsystemConversion)
 {
-  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kUNDEFINED), "UNDEFINED");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("UNDEFINED"), SourceID::Subsystem::kUNDEFINED);
+  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kUnknown), "Unknown");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("Unknown"), SourceID::Subsystem::kUnknown);
 
-  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kDRO), "DRO");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("DRO"), SourceID::Subsystem::kDRO);
+  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kDetectorReadout), "Detector_Readout");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("Detector_Readout"), SourceID::Subsystem::kDetectorReadout);
 
-  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kHSI), "HSI");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("HSI"), SourceID::Subsystem::kHSI);
+  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kHwSignalsInterface), "HW_Signals_Interface");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("HW_Signals_Interface"), SourceID::Subsystem::kHwSignalsInterface);
 
-  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kTRG), "TRG");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("TRG"), SourceID::Subsystem::kTRG);
+  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kTrigger), "Trigger");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("Trigger"), SourceID::Subsystem::kTrigger);
 
-  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kTRB), "TRB");
-  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("TRB"), SourceID::Subsystem::kTRB);
+  BOOST_REQUIRE_EQUAL(SourceID::subsystem_to_string(SourceID::Subsystem::kTRBuilder), "TR_Builder");
+  BOOST_REQUIRE_EQUAL(SourceID::string_to_subsystem("TR_Builder"), SourceID::Subsystem::kTRBuilder);
 }
 
 /**
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(SubsystemConversion)
  */
 BOOST_AUTO_TEST_CASE(StreamOperator)
 {
-  SourceID test = { SourceID::Subsystem::kDRO, 314159 };
+  SourceID test = { SourceID::Subsystem::kDetectorReadout, 314159 };
 
   std::ostringstream ostr;
   ostr << test;
@@ -66,13 +66,13 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   SourceID test2;
   istr >> test2;
   BOOST_TEST_MESSAGE("Looks like the output-from-the-input is \"" << test2) << "\"";
-  BOOST_REQUIRE_EQUAL(test, test2); // Recall that output was generated from streaming out a SourceID instance
+  BOOST_REQUIRE_EQUAL(test.subsystem, test2.subsystem); // Recall that output was generated from streaming out a SourceID instance
 
-  SourceID::Subsystem cat{ SourceID::Subsystem::kTRB };
+  SourceID::Subsystem cat{ SourceID::Subsystem::kTrigger };
   std::ostringstream cat_ostr;
   cat_ostr << cat;
   std::istringstream cat_istr(cat_ostr.str());
-  SourceID::Subsystem cat2{ SourceID::Subsystem::kUNDEFINED };
+  SourceID::Subsystem cat2{ SourceID::Subsystem::kUnknown };
   cat_istr >> cat2;
 
   BOOST_REQUIRE_EQUAL(cat, cat2);
@@ -83,8 +83,8 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
  */
 BOOST_AUTO_TEST_CASE(ComparisonOperator)
 {
-  SourceID lesser{ SourceID::Subsystem::kDRO, 1 };
-  SourceID greater{ SourceID::Subsystem::kDRO, 2 };
+  SourceID lesser{ SourceID::Subsystem::kDetectorReadout, 1 };
+  SourceID greater{ SourceID::Subsystem::kDetectorReadout, 2 };
 
   BOOST_REQUIRE(lesser != greater);
   BOOST_REQUIRE(lesser == lesser);
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(Validity)
   SourceID test;
   BOOST_REQUIRE(!test.is_in_valid_state());
 
-  test = { SourceID::Subsystem::kHSI, 3141592 };
+  test = { SourceID::Subsystem::kHwSignalsInterface, 3141592 };
   BOOST_REQUIRE(test.is_in_valid_state());
 
   test.id = SourceID::s_invalid_id;

@@ -41,11 +41,11 @@ struct SourceID
 
   enum class Subsystem : Subsystem_t
   {
-    kUNDEFINED = 0,
-    kDRO = 1,
-    kHSI = 2,
-    kTRG = 3,
-    kTRB = 4
+    kUnknown = 0,
+    kDetectorReadout = 1,
+    kHwSignalsInterface = 2,
+    kTrigger = 3,
+    kTRBuilder = 4
   };
 
   /**
@@ -66,7 +66,7 @@ struct SourceID
   /**
    * @brief The general subsystem of the source of the data
    */
-  Subsystem subsystem{ Subsystem::kUNDEFINED };
+  Subsystem subsystem{ Subsystem::kUnknown };
 
   /**
    * @brief Unique identifier of the source of the data
@@ -87,7 +87,7 @@ struct SourceID
     return ostr.str();
   }
 
-  bool is_in_valid_state() const noexcept { return subsystem != Subsystem::kUNDEFINED && id != s_invalid_id; }
+  bool is_in_valid_state() const noexcept { return subsystem != Subsystem::kUnknown && id != s_invalid_id; }
 
   /**
    * @brief Comparison operators to allow SourceID to be used in std::map

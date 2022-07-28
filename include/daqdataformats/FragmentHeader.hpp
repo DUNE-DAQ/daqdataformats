@@ -178,18 +178,15 @@ enum class FragmentErrorBits : size_t
  */
 enum class FragmentType : fragment_type_t
 {
-  kProtoWIB = 0,
+  kUnknown = 0,
   kWIB = 1,
   kDAPHNE = 2,
   kTDE_AMC = 3,
-  kTP = 4,
-  kTA = 5,
-  kTC = 6,
-  kHS_type = 7,
-  kSSP = 8, // retired
-  kPACMAN = 9,
-  kUnknown = TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in
-                                                   ///< get_fragment_type_names
+  kTriggerPrimitive = 4,
+  kTriggerActivity = 5,
+  kTriggerCandidate = 6,
+  kHardwareSignal = 7,
+  kPACMAN = 8
 };
 
 /**
@@ -201,16 +198,15 @@ inline std::map<FragmentType, std::string>
 get_fragment_type_names()
 {
   return {
-    { FragmentType::kProtoWIB, "ProtoWIB" },
+    { FragmentType::kUnknown, "Unknown" },
     { FragmentType::kWIB, "WIB" },
     { FragmentType::kDAPHNE, "DAPHNE" },
     { FragmentType::kTDE_AMC, "TDE_AMC" },
-    { FragmentType::kTP, "TP" },
-    { FragmentType::kTA, "TA" },
-    { FragmentType::kTC, "TC" },
-    { FragmentType::kHS_type, "HS_type" },
-      {FragmentType::kSSP, "SSP"},
-      {FragmentType::kPACMAN, "PACMAN"},
+    { FragmentType::kTriggerPrimitive, "Trigger_Primitive" },
+    { FragmentType::kTriggerActivity, "Trigger_Activity" },
+    { FragmentType::kTriggerCandidate, "Trigger_Candidate" },
+    { FragmentType::kHardwareSignal, "Hardware_Signal" },
+    { FragmentType::kPACMAN, "PACMAN"},
   };
 }
 
@@ -222,10 +218,12 @@ get_fragment_type_names()
 inline std::string
 fragment_type_to_string(const FragmentType& type)
 {
-  if (!get_fragment_type_names().count(type)) {
-    return "UNKNOWN";
+  try {
+    return get_fragment_type_names().at(type);
   }
-  return get_fragment_type_names().at(type);
+  catch(std::exception &e) {
+  }
+  return "Unknown";
 }
 
 /**

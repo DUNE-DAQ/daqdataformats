@@ -49,6 +49,7 @@ operator>>(std::istream& is, SourceID::Subsystem& t)
 
   return is;
 }
+
 /**
  * @brief Read a SourceID from a string stream
  * @param is Stream to read from
@@ -58,11 +59,12 @@ operator>>(std::istream& is, SourceID::Subsystem& t)
 inline std::istream&
 operator>>(std::istream& is, SourceID& source_id)
 {
-  std::string tmp;
+  std::string tmp ;
   is >> tmp >> source_id.subsystem >> tmp >> source_id.id; // Eat last three tokens, e.g. "-> (314, 159)"
 
   return is;
 }
+
 
 bool
 SourceID::operator<(const SourceID& other) const noexcept
@@ -86,16 +88,16 @@ std::string
 SourceID::subsystem_to_string(const Subsystem& type)
 {
   switch (type) {
-    case Subsystem::kUNDEFINED:
-      return "UNDEFINED";
-    case Subsystem::kDRO:
-      return "DRO";
-    case Subsystem::kHSI:
-      return "HSI";
-    case Subsystem::kTRG:
-      return "TRG";
-    case Subsystem::kTRB:
-      return "TRB";
+    case Subsystem::kUnknown:
+      return "Unknown";
+    case Subsystem::kDetectorReadout:
+      return "Detector_Readout";
+    case Subsystem::kHwSignalsInterface:
+      return "HW_Signals_Interface";
+    case Subsystem::kTrigger:
+      return "Trigger";
+    case Subsystem::kTRBuilder:
+      return "TR_Builder";
   }
   return "Unknown";
 }
@@ -103,16 +105,16 @@ SourceID::subsystem_to_string(const Subsystem& type)
 SourceID::Subsystem
 SourceID::string_to_subsystem(const std::string& typestring)
 {
-  if (typestring == "DRO")
-    return Subsystem::kDRO;
-  if (typestring == "HSI")
-    return Subsystem::kHSI;
-  if (typestring == "TRG")
-    return Subsystem::kTRG;
-  if (typestring == "TRB")
-    return Subsystem::kTRB;
+  if (typestring == "Detector_Readout")
+    return Subsystem::kDetectorReadout;
+  if (typestring == "HW_Signals_Interface")
+    return Subsystem::kHwSignalsInterface;
+  if (typestring == "Trigger")
+    return Subsystem::kTrigger;
+  if (typestring == "TR_Builder")
+    return Subsystem::kTRBuilder;
 
-  return Subsystem::kUNDEFINED;
+  return Subsystem::kUnknown;
 }
 
 } // namespace dunedaq::daqdataformats

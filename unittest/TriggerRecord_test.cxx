@@ -42,11 +42,11 @@ BOOST_AUTO_TEST_CASE(ComponentsConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 12 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 56 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -62,11 +62,11 @@ BOOST_AUTO_TEST_CASE(HeaderConstructor)
 {
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 12 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 56 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -85,11 +85,11 @@ BOOST_AUTO_TEST_CASE(MoveConstructor)
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 12 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 56 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
@@ -110,18 +110,18 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation)
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 12 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 56 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
   TriggerRecord record(components);
 
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 910 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 910 };
   components.back().window_begin = 11;
   components.back().window_end = 12;
 
@@ -141,11 +141,11 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
 
   std::vector<ComponentRequest> components;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 12 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 12 };
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
-  components.back().component = { SourceID::Subsystem::kDRO, 56 };
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
 
