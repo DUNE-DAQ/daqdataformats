@@ -162,11 +162,28 @@ public:
    * @return The element_id header field
    */
   SourceID get_element_id() const { return header_()->element_id; }
+
   /**
    * @brief Set the SourceID for the Fragment
    * @param element_id SourceID to use as element_id
    */
   void set_element_id(SourceID element_id) { header_()->element_id = element_id; }
+
+  /**
+   * @brief Get the DetID for the Fragment
+   * @return The detector_id header field
+   */
+
+  dunedaq::detdataformats::DetID get_detector_id() const noexcept { return header_()->detector_id; }
+
+  /**
+   * @brief Set the DetID for the Fragment
+   * @param detector_id DetID to use as the detector_id 
+   */
+
+  void set_detector_id(const detdataformats::DetID& detector_id) noexcept { header_()->detector_id = detector_id; }
+
+
   /**
    * @brief Get the error_bits header field
    * @return Bitset generated from header's error_bits field
@@ -311,6 +328,7 @@ Fragment::set_header_fields(const FragmentHeader& header)
   header_()->window_end = header.window_end;
   header_()->run_number = header.run_number;
   header_()->element_id = header.element_id;
+  header_()->detector_id = header.detector_id;
   header_()->error_bits = header.error_bits;
   header_()->fragment_type = header.fragment_type;
   header_()->sequence_number = header.sequence_number;

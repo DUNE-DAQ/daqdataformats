@@ -32,6 +32,7 @@ register_fragment(py::module& m)
     .def("get_window_begin", &Fragment::get_window_begin)
     .def("get_window_end", &Fragment::get_window_end)
     .def("get_element_id", &Fragment::get_element_id)
+    .def("get_detector_id", &Fragment::get_detector_id)
     .def("get_error_bits", &Fragment::get_error_bits)
     .def("get_error_bit", &Fragment::get_error_bit)
     .def("get_fragment_type_code", &Fragment::get_fragment_type_code)
@@ -71,6 +72,7 @@ register_fragment(py::module& m)
     .def_property_readonly("sequence_number",
                            [](const FragmentHeader& self) -> sequence_number_t { return self.sequence_number; })
     .def_property_readonly("element_id", [](const FragmentHeader& self) -> SourceID { return self.element_id; })
+    .def_property_readonly("detector_id", [](const FragmentHeader& self) -> dunedaq::detdataformats::DetID { return self.detector_id; })
     .def_static("sizeof", []() { return sizeof(FragmentHeader); });
 
   py::enum_<FragmentErrorBits>(m, "FragmentErrorBits")
