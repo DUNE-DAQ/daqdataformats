@@ -12,6 +12,8 @@
 #include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/Types.hpp"
 
+#include "detdataformats/DetID.hpp"
+
 #include <bitset>
 #include <cstddef>
 #include <cstdlib>
@@ -106,13 +108,24 @@ struct FragmentHeader
    * @brief Component that generated the data in this Fragment
    */
   SourceID element_id;
+
+  /** 
+   * @brief Identifier for the subdetector that produced the raw data in the Fragment payload
+   */
+
+  detdataformats::DetID detector_id;
+
+  uint32_t unused2{ // NOLINT(build/unsigned)
+                   0xFFFFFFFF
+  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+
 };
 
 static_assert(FragmentHeader::s_fragment_header_version == 4,
              "This is intentionally designed to tell the developer to update the static_assert checks (including this "
              "one) when the version is bumped");
 
-static_assert(sizeof(FragmentHeader) == 72, "FragmentHeader struct size different than expected!");
+static_assert(sizeof(FragmentHeader) == 80, "FragmentHeader struct size different than expected!");
 static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
               "FragmentHeader fragment_header_marker field not at expected offset!");
 static_assert(offsetof(FragmentHeader, version) == 4, "FragmentHeader version field not at expected offset!");
@@ -132,6 +145,7 @@ static_assert(offsetof(FragmentHeader, sequence_number) == 60,
               "FragmentHeader sequence_number field not at expected offset!");
 static_assert(offsetof(FragmentHeader, unused) == 62, "FragmentHeader unused field not at expected offset!");
 static_assert(offsetof(FragmentHeader, element_id) == 64, "FragmentHeader element_id field not at expected offset!");
+static_assert(offsetof(FragmentHeader, detector_id) == 72, "FragmentHeader detector_id field not at expected offset!");
 
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
@@ -261,7 +275,8 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "element_id: " << hdr.element_id << ", "
            << "error_bits: " << hdr.error_bits << ", "
            << "fragment_type: " << hdr.fragment_type << ", "
-           << "sequence_number: " << hdr.sequence_number;
+           << "sequence_number: " << hdr.sequence_number << ", "
+           << "detector_id: " << hdr.detector_id;
 }
 
 /**
@@ -278,7 +293,8 @@ operator>>(std::istream& o, FragmentHeader& hdr)
          hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
          hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
          hdr.element_id >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
-         hdr.sequence_number;
+         hdr.sequence_number >> tmp >> tmp >> hdr.detector_id;
+
 }
 } // namespace dunedaq::daqdataformats
 

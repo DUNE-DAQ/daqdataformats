@@ -53,6 +53,8 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   header.trigger_timestamp = 2;
   header.run_number = 3;
   header.sequence_number = 4;
+  header.element_id = { SourceID::Subsystem::kTrigger, 0x7766 };
+  header.detector_id = { dunedaq::detdataformats::DetID::Subdetector::kHD_TPC };
 
   std::ostringstream ostr;
   ostr << header;
@@ -74,6 +76,8 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE_EQUAL(header_from_stream.trigger_number, header.trigger_number);
   BOOST_REQUIRE_EQUAL(header_from_stream.trigger_timestamp, header.trigger_timestamp);
   BOOST_REQUIRE_EQUAL(header_from_stream.sequence_number, header.sequence_number);
+  BOOST_REQUIRE_EQUAL(header_from_stream.element_id, header.element_id);
+  BOOST_REQUIRE_EQUAL(header_from_stream.detector_id.subdetector, header.detector_id.subdetector);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

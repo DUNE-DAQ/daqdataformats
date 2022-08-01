@@ -1,13 +1,10 @@
 
-# n.b. for the purposes of development on
-# johnfreeman/daq-deliverables_issue10_sourceid many parts of this
-# build have been disabled. Make sure that they are reenabled (and
-# this comment removed) before putting in a PR
-
 cmake_minimum_required(VERSION 3.12)
 project(daqdataformats VERSION 3.3.3)
 
 find_package(daq-cmake REQUIRED)
+find_package(detdataformats REQUIRED)
+
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 daq_setup_environment()
@@ -16,7 +13,7 @@ daq_setup_environment()
 ##############################################################################
 # Main library
 
-daq_add_library(LINK_LIBRARIES )
+daq_add_library(LINK_LIBRARIES detdataformats)
 
 ##############################################################################
 daq_add_python_bindings(*.cpp LINK_LIBRARIES ${PROJECT_NAME})
