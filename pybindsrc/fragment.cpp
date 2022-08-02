@@ -71,8 +71,8 @@ register_fragment(py::module& m)
                            [](const FragmentHeader& self) -> fragment_type_t { return self.fragment_type; })
     .def_property_readonly("sequence_number",
                            [](const FragmentHeader& self) -> sequence_number_t { return self.sequence_number; })
+    .def_property_readonly("detector_id", [](const FragmentHeader& self) -> uint16_t { return self.detector_id; })
     .def_property_readonly("element_id", [](const FragmentHeader& self) -> SourceID { return self.element_id; })
-    .def_property_readonly("detector_id", [](const FragmentHeader& self) -> dunedaq::detdataformats::DetID { return self.detector_id; })
     .def_static("sizeof", []() { return sizeof(FragmentHeader); });
 
   py::enum_<FragmentErrorBits>(m, "FragmentErrorBits")
@@ -84,10 +84,12 @@ register_fragment(py::module& m)
 
   py::enum_<FragmentType>(m, "FragmentType")
     .value("kUnknown", FragmentType::kUnknown)
+    .value("kProtoWIB", FragmentType::kProtoWIB)
     .value("kWIB", FragmentType::kWIB)
     .value("kDAPHNE", FragmentType::kDAPHNE)
     .value("kTDE_AMC", FragmentType::kTDE_AMC)
-    .value("kTriggerPrimitive", FragmentType::kTriggerPrimitive)
+    .value("kFW_TriggerPrimitive", FragmentType::kFW_TriggerPrimitive)
+    .value("kSW_TriggerPrimitive", FragmentType::kSW_TriggerPrimitive)
     .value("kTriggerActivity", FragmentType::kTriggerActivity)
     .value("kTriggerCandidate", FragmentType::kTriggerCandidate)
     .value("kHardwareSignal", FragmentType::kHardwareSignal)

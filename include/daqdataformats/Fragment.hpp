@@ -174,14 +174,14 @@ public:
    * @return The detector_id header field
    */
 
-  dunedaq::detdataformats::DetID get_detector_id() const noexcept { return header_()->detector_id; }
+  uint16_t get_detector_id() const noexcept { return header_()->detector_id; }
 
   /**
    * @brief Set the DetID for the Fragment
    * @param detector_id DetID to use as the detector_id 
    */
 
-  void set_detector_id(const detdataformats::DetID& detector_id) noexcept { header_()->detector_id = detector_id; }
+  void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; }
 
 
   /**

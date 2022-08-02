@@ -12,8 +12,6 @@
 #include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/Types.hpp"
 
-#include "detdataformats/DetID.hpp"
-
 #include <bitset>
 #include <cstddef>
 #include <cstdlib>
@@ -95,29 +93,27 @@ struct FragmentHeader
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
+
   /**
    * @brief Sequence number of this Fragment within a trigger record
    */
   sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
 
-  uint16_t unused{ // NOLINT(build/unsigned)
-                   0xFFFF
-  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+  /** 
+   * @brief Identifier for the subdetector that produced the raw data in the Fragment payload
+   */
+
+  uint16_t detector_id;
 
   /**
    * @brief Component that generated the data in this Fragment
    */
   SourceID element_id;
 
-  /** 
-   * @brief Identifier for the subdetector that produced the raw data in the Fragment payload
-   */
 
-  detdataformats::DetID detector_id;
-
-  uint32_t unused2{ // NOLINT(build/unsigned)
-                   0xFFFFFFFF
-  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+//  uint32_t unused2{ // NOLINT(build/unsigned)
+//                   0xFFFFFFFF
+//  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 
 };
 
@@ -125,7 +121,7 @@ static_assert(FragmentHeader::s_fragment_header_version == 4,
              "This is intentionally designed to tell the developer to update the static_assert checks (including this "
              "one) when the version is bumped");
 
-static_assert(sizeof(FragmentHeader) == 80, "FragmentHeader struct size different than expected!");
+static_assert(sizeof(FragmentHeader) == 72, "FragmentHeader struct size different than expected!");
 static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
               "FragmentHeader fragment_header_marker field not at expected offset!");
 static_assert(offsetof(FragmentHeader, version) == 4, "FragmentHeader version field not at expected offset!");
@@ -143,9 +139,8 @@ static_assert(offsetof(FragmentHeader, fragment_type) == 56,
               "FragmentHeader fragment_type field not at expected offset!");
 static_assert(offsetof(FragmentHeader, sequence_number) == 60,
               "FragmentHeader sequence_number field not at expected offset!");
-static_assert(offsetof(FragmentHeader, unused) == 62, "FragmentHeader unused field not at expected offset!");
+static_assert(offsetof(FragmentHeader, detector_id) == 62, "FragmentHeader detector_id field not at expected offset!");
 static_assert(offsetof(FragmentHeader, element_id) == 64, "FragmentHeader element_id field not at expected offset!");
-static_assert(offsetof(FragmentHeader, detector_id) == 72, "FragmentHeader detector_id field not at expected offset!");
 
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
@@ -193,14 +188,16 @@ enum class FragmentErrorBits : size_t
 enum class FragmentType : fragment_type_t
 {
   kUnknown = 0,
-  kWIB = 1,
-  kDAPHNE = 2,
-  kTDE_AMC = 3,
-  kTriggerPrimitive = 4,
-  kTriggerActivity = 5,
-  kTriggerCandidate = 6,
-  kHardwareSignal = 7,
-  kPACMAN = 8
+  kProtoWIB = 1,
+  kWIB = 2,
+  kDAPHNE = 3,
+  kTDE_AMC = 4,
+  kFW_TriggerPrimitive = 5,
+  kSW_TriggerPrimitive = 6,
+  kTriggerActivity = 7,
+  kTriggerCandidate = 8,
+  kHardwareSignal = 9,
+  kPACMAN = 10
 };
 
 /**
@@ -213,10 +210,12 @@ get_fragment_type_names()
 {
   return {
     { FragmentType::kUnknown, "Unknown" },
+    { FragmentType::kProtoWIB, "ProtoWIB" },
     { FragmentType::kWIB, "WIB" },
     { FragmentType::kDAPHNE, "DAPHNE" },
     { FragmentType::kTDE_AMC, "TDE_AMC" },
-    { FragmentType::kTriggerPrimitive, "Trigger_Primitive" },
+    { FragmentType::kFW_TriggerPrimitive, "FW_Trigger_Primitive" },
+    { FragmentType::kSW_TriggerPrimitive, "SW_Trigger_Primitive" },
     { FragmentType::kTriggerActivity, "Trigger_Activity" },
     { FragmentType::kTriggerCandidate, "Trigger_Candidate" },
     { FragmentType::kHardwareSignal, "Hardware_Signal" },
@@ -272,11 +271,11 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
            << "window_begin: " << hdr.window_begin << ", "
            << "window_end: " << hdr.window_end << ", "
-           << "element_id: " << hdr.element_id << ", "
            << "error_bits: " << hdr.error_bits << ", "
            << "fragment_type: " << hdr.fragment_type << ", "
            << "sequence_number: " << hdr.sequence_number << ", "
-           << "detector_id: " << hdr.detector_id;
+           << "detector_id: " << hdr.detector_id << ", "
+           << "element_id: " << hdr.element_id ;
 }
 
 /**
@@ -292,8 +291,8 @@ operator>>(std::istream& o, FragmentHeader& hdr)
   return o >> tmp >> std::hex >> hdr.fragment_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
          hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
          hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
-         hdr.element_id >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
-         hdr.sequence_number >> tmp >> tmp >> hdr.detector_id;
+         hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
+         hdr.sequence_number >> tmp >> tmp >> hdr.detector_id >> tmp >> tmp >> hdr.element_id;
 
 }
 } // namespace dunedaq::daqdataformats
