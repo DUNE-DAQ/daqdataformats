@@ -10,6 +10,7 @@
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICEHEADER_HPP_
 
 #include "daqdataformats/ComponentRequest.hpp"
+#include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/Types.hpp"
 
 #include <cstddef>
@@ -33,7 +34,7 @@ struct TimeSliceHeader
   /**
    * @brief The current version of the TimeSliceHeader
    */
-  static constexpr uint32_t s_timeslice_header_version = 1; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_timeslice_header_version = 2; // NOLINT(build/unsigned)
 
   /**
    * @brief Marker bytes used to identify a TimeSliceHeader struct in a raw data stream
@@ -59,8 +60,10 @@ struct TimeSliceHeader
    * @brief Padding to ensure 64-bit alignment
    */
   uint32_t unused{ 0xFFFFFFFF }; // NOLINT(build/unsigned)
+
+  SourceID element_id;
 };
-static_assert(sizeof(TimeSliceHeader) == 24, "TimeSliceHeader struct size different than expected!");
+static_assert(sizeof(TimeSliceHeader) == 32, "TimeSliceHeader struct size different than expected!");
 static_assert(offsetof(TimeSliceHeader, timeslice_header_marker) == 0,
               "TimeSliceHeader timeslice_header_marker field not at expected offset!");
 static_assert(offsetof(TimeSliceHeader, version) == 4, "TimeSliceHeader version field not at expected offset!");
@@ -68,6 +71,7 @@ static_assert(offsetof(TimeSliceHeader, timeslice_number) == 8,
               "TimeSliceHeader timeslice_number field not at expected offset!");
 static_assert(offsetof(TimeSliceHeader, run_number) == 16, "TimeSliceHeader run_number field not at expected offset!");
 static_assert(offsetof(TimeSliceHeader, unused) == 20, "TimeSliceHeader unused field not at expected offset!");
+static_assert(offsetof(TimeSliceHeader, element_id) == 24, "TimeSliceHeader source_id field not at expected offset!");
 
 /**
  * @brief Stream a TimeSliceHeader instance in human-readable form
