@@ -192,8 +192,20 @@ enum class FragmentType : fragment_type_t
   kWIB = 2,
   kDAPHNE = 3,
   kTDE_AMC = 4,
-  kFW_TriggerPrimitive = 5,
-  kSW_TriggerPrimitive = 6,
+  // This fragment type is for the "raw" data from the firmware
+  // trigger primitive generation. We store this in fragments for the
+  // purposes of inspecting/debugging the firmware TPG
+  kFW_TriggerPrimitive = 5, ///< FW TP frame format
+  // This fragment type is for TPs saved via the trigger subsystem's
+  // TP buffer, which are in the format defined by
+  // dunedaq::detdataformats::trigger::TriggerPrimitive. The "SW" part
+  // of the name is a slight misnomer, in that the TPs stored in this
+  // format may have been _originally_ produced by either software
+  // _or_ firmware. In the case where the TPs come originally from
+  // firmware, the kFW_TriggerPrimitive fragment and the
+  // kSW_TriggerPrimitive fragment will store the same information,
+  // just encoded in different ways
+  kSW_TriggerPrimitive = 6, ///< Trigger format TPs produced by trigger code
   kTriggerActivity = 7,
   kTriggerCandidate = 8,
   kHardwareSignal = 9,
