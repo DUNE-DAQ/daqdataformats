@@ -23,6 +23,7 @@ register_sourceid(py::module& m)
 {
 
   py::class_<SourceID> py_sourceid(m, "SourceID");
+  py_sourceid.def(py::init()).def(py::init<const SourceID::Subsystem&, const SourceID::ID_t&>());
   py_sourceid.def(py::self < py::self).def("__repr__", [](const SourceID& gid) {
     std::ostringstream oss;
     oss << "<daqdataformats::SourceID " << gid << ">";
