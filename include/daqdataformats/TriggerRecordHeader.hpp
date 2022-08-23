@@ -10,6 +10,7 @@
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADER_HPP_
 
 #include "daqdataformats/ComponentRequest.hpp"
+#include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/TriggerRecordHeaderData.hpp"
 #include "daqdataformats/Types.hpp"
 
@@ -187,6 +188,17 @@ public:
    * @param max_sequence_number Maximum sequence number to set
    */
   void set_max_sequence_number(sequence_number_t number) { header_()->max_sequence_number = number; }
+
+  /**
+   * @brief Get the SourceID for this TriggerRecordHeader
+   * @return The element_id TriggerRecordHeaderData field
+   */
+  SourceID get_element_id() const { return header_()->element_id; }
+  /**
+   * @brief Set the SourceID for this TriggerRecordHeader
+   * @param source_id SourceID value to set
+   */
+  void set_element_id(SourceID source_id) { header_()->element_id = source_id; }
 
   /**
    * @brief Get the total size of the TriggerRecordHeader
