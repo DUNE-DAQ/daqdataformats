@@ -34,6 +34,7 @@ struct GeoID
     kPDS = 2,
     kDataSelection = 3,
     kNDLArTPC = 4,
+    kNDPD = 5,
     kInvalid = 0
   };
   /**
@@ -184,6 +185,8 @@ GeoID::system_type_to_string(SystemType type)
       return "DataSelection";
     case SystemType::kNDLArTPC:
       return "NDLArTPC";
+    case SystemType::kNDPD:
+      return "NDPD";
     case SystemType::kInvalid:
       return "Invalid";
   }
@@ -201,6 +204,8 @@ GeoID::string_to_system_type(std::string typestring)
     return SystemType::kDataSelection;
   if (typestring.find("NDLArTPC") == 0)
     return SystemType::kNDLArTPC;
+  if (typestring.find("NDPD") == 0)
+    return SystemType::kNDPD;
   return SystemType::kInvalid;
 }
 

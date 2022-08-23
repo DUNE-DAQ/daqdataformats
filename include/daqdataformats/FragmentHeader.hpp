@@ -182,6 +182,7 @@ enum class FragmentType : fragment_type_t
   kTriggerPrimitives = 4,                          ///< A DataSelection TriggerPrimitivesFragment
   kTriggerActivities = 5,                          ///< A DataSelection TriggerActivitiesFragment
   kTriggerCandidates = 6,                          ///< A DataSelection TriggerCandidatesFragment
+  kNDPD = 7,                                       ///< Data from the NDPD
   kUnknown = TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in
                                                    ///< get_fragment_type_names
 };
@@ -200,7 +201,8 @@ get_fragment_type_names()
            { FragmentType::kNDLArTPC, "NDLArTPC" },
            { FragmentType::kTriggerPrimitives, "TriggerPrimitives" },
            { FragmentType::kTriggerActivities, "TriggerActivities" },
-           { FragmentType::kTriggerCandidates, "TriggerCandidates" } };
+	   { FragmentType::kTriggerCandidates, "TriggerCandidates" },
+	   { FragmentType::kNDPD, "NDPD" } };
 }
 
 /**
