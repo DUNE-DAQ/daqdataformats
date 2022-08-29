@@ -87,6 +87,7 @@ register_fragment(py::module& m)
     .value("kTriggerPrimitives", FragmentType::kTriggerPrimitives)
     .value("kTriggerActivities", FragmentType::kTriggerActivities)
     .value("kTriggerCandidates", FragmentType::kTriggerCandidates)
+    .value("kHSIData", FragmentType::kHSIData)
     .value("kUnknown", FragmentType::kUnknown)
     .export_values();
 }

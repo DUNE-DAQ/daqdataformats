@@ -36,6 +36,7 @@ register_geoid(py::module& m)
     .value("kPDS", GeoID::SystemType::kPDS)
     .value("kDataSelection", GeoID::SystemType::kDataSelection)
     .value("kNDLArTPC", GeoID::SystemType::kNDLArTPC)
+    .value("kHSI", GeoID::SystemType::kHSI)
     .value("kInvalid", GeoID::SystemType::kInvalid)
     .export_values();
 
