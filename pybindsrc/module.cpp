@@ -16,7 +16,7 @@ namespace daqdataformats {
 namespace python {
 
 extern void
-register_geoid(py::module&);
+register_sourceid(py::module&);
 extern void
 register_fragment(py::module&);
 extern void
@@ -31,7 +31,7 @@ PYBIND11_MODULE(_daq_daqdataformats_py, m)
 
   m.doc() = "c++ implementation of the dunedaq daqdataformats modules"; // optional module docstring
 
-  register_geoid(m);
+  register_sourceid(m);
   register_fragment(m);
   register_component_request(m);
   register_trigger_record(m);

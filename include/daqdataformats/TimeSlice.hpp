@@ -17,8 +17,7 @@
 #include <utility>
 #include <vector>
 
-namespace dunedaq {
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief C++ Representation of a DUNE TimeSlice, consisting of a TimeSliceHeader object and a vector of
@@ -107,7 +106,6 @@ TimeSlice::TimeSlice(TimeSliceHeader const& header)
   , m_fragments()
 {}
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICE_HPP_

@@ -32,6 +32,7 @@ register_fragment(py::module& m)
     .def("get_window_begin", &Fragment::get_window_begin)
     .def("get_window_end", &Fragment::get_window_end)
     .def("get_element_id", &Fragment::get_element_id)
+    .def("get_detector_id", &Fragment::get_detector_id)
     .def("get_error_bits", &Fragment::get_error_bits)
     .def("get_error_bit", &Fragment::get_error_bit)
     .def("get_fragment_type_code", &Fragment::get_fragment_type_code)
@@ -39,9 +40,10 @@ register_fragment(py::module& m)
     .def("get_sequence_number", &Fragment::get_sequence_number)
     .def("get_size", &Fragment::get_size)
     .def("get_data", &Fragment::get_data, py::return_value_policy::reference_internal)
-    .def("get_data",
-         [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); },
-         py::return_value_policy::reference_internal);
+    .def(
+      "get_data",
+      [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); },
+      py::return_value_policy::reference_internal);
 
   py::enum_<Fragment::BufferAdoptionMode>(py_fragment, "BufferAdoptionMode")
     .value("kReadOnlyMode", Fragment::BufferAdoptionMode::kReadOnlyMode)
@@ -69,7 +71,8 @@ register_fragment(py::module& m)
                            [](const FragmentHeader& self) -> fragment_type_t { return self.fragment_type; })
     .def_property_readonly("sequence_number",
                            [](const FragmentHeader& self) -> sequence_number_t { return self.sequence_number; })
-    .def_property_readonly("element_id", [](const FragmentHeader& self) -> GeoID { return self.element_id; })
+    .def_property_readonly("detector_id", [](const FragmentHeader& self) -> uint16_t { return self.detector_id; })
+    .def_property_readonly("element_id", [](const FragmentHeader& self) -> SourceID { return self.element_id; })
     .def_static("sizeof", []() { return sizeof(FragmentHeader); });
 
   py::enum_<FragmentErrorBits>(m, "FragmentErrorBits")
@@ -80,15 +83,17 @@ register_fragment(py::module& m)
     .export_values();
 
   py::enum_<FragmentType>(m, "FragmentType")
-    .value("kFakeData", FragmentType::kFakeData)
-    .value("kTPCData", FragmentType::kTPCData)
-    .value("kPDSData", FragmentType::kPDSData)
-    .value("kNDLArTPC", FragmentType::kNDLArTPC)
-    .value("kTriggerPrimitives", FragmentType::kTriggerPrimitives)
-    .value("kTriggerActivities", FragmentType::kTriggerActivities)
-    .value("kTriggerCandidates", FragmentType::kTriggerCandidates)
-    .value("kHSIData", FragmentType::kHSIData)
     .value("kUnknown", FragmentType::kUnknown)
+    .value("kProtoWIB", FragmentType::kProtoWIB)
+    .value("kWIB", FragmentType::kWIB)
+    .value("kDAPHNE", FragmentType::kDAPHNE)
+    .value("kTDE_AMC", FragmentType::kTDE_AMC)
+    .value("kFW_TriggerPrimitive", FragmentType::kFW_TriggerPrimitive)
+    .value("kSW_TriggerPrimitive", FragmentType::kSW_TriggerPrimitive)
+    .value("kTriggerActivity", FragmentType::kTriggerActivity)
+    .value("kTriggerCandidate", FragmentType::kTriggerCandidate)
+    .value("kHardwareSignal", FragmentType::kHardwareSignal)
+    .value("kPACMAN", FragmentType::kPACMAN)
     .export_values();
 }
 

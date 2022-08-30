@@ -10,6 +10,7 @@
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADER_HPP_
 
 #include "daqdataformats/ComponentRequest.hpp"
+#include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/TriggerRecordHeaderData.hpp"
 #include "daqdataformats/Types.hpp"
 
@@ -22,9 +23,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief C++ representation of a TriggerRecordHeader, which wraps a flat array that is the TriggerRecordHeader's
@@ -191,6 +190,17 @@ public:
   void set_max_sequence_number(sequence_number_t number) { header_()->max_sequence_number = number; }
 
   /**
+   * @brief Get the SourceID for this TriggerRecordHeader
+   * @return The element_id TriggerRecordHeaderData field
+   */
+  SourceID get_element_id() const { return header_()->element_id; }
+  /**
+   * @brief Set the SourceID for this TriggerRecordHeader
+   * @param source_id SourceID value to set
+   */
+  void set_element_id(SourceID source_id) { header_()->element_id = source_id; }
+
+  /**
    * @brief Get the total size of the TriggerRecordHeader
    * @return The size of the TriggerRecordHeader, including header and all component requests
    */
@@ -306,7 +316,8 @@ TriggerRecordHeader::at(size_t idx) const
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
 
-ComponentRequest& TriggerRecordHeader::operator[](size_t idx)
+ComponentRequest&
+TriggerRecordHeader::operator[](size_t idx)
 {
   if (idx >= header_()->num_requested_components) {
     throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
@@ -315,7 +326,6 @@ ComponentRequest& TriggerRecordHeader::operator[](size_t idx)
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADER_HPP_

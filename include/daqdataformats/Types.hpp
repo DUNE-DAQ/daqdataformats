@@ -12,14 +12,7 @@
 #include <cstdint>
 #include <limits>
 
-/**
- * @brief The DUNE-DAQ namespace
- */
-namespace dunedaq {
-/**
- * @brief daqdataformats code
- */
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief Type used to represent run number
@@ -81,7 +74,6 @@ public:
     std::numeric_limits<timeslice_number_t>::max(); ///< An invalid timeslice number
 };
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TYPES_HPP_

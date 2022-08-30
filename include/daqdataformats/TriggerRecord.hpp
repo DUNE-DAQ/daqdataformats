@@ -17,8 +17,7 @@
 #include <utility>
 #include <vector>
 
-namespace dunedaq {
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief C++ Representation of a DUNE TriggerRecord, consisting of a TriggerRecordHeader object and a vector of
@@ -56,7 +55,7 @@ public:
    * @brief Set the TriggerRecordHeader to the given TriggerRecordHeader object
    * @param header new TriggerRecordHeader to use
    */
-  void set_header(TriggerRecordHeader header) { m_header = header; }
+  void set_header(const TriggerRecordHeader& header) { m_header = header; }
   /**
    * @brief Get a copy of the TriggerRecordHeaderData from the TriggerRecordHeader
    * @return Copy of the TriggerRecordHeaderData struct from the TriggerRecordHeader
@@ -110,7 +109,6 @@ TriggerRecord::TriggerRecord(TriggerRecordHeader const& header)
   , m_fragments()
 {}
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORD_HPP_

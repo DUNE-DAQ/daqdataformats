@@ -24,13 +24,14 @@ BOOST_AUTO_TEST_SUITE(FragmentHeader_test)
 
 BOOST_AUTO_TEST_CASE(FragmentTypeConversion)
 {
-  BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(string_to_fragment_type("TPC")),
-                      static_cast<fragment_type_t>(FragmentType::kTPCData));
-  BOOST_REQUIRE_EQUAL(fragment_type_to_string(FragmentType::kTPCData), "TPC");
+  BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(string_to_fragment_type("WIB")),
+                      static_cast<fragment_type_t>(FragmentType::kWIB));
+  BOOST_REQUIRE_EQUAL(fragment_type_to_string(FragmentType::kWIB), "WIB");
 
   auto type_map = get_fragment_type_names();
   // sanity check
   for (auto& type_pair : type_map) {
+    BOOST_TEST_MESSAGE("Fragment type" << int(type_pair.first) << " " << type_pair.second << " with converters: " << int(string_to_fragment_type(type_pair.second)) << " " << fragment_type_to_string(type_pair.first));
     BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(string_to_fragment_type(type_pair.second)),
                         static_cast<fragment_type_t>(type_pair.first));
     BOOST_REQUIRE_EQUAL(fragment_type_to_string(type_pair.first), type_pair.second);
@@ -38,7 +39,7 @@ BOOST_AUTO_TEST_CASE(FragmentTypeConversion)
 
   BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(string_to_fragment_type("thisIsABadFragmentType")),
                       static_cast<fragment_type_t>(FragmentType::kUnknown));
-  BOOST_REQUIRE_EQUAL(fragment_type_to_string(static_cast<FragmentType>(-10)), "UNKNOWN");
+  BOOST_REQUIRE_EQUAL(fragment_type_to_string(static_cast<FragmentType>(-10)), "Unknown");
 }
 
 /**
@@ -52,6 +53,8 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   header.trigger_timestamp = 2;
   header.run_number = 3;
   header.sequence_number = 4;
+  header.detector_id = 1;
+  header.element_id = { SourceID::Subsystem::kTrigger, 0x7766 };
 
   std::ostringstream ostr;
   ostr << header;
@@ -73,6 +76,8 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE_EQUAL(header_from_stream.trigger_number, header.trigger_number);
   BOOST_REQUIRE_EQUAL(header_from_stream.trigger_timestamp, header.trigger_timestamp);
   BOOST_REQUIRE_EQUAL(header_from_stream.sequence_number, header.sequence_number);
+  BOOST_REQUIRE_EQUAL(header_from_stream.detector_id, header.detector_id);
+  BOOST_REQUIRE_EQUAL(header_from_stream.element_id, header.element_id);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

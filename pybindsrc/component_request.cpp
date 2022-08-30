@@ -23,7 +23,7 @@ register_component_request(py::module& m)
 
   py::class_<ComponentRequest>(m, "ComponentRequest")
     .def(py::init())
-    .def(py::init<GeoID const&, timestamp_t const&, timestamp_t const&>())
+    .def(py::init<SourceID const&, timestamp_t const&, timestamp_t const&>())
     .def_readonly_static("s_component_request_version", &ComponentRequest::s_component_request_version)
     .def_readonly("unused", &ComponentRequest::unused)
     .def_readonly("version", &ComponentRequest::version)
