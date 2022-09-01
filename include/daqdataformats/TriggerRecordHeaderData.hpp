@@ -193,7 +193,8 @@ operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr)
 
            << "num_requested_components: " << hdr.num_requested_components << ", "
            << "sequence_number: " << hdr.sequence_number << ", "
-           << "max_sequence_number: " << hdr.max_sequence_number;
+           << "max_sequence_number: " << hdr.max_sequence_number << ", "
+           << "element_id: { " << hdr.element_id << " }";
 }
 
 /**
@@ -209,7 +210,7 @@ operator>>(std::istream& o, TriggerRecordHeaderData& hdr)
   return o >> tmp >> std::hex >> hdr.trigger_record_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >>
          tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >> hdr.trigger_timestamp >> tmp >>
          tmp >> hdr.trigger_type >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.num_requested_components >> tmp >>
-         tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number;
+         tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number >> tmp >> tmp >> tmp >> hdr.element_id;
 }
 
 } // namespace dunedaq::daqdataformats

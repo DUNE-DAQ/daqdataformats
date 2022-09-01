@@ -86,7 +86,8 @@ operator<<(std::ostream& o, TimeSliceHeader const& hdr)
            << "version: " << hdr.version << ", "
 
            << "timeslice_number: " << hdr.timeslice_number << ", "
-           << "run_number: " << hdr.run_number;
+           << "run_number: " << hdr.run_number << ", "
+           << "element_id: { " << hdr.element_id << " }";
 }
 
 /**
@@ -100,7 +101,7 @@ operator>>(std::istream& o, TimeSliceHeader& hdr)
 {
   std::string tmp;
   return o >> tmp >> std::hex >> hdr.timeslice_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
-         hdr.timeslice_number >> tmp >> tmp >> hdr.run_number;
+         hdr.timeslice_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >> tmp >> hdr.element_id;
 }
 
 } // namespace dunedaq::daqdataformats
