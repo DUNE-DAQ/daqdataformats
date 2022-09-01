@@ -74,6 +74,12 @@ public:
   void add_fragment(std::unique_ptr<Fragment>&& fragment) { m_fragments.emplace_back(std::move(fragment)); }
 
   /**
+   * @brief Set the SourceID for this TimeSlice
+   * @param source_id SourceID value to set
+   */
+  void set_element_id(SourceID source_id) { m_header.element_id = source_id; }
+
+  /**
    * @brief Get size of trigger record from underlying TriggerRecordHeader and Fragments
    */
   size_t get_total_size_bytes() const
