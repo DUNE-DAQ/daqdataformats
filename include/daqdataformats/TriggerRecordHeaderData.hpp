@@ -10,6 +10,7 @@
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_
 
 #include "daqdataformats/ComponentRequest.hpp"
+#include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/Types.hpp"
 
 #include <cstddef>
@@ -18,9 +19,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief Additional data fields associated with a TriggerRecordHeader
@@ -35,7 +34,7 @@ struct TriggerRecordHeaderData
   /**
    * @brief The current version of the TriggerRecordHeader
    */
-  static constexpr uint32_t s_trigger_record_header_version = 2; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_trigger_record_header_version = 3; // NOLINT(build/unsigned)
 
   /**
    * @brief An invalid number of components
@@ -101,8 +100,13 @@ struct TriggerRecordHeaderData
    * @brief Padding to ensure 64-bit alignment
    */
   uint16_t unused{ 0xFFFF }; // NOLINT(build/unsigned)
+
+  SourceID element_id;
 };
-static_assert(sizeof(TriggerRecordHeaderData) == 48, "TriggerRecordHeaderData struct size different than expected!");
+
+  static_assert(TriggerRecordHeaderData::s_trigger_record_header_version == 3, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped");
+
+static_assert(sizeof(TriggerRecordHeaderData) == 56, "TriggerRecordHeaderData struct size different than expected!");
 static_assert(offsetof(TriggerRecordHeaderData, trigger_record_header_marker) == 0,
               "TriggerRecordHeaderData trigger_record_header_marker field not at expected offset!");
 static_assert(offsetof(TriggerRecordHeaderData, version) == 4,
@@ -125,6 +129,8 @@ static_assert(offsetof(TriggerRecordHeaderData, max_sequence_number) == 44,
               "TriggerRecordHeaderData max_sequence_number field not at expected offset!");
 static_assert(offsetof(TriggerRecordHeaderData, unused) == 46,
               "TriggerRecordHeaderData unused field not at expected offset!");
+static_assert(offsetof(TriggerRecordHeaderData, element_id) == 48,
+              "TriggerRecordHeaderData source_id field not at expected offset!");
 
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
@@ -187,7 +193,8 @@ operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr)
 
            << "num_requested_components: " << hdr.num_requested_components << ", "
            << "sequence_number: " << hdr.sequence_number << ", "
-           << "max_sequence_number: " << hdr.max_sequence_number;
+           << "max_sequence_number: " << hdr.max_sequence_number << ", "
+           << "element_id: { " << hdr.element_id << " }";
 }
 
 /**
@@ -203,10 +210,9 @@ operator>>(std::istream& o, TriggerRecordHeaderData& hdr)
   return o >> tmp >> std::hex >> hdr.trigger_record_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >>
          tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >> hdr.trigger_timestamp >> tmp >>
          tmp >> hdr.trigger_type >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.num_requested_components >> tmp >>
-         tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number;
+         tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number >> tmp >> tmp >> tmp >> hdr.element_id;
 }
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TRIGGERRECORDHEADERDATA_HPP_

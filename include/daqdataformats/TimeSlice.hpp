@@ -17,8 +17,7 @@
 #include <utility>
 #include <vector>
 
-namespace dunedaq {
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief C++ Representation of a DUNE TimeSlice, consisting of a TimeSliceHeader object and a vector of
@@ -75,6 +74,12 @@ public:
   void add_fragment(std::unique_ptr<Fragment>&& fragment) { m_fragments.emplace_back(std::move(fragment)); }
 
   /**
+   * @brief Set the SourceID for this TimeSlice
+   * @param source_id SourceID value to set
+   */
+  void set_element_id(SourceID source_id) { m_header.element_id = source_id; }
+
+  /**
    * @brief Get size of trigger record from underlying TriggerRecordHeader and Fragments
    */
   size_t get_total_size_bytes() const
@@ -107,7 +112,6 @@ TimeSlice::TimeSlice(TimeSliceHeader const& header)
   , m_fragments()
 {}
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICE_HPP_

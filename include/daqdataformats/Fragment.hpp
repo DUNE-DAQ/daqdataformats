@@ -14,7 +14,7 @@
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENT_HPP_
 
 #include "daqdataformats/FragmentHeader.hpp"
-#include "daqdataformats/GeoID.hpp"
+#include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/Types.hpp"
 
 #include <bitset>
@@ -158,15 +158,32 @@ public:
   void set_window_end(timestamp_t window_end) { header_()->window_end = window_end; }
 
   /**
-   * @brief Get the GeoID for the Fragment
+   * @brief Get the SourceID for the Fragment
    * @return The element_id header field
    */
-  GeoID get_element_id() const { return header_()->element_id; }
+  SourceID get_element_id() const { return header_()->element_id; }
+
   /**
-   * @brief Set the GeoID for the Fragment
-   * @param element_id GeoID to use as element_id
+   * @brief Set the SourceID for the Fragment
+   * @param element_id SourceID to use as element_id
    */
-  void set_element_id(GeoID element_id) { header_()->element_id = element_id; }
+  void set_element_id(SourceID element_id) { header_()->element_id = element_id; }
+
+  /**
+   * @brief Get the DetID for the Fragment
+   * @return The detector_id header field
+   */
+
+  uint16_t get_detector_id() const noexcept { return header_()->detector_id; }
+
+  /**
+   * @brief Set the DetID for the Fragment
+   * @param detector_id DetID to use as the detector_id 
+   */
+
+  void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; }
+
+
   /**
    * @brief Get the error_bits header field
    * @return Bitset generated from header's error_bits field
@@ -311,6 +328,7 @@ Fragment::set_header_fields(const FragmentHeader& header)
   header_()->window_end = header.window_end;
   header_()->run_number = header.run_number;
   header_()->element_id = header.element_id;
+  header_()->detector_id = header.detector_id;
   header_()->error_bits = header.error_bits;
   header_()->fragment_type = header.fragment_type;
   header_()->sequence_number = header.sequence_number;

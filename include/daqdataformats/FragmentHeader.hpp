@@ -9,7 +9,7 @@
 #ifndef DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_
 #define DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_
 
-#include "daqdataformats/GeoID.hpp"
+#include "daqdataformats/SourceID.hpp"
 #include "daqdataformats/Types.hpp"
 
 #include <bitset>
@@ -20,9 +20,7 @@
 #include <string>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief The header for a DUNE Fragment
@@ -37,7 +35,7 @@ struct FragmentHeader
   /**
    * @brief The current version of the Fragment
    */
-  static constexpr uint32_t s_fragment_header_version = 3; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_fragment_header_version = 4; // NOLINT(build/unsigned)
 
   /**
    * @brief By default, all error bits are unset
@@ -95,21 +93,35 @@ struct FragmentHeader
    * @brief Type of the Fragment, indicating the format of the contained payload
    */
   fragment_type_t fragment_type{ TypeDefaults::s_invalid_fragment_type };
+
   /**
    * @brief Sequence number of this Fragment within a trigger record
    */
   sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
 
-  uint16_t unused{ // NOLINT(build/unsigned)
-                   0xFFFF
-  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+  /** 
+   * @brief Identifier for the subdetector that produced the raw data in the Fragment payload
+   */
+
+  uint16_t detector_id;
 
   /**
    * @brief Component that generated the data in this Fragment
    */
-  GeoID element_id;
+  SourceID element_id;
+
+
+//  uint32_t unused2{ // NOLINT(build/unsigned)
+//                   0xFFFFFFFF
+//  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
+
 };
-static_assert(sizeof(FragmentHeader) == 80, "FragmentHeader struct size different than expected!");
+
+static_assert(FragmentHeader::s_fragment_header_version == 4,
+             "This is intentionally designed to tell the developer to update the static_assert checks (including this "
+             "one) when the version is bumped");
+
+static_assert(sizeof(FragmentHeader) == 72, "FragmentHeader struct size different than expected!");
 static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
               "FragmentHeader fragment_header_marker field not at expected offset!");
 static_assert(offsetof(FragmentHeader, version) == 4, "FragmentHeader version field not at expected offset!");
@@ -127,7 +139,7 @@ static_assert(offsetof(FragmentHeader, fragment_type) == 56,
               "FragmentHeader fragment_type field not at expected offset!");
 static_assert(offsetof(FragmentHeader, sequence_number) == 60,
               "FragmentHeader sequence_number field not at expected offset!");
-static_assert(offsetof(FragmentHeader, unused) == 62, "FragmentHeader unused field not at expected offset!");
+static_assert(offsetof(FragmentHeader, detector_id) == 62, "FragmentHeader detector_id field not at expected offset!");
 static_assert(offsetof(FragmentHeader, element_id) == 64, "FragmentHeader element_id field not at expected offset!");
 
 /**
@@ -175,16 +187,30 @@ enum class FragmentErrorBits : size_t
  */
 enum class FragmentType : fragment_type_t
 {
-  kFakeData = 0,                                   ///< Data created in dfmodules' FakeDataProducer
-  kTPCData = 1,                                    ///< Data from the TPC
-  kPDSData = 2,                                    ///< Data from the PDS
-  kNDLArTPC = 3,                                   ///< Data from the NDLArTPC
-  kTriggerPrimitives = 4,                          ///< A DataSelection TriggerPrimitivesFragment
-  kTriggerActivities = 5,                          ///< A DataSelection TriggerActivitiesFragment
-  kTriggerCandidates = 6,                          ///< A DataSelection TriggerCandidatesFragment
-  kNDPD = 7,                                       ///< Data from the NDPD
-  kUnknown = TypeDefaults::s_invalid_fragment_type ///< Used when given a string that does not match any in
-                                                   ///< get_fragment_type_names
+  kUnknown = 0,
+  kProtoWIB = 1,
+  kWIB = 2,
+  kDAPHNE = 3,
+  kTDE_AMC = 4,
+  // This fragment type is for the "raw" data from the firmware
+  // trigger primitive generation. We store this in fragments for the
+  // purposes of inspecting/debugging the firmware TPG
+  kFW_TriggerPrimitive = 5, ///< FW TP frame format
+  // This fragment type is for TPs saved via the trigger subsystem's
+  // TP buffer, which are in the format defined by
+  // dunedaq::detdataformats::trigger::TriggerPrimitive. The "SW" part
+  // of the name is a slight misnomer, in that the TPs stored in this
+  // format may have been _originally_ produced by either software
+  // _or_ firmware. In the case where the TPs come originally from
+  // firmware, the kFW_TriggerPrimitive fragment and the
+  // kSW_TriggerPrimitive fragment will store the same information,
+  // just encoded in different ways
+  kSW_TriggerPrimitive = 6, ///< Trigger format TPs produced by trigger code
+  kTriggerActivity = 7,
+  kTriggerCandidate = 8,
+  kHardwareSignal = 9,
+  kPACMAN = 10,
+  kMPD = 11
 };
 
 /**
@@ -195,14 +221,20 @@ enum class FragmentType : fragment_type_t
 inline std::map<FragmentType, std::string>
 get_fragment_type_names()
 {
-  return { { FragmentType::kFakeData, "FakeData" },
-           { FragmentType::kTPCData, "TPC" },
-           { FragmentType::kPDSData, "PDS" },
-           { FragmentType::kNDLArTPC, "NDLArTPC" },
-           { FragmentType::kTriggerPrimitives, "TriggerPrimitives" },
-           { FragmentType::kTriggerActivities, "TriggerActivities" },
-	   { FragmentType::kTriggerCandidates, "TriggerCandidates" },
-	   { FragmentType::kNDPD, "NDPD" } };
+  return {
+    { FragmentType::kUnknown, "Unknown" },
+    { FragmentType::kProtoWIB, "ProtoWIB" },
+    { FragmentType::kWIB, "WIB" },
+    { FragmentType::kDAPHNE, "DAPHNE" },
+    { FragmentType::kTDE_AMC, "TDE_AMC" },
+    { FragmentType::kFW_TriggerPrimitive, "FW_Trigger_Primitive" },
+    { FragmentType::kSW_TriggerPrimitive, "SW_Trigger_Primitive" },
+    { FragmentType::kTriggerActivity, "Trigger_Activity" },
+    { FragmentType::kTriggerCandidate, "Trigger_Candidate" },
+    { FragmentType::kHardwareSignal, "Hardware_Signal" },
+    { FragmentType::kPACMAN, "PACMAN"},
+    { FragmentType::kMPD, "MPD"},
+  };
 }
 
 /**
@@ -211,12 +243,14 @@ get_fragment_type_names()
  * @return String representation of the given type
  */
 inline std::string
-fragment_type_to_string(FragmentType type)
+fragment_type_to_string(const FragmentType& type)
 {
-  if (!get_fragment_type_names().count(type)) {
-    return "UNKNOWN";
+  try {
+    return get_fragment_type_names().at(type);
   }
-  return get_fragment_type_names().at(type);
+  catch(std::exception &e) {
+  }
+  return "Unknown";
 }
 
 /**
@@ -225,7 +259,7 @@ fragment_type_to_string(FragmentType type)
  * @return FragmentType corresponding to given string
  */
 inline FragmentType
-string_to_fragment_type(std::string name)
+string_to_fragment_type(const std::string& name)
 {
   for (auto& it : get_fragment_type_names()) {
     if (it.second == name)
@@ -251,10 +285,11 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
            << "window_begin: " << hdr.window_begin << ", "
            << "window_end: " << hdr.window_end << ", "
-           << "element_id: " << hdr.element_id << ", "
            << "error_bits: " << hdr.error_bits << ", "
            << "fragment_type: " << hdr.fragment_type << ", "
-           << "sequence_number: " << hdr.sequence_number;
+           << "sequence_number: " << hdr.sequence_number << ", "
+           << "detector_id: " << hdr.detector_id << ", "
+           << "element_id: " << hdr.element_id ;
 }
 
 /**
@@ -270,10 +305,10 @@ operator>>(std::istream& o, FragmentHeader& hdr)
   return o >> tmp >> std::hex >> hdr.fragment_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
          hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
          hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
-         hdr.element_id >> tmp >> tmp >> hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
-         hdr.sequence_number;
+         hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
+         hdr.sequence_number >> tmp >> tmp >> hdr.detector_id >> tmp >> tmp >> hdr.element_id;
+
 }
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_
