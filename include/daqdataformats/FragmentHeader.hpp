@@ -35,7 +35,7 @@ struct FragmentHeader
   /**
    * @brief The current version of the Fragment
    */
-  static constexpr uint32_t s_fragment_header_version = 4; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_fragment_header_version = 5; // NOLINT(build/unsigned)
 
   /**
    * @brief By default, all error bits are unset
@@ -117,7 +117,7 @@ struct FragmentHeader
 
 };
 
-static_assert(FragmentHeader::s_fragment_header_version == 4,
+static_assert(FragmentHeader::s_fragment_header_version == 5,
              "This is intentionally designed to tell the developer to update the static_assert checks (including this "
              "one) when the version is bumped");
 
@@ -198,14 +198,12 @@ enum class FragmentType : fragment_type_t
   kFW_TriggerPrimitive = 5, ///< FW TP frame format
   // This fragment type is for TPs saved via the trigger subsystem's
   // TP buffer, which are in the format defined by
-  // dunedaq::detdataformats::trigger::TriggerPrimitive. The "SW" part
-  // of the name is a slight misnomer, in that the TPs stored in this
-  // format may have been _originally_ produced by either software
-  // _or_ firmware. In the case where the TPs come originally from
-  // firmware, the kFW_TriggerPrimitive fragment and the
-  // kSW_TriggerPrimitive fragment will store the same information,
-  // just encoded in different ways
-  kSW_TriggerPrimitive = 6, ///< Trigger format TPs produced by trigger code
+  // dunedaq::detdataformats::trigger::TriggerPrimitive. It is also
+  // used for the stream of TPs that are sent directly from the readout
+  // subsystem to the dataflow subsystem for storage on disk.
+  // TPs stored in this format may have been _originally_ produced
+  // by either software _or_ firmware.
+  kTriggerPrimitive = 6, ///< Trigger format TPs produced by trigger code
   kTriggerActivity = 7,
   kTriggerCandidate = 8,
   kHardwareSignal = 9,
@@ -227,7 +225,7 @@ get_fragment_type_names()
     { FragmentType::kDAPHNE, "DAPHNE" },
     { FragmentType::kTDE_AMC, "TDE_AMC" },
     { FragmentType::kFW_TriggerPrimitive, "FW_Trigger_Primitive" },
-    { FragmentType::kSW_TriggerPrimitive, "SW_Trigger_Primitive" },
+    { FragmentType::kTriggerPrimitive, "Trigger_Primitive" },
     { FragmentType::kTriggerActivity, "Trigger_Activity" },
     { FragmentType::kTriggerCandidate, "Trigger_Candidate" },
     { FragmentType::kHardwareSignal, "Hardware_Signal" },
