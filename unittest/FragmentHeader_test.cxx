@@ -31,9 +31,7 @@ BOOST_AUTO_TEST_CASE(FragmentTypeConversion)
   auto type_map = get_fragment_type_names();
   // sanity check
   for (auto& type_pair : type_map) {
-    BOOST_TEST_MESSAGE("Fragment type" << int(type_pair.first) << " " << type_pair.second
-                                       << " with converters: " << int(string_to_fragment_type(type_pair.second)) << " "
-                                       << fragment_type_to_string(type_pair.first));
+    BOOST_TEST_MESSAGE("Fragment type" << int(type_pair.first) << " " << type_pair.second << " with converters: " << int(string_to_fragment_type(type_pair.second)) << " " << fragment_type_to_string(type_pair.first));
     BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(string_to_fragment_type(type_pair.second)),
                         static_cast<fragment_type_t>(type_pair.first));
     BOOST_REQUIRE_EQUAL(fragment_type_to_string(type_pair.first), type_pair.second);

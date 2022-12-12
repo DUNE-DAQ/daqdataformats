@@ -78,8 +78,7 @@ struct SourceID
   SourceID(const Subsystem& subsystem_arg, const ID_t& id_arg)
     : subsystem(subsystem_arg)
     , id(id_arg)
-  {
-  }
+  {}
 
   std::string to_string() const
   {
