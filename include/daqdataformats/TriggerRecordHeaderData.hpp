@@ -104,9 +104,7 @@ struct TriggerRecordHeaderData
   SourceID element_id;
 };
 
-static_assert(TriggerRecordHeaderData::s_trigger_record_header_version == 3,
-              "This is intentionally designed to tell the developer to update the static_assert checks (including this "
-              "one) when the version is bumped");
+  static_assert(TriggerRecordHeaderData::s_trigger_record_header_version == 3, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped");
 
 static_assert(sizeof(TriggerRecordHeaderData) == 56, "TriggerRecordHeaderData struct size different than expected!");
 static_assert(offsetof(TriggerRecordHeaderData, trigger_record_header_marker) == 0,
