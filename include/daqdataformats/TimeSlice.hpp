@@ -110,7 +110,8 @@ TimeSlice::TimeSlice(timeslice_number_t timeslice_number, run_number_t run_numbe
 TimeSlice::TimeSlice(TimeSliceHeader const& header)
   : m_header(header)
   , m_fragments()
-{}
+{
+}
 
 } // namespace dunedaq::daqdataformats
 

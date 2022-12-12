@@ -286,7 +286,8 @@ TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_bu
 
 TriggerRecordHeader::TriggerRecordHeader(TriggerRecordHeader const& other)
   : TriggerRecordHeader(other.m_data_arr, true)
-{}
+{
+}
 
 TriggerRecordHeader&
 TriggerRecordHeader::operator=(TriggerRecordHeader const& other)

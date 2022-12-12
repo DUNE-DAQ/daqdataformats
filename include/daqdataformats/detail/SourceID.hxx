@@ -59,12 +59,11 @@ operator>>(std::istream& is, SourceID::Subsystem& t)
 inline std::istream&
 operator>>(std::istream& is, SourceID& source_id)
 {
-  std::string tmp ;
+  std::string tmp;
   is >> tmp >> source_id.subsystem >> tmp >> source_id.id; // Eat last three tokens, e.g. "-> (314, 159)"
 
   return is;
 }
-
 
 bool
 SourceID::operator<(const SourceID& other) const noexcept
