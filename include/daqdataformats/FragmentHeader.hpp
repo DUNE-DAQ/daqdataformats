@@ -99,7 +99,7 @@ struct FragmentHeader
    */
   sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
 
-  /** 
+  /**
    * @brief Identifier for the subdetector that produced the raw data in the Fragment payload
    */
 
@@ -110,16 +110,14 @@ struct FragmentHeader
    */
   SourceID element_id;
 
-
-//  uint32_t unused2{ // NOLINT(build/unsigned)
-//                   0xFFFFFFFF
-//  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
-
+  //  uint32_t unused2{ // NOLINT(build/unsigned)
+  //                   0xFFFFFFFF
+  //  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 };
 
 static_assert(FragmentHeader::s_fragment_header_version == 5,
-             "This is intentionally designed to tell the developer to update the static_assert checks (including this "
-             "one) when the version is bumped");
+              "This is intentionally designed to tell the developer to update the static_assert checks (including this "
+              "one) when the version is bumped");
 
 static_assert(sizeof(FragmentHeader) == 72, "FragmentHeader struct size different than expected!");
 static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
@@ -229,7 +227,7 @@ get_fragment_type_names()
     { FragmentType::kTriggerActivity, "Trigger_Activity" },
     { FragmentType::kTriggerCandidate, "Trigger_Candidate" },
     { FragmentType::kHardwareSignal, "Hardware_Signal" },
-    { FragmentType::kPACMAN, "PACMAN"},
+    { FragmentType::kPACMAN, "PACMAN" },
   };
 }
 
@@ -243,8 +241,7 @@ fragment_type_to_string(const FragmentType& type)
 {
   try {
     return get_fragment_type_names().at(type);
-  }
-  catch(std::exception &e) {
+  } catch (std::exception& e) {
   }
   return "Unknown";
 }
@@ -285,7 +282,7 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "fragment_type: " << hdr.fragment_type << ", "
            << "sequence_number: " << hdr.sequence_number << ", "
            << "detector_id: " << hdr.detector_id << ", "
-           << "element_id: " << hdr.element_id ;
+           << "element_id: " << hdr.element_id;
 }
 
 /**
@@ -301,9 +298,8 @@ operator>>(std::istream& o, FragmentHeader& hdr)
   return o >> tmp >> std::hex >> hdr.fragment_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
          hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
          hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
-         hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
-         hdr.sequence_number >> tmp >> tmp >> hdr.detector_id >> tmp >> tmp >> hdr.element_id;
-
+         hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >> hdr.sequence_number >> tmp >> tmp >>
+         hdr.detector_id >> tmp >> tmp >> hdr.element_id;
 }
 } // namespace dunedaq::daqdataformats
 

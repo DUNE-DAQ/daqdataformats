@@ -66,7 +66,8 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   SourceID test2;
   istr >> test2;
   BOOST_TEST_MESSAGE("Looks like the output-from-the-input is \"" << test2) << "\"";
-  BOOST_REQUIRE_EQUAL(test.subsystem, test2.subsystem); // Recall that output was generated from streaming out a SourceID instance
+  BOOST_REQUIRE_EQUAL(test.subsystem,
+                      test2.subsystem); // Recall that output was generated from streaming out a SourceID instance
 
   SourceID::Subsystem cat{ SourceID::Subsystem::kTrigger };
   std::ostringstream cat_ostr;
