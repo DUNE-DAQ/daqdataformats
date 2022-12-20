@@ -43,7 +43,8 @@ register_sourceid(py::module& m)
     .def_readwrite("id", &SourceID::id);
 
   py_sourceid.def("subsystem_to_string", &SourceID::subsystem_to_string)
-    .def("string_to_subsystem", &SourceID::string_to_subsystem);
+    .def("string_to_subsystem", &SourceID::string_to_subsystem)
+      .def("to_string", &SourceID::to_string);
 }
 
 } // namespace dunedaq::daqdataformats::python
