@@ -207,7 +207,8 @@ enum class FragmentType : fragment_type_t
   kTriggerActivity = 7,
   kTriggerCandidate = 8,
   kHardwareSignal = 9,
-  kPACMAN = 10
+  kPACMAN = 10,
+  kTOAD = 11
 };
 
 /**
@@ -230,6 +231,7 @@ get_fragment_type_names()
     { FragmentType::kTriggerCandidate, "Trigger_Candidate" },
     { FragmentType::kHardwareSignal, "Hardware_Signal" },
     { FragmentType::kPACMAN, "PACMAN"},
+    { FragmentType::kTOAD, "TOAD"},
   };
 }
 
