@@ -94,6 +94,7 @@ register_fragment(py::module& m)
     .value("kTriggerCandidate", FragmentType::kTriggerCandidate)
     .value("kHardwareSignal", FragmentType::kHardwareSignal)
     .value("kPACMAN", FragmentType::kPACMAN)
+    .value("kWIBEth", FragmentType::kWIBEth)
     .export_values();
 }
 

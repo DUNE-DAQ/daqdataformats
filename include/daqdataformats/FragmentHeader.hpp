@@ -208,7 +208,8 @@ enum class FragmentType : fragment_type_t
   kTriggerCandidate = 8,
   kHardwareSignal = 9,
   kPACMAN = 10,
-  kMPD = 11
+  kMPD = 11,
+  kWIBEth = 12
 };
 
 /**
@@ -232,6 +233,7 @@ get_fragment_type_names()
     { FragmentType::kHardwareSignal, "Hardware_Signal" },
     { FragmentType::kPACMAN, "PACMAN"},
     { FragmentType::kMPD, "MPD"},
+    { FragmentType::kWIBEth, "WIBEth"},
   };
 }
 
