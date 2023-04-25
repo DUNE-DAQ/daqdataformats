@@ -198,7 +198,7 @@ enum class FragmentType : fragment_type_t
   kFW_TriggerPrimitive = 5, ///< FW TP frame format
   // This fragment type is for TPs saved via the trigger subsystem's
   // TP buffer, which are in the format defined by
-  // dunedaq::detdataformats::trigger::TriggerPrimitive. It is also
+  // dunedaq::trgdataformats::TriggerPrimitive. It is also
   // used for the stream of TPs that are sent directly from the readout
   // subsystem to the dataflow subsystem for storage on disk.
   // TPs stored in this format may have been _originally_ produced
