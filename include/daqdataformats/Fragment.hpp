@@ -240,6 +240,13 @@ public:
    * @return The size of the Fragment, including header and all payload pieces
    */
   fragment_size_t get_size() const { return header_()->size; }
+
+  /**
+   * @brief Get the size of the Fragment data
+   * @return The size of the Fragment data, payload only
+   */
+  fragment_size_t get_data_size() const { return header_()->size-sizeof(FragmentHeader); }
+
   /**
    * @brief Get a pointer to the data payload in the Fragmnet
    * @return Pointer to the data payload in the Fragment
