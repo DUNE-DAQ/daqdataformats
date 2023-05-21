@@ -47,7 +47,7 @@ register_fragment(py::module& m)
       py::return_value_policy::reference_internal  
     )
     .def("get_data_bytes", [](Fragment* fr) -> py::bytes {
-           return py::bytes(reinterpret_cast<char*>(fr->get_data()), fr->get_size()-sizeof(FragmentHeader));
+           return py::bytes(reinterpret_cast<char*>(fr->get_data()), fr->get_data_size());
         },
         py::return_value_policy::reference_internal
     );
