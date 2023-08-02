@@ -102,6 +102,7 @@ register_fragment(py::module& m)
     .value("kHardwareSignal", FragmentType::kHardwareSignal)
     .value("kPACMAN", FragmentType::kPACMAN)
     .value("kWIBEth", FragmentType::kWIBEth)
+    .value("kDAPHNEStream", FragmentType::kDAPHNEStream)
     .export_values();
 }
 
