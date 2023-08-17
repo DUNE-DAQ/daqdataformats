@@ -209,7 +209,8 @@ enum class FragmentType : fragment_type_t
   kHardwareSignal = 9,
   kPACMAN = 10,
   kMPD = 11,
-  kWIBEth = 12
+  kWIBEth = 12,
+  kDAPHNEStream = 13
 };
 
 /**
@@ -225,6 +226,7 @@ get_fragment_type_names()
     { FragmentType::kProtoWIB, "ProtoWIB" },
     { FragmentType::kWIB, "WIB" },
     { FragmentType::kDAPHNE, "DAPHNE" },
+    { FragmentType::kDAPHNEStream, "DAPHNEStream" },
     { FragmentType::kTDE_AMC, "TDE_AMC" },
     { FragmentType::kFW_TriggerPrimitive, "FW_Trigger_Primitive" },
     { FragmentType::kTriggerPrimitive, "Trigger_Primitive" },
