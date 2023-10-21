@@ -41,11 +41,10 @@ register_fragment(py::module& m)
     .def("get_sequence_number", &Fragment::get_sequence_number)
     .def("get_size", &Fragment::get_size)
     .def("get_data_size", &Fragment::get_data_size)
-    // .def("get_data", &Fragment::get_data, py::return_value_policy::reference_internal)
     .def(
       "get_data",
       [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); },
-      "self"_a, "offset"_a=0,
+      "offset"_a=0,
       py::return_value_policy::reference_internal  
     )
     .def("get_data_bytes", [](Fragment* self, size_t offset) -> py::bytes {
@@ -54,7 +53,7 @@ register_fragment(py::module& m)
           }
           return py::bytes(reinterpret_cast<char*>(self->get_data())+offset, self->get_data_size()-offset);
       },
-      "self"_a, "offset"_a=0,
+      "offset"_a=0,
       py::return_value_policy::reference_internal
     );
 
