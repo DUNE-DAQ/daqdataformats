@@ -24,7 +24,16 @@ register_fragment(py::module& m)
 
   py::class_<Fragment> py_fragment(m, "Fragment", py::buffer_protocol());
 
-  py_fragment.def("get_header", &Fragment::get_header, py::return_value_policy::reference_internal)
+  py_fragment.def(py::init([](py::capsule capsule) {
+        auto wfp = *static_cast<Fragment*>(capsule.get_pointer());
+        return wfp;
+    } ))
+    .def(py::init([](py::bytes bytes){
+        py::buffer_info info(py::buffer(bytes).request());
+        auto wfp = *static_cast<Fragment*>(info.ptr);
+        return wfp;
+    }))
+    .def("get_header", &Fragment::get_header, py::return_value_policy::reference_internal)
     .def("get_storage_location", &Fragment::get_storage_location, py::return_value_policy::reference_internal)
     .def("get_trigger_number", &Fragment::get_trigger_number)
     .def("get_run_number", &Fragment::get_run_number)
