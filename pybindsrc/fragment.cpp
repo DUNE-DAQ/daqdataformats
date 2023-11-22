@@ -46,10 +46,6 @@ register_fragment(py::module& m)
     .def(
       "get_data_bytes",
       [](Fragment* self, size_t offset) -> py::bytes {
-        // std::cout << "Frag size: " << self->get_data_size() << " data offset " << offset << std::endl;
-        // std::cout << "Bytes size: " << bytes_size << std::endl;
-
-
         if (offset > self->get_data_size()) {
           throw std::runtime_error("Fragment.get_data_bytes: offset exceeds fragment size.");
         }
