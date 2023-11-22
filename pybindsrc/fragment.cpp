@@ -12,6 +12,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <iostream>
+
 namespace py = pybind11;
 
 namespace dunedaq {
@@ -26,8 +28,17 @@ register_fragment(py::module& m)
 
   py_fragment.def(py::init([](py::bytes bytes){
         py::buffer_info info(py::buffer(bytes).request());
-        auto wfp = Fragment(info.ptr, info.size);
-        return wfp;
+        std::cout << ">>> " << info.ptr << " size "  << info.size << " | " << info.itemsize << std::endl;
+        
+
+        auto fp = reinterpret_cast<char*>(info.ptr);
+        for(size_t i(0); i<info.size; ++i) {
+          std::cout << i << " -- " << fp[i] << std::endl;
+        }
+
+        auto frag = Fragment(info.ptr, Fragment::BufferAdoptionMode::kReadOnlyMode);
+
+        return frag;
     }))
     .def("get_header", &Fragment::get_header, py::return_value_policy::reference_internal)
     .def("get_storage_location", &Fragment::get_storage_location, py::return_value_policy::reference_internal)
