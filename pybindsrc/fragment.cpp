@@ -28,20 +28,13 @@ register_fragment(py::module& m)
 
   py_fragment.def(py::init([](py::bytes bytes){
         py::buffer_info info(py::buffer(bytes).request());
-        std::cout << ">>> " << info.ptr << " size "  << info.size << " | " << info.itemsize << std::endl;
 
-        auto fp = reinterpret_cast<char*>(info.ptr);
-        for(size_t i(0); i<info.size; ++i) {
-          std::cout << std::dec << i << " -- " << std::hex << int(fp[i]) << std::endl;
-        }
         // Manually copy buffer
         auto cbuf = new char[info.size];
         std::memcpy(cbuf, info.ptr, info.size);
 
-
         // And then take over
         auto frag = Fragment(cbuf, Fragment::BufferAdoptionMode::kTakeOverBuffer);
-
         return frag;
     }))
     .def("get_header", &Fragment::get_header, py::return_value_policy::reference_internal)
