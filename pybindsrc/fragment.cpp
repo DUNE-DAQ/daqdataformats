@@ -26,7 +26,7 @@ register_fragment(py::module& m)
 
   py_fragment.def(py::init([](py::bytes bytes){
         py::buffer_info info(py::buffer(bytes).request());
-        auto wfp = Fragment(info.ptr, info.itemsize);
+        auto wfp = Fragment(info.ptr, info.size);
         return wfp;
     }))
     .def("get_header", &Fragment::get_header, py::return_value_policy::reference_internal)
