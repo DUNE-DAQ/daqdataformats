@@ -231,6 +231,14 @@ public:
    */
   inline ComponentRequest& operator[](size_t idx);
 
+  /**
+   * @brief Access ComponentRequest by SourceID
+   * @param source_id SourceID to access
+   * @return ComponentRequest constant reference
+   * @throws std::invalid_argument exception if source_id is not in ComponentRequest list
+   */
+  inline ComponentRequest const& get_component_for_source_id(SourceID const& source_id) const;
+
 private:
   /**
    * @brief Get the TriggerRecordHeaderData from the m_data_arr array
@@ -324,6 +332,18 @@ TriggerRecordHeader::operator[](size_t idx)
   }
   // Increment header pointer by one to skip header
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
+}
+
+ComponentRequest const&
+TriggerRecordHeader::get_component_for_source_id(SourceID const& source_id) const
+{
+  for (uint64_t idx = 0; idx < get_num_requested_components(); ++idx) {
+    ComponentRequest const& component_obj = *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
+    if (source_id == component_obj.component) {
+      return component_obj;
+    }
+  }
+  throw std::invalid_argument("Supplied SourceID was not found in the ComponentRequest list.");
 }
 
 } // namespace dunedaq::daqdataformats
