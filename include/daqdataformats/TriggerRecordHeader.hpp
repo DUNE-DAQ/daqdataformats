@@ -343,7 +343,7 @@ TriggerRecordHeader::get_component_for_source_id(SourceID const& source_id) cons
       return component_obj;
     }
   }
-  throw std::invalid_argument("Supplied SourceID was not found in the ComponentRequest list.");
+  throw std::invalid_argument("Supplied SourceID (" + source_id.to_string() + ") was not found in the ComponentRequest list.");
 }
 
 } // namespace dunedaq::daqdataformats
