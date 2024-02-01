@@ -222,9 +222,21 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   components.back().window_begin = 3;
   components.back().window_end = 4;
   components.emplace_back();
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 34 };
+  components.back().window_begin = 5;
+  components.back().window_end = 6;
+  components.emplace_back();
   components.back().component = { SourceID::Subsystem::kDetectorReadout, 56 };
   components.back().window_begin = 7;
   components.back().window_end = 8;
+  components.emplace_back();
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 78 };
+  components.back().window_begin = 9;
+  components.back().window_end = 10;
+  components.emplace_back();
+  components.back().component = { SourceID::Subsystem::kDetectorReadout, 90 };
+  components.back().window_begin = 11;
+  components.back().window_end = 12;
 
   auto header = new TriggerRecordHeader(components);
   header->set_run_number(9);
@@ -243,9 +255,25 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(header->get_trigger_type(), header_data.trigger_type);
   BOOST_REQUIRE_EQUAL(header->get_sequence_number(), header_data.sequence_number);
   BOOST_REQUIRE_EQUAL(header->get_max_sequence_number(), header_data.max_sequence_number);
-  BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), 2);
+  BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), 5);
   BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), header_data.num_requested_components);
   BOOST_REQUIRE_EQUAL(header->get_error_bits().to_ulong(), 0x80000002);
+
+  auto comp_ref = header->get_component_for_source_id({ SourceID::Subsystem::kDetectorReadout, 78 });
+  BOOST_REQUIRE_EQUAL(comp_ref.window_begin, 9);
+  BOOST_REQUIRE_EQUAL(comp_ref.window_end, 10);
+  comp_ref = header->get_component_for_source_id({ SourceID::Subsystem::kDetectorReadout, 56 });
+  BOOST_REQUIRE_EQUAL(comp_ref.window_begin, 7);
+  BOOST_REQUIRE_EQUAL(comp_ref.window_end, 8);
+  comp_ref = header->get_component_for_source_id({ SourceID::Subsystem::kDetectorReadout, 12 });
+  BOOST_REQUIRE_EQUAL(comp_ref.window_begin, 3);
+  BOOST_REQUIRE_EQUAL(comp_ref.window_end, 4);
+  comp_ref = header->get_component_for_source_id({ SourceID::Subsystem::kDetectorReadout, 90 });
+  BOOST_REQUIRE_EQUAL(comp_ref.window_begin, 11);
+  BOOST_REQUIRE_EQUAL(comp_ref.window_end, 12);
+  BOOST_REQUIRE_EXCEPTION(header->get_component_for_source_id({ SourceID::Subsystem::kDetectorReadout, 43 }),
+                          std::invalid_argument,
+                          [&](std::invalid_argument) { return true; });
 
   auto header_ptr = static_cast<const TriggerRecordHeaderData*>(header->get_storage_location());
   BOOST_REQUIRE_EQUAL(header_ptr->run_number, header_data.run_number);
