@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 3.12)
-project(daqdataformats VERSION 3.5.2)
+project(daqdataformats VERSION 3.6.0)
 
 find_package(daq-cmake REQUIRED)
 
