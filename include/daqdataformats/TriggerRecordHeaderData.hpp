@@ -34,7 +34,7 @@ struct TriggerRecordHeaderData
   /**
    * @brief The current version of the TriggerRecordHeader
    */
-  static constexpr uint32_t s_trigger_record_header_version = 3; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_trigger_record_header_version = 4; // NOLINT(build/unsigned)
 
   /**
    * @brief An invalid number of components
@@ -104,9 +104,9 @@ struct TriggerRecordHeaderData
   SourceID element_id;
 };
 
-  static_assert(TriggerRecordHeaderData::s_trigger_record_header_version == 3, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped");
+  static_assert(TriggerRecordHeaderData::s_trigger_record_header_version == 4, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped");
 
-static_assert(sizeof(TriggerRecordHeaderData) == 56, "TriggerRecordHeaderData struct size different than expected!");
+static_assert(sizeof(TriggerRecordHeaderData) == 64, "TriggerRecordHeaderData struct size different than expected!");
 static_assert(offsetof(TriggerRecordHeaderData, trigger_record_header_marker) == 0,
               "TriggerRecordHeaderData trigger_record_header_marker field not at expected offset!");
 static_assert(offsetof(TriggerRecordHeaderData, version) == 4,
@@ -123,13 +123,13 @@ static_assert(offsetof(TriggerRecordHeaderData, error_bits) == 36,
               "TriggerRecordHeaderData error_bits field not at expected offset!");
 static_assert(offsetof(TriggerRecordHeaderData, trigger_type) == 40,
               "TriggerRecordHeaderData trigger_type field not at expected offset!");
-static_assert(offsetof(TriggerRecordHeaderData, sequence_number) == 42,
+static_assert(offsetof(TriggerRecordHeaderData, sequence_number) == 48,
               "TriggerRecordHeaderData sequence_number field not at expected offset!");
-static_assert(offsetof(TriggerRecordHeaderData, max_sequence_number) == 44,
+static_assert(offsetof(TriggerRecordHeaderData, max_sequence_number) == 50,
               "TriggerRecordHeaderData max_sequence_number field not at expected offset!");
-static_assert(offsetof(TriggerRecordHeaderData, unused) == 46,
+static_assert(offsetof(TriggerRecordHeaderData, unused) == 52,
               "TriggerRecordHeaderData unused field not at expected offset!");
-static_assert(offsetof(TriggerRecordHeaderData, element_id) == 48,
+static_assert(offsetof(TriggerRecordHeaderData, element_id) == 56,
               "TriggerRecordHeaderData source_id field not at expected offset!");
 
 /**

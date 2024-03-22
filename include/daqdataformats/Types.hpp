@@ -38,7 +38,7 @@ using timestamp_diff_t = int64_t; ///< Used to represent differences between tim
 /**
  * @brief Type used to represent Trigger Decision trigger types
  */
-using trigger_type_t = uint16_t; // NOLINT(build/unsigned)
+using trigger_type_t = uint64_t; // NOLINT(build/unsigned)
 /**
  * @brief Type used to represent sequence within a trigger record
  */
