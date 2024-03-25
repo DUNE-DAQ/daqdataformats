@@ -99,7 +99,7 @@ struct TriggerRecordHeaderData
   /**
    * @brief Padding to ensure 64-bit alignment
    */
-  uint32_t unused{ 0xFFFF }; // NOLINT(build/unsigned)
+  uint32_t unused{ 0xFFFFFFFF }; // NOLINT(build/unsigned)
 
   SourceID element_id;
 };
