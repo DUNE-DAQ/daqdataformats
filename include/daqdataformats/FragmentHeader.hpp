@@ -211,7 +211,8 @@ enum class FragmentType : fragment_type_t
   kMPD = 11,
   kWIBEth = 12,
   kDAPHNEStream = 13,
-  kCRT = 14
+  kCRT = 14,
+  kPAT = 15
 };
 
 /**
@@ -238,6 +239,7 @@ get_fragment_type_names()
     { FragmentType::kMPD, "MPD"},
     { FragmentType::kWIBEth, "WIBEth"},
     { FragmentType::kCRT, "CRT"},
+    { FragmentType::kPAT, "PAT"},
   };
 }
 
