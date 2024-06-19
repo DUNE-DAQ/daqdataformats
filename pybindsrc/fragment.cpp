@@ -107,6 +107,7 @@ register_fragment(py::module& m)
     .value("kWIBEth", FragmentType::kWIBEth)
     .value("kDAPHNEStream", FragmentType::kDAPHNEStream)
     .value("kCRT", FragmentType::kCRT)
+    .value("kTDEEth", FragmentType::kTDEEth)
     .export_values();
 }
 
