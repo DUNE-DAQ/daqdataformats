@@ -88,6 +88,10 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 1);
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref()[0]->get_size(), sizeof(FragmentHeader) + 10);
 
+  BOOST_REQUIRE_EQUAL(record.get_total_size_bytes(), sizeof(TimeSliceHeader) +
+                      sizeof(FragmentHeader) + 10);
+  BOOST_REQUIRE_EQUAL(record.get_sum_of_fragment_payload_sizes(), 10);
+
   std::vector<std::unique_ptr<Fragment>> new_vector;
   record.set_fragments(std::move(new_vector));
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 0);

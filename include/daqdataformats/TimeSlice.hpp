@@ -93,9 +93,9 @@ public:
   }
 
   /**
-   * @brief Get size of timeslice payload data from underlying Fragments
+   * @brief Get the sum of the fragment payload sizes
    */
-  size_t get_total_payload_data_size_bytes() const
+  size_t get_sum_of_fragment_payload_sizes() const
   {
     size_t total_size = 0;
 

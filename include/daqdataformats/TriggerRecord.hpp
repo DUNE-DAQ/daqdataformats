@@ -92,6 +92,19 @@ public:
     return total_size;
   }
 
+  /**
+   * @brief Get the sum of the fragment payload sizes
+   */
+  size_t get_sum_of_fragment_payload_sizes() const
+  {
+    size_t total_size = 0;
+
+    for (auto const& frag_ptr : m_fragments)
+      total_size += frag_ptr->get_data_size();
+
+    return total_size;
+  }
+
 private:
   TriggerRecordHeader m_header;                       ///< TriggerRecordHeader object
   std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
