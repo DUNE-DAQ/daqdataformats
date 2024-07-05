@@ -80,7 +80,7 @@ public:
   void set_element_id(SourceID source_id) { m_header.element_id = source_id; }
 
   /**
-   * @brief Get size of trigger record from underlying TriggerRecordHeader and Fragments
+   * @brief Get size of timeslice from underlying TimeSliceHeader and Fragments
    */
   size_t get_total_size_bytes() const
   {
@@ -88,6 +88,19 @@ public:
 
     for (auto const& frag_ptr : m_fragments)
       total_size += frag_ptr->get_size();
+
+    return total_size;
+  }
+
+  /**
+   * @brief Get the sum of the fragment payload sizes
+   */
+  size_t get_sum_of_fragment_payload_sizes() const
+  {
+    size_t total_size = 0;
+
+    for (auto const& frag_ptr : m_fragments)
+      total_size += frag_ptr->get_data_size();
 
     return total_size;
   }
