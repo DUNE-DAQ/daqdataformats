@@ -152,7 +152,9 @@ register_trigger_record(py::module& m)
         }
         return fragments;
       },
-      py::return_value_policy::reference_internal);
+      py::return_value_policy::reference_internal)
+    .def("get_total_size_bytes", &TriggerRecord::get_total_size_bytes)
+    .def("get_sum_of_fragment_payload_sizes", &TriggerRecord::get_sum_of_fragment_payload_sizes);
 } // NOLINT
 
 } // namespace python
