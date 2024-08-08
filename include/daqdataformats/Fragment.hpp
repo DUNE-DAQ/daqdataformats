@@ -271,8 +271,9 @@ private:
 
 Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
 {
+
   size_t size = sizeof(FragmentHeader) +
-                std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](auto& a, auto& b) { return a + b.second; });
+    std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](const size_t& a, const std::pair<void*, size_t>& b) { return a + b.second; });
 
   if (size < sizeof(FragmentHeader)) {
     throw std::length_error("The Fragment size is smaller than the Fragment header size.");
