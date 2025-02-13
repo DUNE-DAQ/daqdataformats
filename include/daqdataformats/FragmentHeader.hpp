@@ -213,6 +213,9 @@ enum class FragmentType : fragment_type_t
   kDAPHNEStream = 13,
   kCRT = 14,
   kTDEEth = 15,
+  kTriggerPrimitivePDS = 16,
+  kTriggerActivityPDS = 17,
+  kTriggerCandidatePDS = 18
 };
 
 /**
