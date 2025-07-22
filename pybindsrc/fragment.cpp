@@ -83,6 +83,7 @@ register_fragment(py::module& m)
                            [](const FragmentHeader& self) -> sequence_number_t { return self.sequence_number; })
     .def_property_readonly("detector_id", [](const FragmentHeader& self) -> uint16_t { return self.detector_id; })
     .def_property_readonly("element_id", [](const FragmentHeader& self) -> SourceID { return self.element_id; })
+
     .def_static("sizeof", []() { return sizeof(FragmentHeader); });
 
   py::enum_<FragmentErrorBits>(m, "FragmentErrorBits")
@@ -108,7 +109,12 @@ register_fragment(py::module& m)
     .value("kDAPHNEStream", FragmentType::kDAPHNEStream)
     .value("kCRT", FragmentType::kCRT)
     .value("kTDEEth", FragmentType::kTDEEth)
+    .value("kCRTBern", FragmentType::kCRTBern)
+    .value("kCRTGrenoble", FragmentType::kCRTGrenoble)
     .export_values();
+
+    m.def("fragment_type_to_string", &fragment_type_to_string);
+    m.def("string_to_fragment_type", &string_to_fragment_type);
 }
 
 } // namespace python
