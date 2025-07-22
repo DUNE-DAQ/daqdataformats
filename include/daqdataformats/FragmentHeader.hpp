@@ -242,6 +242,8 @@ get_fragment_type_names()
     { FragmentType::kWIBEth, "WIBEth"},
     { FragmentType::kCRT, "CRT"},
     { FragmentType::kTDEEth, "TDEEth"},
+    { FragmentType::kCRTBern, "CRTBern"},
+    { FragmentType::kCRTGrenoble, "CRTGrenoble"},
   };
 }
 
