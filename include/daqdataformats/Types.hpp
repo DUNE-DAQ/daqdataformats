@@ -37,6 +37,9 @@ using timestamp_t = uint64_t;     // NOLINT(build/unsigned)
 using timestamp_diff_t = int64_t; ///< Used to represent differences between timestamps
 /**
  * @brief Type used to represent Trigger Decision trigger types
+ *
+ * This field is a bitset mapping to this enum:
+ * https://github.com/DUNE-DAQ/trgdataformats/blob/develop/include/trgdataformats/TriggerCandidateData.hpp#L22
  */
 using trigger_type_t = uint64_t; // NOLINT(build/unsigned)
 /**
