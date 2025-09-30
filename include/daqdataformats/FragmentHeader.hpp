@@ -215,6 +215,7 @@ enum class FragmentType : fragment_type_t
   kTDEEth = 15,
   kCRTBern = 16,
   kCRTGrenoble = 17,
+  kDAPHNEEth = 18,
 };
 
 /**
@@ -244,6 +245,7 @@ get_fragment_type_names()
     { FragmentType::kTDEEth, "TDEEth"},
     { FragmentType::kCRTBern, "CRTBern"},
     { FragmentType::kCRTGrenoble, "CRTGrenoble"},
+    { FragmentType::kDAPHNEEth, "DAPHNEEth"},
   };
 }
 
