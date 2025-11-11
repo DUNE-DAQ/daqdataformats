@@ -247,6 +247,7 @@ get_fragment_type_names()
     { FragmentType::kCRTBern, "CRTBern"},
     { FragmentType::kCRTGrenoble, "CRTGrenoble"},
     { FragmentType::kDAPHNEEth, "DAPHNEEth"},
+    { FragmentType::kDAPHNEEthStream, "DAPHNEEthStream"},
   };
 }
 
