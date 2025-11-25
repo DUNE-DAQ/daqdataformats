@@ -111,6 +111,8 @@ register_fragment(py::module& m)
     .value("kTDEEth", FragmentType::kTDEEth)
     .value("kCRTBern", FragmentType::kCRTBern)
     .value("kCRTGrenoble", FragmentType::kCRTGrenoble)
+    .value("kDAPHNEEth", FragmentType::kDAPHNEEth)
+    .value("kDAPHNEEthStream", FragmentType::kDAPHNEEthStream)
     .export_values();
 
     m.def("fragment_type_to_string", &fragment_type_to_string);
