@@ -101,7 +101,7 @@ struct FragmentHeader
    * @brief Identifier for the subdetector that produced the raw data in the Fragment payload
    */
 
-  uint16_t detector_id;
+  uint16_t detector_id; // NOLINT(build/unsigned)
 
   /**
    * @brief Component that generated the data in this Fragment

@@ -78,7 +78,7 @@ public:
   ~TriggerRecordHeader()
   {
     if (m_alloc)
-      free(m_data_arr);
+      free(m_data_arr); // NOLINT
   }
 
   /**
@@ -258,7 +258,7 @@ TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& co
 {
   size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
 
-  m_data_arr = malloc(size); // NOLINT(build/unsigned)
+  m_data_arr = malloc(size); // NOLINT
   if (m_data_arr == nullptr) {
     throw std::bad_alloc();
   }
@@ -283,7 +283,7 @@ TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_bu
     auto header = reinterpret_cast<TriggerRecordHeaderData*>(existing_trigger_record_header_buffer); // NOLINT
     size_t size = header->num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
 
-    m_data_arr = malloc(size);
+    m_data_arr = malloc(size); // NOLINT
     if (m_data_arr == nullptr) {
       throw std::bad_alloc();
     }
@@ -304,9 +304,9 @@ TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
     return *this;
 
   if (m_alloc) {
-    free(m_data_arr);
+    free(m_data_arr); // NOLINT
   }
-  m_data_arr = malloc(other.get_total_size_bytes());
+  m_data_arr = malloc(other.get_total_size_bytes()); // NOLINT
   if (m_data_arr == nullptr) {
     throw std::bad_alloc();
   }
@@ -338,7 +338,7 @@ TriggerRecordHeader::operator[](size_t idx)
 ComponentRequest const&
 TriggerRecordHeader::get_component_for_source_id(SourceID const& source_id) const
 {
-  for (uint64_t idx = 0; idx < get_num_requested_components(); ++idx) {
+  for (uint64_t idx = 0; idx < get_num_requested_components(); ++idx) { // NOLINT(build/unsigned)
     ComponentRequest const& component_obj = *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
     if (source_id == component_obj.component) {
       return component_obj;

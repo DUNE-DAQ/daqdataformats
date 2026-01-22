@@ -15,9 +15,7 @@
 namespace py = pybind11;
 using namespace pybind11::literals; // to bring in the `_a` literal
 
-namespace dunedaq {
-namespace daqdataformats {
-namespace python {
+namespace dunedaq::daqdataformats::python {
 
 void
 register_fragment(py::module& m)
@@ -43,7 +41,7 @@ register_fragment(py::module& m)
     .def("get_data_size", &Fragment::get_data_size)
     .def(
       "get_data",
-      [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); },
+      [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); }, // NOLINT
       "offset"_a = 0,
       py::return_value_policy::reference_internal)
     .def(
@@ -53,7 +51,7 @@ register_fragment(py::module& m)
           throw std::runtime_error("Fragment.get_data_bytes: offset exceeds fragment size.");
         }
         size_t bytes_size = self->get_data_size() - offset;
-        return py::bytes(reinterpret_cast<char*>(self->get_data()) + offset, bytes_size);
+        return py::bytes(reinterpret_cast<char*>(self->get_data()) + offset, bytes_size); // NOLINT
       },
       "offset"_a = 0,
       py::return_value_policy::reference_internal);
@@ -84,7 +82,8 @@ register_fragment(py::module& m)
                            [](const FragmentHeader& self) -> fragment_type_t { return self.fragment_type; })
     .def_property_readonly("sequence_number",
                            [](const FragmentHeader& self) -> sequence_number_t { return self.sequence_number; })
-    .def_property_readonly("detector_id", [](const FragmentHeader& self) -> uint16_t { return self.detector_id; })
+    .def_property_readonly(
+      "detector_id", [](const FragmentHeader& self) -> uint16_t { return self.detector_id; }) // NOLINT(build/unsigned)
     .def_property_readonly("element_id", [](const FragmentHeader& self) -> SourceID { return self.element_id; })
 
     .def_static("sizeof", []() { return sizeof(FragmentHeader); });
@@ -124,8 +123,6 @@ register_fragment(py::module& m)
 
   m.def("fragment_type_to_string", &fragment_type_to_string);
   m.def("string_to_fragment_type", &string_to_fragment_type);
-}
+} // NOLINT(readability/fn_size)
 
-} // namespace python
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats::python

@@ -192,8 +192,11 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest));
   std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
   BOOST_REQUIRE_EXCEPTION(
     TriggerRecordHeader oversize_header(hdr, true), std::bad_alloc, [&](std::bad_alloc) { return true; });
+#pragma GCC diagnostic pop
 
   header_data.num_requested_components = 1;
   std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));

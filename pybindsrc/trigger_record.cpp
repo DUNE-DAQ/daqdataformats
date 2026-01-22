@@ -17,9 +17,7 @@
 
 namespace py = pybind11;
 
-namespace dunedaq {
-namespace daqdataformats {
-namespace python {
+namespace dunedaq::daqdataformats::python {
 
 void
 register_trigger_record(py::module& m)
@@ -27,7 +25,7 @@ register_trigger_record(py::module& m)
   py::class_<TriggerRecordHeader>(m, "TriggerRecordHeader", pybind11::buffer_protocol())
     .def(py::init<std::vector<ComponentRequest> const&>())
     .def(py::init([](py::capsule capsule, bool copy_from_buffer) {
-      return std::unique_ptr<TriggerRecordHeader>(new TriggerRecordHeader(capsule.get_pointer(), copy_from_buffer));
+      return std::make_unique<TriggerRecordHeader>(capsule.get_pointer(), copy_from_buffer);
     }))
     .def(py::init<TriggerRecordHeader const&>())
     .def("get_header", &TriggerRecordHeader::get_header)
@@ -157,6 +155,4 @@ register_trigger_record(py::module& m)
     .def("get_sum_of_fragment_payload_sizes", &TriggerRecord::get_sum_of_fragment_payload_sizes);
 } // NOLINT
 
-} // namespace python
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats::python

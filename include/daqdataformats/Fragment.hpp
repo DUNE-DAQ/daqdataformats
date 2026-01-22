@@ -27,9 +27,7 @@
 #include <utility>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief C++ Representation of a DUNE Fragment, wrapping the flat byte array that is the Fragment's "actual" form
@@ -173,15 +171,13 @@ public:
    * @brief Get the DetID for the Fragment
    * @return The detector_id header field
    */
-
-  uint16_t get_detector_id() const noexcept { return header_()->detector_id; }
+  uint16_t get_detector_id() const noexcept { return header_()->detector_id; } // NOLINT
 
   /**
    * @brief Set the DetID for the Fragment
    * @param detector_id DetID to use as the detector_id
    */
-
-  void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; }
+  void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; } // NOLINT
 
   /**
    * @brief Get the status_bits header field
@@ -281,7 +277,7 @@ Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
     throw std::length_error("The Fragment size is smaller than the Fragment header size.");
   }
 
-  m_data_arr = malloc(size); // NOLINT(build/unsigned)
+  m_data_arr = malloc(size); // NOLINT
   if (m_data_arr == nullptr) {
     throw std::bad_alloc();
   }
@@ -296,7 +292,7 @@ Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
     if (piece.first == nullptr) {
       throw std::invalid_argument("The Fragment buffer point to NULL.");
     }
-    memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
+    memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT
     offset += piece.second;
   }
 }
@@ -315,7 +311,7 @@ Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_m
     m_alloc = true;
   } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {
     auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
-    m_data_arr = malloc(header->size);
+    m_data_arr = malloc(header->size); // NOLINT
     if (m_data_arr == nullptr) {
       throw std::bad_alloc();
     }
@@ -327,7 +323,7 @@ Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_m
 Fragment::~Fragment()
 {
   if (m_alloc)
-    free(m_data_arr);
+    free(m_data_arr); // NOLINT
 }
 
 void
@@ -354,7 +350,6 @@ Fragment::set_status_bit(FragmentStatusBits bit, bool value)
   set_status_bits(bits);
 }
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENT_HPP_

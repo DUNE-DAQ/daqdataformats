@@ -169,9 +169,13 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
   memcpy(frag, &header, sizeof(FragmentHeader));
 
   std::unique_ptr<Fragment> fragment_ptr{};
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
   BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(frag, Fragment::BufferAdoptionMode::kCopyFromBuffer)),
                           std::bad_alloc,
                           [&](std::bad_alloc) { return true; });
+#pragma GCC diagnostic pop
+
   free(frag);
 
   // Use fragment_ptr
