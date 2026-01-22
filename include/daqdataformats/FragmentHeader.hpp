@@ -83,9 +83,7 @@ struct FragmentHeader
   run_number_t run_number{ TypeDefaults::s_invalid_run_number };
 
   /**
-   * @brief Error bits set by the Upstream DAQ
-   *
-   * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
+   * @brief Status bits set by the Upstream DAQ
    */
   uint32_t status_bits{ s_default_status_bits }; // NOLINT(build/unsigned)
 
@@ -141,7 +139,7 @@ static_assert(offsetof(FragmentHeader, detector_id) == 62, "FragmentHeader detec
 static_assert(offsetof(FragmentHeader, element_id) == 64, "FragmentHeader element_id field not at expected offset!");
 
 /**
- * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
+ * @brief This enumeration should list all defined status bits, as well as a short documentation of their meaning
  */
 enum class FragmentStatusBits : size_t
 {
@@ -152,32 +150,32 @@ enum class FragmentStatusBits : size_t
   kRequestWindowBeforeBuffer = 4, ///< The request window extends before the latency buffer start
   kRequestWindowAfterBuffer = 5,  ///< The request window extends after the latency buffer end
   kEmptyFragment = 6,             ///< This Fragment contains no data
-  kUnassigned7 = 7,               ///< Error bit 7 is not assigned
-  kUnassigned8 = 8,               ///< Error bit 8 is not assigned
-  kUnassigned9 = 9,               ///< Error bit 9 is not assigned
-  kUnassigned10 = 10,             ///< Error bit 10 is not assigned
-  kUnassigned11 = 11,             ///< Error bit 11 is not assigned
-  kUnassigned12 = 12,             ///< Error bit 12 is not assigned
-  kUnassigned13 = 13,             ///< Error bit 13 is not assigned
-  kUnassigned14 = 14,             ///< Error bit 14 is not assigned
-  kUnassigned15 = 15,             ///< Error bit 15 is not assigned
-  kUnassigned16 = 16,             ///< Error bit 16 is not assigned
-  kUnassigned17 = 17,             ///< Error bit 17 is not assigned
-  kUnassigned18 = 18,             ///< Error bit 18 is not assigned
-  kUnassigned19 = 19,             ///< Error bit 19 is not assigned
-  kUnassigned20 = 20,             ///< Error bit 20 is not assigned
-  kUnassigned21 = 21,             ///< Error bit 21 is not assigned
-  kUnassigned22 = 22,             ///< Error bit 22 is not assigned
-  kUnassigned23 = 23,             ///< Error bit 23 is not assigned
-  kUnassigned24 = 24,             ///< Error bit 24 is not assigned
-  kUnassigned25 = 25,             ///< Error bit 25 is not assigned
-  kUnassigned26 = 26,             ///< Error bit 26 is not assigned
-  kUnassigned27 = 27,             ///< Error bit 27 is not assigned
-  kUnassigned28 = 28,             ///< Error bit 28 is not assigned
-  kUnassigned29 = 29,             ///< Error bit 29 is not assigned
-  kUnassigned30 = 30,             ///< Error bit 30 is not assigned
-  kUnassigned31 = 31,             ///< Error bit 31 is not assigned
-  kInvalid = 32                   ///< Error bit 32 and higher are not valid (error_bits is only 32 bits)
+  kUnassigned7 = 7,               ///< Status bit 7 is not assigned
+  kUnassigned8 = 8,               ///< Status bit 8 is not assigned
+  kUnassigned9 = 9,               ///< Status bit 9 is not assigned
+  kUnassigned10 = 10,             ///< Status bit 10 is not assigned
+  kUnassigned11 = 11,             ///< Status bit 11 is not assigned
+  kUnassigned12 = 12,             ///< Status bit 12 is not assigned
+  kUnassigned13 = 13,             ///< Status bit 13 is not assigned
+  kUnassigned14 = 14,             ///< Status bit 14 is not assigned
+  kUnassigned15 = 15,             ///< Status bit 15 is not assigned
+  kUnassigned16 = 16,             ///< Status bit 16 is not assigned
+  kUnassigned17 = 17,             ///< Status bit 17 is not assigned
+  kUnassigned18 = 18,             ///< Status bit 18 is not assigned
+  kUnassigned19 = 19,             ///< Status bit 19 is not assigned
+  kUnassigned20 = 20,             ///< Status bit 20 is not assigned
+  kUnassigned21 = 21,             ///< Status bit 21 is not assigned
+  kUnassigned22 = 22,             ///< Status bit 22 is not assigned
+  kUnassigned23 = 23,             ///< Status bit 23 is not assigned
+  kUnassigned24 = 24,             ///< Status bit 24 is not assigned
+  kUnassigned25 = 25,             ///< Status bit 25 is not assigned
+  kUnassigned26 = 26,             ///< Status bit 26 is not assigned
+  kUnassigned27 = 27,             ///< Status bit 27 is not assigned
+  kUnassigned28 = 28,             ///< Status bit 28 is not assigned
+  kUnassigned29 = 29,             ///< Status bit 29 is not assigned
+  kUnassigned30 = 30,             ///< Status bit 30 is not assigned
+  kUnassigned31 = 31,             ///< Status bit 31 is not assigned
+  kInvalid = 32                   ///< Status bit 32 and higher are not valid (status_bits is only 32 bits)
 };
 
 /**
