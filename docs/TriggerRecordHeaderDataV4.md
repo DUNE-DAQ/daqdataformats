@@ -1,13 +1,13 @@
-# TriggerRecordHeaderData v3
+# TriggerRecordHeaderData v4
 
-This document describes the format of the `TriggerRecordHeaderData` struct, version 3. It should **not** be updated, but rather kept as a historic record of the data format for this version.
+This document describes the format of the `TriggerRecordHeaderData` struct, version 4. It should **not** be updated, but rather kept as a historic record of the data format for this version.
 
 # TriggerRecordHeaderData Description
 
-A version 3 `TriggerRecordHeaderData` consists of 14 32-bit words:
+A version 4 `TriggerRecordHeaderData` consists of 16 32-bit words:
 
 0. Marker (0x33334444)
-1. Version (0x00000003)
+1. Version (0x00000004)
 2. Trigger Number (upper 32 bits)
 3. Trigger Number (lower 32 bits)
 4. Trigger timestamp (upper 32 bits)
@@ -16,10 +16,12 @@ A version 3 `TriggerRecordHeaderData` consists of 14 32-bit words:
 7. Number of Requested Components (lower 32 bits)
 8. Run number
 9. Error bits
-10. Trigger type (upper 16 bits) / Sequence number (lower 16 bits)
-11. Max sequence number (upper 16 bits) / Padding (lower 16 bits)
-12. [SourceID version 2](SourceIDV2.md) Version (upper 16 bits) / Subsystem (lower 16 bits)
-13. [SourceID version 2](SourceIDV2.md) Element ID
+10. Trigger type (upper 32 bits)
+11. Trigger type (lower 32 bits)
+12. Sequence number (upper 16 bits) / Max sequence number (lower 16 bits)
+13. Padding
+14. [SourceID version 2](SourceIDV2.md) Version (upper 16 bits) / Subsystem (lower 16 bits)
+15. [SourceID version 2](SourceIDV2.md) Element ID
 
 
 # C++ code for TriggerRecordHeaderData
@@ -28,14 +30,14 @@ A version 3 `TriggerRecordHeaderData` consists of 14 32-bit words:
 using run_number_t = uint32_t; 
 using trigger_number_t = uint64_t; 
 using timestamp_t = uint64_t;
-using trigger_type_t = uint16_t; 
+using trigger_type_t = uint32_t; 
 using sequence_number_t = uint16_t;
 
 struct TriggerRecordHeaderData
 {
   
   static constexpr uint32_t s_trigger_record_header_marker = 0x33334444;
-  static constexpr uint32_t s_trigger_record_header_version = 3;
+  static constexpr uint32_t s_trigger_record_header_version = 4;
   static constexpr uint64_t s_invalid_number_components = std::numeric_limits<uint64_t>::max();
   static constexpr uint32_t s_default_error_bits = 0;
 
@@ -49,7 +51,7 @@ struct TriggerRecordHeaderData
   trigger_type_t trigger_type{ TypeDefaults::s_invalid_trigger_type };
   sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
   sequence_number_t max_sequence_number{ TypeDefaults::s_invalid_sequence_number };
-  uint16_t unused { 0xFFFF};
+  uint32_t unused { 0xFFFFFFFF };
   SourceID element_id;
 };
 ```
@@ -57,3 +59,7 @@ struct TriggerRecordHeaderData
 # Notes
 
 A `TriggerRecordHeaderData` instance is a flat array consisting of a TriggerRecordHeaderData instance followed immediately by zero or more ComponentRequest instances. For TriggerRecordHeaderData version 1, these are assumed to be [ComponentRequest version 0 (unversioned)](ComponentRequestV0.md).
+
+# Changelog
+
+v4. The trigger type field has been expanded from 16 bits to 64 bits to accomodate a bitset instead of a value field. This moved several later elements, and resulting in a 32-bit padding word to maintain 64-bit alignment.

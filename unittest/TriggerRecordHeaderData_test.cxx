@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   header.trigger_number = 1;
   header.trigger_timestamp = 2;
   header.run_number = 3;
-  header.error_bits = 0xa5;
+  header.status_bits = 0xa5;
   header.trigger_type = 4;
   header.sequence_number = 5;
   header.max_sequence_number = 6;
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE_EQUAL(reconstituted_header.trigger_number, 1);
   BOOST_REQUIRE_EQUAL(reconstituted_header.trigger_timestamp, 2);
   BOOST_REQUIRE_EQUAL(reconstituted_header.run_number, 3);
-  BOOST_REQUIRE_EQUAL(reconstituted_header.error_bits, 0xa5);
+  BOOST_REQUIRE_EQUAL(reconstituted_header.status_bits, 0xa5);
   BOOST_REQUIRE_EQUAL(reconstituted_header.trigger_type, 4);
   BOOST_REQUIRE_EQUAL(reconstituted_header.sequence_number, 5);
   BOOST_REQUIRE_EQUAL(reconstituted_header.max_sequence_number, 6);

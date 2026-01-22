@@ -35,7 +35,7 @@ struct FragmentHeader
   /**
    * @brief The current version of the Fragment
    */
-  static constexpr uint32_t s_fragment_header_version = 5; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_fragment_header_version = 6; // NOLINT(build/unsigned)
 
   /**
    * @brief By default, all status bits are unset
@@ -113,7 +113,7 @@ struct FragmentHeader
   //  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 };
 
-static_assert(FragmentHeader::s_fragment_header_version == 5,
+static_assert(FragmentHeader::s_fragment_header_version == 6,
               "This is intentionally designed to tell the developer to update the static_assert checks (including this "
               "one) when the version is bumped");
 
