@@ -38,9 +38,9 @@ struct FragmentHeader
   static constexpr uint32_t s_fragment_header_version = 5; // NOLINT(build/unsigned)
 
   /**
-   * @brief By default, all error bits are unset
+   * @brief By default, all status bits are unset
    */
-  static constexpr uint32_t s_default_error_bits = 0; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_default_status_bits = 0; // NOLINT(build/unsigned)
 
   /**
    * @brief Marker Bytes used to identify FragmentHeaders in a raw data stream
@@ -87,7 +87,7 @@ struct FragmentHeader
    *
    * Defined Error bits should be documented here, along with the Fragment Type(s) that they apply to
    */
-  uint32_t error_bits{ s_default_error_bits }; // NOLINT(build/unsigned)
+  uint32_t status_bits{ s_default_status_bits }; // NOLINT(build/unsigned)
 
   /**
    * @brief Type of the Fragment, indicating the format of the contained payload
@@ -99,7 +99,7 @@ struct FragmentHeader
    */
   sequence_number_t sequence_number{ TypeDefaults::s_invalid_sequence_number };
 
-  /** 
+  /**
    * @brief Identifier for the subdetector that produced the raw data in the Fragment payload
    */
 
@@ -110,16 +110,14 @@ struct FragmentHeader
    */
   SourceID element_id;
 
-
-//  uint32_t unused2{ // NOLINT(build/unsigned)
-//                   0xFFFFFFFF
-//  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
-
+  //  uint32_t unused2{ // NOLINT(build/unsigned)
+  //                   0xFFFFFFFF
+  //  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 };
 
 static_assert(FragmentHeader::s_fragment_header_version == 5,
-             "This is intentionally designed to tell the developer to update the static_assert checks (including this "
-             "one) when the version is bumped");
+              "This is intentionally designed to tell the developer to update the static_assert checks (including this "
+              "one) when the version is bumped");
 
 static_assert(sizeof(FragmentHeader) == 72, "FragmentHeader struct size different than expected!");
 static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
@@ -134,7 +132,7 @@ static_assert(offsetof(FragmentHeader, window_begin) == 32,
               "FragmentHeader window_begin field not at expected offset!");
 static_assert(offsetof(FragmentHeader, window_end) == 40, "FragmentHeader window_end field not at expected offset!");
 static_assert(offsetof(FragmentHeader, run_number) == 48, "FragmentHeader run_number field not at expected offset!");
-static_assert(offsetof(FragmentHeader, error_bits) == 52, "FragmentHeader error_bits field not at expected offset!");
+static_assert(offsetof(FragmentHeader, status_bits) == 52, "FragmentHeader status_bits field not at expected offset!");
 static_assert(offsetof(FragmentHeader, fragment_type) == 56,
               "FragmentHeader fragment_type field not at expected offset!");
 static_assert(offsetof(FragmentHeader, sequence_number) == 60,
@@ -145,41 +143,41 @@ static_assert(offsetof(FragmentHeader, element_id) == 64, "FragmentHeader elemen
 /**
  * @brief This enumeration should list all defined error bits, as well as a short documentation of their meaning
  */
-enum class FragmentErrorBits : size_t
+enum class FragmentStatusBits : size_t
 {
-  kDataNotFound = 0,  ///< The requested data was not found at all, so the fragment is empty
-  kIncomplete = 1,    ///< Only part of the requested data is present in the fragment
-  kInvalidWindow = 2, ///< The requested data window was too large
-  kUnassigned3 = 3,   ///< Error bit 3 is not assigned
-  kUnassigned4 = 4,   ///< Error bit 4 is not assigned
-  kUnassigned5 = 5,   ///< Error bit 5 is not assigned
-  kUnassigned6 = 6,   ///< Error bit 6 is not assigned
-  kUnassigned7 = 7,   ///< Error bit 7 is not assigned
-  kUnassigned8 = 8,   ///< Error bit 8 is not assigned
-  kUnassigned9 = 9,   ///< Error bit 9 is not assigned
-  kUnassigned10 = 10, ///< Error bit 10 is not assigned
-  kUnassigned11 = 11, ///< Error bit 11 is not assigned
-  kUnassigned12 = 12, ///< Error bit 12 is not assigned
-  kUnassigned13 = 13, ///< Error bit 13 is not assigned
-  kUnassigned14 = 14, ///< Error bit 14 is not assigned
-  kUnassigned15 = 15, ///< Error bit 15 is not assigned
-  kUnassigned16 = 16, ///< Error bit 16 is not assigned
-  kUnassigned17 = 17, ///< Error bit 17 is not assigned
-  kUnassigned18 = 18, ///< Error bit 18 is not assigned
-  kUnassigned19 = 19, ///< Error bit 19 is not assigned
-  kUnassigned20 = 20, ///< Error bit 20 is not assigned
-  kUnassigned21 = 21, ///< Error bit 21 is not assigned
-  kUnassigned22 = 22, ///< Error bit 22 is not assigned
-  kUnassigned23 = 23, ///< Error bit 23 is not assigned
-  kUnassigned24 = 24, ///< Error bit 24 is not assigned
-  kUnassigned25 = 25, ///< Error bit 25 is not assigned
-  kUnassigned26 = 26, ///< Error bit 26 is not assigned
-  kUnassigned27 = 27, ///< Error bit 27 is not assigned
-  kUnassigned28 = 28, ///< Error bit 28 is not assigned
-  kUnassigned29 = 29, ///< Error bit 29 is not assigned
-  kUnassigned30 = 30, ///< Error bit 30 is not assigned
-  kUnassigned31 = 31, ///< Error bit 31 is not assigned
-  kInvalid = 32       ///< Error bit 32 and higher are not valid (error_bits is only 32 bits)
+  kLatencyBufferEmpty = 0,        ///< The latency buffer had zero occupancy when the data request was made
+  kIncomplete = 1,                ///< Only part of the requested data is present in the fragment
+  kInvalidRequestWindow = 2,      ///< The requested data window was too large
+  kRequestTimeout = 3,            ///< A timeout occurred while processing the data request
+  kRequestWindowBeforeBuffer = 4, ///< The request window extends before the latency buffer start
+  kRequestWindowAfterBuffer = 5,  ///< The request window extends after the latency buffer end
+  kEmptyFragment = 6,             ///< This Fragment contains no data
+  kUnassigned7 = 7,               ///< Error bit 7 is not assigned
+  kUnassigned8 = 8,               ///< Error bit 8 is not assigned
+  kUnassigned9 = 9,               ///< Error bit 9 is not assigned
+  kUnassigned10 = 10,             ///< Error bit 10 is not assigned
+  kUnassigned11 = 11,             ///< Error bit 11 is not assigned
+  kUnassigned12 = 12,             ///< Error bit 12 is not assigned
+  kUnassigned13 = 13,             ///< Error bit 13 is not assigned
+  kUnassigned14 = 14,             ///< Error bit 14 is not assigned
+  kUnassigned15 = 15,             ///< Error bit 15 is not assigned
+  kUnassigned16 = 16,             ///< Error bit 16 is not assigned
+  kUnassigned17 = 17,             ///< Error bit 17 is not assigned
+  kUnassigned18 = 18,             ///< Error bit 18 is not assigned
+  kUnassigned19 = 19,             ///< Error bit 19 is not assigned
+  kUnassigned20 = 20,             ///< Error bit 20 is not assigned
+  kUnassigned21 = 21,             ///< Error bit 21 is not assigned
+  kUnassigned22 = 22,             ///< Error bit 22 is not assigned
+  kUnassigned23 = 23,             ///< Error bit 23 is not assigned
+  kUnassigned24 = 24,             ///< Error bit 24 is not assigned
+  kUnassigned25 = 25,             ///< Error bit 25 is not assigned
+  kUnassigned26 = 26,             ///< Error bit 26 is not assigned
+  kUnassigned27 = 27,             ///< Error bit 27 is not assigned
+  kUnassigned28 = 28,             ///< Error bit 28 is not assigned
+  kUnassigned29 = 29,             ///< Error bit 29 is not assigned
+  kUnassigned30 = 30,             ///< Error bit 30 is not assigned
+  kUnassigned31 = 31,             ///< Error bit 31 is not assigned
+  kInvalid = 32                   ///< Error bit 32 and higher are not valid (error_bits is only 32 bits)
 };
 
 /**
@@ -239,15 +237,15 @@ get_fragment_type_names()
     { FragmentType::kTriggerActivity, "Trigger_Activity" },
     { FragmentType::kTriggerCandidate, "Trigger_Candidate" },
     { FragmentType::kHardwareSignal, "Hardware_Signal" },
-    { FragmentType::kPACMAN, "PACMAN"},
-    { FragmentType::kMPD, "MPD"},
-    { FragmentType::kWIBEth, "WIBEth"},
-    { FragmentType::kCRT, "CRT"},
-    { FragmentType::kTDEEth, "TDEEth"},
-    { FragmentType::kCRTBern, "CRTBern"},
-    { FragmentType::kCRTGrenoble, "CRTGrenoble"},
-    { FragmentType::kDAPHNEEth, "DAPHNEEth"},
-    { FragmentType::kDAPHNEEthStream, "DAPHNEEthStream"},
+    { FragmentType::kPACMAN, "PACMAN" },
+    { FragmentType::kMPD, "MPD" },
+    { FragmentType::kWIBEth, "WIBEth" },
+    { FragmentType::kCRT, "CRT" },
+    { FragmentType::kTDEEth, "TDEEth" },
+    { FragmentType::kCRTBern, "CRTBern" },
+    { FragmentType::kCRTGrenoble, "CRTGrenoble" },
+    { FragmentType::kDAPHNEEth, "DAPHNEEth" },
+    { FragmentType::kDAPHNEEthStream, "DAPHNEEthStream" },
   };
 }
 
@@ -261,8 +259,7 @@ fragment_type_to_string(const FragmentType& type)
 {
   try {
     return get_fragment_type_names().at(type);
-  }
-  catch(std::exception &e) {
+  } catch (std::exception& e) {
   }
   return "Unknown";
 }
@@ -291,19 +288,13 @@ string_to_fragment_type(const std::string& name)
 inline std::ostream&
 operator<<(std::ostream& o, FragmentHeader const& hdr)
 {
-  return o << "check_word: " << std::hex << hdr.fragment_header_marker << std::dec << ", "
-           << "version: " << hdr.version << ", "
-           << "size: " << hdr.size << ", "
-           << "trigger_number: " << hdr.trigger_number << ", "
-           << "run_number: " << hdr.run_number << ", "
-           << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
-           << "window_begin: " << hdr.window_begin << ", "
-           << "window_end: " << hdr.window_end << ", "
-           << "error_bits: " << hdr.error_bits << ", "
-           << "fragment_type: " << hdr.fragment_type << ", "
-           << "sequence_number: " << hdr.sequence_number << ", "
-           << "detector_id: " << hdr.detector_id << ", "
-           << "element_id: " << hdr.element_id ;
+  return o << "check_word: " << std::hex << hdr.fragment_header_marker << std::dec << ", " << "version: " << hdr.version
+           << ", " << "size: " << hdr.size << ", " << "trigger_number: " << hdr.trigger_number << ", "
+           << "run_number: " << hdr.run_number << ", " << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
+           << "window_begin: " << hdr.window_begin << ", " << "window_end: " << hdr.window_end << ", "
+           << "status_bits: " << hdr.status_bits << ", " << "fragment_type: " << hdr.fragment_type << ", "
+           << "sequence_number: " << hdr.sequence_number << ", " << "detector_id: " << hdr.detector_id << ", "
+           << "element_id: " << hdr.element_id;
 }
 
 /**
@@ -319,9 +310,8 @@ operator>>(std::istream& o, FragmentHeader& hdr)
   return o >> tmp >> std::hex >> hdr.fragment_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
          hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
          hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
-         hdr.error_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >>
-         hdr.sequence_number >> tmp >> tmp >> hdr.detector_id >> tmp >> tmp >> hdr.element_id;
-
+         hdr.status_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >> hdr.sequence_number >> tmp >> tmp >>
+         hdr.detector_id >> tmp >> tmp >> hdr.element_id;
 }
 } // namespace dunedaq::daqdataformats
 

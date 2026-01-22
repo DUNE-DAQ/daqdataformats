@@ -34,15 +34,18 @@ register_fragment(py::module& m)
     .def("get_window_end", &Fragment::get_window_end)
     .def("get_element_id", &Fragment::get_element_id)
     .def("get_detector_id", &Fragment::get_detector_id)
-    .def("get_error_bits", [](Fragment& self) { return self.get_error_bits().to_ullong(); } )
-    .def("get_error_bit", &Fragment::get_error_bit)
+    .def("get_status_bits", [](Fragment& self) { return self.get_status_bits().to_ullong(); })
+    .def("get_status_bit", &Fragment::get_status_bit)
     .def("get_fragment_type_code", &Fragment::get_fragment_type_code)
     .def("get_fragment_type", &Fragment::get_fragment_type)
     .def("get_sequence_number", &Fragment::get_sequence_number)
     .def("get_size", &Fragment::get_size)
     .def("get_data_size", &Fragment::get_data_size)
     .def(
-      "get_data", [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); }, "offset"_a = 0, py::return_value_policy::reference_internal)
+      "get_data",
+      [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); },
+      "offset"_a = 0,
+      py::return_value_policy::reference_internal)
     .def(
       "get_data_bytes",
       [](Fragment* self, size_t offset) -> py::bytes {
@@ -76,7 +79,7 @@ register_fragment(py::module& m)
     .def_property_readonly("window_end", [](const FragmentHeader& self) -> timestamp_t { return self.window_end; })
     .def_property_readonly("run_number", [](const FragmentHeader& self) -> run_number_t { return self.run_number; })
     .def_property_readonly(
-      "error_bits", [](const FragmentHeader& self) -> uint32_t { return self.error_bits; }) // NOLINT(build/unsigned)
+      "status_bits", [](const FragmentHeader& self) -> uint32_t { return self.status_bits; }) // NOLINT(build/unsigned)
     .def_property_readonly("fragment_type",
                            [](const FragmentHeader& self) -> fragment_type_t { return self.fragment_type; })
     .def_property_readonly("sequence_number",
@@ -86,10 +89,14 @@ register_fragment(py::module& m)
 
     .def_static("sizeof", []() { return sizeof(FragmentHeader); });
 
-  py::enum_<FragmentErrorBits>(m, "FragmentErrorBits")
-    .value("kDataNotFound", FragmentErrorBits::kDataNotFound)
-    .value("kIncomplete", FragmentErrorBits::kIncomplete)
-    .value("kInvalidWindow", FragmentErrorBits::kInvalidWindow)
+  py::enum_<FragmentStatusBits>(m, "FragmentStatusBits")
+    .value("kLatencyBufferEmpty", FragmentStatusBits::kLatencyBufferEmpty)
+    .value("kIncomplete", FragmentStatusBits::kIncomplete)
+    .value("kInvalidRequestWindow", FragmentStatusBits::kInvalidRequestWindow)
+    .value("kRequestTimeout", FragmentStatusBits::kRequestTimeout)
+    .value("kRequestWindowBeforeBuffer", FragmentStatusBits::kRequestWindowBeforeBuffer)
+    .value("kRequestWindowAfterBuffer", FragmentStatusBits::kRequestWindowAfterBuffer)
+    .value("kEmptyFragment", FragmentStatusBits::kEmptyFragment)
     // TODO, Alessandro Thea <thea@github.com> Oct-31-2021:  Add unassigned
     .export_values();
 
@@ -115,8 +122,8 @@ register_fragment(py::module& m)
     .value("kDAPHNEEthStream", FragmentType::kDAPHNEEthStream)
     .export_values();
 
-    m.def("fragment_type_to_string", &fragment_type_to_string);
-    m.def("string_to_fragment_type", &string_to_fragment_type);
+  m.def("fragment_type_to_string", &fragment_type_to_string);
+  m.def("string_to_fragment_type", &string_to_fragment_type);
 }
 
 } // namespace python

@@ -178,35 +178,34 @@ public:
 
   /**
    * @brief Set the DetID for the Fragment
-   * @param detector_id DetID to use as the detector_id 
+   * @param detector_id DetID to use as the detector_id
    */
 
   void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; }
 
-
   /**
-   * @brief Get the error_bits header field
-   * @return Bitset generated from header's error_bits field
+   * @brief Get the status_bits header field
+   * @return Bitset generated from header's status_bits field
    */
-  std::bitset<32> get_error_bits() const { return header_()->error_bits; }
+  std::bitset<32> get_status_bits() const { return header_()->status_bits; }
   /**
-   * @brief Overwrite the error_bits header field
-   * @param error_bits Bitset of error bits to set
+   * @brief Overwrite the status_bits header field
+   * @param status_bits Bitset of status bits to set
    */
-  void set_error_bits(std::bitset<32> error_bits) { header_()->error_bits = error_bits.to_ulong(); }
+  void set_status_bits(std::bitset<32> status_bits) { header_()->status_bits = status_bits.to_ulong(); }
   /**
-   * @brief Get the value of a designated error bit
+   * @brief Get the value of a designated status bit
    * @param bit Bit to query
    * @return Value of bit (true/false)
    */
-  bool get_error_bit(FragmentErrorBits bit) const { return get_error_bits()[static_cast<size_t>(bit)]; }
+  bool get_status_bit(FragmentStatusBits bit) const { return get_status_bits()[static_cast<size_t>(bit)]; }
 
   /**
-   * @brief Set the designated error bit
+   * @brief Set the designated status bit
    * @param bit Bit to set
-   * @param value Value (true/false) for the error bit
+   * @param value Value (true/false) for the status bit
    */
-  inline void set_error_bit(FragmentErrorBits bit, bool value);
+  inline void set_status_bit(FragmentStatusBits bit, bool value);
 
   /**
    * @brief Get the fragment_type_t value stored in the header
@@ -245,7 +244,7 @@ public:
    * @brief Get the size of the Fragment data
    * @return The size of the Fragment data, payload only
    */
-  fragment_size_t get_data_size() const { return header_()->size-sizeof(FragmentHeader); }
+  fragment_size_t get_data_size() const { return header_()->size - sizeof(FragmentHeader); }
 
   /**
    * @brief Get a pointer to the data payload in the Fragmnet
@@ -272,8 +271,11 @@ private:
 Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
 {
 
-  size_t size = sizeof(FragmentHeader) +
-    std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](const size_t& a, const std::pair<void*, size_t>& b) { return a + b.second; });
+  size_t size =
+    sizeof(FragmentHeader) +
+    std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](const size_t& a, const std::pair<void*, size_t>& b) {
+      return a + b.second;
+    });
 
   if (size < sizeof(FragmentHeader)) {
     throw std::length_error("The Fragment size is smaller than the Fragment header size.");
@@ -301,7 +303,8 @@ Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
 
 Fragment::Fragment(void* buffer, size_t size)
   : Fragment({ std::make_pair(buffer, size) })
-{}
+{
+}
 
 Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
 {
@@ -337,18 +340,18 @@ Fragment::set_header_fields(const FragmentHeader& header)
   header_()->run_number = header.run_number;
   header_()->element_id = header.element_id;
   header_()->detector_id = header.detector_id;
-  header_()->error_bits = header.error_bits;
+  header_()->status_bits = header.status_bits;
   header_()->fragment_type = header.fragment_type;
   header_()->sequence_number = header.sequence_number;
 }
 
 void
-Fragment::set_error_bit(FragmentErrorBits bit, bool value)
+Fragment::set_status_bit(FragmentStatusBits bit, bool value)
 
 {
-  auto bits = get_error_bits();
+  auto bits = get_status_bits();
   bits[static_cast<size_t>(bit)] = value;
-  set_error_bits(bits);
+  set_status_bits(bits);
 }
 
 } // namespace daqdataformats
