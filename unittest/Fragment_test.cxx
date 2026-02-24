@@ -169,9 +169,13 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
   memcpy(frag, &header, sizeof(FragmentHeader));
 
   std::unique_ptr<Fragment> fragment_ptr{};
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
   BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(frag, Fragment::BufferAdoptionMode::kCopyFromBuffer)),
                           std::bad_alloc,
                           [&](std::bad_alloc) { return true; });
+#pragma GCC diagnostic pop
+
   free(frag);
 
   // Use fragment_ptr
@@ -224,7 +228,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   SourceID component{ SourceID::Subsystem::kDetectorReadout, 123456789 };
   header.element_id = component;
 
-  header.error_bits = 0x12345678;
+  header.status_bits = 0x12345678;
   header.fragment_type = 8;
   header.sequence_number = 9;
 
@@ -242,8 +246,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(frag.get_window_end(), header.window_end);
   BOOST_REQUIRE_EQUAL(frag.get_element_id(), header.element_id);
 
-  BOOST_REQUIRE_EQUAL(frag.get_error_bits().to_ulong(), header.error_bits);
-  BOOST_REQUIRE_EQUAL(frag.get_error_bit(static_cast<FragmentErrorBits>(3)), true);
+  BOOST_REQUIRE_EQUAL(frag.get_status_bits().to_ulong(), header.status_bits);
+  BOOST_REQUIRE_EQUAL(frag.get_status_bit(static_cast<FragmentStatusBits>(3)), true);
 
   BOOST_REQUIRE_EQUAL(frag.get_fragment_type_code(), header.fragment_type);
   BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(frag.get_fragment_type()), header.fragment_type);
@@ -271,13 +275,13 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(theHeader->element_id.subsystem, SourceID::Subsystem::kDetectorReadout);
   BOOST_REQUIRE_EQUAL(theHeader->element_id.id, 0x6677);
 
-  std::bitset<32> no_errors(0);
-  frag.set_error_bits(no_errors);
-  BOOST_REQUIRE_EQUAL(theHeader->error_bits, 0);
-  frag.set_error_bit(static_cast<FragmentErrorBits>(1), true);
-  BOOST_REQUIRE_EQUAL(theHeader->error_bits, 2);
-  frag.set_error_bit(static_cast<FragmentErrorBits>(1), false);
-  BOOST_REQUIRE_EQUAL(theHeader->error_bits, 0);
+  std::bitset<32> no_status(0);
+  frag.set_status_bits(no_status);
+  BOOST_REQUIRE_EQUAL(theHeader->status_bits, 0);
+  frag.set_status_bit(static_cast<FragmentStatusBits>(1), true);
+  BOOST_REQUIRE_EQUAL(theHeader->status_bits, 2);
+  frag.set_status_bit(static_cast<FragmentStatusBits>(1), false);
+  BOOST_REQUIRE_EQUAL(theHeader->status_bits, 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

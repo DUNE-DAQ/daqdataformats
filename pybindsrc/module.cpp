@@ -11,9 +11,7 @@
 
 namespace py = pybind11;
 
-namespace dunedaq {
-namespace daqdataformats {
-namespace python {
+namespace dunedaq::daqdataformats::python {
 
 extern void
 register_sourceid(py::module&);
@@ -38,6 +36,4 @@ PYBIND11_MODULE(_daq_daqdataformats_py, m)
   register_timeslice(m);
 }
 
-} // namespace python
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats::python

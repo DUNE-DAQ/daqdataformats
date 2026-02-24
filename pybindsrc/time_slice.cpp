@@ -17,9 +17,7 @@
 
 namespace py = pybind11;
 
-namespace dunedaq {
-namespace daqdataformats {
-namespace python {
+namespace dunedaq::daqdataformats::python {
 
 void
 register_timeslice(py::module& m)
@@ -65,6 +63,4 @@ register_timeslice(py::module& m)
     .def("get_sum_of_fragment_payload_sizes", &TimeSlice::get_sum_of_fragment_payload_sizes);
 } // NOLINT
 
-} // namespace python
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats::python

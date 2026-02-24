@@ -71,8 +71,8 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_trigger_type(12);
   header->set_sequence_number(13);
   header->set_max_sequence_number(14);
-  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
-  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
+  header->set_status_bit(TriggerRecordStatusBits::kMismatch, true);
+  header->set_status_bit(TriggerRecordStatusBits::kUnassigned3, true);
 
   BOOST_REQUIRE_THROW(header->at(header->get_header().num_requested_components), std::range_error);
   BOOST_REQUIRE_THROW((*header)[header->get_header().num_requested_components], std::range_error);
@@ -87,9 +87,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   BOOST_REQUIRE_EQUAL(copy_header.get_run_number(), 9);
   BOOST_REQUIRE_EQUAL(copy_header.get_sequence_number(), 13);
   BOOST_REQUIRE_EQUAL(copy_header.get_max_sequence_number(), 14);
-  BOOST_REQUIRE_EQUAL(copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
-  BOOST_REQUIRE_EQUAL(copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-  BOOST_REQUIRE_EQUAL(copy_header.get_header().error_bits, 10);
+  BOOST_REQUIRE_EQUAL(copy_header.get_status_bit(static_cast<TriggerRecordStatusBits>(0)), false);
+  BOOST_REQUIRE_EQUAL(copy_header.get_status_bit(static_cast<TriggerRecordStatusBits>(1)), true);
+  BOOST_REQUIRE_EQUAL(copy_header.get_header().status_bits, 10);
   BOOST_REQUIRE_EQUAL(copy_header.at(0).window_begin, 3);
   BOOST_REQUIRE_EQUAL(copy_header[1].window_begin, 7);
 
@@ -99,9 +99,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_run_number(), 9);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_sequence_number(), 13);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_max_sequence_number(), 14);
-    BOOST_REQUIRE_EQUAL(copy_copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
-    BOOST_REQUIRE_EQUAL(copy_copy_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-    BOOST_REQUIRE_EQUAL(copy_copy_header.get_header().error_bits, 10);
+    BOOST_REQUIRE_EQUAL(copy_copy_header.get_status_bit(static_cast<TriggerRecordStatusBits>(0)), false);
+    BOOST_REQUIRE_EQUAL(copy_copy_header.get_status_bit(static_cast<TriggerRecordStatusBits>(1)), true);
+    BOOST_REQUIRE_EQUAL(copy_copy_header.get_header().status_bits, 10);
     BOOST_REQUIRE_EQUAL(copy_copy_header.at(0).window_begin, 3);
     BOOST_REQUIRE_EQUAL(copy_copy_header[1].window_begin, 7);
   }
@@ -111,9 +111,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_run_number(), 9);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_sequence_number(), 13);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_max_sequence_number(), 14);
-    BOOST_REQUIRE_EQUAL(copy_assign_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
-    BOOST_REQUIRE_EQUAL(copy_assign_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-    BOOST_REQUIRE_EQUAL(copy_assign_header.get_header().error_bits, 10);
+    BOOST_REQUIRE_EQUAL(copy_assign_header.get_status_bit(static_cast<TriggerRecordStatusBits>(0)), false);
+    BOOST_REQUIRE_EQUAL(copy_assign_header.get_status_bit(static_cast<TriggerRecordStatusBits>(1)), true);
+    BOOST_REQUIRE_EQUAL(copy_assign_header.get_header().status_bits, 10);
     BOOST_REQUIRE_EQUAL(copy_assign_header.at(0).window_begin, 3);
     BOOST_REQUIRE_EQUAL(copy_assign_header[1].window_begin, 7);
   }
@@ -125,9 +125,9 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(buffer_header.get_run_number(), 9);
     BOOST_REQUIRE_EQUAL(buffer_header.get_sequence_number(), 13);
     BOOST_REQUIRE_EQUAL(buffer_header.get_max_sequence_number(), 14);
-    BOOST_REQUIRE_EQUAL(buffer_header.get_error_bit(static_cast<TriggerRecordErrorBits>(0)), false);
-    BOOST_REQUIRE_EQUAL(buffer_header.get_error_bit(static_cast<TriggerRecordErrorBits>(1)), true);
-    BOOST_REQUIRE_EQUAL(buffer_header.get_header().error_bits, 10);
+    BOOST_REQUIRE_EQUAL(buffer_header.get_status_bit(static_cast<TriggerRecordStatusBits>(0)), false);
+    BOOST_REQUIRE_EQUAL(buffer_header.get_status_bit(static_cast<TriggerRecordStatusBits>(1)), true);
+    BOOST_REQUIRE_EQUAL(buffer_header.get_header().status_bits, 10);
     BOOST_REQUIRE_EQUAL(buffer_header.at(0).window_begin, 3);
     BOOST_REQUIRE_EQUAL(buffer_header[1].window_begin, 7);
   }
@@ -192,8 +192,11 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest));
   std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
   BOOST_REQUIRE_EXCEPTION(
     TriggerRecordHeader oversize_header(hdr, true), std::bad_alloc, [&](std::bad_alloc) { return true; });
+#pragma GCC diagnostic pop
 
   header_data.num_requested_components = 1;
   std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
@@ -245,8 +248,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header->set_trigger_type(12);
   header->set_sequence_number(13);
   header->set_max_sequence_number(14);
-  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
-  header->set_error_bit(TriggerRecordErrorBits::kUnassigned31, true);
+  header->set_status_bit(TriggerRecordStatusBits::kMismatch, true);
+  header->set_status_bit(TriggerRecordStatusBits::kUnassigned31, true);
 
   auto header_data = header->get_header();
   BOOST_REQUIRE_EQUAL(header->get_run_number(), header_data.run_number);
@@ -257,7 +260,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(header->get_max_sequence_number(), header_data.max_sequence_number);
   BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), 5);
   BOOST_REQUIRE_EQUAL(header->get_num_requested_components(), header_data.num_requested_components);
-  BOOST_REQUIRE_EQUAL(header->get_error_bits().to_ulong(), 0x80000002);
+  BOOST_REQUIRE_EQUAL(header->get_status_bits().to_ulong(), 0x80000002);
 
   auto comp_ref = header->get_component_for_source_id({ SourceID::Subsystem::kDetectorReadout, 78 });
   BOOST_REQUIRE_EQUAL(comp_ref.window_begin, 9);
@@ -280,8 +283,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header->set_run_number(10);
   BOOST_REQUIRE(header_ptr->run_number != header_data.run_number);
   BOOST_REQUIRE_EQUAL(header_ptr->run_number, 10);
-  header->set_error_bits(std::bitset<32>(0x11111111));
-  BOOST_REQUIRE_EQUAL(header_ptr->error_bits, 0x11111111);
+  header->set_status_bits(std::bitset<32>(0x11111111));
+  BOOST_REQUIRE_EQUAL(header_ptr->status_bits, 0x11111111);
 }
 
 BOOST_AUTO_TEST_CASE(StreamOperator)
@@ -303,8 +306,8 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   header->set_trigger_type(12);
   header->set_sequence_number(13);
   header->set_max_sequence_number(14);
-  header->set_error_bit(TriggerRecordErrorBits::kMismatch, true);
-  header->set_error_bit(TriggerRecordErrorBits::kUnassigned3, true);
+  header->set_status_bit(TriggerRecordStatusBits::kMismatch, true);
+  header->set_status_bit(TriggerRecordStatusBits::kUnassigned3, true);
 
   auto header_data = header->get_header();
   std::ostringstream oss;

@@ -27,9 +27,7 @@
 #include <utility>
 #include <vector>
 
-namespace dunedaq {
-
-namespace daqdataformats {
+namespace dunedaq::daqdataformats {
 
 /**
  * @brief C++ Representation of a DUNE Fragment, wrapping the flat byte array that is the Fragment's "actual" form
@@ -173,40 +171,37 @@ public:
    * @brief Get the DetID for the Fragment
    * @return The detector_id header field
    */
-
-  uint16_t get_detector_id() const noexcept { return header_()->detector_id; }
+  uint16_t get_detector_id() const noexcept { return header_()->detector_id; } // NOLINT
 
   /**
    * @brief Set the DetID for the Fragment
-   * @param detector_id DetID to use as the detector_id 
+   * @param detector_id DetID to use as the detector_id
    */
-
-  void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; }
-
+  void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; } // NOLINT
 
   /**
-   * @brief Get the error_bits header field
-   * @return Bitset generated from header's error_bits field
+   * @brief Get the status_bits header field
+   * @return Bitset generated from header's status_bits field
    */
-  std::bitset<32> get_error_bits() const { return header_()->error_bits; }
+  std::bitset<32> get_status_bits() const { return header_()->status_bits; }
   /**
-   * @brief Overwrite the error_bits header field
-   * @param error_bits Bitset of error bits to set
+   * @brief Overwrite the status_bits header field
+   * @param status_bits Bitset of status bits to set
    */
-  void set_error_bits(std::bitset<32> error_bits) { header_()->error_bits = error_bits.to_ulong(); }
+  void set_status_bits(std::bitset<32> status_bits) { header_()->status_bits = status_bits.to_ulong(); }
   /**
-   * @brief Get the value of a designated error bit
+   * @brief Get the value of a designated status bit
    * @param bit Bit to query
    * @return Value of bit (true/false)
    */
-  bool get_error_bit(FragmentErrorBits bit) const { return get_error_bits()[static_cast<size_t>(bit)]; }
+  bool get_status_bit(FragmentStatusBits bit) const { return get_status_bits()[static_cast<size_t>(bit)]; }
 
   /**
-   * @brief Set the designated error bit
+   * @brief Set the designated status bit
    * @param bit Bit to set
-   * @param value Value (true/false) for the error bit
+   * @param value Value (true/false) for the status bit
    */
-  inline void set_error_bit(FragmentErrorBits bit, bool value);
+  inline void set_status_bit(FragmentStatusBits bit, bool value);
 
   /**
    * @brief Get the fragment_type_t value stored in the header
@@ -245,7 +240,7 @@ public:
    * @brief Get the size of the Fragment data
    * @return The size of the Fragment data, payload only
    */
-  fragment_size_t get_data_size() const { return header_()->size-sizeof(FragmentHeader); }
+  fragment_size_t get_data_size() const { return header_()->size - sizeof(FragmentHeader); }
 
   /**
    * @brief Get a pointer to the data payload in the Fragmnet
@@ -272,14 +267,17 @@ private:
 Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
 {
 
-  size_t size = sizeof(FragmentHeader) +
-    std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](const size_t& a, const std::pair<void*, size_t>& b) { return a + b.second; });
+  size_t size =
+    sizeof(FragmentHeader) +
+    std::accumulate(pieces.begin(), pieces.end(), 0ULL, [](const size_t& a, const std::pair<void*, size_t>& b) {
+      return a + b.second;
+    });
 
   if (size < sizeof(FragmentHeader)) {
     throw std::length_error("The Fragment size is smaller than the Fragment header size.");
   }
 
-  m_data_arr = malloc(size); // NOLINT(build/unsigned)
+  m_data_arr = malloc(size); // NOLINT
   if (m_data_arr == nullptr) {
     throw std::bad_alloc();
   }
@@ -294,14 +292,15 @@ Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
     if (piece.first == nullptr) {
       throw std::invalid_argument("The Fragment buffer point to NULL.");
     }
-    memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT(build/unsigned)
+    memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT
     offset += piece.second;
   }
 }
 
 Fragment::Fragment(void* buffer, size_t size)
   : Fragment({ std::make_pair(buffer, size) })
-{}
+{
+}
 
 Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
 {
@@ -312,7 +311,7 @@ Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_m
     m_alloc = true;
   } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {
     auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
-    m_data_arr = malloc(header->size);
+    m_data_arr = malloc(header->size); // NOLINT
     if (m_data_arr == nullptr) {
       throw std::bad_alloc();
     }
@@ -324,7 +323,7 @@ Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_m
 Fragment::~Fragment()
 {
   if (m_alloc)
-    free(m_data_arr);
+    free(m_data_arr); // NOLINT
 }
 
 void
@@ -337,21 +336,20 @@ Fragment::set_header_fields(const FragmentHeader& header)
   header_()->run_number = header.run_number;
   header_()->element_id = header.element_id;
   header_()->detector_id = header.detector_id;
-  header_()->error_bits = header.error_bits;
+  header_()->status_bits = header.status_bits;
   header_()->fragment_type = header.fragment_type;
   header_()->sequence_number = header.sequence_number;
 }
 
 void
-Fragment::set_error_bit(FragmentErrorBits bit, bool value)
+Fragment::set_status_bit(FragmentStatusBits bit, bool value)
 
 {
-  auto bits = get_error_bits();
+  auto bits = get_status_bits();
   bits[static_cast<size_t>(bit)] = value;
-  set_error_bits(bits);
+  set_status_bits(bits);
 }
 
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENT_HPP_

@@ -13,9 +13,7 @@
 
 namespace py = pybind11;
 
-namespace dunedaq {
-namespace daqdataformats {
-namespace python {
+namespace dunedaq::daqdataformats::python {
 
 void
 register_component_request(py::module& m)
@@ -31,6 +29,4 @@ register_component_request(py::module& m)
     .def_readonly("window_end", &ComponentRequest::window_end);
 }
 
-} // namespace python
-} // namespace daqdataformats
-} // namespace dunedaq
+} // namespace dunedaq::daqdataformats::python

@@ -78,7 +78,7 @@ public:
   ~TriggerRecordHeader()
   {
     if (m_alloc)
-      free(m_data_arr);
+      free(m_data_arr); // NOLINT
   }
 
   /**
@@ -129,31 +129,31 @@ public:
   void set_run_number(run_number_t run_number) { header_()->run_number = run_number; }
 
   /**
-   * @brief Get the error_bits header field as a bitset
-   * @return bitset containing error_bits header field
+   * @brief Get the status_bits header field as a bitset
+   * @return bitset containing status_bits header field
    */
-  std::bitset<32> get_error_bits() const { return header_()->error_bits; }
+  std::bitset<32> get_status_bits() const { return header_()->status_bits; }
   /**
-   * @brief Overwrite error bits using the given bitset
-   * @param bits Bitset of error bits to set
+   * @brief Overwrite status bits using the given bitset
+   * @param bits Bitset of status bits to set
    */
-  void set_error_bits(std::bitset<32> bits) { header_()->error_bits = bits.to_ulong(); }
+  void set_status_bits(std::bitset<32> bits) { header_()->status_bits = bits.to_ulong(); }
   /**
-   * @brief Get the value of the given error bit
+   * @brief Get the value of the given status bit
    * @param bit Bit to get
    * @return Value of bit (true/false)
    */
-  bool get_error_bit(TriggerRecordErrorBits bit) const { return get_error_bits()[static_cast<size_t>(bit)]; }
+  bool get_status_bit(TriggerRecordStatusBits bit) const { return get_status_bits()[static_cast<size_t>(bit)]; }
   /**
-   * @brief Set the given error bit to the given value
+   * @brief Set the given status bit to the given value
    * @param bit Bit to set
    * @param value Value to set (true/false)
    */
-  void set_error_bit(TriggerRecordErrorBits bit, bool value)
+  void set_status_bit(TriggerRecordStatusBits bit, bool value)
   {
-    auto bits = get_error_bits();
+    auto bits = get_status_bits();
     bits[static_cast<size_t>(bit)] = value;
-    set_error_bits(bits);
+    set_status_bits(bits);
   }
 
   /**
@@ -248,7 +248,7 @@ private:
 
   void* m_data_arr{
     nullptr
-  };                     ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
+  }; ///< Flat memory containing a TriggerRecordHeaderData header and an array of ComponentRequests
   bool m_alloc{ false }; ///< Whether the TriggerRecordHeader owns the memory pointed by m_data_arr
 };
 
@@ -258,7 +258,7 @@ TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& co
 {
   size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
 
-  m_data_arr = malloc(size); // NOLINT(build/unsigned)
+  m_data_arr = malloc(size); // NOLINT
   if (m_data_arr == nullptr) {
     throw std::bad_alloc();
   }
@@ -283,7 +283,7 @@ TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_bu
     auto header = reinterpret_cast<TriggerRecordHeaderData*>(existing_trigger_record_header_buffer); // NOLINT
     size_t size = header->num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
 
-    m_data_arr = malloc(size);
+    m_data_arr = malloc(size); // NOLINT
     if (m_data_arr == nullptr) {
       throw std::bad_alloc();
     }
@@ -294,7 +294,8 @@ TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_bu
 
 TriggerRecordHeader::TriggerRecordHeader(TriggerRecordHeader const& other)
   : TriggerRecordHeader(other.m_data_arr, true)
-{}
+{
+}
 
 TriggerRecordHeader&
 TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
@@ -303,9 +304,9 @@ TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
     return *this;
 
   if (m_alloc) {
-    free(m_data_arr);
+    free(m_data_arr); // NOLINT
   }
-  m_data_arr = malloc(other.get_total_size_bytes());
+  m_data_arr = malloc(other.get_total_size_bytes()); // NOLINT
   if (m_data_arr == nullptr) {
     throw std::bad_alloc();
   }
@@ -337,13 +338,14 @@ TriggerRecordHeader::operator[](size_t idx)
 ComponentRequest const&
 TriggerRecordHeader::get_component_for_source_id(SourceID const& source_id) const
 {
-  for (uint64_t idx = 0; idx < get_num_requested_components(); ++idx) {
+  for (uint64_t idx = 0; idx < get_num_requested_components(); ++idx) { // NOLINT(build/unsigned)
     ComponentRequest const& component_obj = *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
     if (source_id == component_obj.component) {
       return component_obj;
     }
   }
-  throw std::invalid_argument("Supplied SourceID (" + source_id.to_string() + ") was not found in the ComponentRequest list.");
+  throw std::invalid_argument("Supplied SourceID (" + source_id.to_string() +
+                              ") was not found in the ComponentRequest list.");
 }
 
 } // namespace dunedaq::daqdataformats
