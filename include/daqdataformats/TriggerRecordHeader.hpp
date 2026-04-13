@@ -36,7 +36,7 @@ public:
    * @brief Construct a TriggerRecordHeader using a vector of ComponentRequest objects
    * @param components Vector of ComponentRequests to copy into TriggerRecordHeader
    */
-  inline explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components);
+  explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components);
 
   /**
    * @brief Construct a TriggerRecordHeader using an existing TriggerRecordHeader data array
@@ -44,19 +44,19 @@ public:
    * @param copy_from_buffer Whether to create a copy of the exiting buffer (true) or use that memory without taking
    * ownership (false)
    */
-  inline explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false);
+  explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false);
 
   /**
    * @brief TriggerRecordHeader Copy Constructor
    * @param other TriggerRecordHeader to copy
    */
-  inline TriggerRecordHeader(TriggerRecordHeader const& other);
+  TriggerRecordHeader(TriggerRecordHeader const& other);
   /**
    * @brief TriggerRecordHeader copy assignment operator
    * @param other TriggerRecordHeader to copy
    * @return Reference to TriggerRecordHeader copy
    */
-  inline TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
+  TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
 
   TriggerRecordHeader(TriggerRecordHeader&& other)
   {
@@ -221,7 +221,7 @@ public:
    * @return Copy of ComponentRequest at index
    * @throws std::range_error exception if idx is outside of allowable range
    */
-  inline ComponentRequest at(size_t idx) const;
+  ComponentRequest at(size_t idx) const;
 
   /**
    * @brief Access ComponentRequest by SourceID
@@ -229,7 +229,7 @@ public:
    * @return ComponentRequest constant reference
    * @throws std::invalid_argument exception if source_id is not in ComponentRequest list
    */
-  inline ComponentRequest const& get_component_for_source_id(SourceID const& source_id) const;
+  ComponentRequest const& get_component_for_source_id(SourceID const& source_id) const;
 
 private:
   /**
@@ -246,7 +246,7 @@ private:
 
 //------
 
-TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& components)
+inline TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& components)
 {
   size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
 
@@ -267,7 +267,7 @@ TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& co
   }
 }
 
-TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer)
+inline TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer)
 {
   if (!copy_from_buffer) {
     m_data_arr = existing_trigger_record_header_buffer;
@@ -284,12 +284,12 @@ TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_bu
   }
 }
 
-TriggerRecordHeader::TriggerRecordHeader(TriggerRecordHeader const& other)
+inline TriggerRecordHeader::TriggerRecordHeader(TriggerRecordHeader const& other)
   : TriggerRecordHeader(other.m_data_arr, true)
 {
 }
 
-TriggerRecordHeader&
+inline TriggerRecordHeader&
 TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
 {
   if (&other == this)
@@ -307,7 +307,7 @@ TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
   return *this;
 }
 
-ComponentRequest
+inline ComponentRequest
 TriggerRecordHeader::at(size_t idx) const
 {
   if (idx >= header_()->num_requested_components) {
@@ -317,7 +317,7 @@ TriggerRecordHeader::at(size_t idx) const
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
 
-ComponentRequest const&
+inline ComponentRequest const&
 TriggerRecordHeader::get_component_for_source_id(SourceID const& source_id) const
 {
   for (uint64_t idx = 0; idx < get_num_requested_components(); ++idx) { // NOLINT(build/unsigned)

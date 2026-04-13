@@ -150,21 +150,8 @@ enum class TriggerRecordStatusBits : size_t
  * @param hdr TriggerRecordHeaderData to write
  * @return Stream instance for continued streaming
  */
-inline std::ostream&
-operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr)
-{
-  return o << "check_word: " << std::hex << hdr.trigger_record_header_marker << std::dec << ", "
-           << "version: " << hdr.version << ", "
-
-           << "trigger_number: " << hdr.trigger_number << ", " << "run_number: " << hdr.run_number << ", "
-           << "trigger_timestamp: " << hdr.trigger_timestamp << ", " << "trigger_type: " << hdr.trigger_type << ", "
-
-           << "status_bits: " << hdr.status_bits << ", "
-
-           << "num_requested_components: " << hdr.num_requested_components << ", "
-           << "sequence_number: " << hdr.sequence_number << ", " << "max_sequence_number: " << hdr.max_sequence_number
-           << ", " << "element_id: { " << hdr.element_id << " }";
-}
+std::ostream&
+operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr);
 
 } // namespace dunedaq::daqdataformats
 

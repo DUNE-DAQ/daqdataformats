@@ -108,9 +108,6 @@ struct FragmentHeader
    */
   SourceID element_id;
 
-  //  uint32_t unused2{ // NOLINT(build/unsigned)
-  //                   0xFFFFFFFF
-  //  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 };
 
 /**
@@ -258,17 +255,9 @@ string_to_fragment_type(const std::string& name)
  * @param hdr FragmentHeader to stream
  * @return Stream instance for further streaming
  */
-inline std::ostream&
-operator<<(std::ostream& o, FragmentHeader const& hdr)
-{
-  return o << "check_word: " << std::hex << hdr.fragment_header_marker << std::dec << ", " << "version: " << hdr.version
-           << ", " << "size: " << hdr.size << ", " << "trigger_number: " << hdr.trigger_number << ", "
-           << "run_number: " << hdr.run_number << ", " << "trigger_timestamp: " << hdr.trigger_timestamp << ", "
-           << "window_begin: " << hdr.window_begin << ", " << "window_end: " << hdr.window_end << ", "
-           << "status_bits: " << hdr.status_bits << ", " << "fragment_type: " << hdr.fragment_type << ", "
-           << "sequence_number: " << hdr.sequence_number << ", " << "detector_id: " << hdr.detector_id << ", "
-           << "element_id: " << hdr.element_id;
-}
+
+std::ostream&
+operator<<(std::ostream& o, FragmentHeader const& hdr);
 
 } // namespace dunedaq::daqdataformats
 

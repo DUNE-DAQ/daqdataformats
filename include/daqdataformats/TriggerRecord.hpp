@@ -30,13 +30,13 @@ public:
    * @brief Construct a TriggerRecord using the given vector of components to initialize the TriggerRecordHeader
    * @param components List of components requested for this TriggerRecord
    */
-  inline explicit TriggerRecord(std::vector<ComponentRequest> const& components);
+  explicit TriggerRecord(std::vector<ComponentRequest> const& components);
 
   /**
    * @brief Construct a TriggerRecord using the given TriggerRecordHeader
    * @param header TriggerRecordHeader to *copy* into the TriggerRecord
    */
-  inline explicit TriggerRecord(TriggerRecordHeader const& header);
+  explicit TriggerRecord(TriggerRecordHeader const& header);
 
   virtual ~TriggerRecord() = default; ///< TriggerRecord default destructor
 
@@ -91,12 +91,12 @@ private:
 
 //-------
 
-TriggerRecord::TriggerRecord(std::vector<ComponentRequest> const& components)
+inline TriggerRecord::TriggerRecord(std::vector<ComponentRequest> const& components)
   : m_header(components)
   , m_fragments()
 {}
 
-TriggerRecord::TriggerRecord(TriggerRecordHeader const& header)
+inline TriggerRecord::TriggerRecord(TriggerRecordHeader const& header)
   : m_header(header)
   , m_fragments()
 {}

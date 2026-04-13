@@ -16,5 +16,10 @@ static_assert(offsetof(ComponentRequest, window_begin) == 16,
               "ComponentRequest window_begin field not at expected offset");
 static_assert(offsetof(ComponentRequest, window_end) == 24, "ComponentRequest window_end field not at expected offset");
 
+  inline std::ostream&
+  operator<<(std::ostream& o, ComponentRequest const& cr)
+  {
+    return o << cr.component << ", begin: " << cr.window_begin << ", end: " << cr.window_end;
+  }
 
 } // namespace dunedaq::daqdataformats

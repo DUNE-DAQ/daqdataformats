@@ -48,19 +48,19 @@ public:
    * @brief Fragment constructor using a vector of buffer pointers
    * @param pieces Vector of pairs of pointer/size pairs used to initialize Fragment payload
    */
-  inline explicit Fragment(const std::vector<std::pair<void*, size_t>>& pieces);
+  explicit Fragment(const std::vector<std::pair<void*, size_t>>& pieces);
   /**
    * @brief Fragment constructor using a buffer and size
    * @param buffer Pointer to Fragment payload
    * @param size Size of payload
    */
-  inline Fragment(void* buffer, size_t size);
+  Fragment(void* buffer, size_t size);
   /**
-   * @brief Framgnet constructor using existing Fragment array
+   * @brief Fragment constructor using existing Fragment array
    * @param existing_fragment_buffer Pointer to existing Fragment array
    * @param adoption_mode How the constructor should treat the existing_fragment_buffer
    */
-  inline explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode);
+  explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode);
 
   Fragment(Fragment const&) = delete;            ///< Fragment copy constructor is deleted
   Fragment& operator=(Fragment const&) = delete; ///< Fragment copy assignment operator is deleted
@@ -81,7 +81,7 @@ public:
   /**
    * @brief Fragment destructor
    */
-  inline ~Fragment();
+  ~Fragment();
   /**
    * @brief Get a copy of the FragmentHeader struct
    * @return A copy of the FragmentHeader struct stored in this Fragment
@@ -93,7 +93,7 @@ public:
    *
    * The size FragmentHeader field is *not* copied from the given FragmentHeader
    */
-  inline void set_header_fields(const FragmentHeader& header);
+  void set_header_fields(const FragmentHeader& header);
 
   /**
    * @brief Get a pointer to the Fragment's data array to read its contents directly
@@ -200,7 +200,7 @@ public:
    * @param bit Bit to set
    * @param value Value (true/false) for the status bit
    */
-  inline void set_status_bit(FragmentStatusBits bit, bool value);
+  void set_status_bit(FragmentStatusBits bit, bool value);
 
   /**
    * @brief Get the fragment_type_t value stored in the header
@@ -263,7 +263,7 @@ private:
 
 // ------
 
-Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
+inline Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
 {
 
   size_t size =
@@ -296,12 +296,12 @@ Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
   }
 }
 
-Fragment::Fragment(void* buffer, size_t size)
+inline Fragment::Fragment(void* buffer, size_t size)
   : Fragment({ std::make_pair(buffer, size) })
 {
 }
 
-Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
+inline Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
 {
   if (adoption_mode == BufferAdoptionMode::kTakeOverBuffer) {
     m_data_arr = existing_fragment_buffer;
@@ -317,13 +317,13 @@ Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_m
   }
 }
 
-Fragment::~Fragment()
+inline Fragment::~Fragment()
 {
   if (m_alloc)
     free(m_data_arr); // NOLINT
 }
 
-void
+inline void
 Fragment::set_header_fields(const FragmentHeader& header)
 {
   header_()->trigger_number = header.trigger_number;
@@ -338,7 +338,7 @@ Fragment::set_header_fields(const FragmentHeader& header)
   header_()->sequence_number = header.sequence_number;
 }
 
-void
+inline void
 Fragment::set_status_bit(FragmentStatusBits bit, bool value)
 
 {

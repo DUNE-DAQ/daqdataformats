@@ -92,12 +92,12 @@ struct SourceID
   /**
    * @brief Comparison operators to allow SourceID to be used in std::map
    */
-  inline bool operator<(const SourceID& other) const noexcept;
-  inline bool operator!=(const SourceID& other) const noexcept;
-  inline bool operator==(const SourceID& other) const noexcept;
+  bool operator<(const SourceID& other) const noexcept;
+  bool operator!=(const SourceID& other) const noexcept;
+  bool operator==(const SourceID& other) const noexcept;
 
-  inline static std::string subsystem_to_string(const Subsystem& type);
-  inline static Subsystem string_to_subsystem(const std::string& typestring);
+  static std::string subsystem_to_string(const Subsystem& type);
+  static Subsystem string_to_subsystem(const std::string& typestring);
 };
 
 } // namespace dunedaq::daqdataformats

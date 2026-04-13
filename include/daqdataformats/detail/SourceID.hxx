@@ -70,25 +70,25 @@ operator>>(std::istream& is, SourceID& source_id)
 }
 
 
-bool
+inline bool
 SourceID::operator<(const SourceID& other) const noexcept
 {
   return std::tuple(subsystem, id) < std::tuple(other.subsystem, other.id);
 }
 
-bool
+inline bool
 SourceID::operator!=(const SourceID& other) const noexcept
 {
   return (*this) < other || other < (*this);
 }
 
-bool
+inline bool
 SourceID::operator==(const SourceID& other) const noexcept
 {
   return !((*this) != other);
 }
 
-std::string
+inline std::string
 SourceID::subsystem_to_string(const Subsystem& type)
 {
   switch (type) {
@@ -106,7 +106,7 @@ SourceID::subsystem_to_string(const Subsystem& type)
   return "Unknown";
 }
 
-SourceID::Subsystem
+inline SourceID::Subsystem
 SourceID::string_to_subsystem(const std::string& typestring)
 {
   if (typestring == "Detector_Readout")

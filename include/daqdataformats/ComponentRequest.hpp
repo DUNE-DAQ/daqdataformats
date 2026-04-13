@@ -48,7 +48,7 @@ struct ComponentRequest
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
 
   ComponentRequest() = default;
-  inline ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
+  ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
 };
 
 /**
@@ -57,13 +57,9 @@ struct ComponentRequest
  * @param cr ComponentRequest to write
  * @return Stream instance for continued streaming
  */
-inline std::ostream&
-operator<<(std::ostream& o, ComponentRequest const& cr)
-{
-  return o << cr.component << ", begin: " << cr.window_begin << ", end: " << cr.window_end;
-}
+  std::ostream& operator<<(std::ostream& o, ComponentRequest const& cr);
 
-ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
+inline ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
   : version(s_component_request_version)
   , component(comp)
   , window_begin(wbegin)

@@ -16,5 +16,16 @@ namespace dunedaq::daqdataformats {
   static_assert(offsetof(TimeSliceHeader, run_number) == 16, "TimeSliceHeader run_number field not at expected offset!");
   static_assert(offsetof(TimeSliceHeader, unused) == 20, "TimeSliceHeader unused field not at expected offset!");
   static_assert(offsetof(TimeSliceHeader, element_id) == 24, "TimeSliceHeader source_id field not at expected offset!");
+
+inline std::ostream&
+operator<<(std::ostream& o, TimeSliceHeader const& hdr)
+{
+  return o << "check_word: " << std::hex << hdr.timeslice_header_marker << std::dec << ", "
+           << "version: " << hdr.version << ", "
+
+           << "timeslice_number: " << hdr.timeslice_number << ", "
+           << "run_number: " << hdr.run_number << ", "
+           << "element_id: { " << hdr.element_id << " }";
+}
   
 } // namespace dunedaq::daqdataformats

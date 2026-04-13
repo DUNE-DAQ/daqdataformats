@@ -70,16 +70,8 @@ struct TimeSliceHeader
  * @param hdr TimeSliceHeader to write
  * @return Stream instance for continued streaming
  */
-inline std::ostream&
-operator<<(std::ostream& o, TimeSliceHeader const& hdr)
-{
-  return o << "check_word: " << std::hex << hdr.timeslice_header_marker << std::dec << ", "
-           << "version: " << hdr.version << ", "
-
-           << "timeslice_number: " << hdr.timeslice_number << ", "
-           << "run_number: " << hdr.run_number << ", "
-           << "element_id: { " << hdr.element_id << " }";
-}
+std::ostream&
+operator<<(std::ostream& o, TimeSliceHeader const& hdr);
 
 } // namespace dunedaq::daqdataformats
 

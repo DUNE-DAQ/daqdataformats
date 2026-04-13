@@ -29,13 +29,13 @@ public:
   /**
    * @brief Construct a TimeSlice, filling in header fields
    */
-  inline explicit TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number);
+  explicit TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number);
 
   /**
    * @brief Construct a TimeSlice using the given TimeSliceHeader
    * @param header TimeSliceHeader to *copy* into the TimeSlice
    */
-  inline explicit TimeSlice(TimeSliceHeader const& header);
+  explicit TimeSlice(TimeSliceHeader const& header);
 
   virtual ~TimeSlice() = default; ///< TimeSlice default destructor
 
@@ -112,7 +112,7 @@ private:
 
 //-------
 
-TimeSlice::TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number)
+inline TimeSlice::TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number)
   : m_header()
   , m_fragments()
 {
@@ -120,7 +120,7 @@ TimeSlice::TimeSlice(timeslice_number_t timeslice_number, run_number_t run_numbe
   m_header.run_number = run_number;
 }
 
-TimeSlice::TimeSlice(TimeSliceHeader const& header)
+inline TimeSlice::TimeSlice(TimeSliceHeader const& header)
   : m_header(header)
   , m_fragments()
 {}
