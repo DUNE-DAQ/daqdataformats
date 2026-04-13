@@ -51,11 +51,7 @@ public:
    */
   const TriggerRecordHeader& get_header_ref() const { return m_header; }
   TriggerRecordHeader& get_header_ref() { return m_header; }
-  /**
-   * @brief Set the TriggerRecordHeader to the given TriggerRecordHeader object
-   * @param header new TriggerRecordHeader to use
-   */
-  void set_header(const TriggerRecordHeader& header) { m_header = header; }
+
   /**
    * @brief Get a copy of the TriggerRecordHeaderData from the TriggerRecordHeader
    * @return Copy of the TriggerRecordHeaderData struct from the TriggerRecordHeader
@@ -68,11 +64,7 @@ public:
    */
   const std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() const { return m_fragments; }
   std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() { return m_fragments; }
-  /**
-   * @brief Set the Fragments vector to the given vector of Fragments
-   * @param fragments Fragments vector to use
-   */
-  void set_fragments(std::vector<std::unique_ptr<Fragment>>&& fragments) { m_fragments = std::move(fragments); }
+
   /**
    * @brief Add a Fragment pointer to the Fragments vector
    * @param fragment Fragment to add
@@ -88,19 +80,6 @@ public:
 
     for (auto const& frag_ptr : m_fragments)
       total_size += frag_ptr->get_size();
-
-    return total_size;
-  }
-
-  /**
-   * @brief Get the sum of the fragment payload sizes
-   */
-  size_t get_sum_of_fragment_payload_sizes() const
-  {
-    size_t total_size = 0;
-
-    for (auto const& frag_ptr : m_fragments)
-      total_size += frag_ptr->get_data_size();
 
     return total_size;
   }

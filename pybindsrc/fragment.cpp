@@ -57,7 +57,6 @@ register_fragment(py::module& m)
       py::return_value_policy::reference_internal);
 
   py::enum_<Fragment::BufferAdoptionMode>(py_fragment, "BufferAdoptionMode")
-    .value("kReadOnlyMode", Fragment::BufferAdoptionMode::kReadOnlyMode)
     .value("kTakeOverBuffer", Fragment::BufferAdoptionMode::kTakeOverBuffer)
     .value("kCopyFromBuffer", Fragment::BufferAdoptionMode::kCopyFromBuffer)
     .export_values();

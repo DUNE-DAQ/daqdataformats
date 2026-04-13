@@ -50,7 +50,7 @@ register_trigger_record(py::module& m)
     .def(
       "get_storage_location", &TriggerRecordHeader::get_storage_location, py::return_value_policy::reference_internal)
     .def("at", &TriggerRecordHeader::at)
-    .def("__getitem__", &TriggerRecordHeader::operator[], py::return_value_policy::reference_internal);
+    .def("__getitem__", &TriggerRecordHeader::at, py::return_value_policy::reference_internal);
 
   py::class_<TriggerRecordHeaderData>(m, "TriggerRecordHeaderData")
     .def_property_readonly_static("s_trigger_record_header_magic",
@@ -138,7 +138,6 @@ register_trigger_record(py::module& m)
       "get_header_ref",
       [](TriggerRecord& self) { return self.get_header_ref(); },
       py::return_value_policy::reference_internal)
-    //    .def("set_header", &TriggerRecord::set_header)
     .def("get_header_data", &TriggerRecord::get_header_data)
     .def(
       "get_fragments_ref",
@@ -151,8 +150,7 @@ register_trigger_record(py::module& m)
         return fragments;
       },
       py::return_value_policy::reference_internal)
-    .def("get_total_size_bytes", &TriggerRecord::get_total_size_bytes)
-    .def("get_sum_of_fragment_payload_sizes", &TriggerRecord::get_sum_of_fragment_payload_sizes);
+    .def("get_total_size_bytes", &TriggerRecord::get_total_size_bytes);
 } // NOLINT
 
 } // namespace dunedaq::daqdataformats::python

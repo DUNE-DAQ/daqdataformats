@@ -75,7 +75,6 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   header->set_status_bit(TriggerRecordStatusBits::kUnassigned3, true);
 
   BOOST_REQUIRE_THROW(header->at(header->get_header().num_requested_components), std::range_error);
-  BOOST_REQUIRE_THROW((*header)[header->get_header().num_requested_components], std::range_error);
 
   void* buff = malloc(header->get_total_size_bytes());
   std::memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
@@ -91,7 +90,6 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   BOOST_REQUIRE_EQUAL(copy_header.get_status_bit(static_cast<TriggerRecordStatusBits>(1)), true);
   BOOST_REQUIRE_EQUAL(copy_header.get_header().status_bits, 10);
   BOOST_REQUIRE_EQUAL(copy_header.at(0).window_begin, 3);
-  BOOST_REQUIRE_EQUAL(copy_header[1].window_begin, 7);
 
   {
     // Test copy constructor
@@ -103,7 +101,6 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_status_bit(static_cast<TriggerRecordStatusBits>(1)), true);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_header().status_bits, 10);
     BOOST_REQUIRE_EQUAL(copy_copy_header.at(0).window_begin, 3);
-    BOOST_REQUIRE_EQUAL(copy_copy_header[1].window_begin, 7);
   }
   {
     // Test copy assignment
@@ -115,7 +112,6 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_status_bit(static_cast<TriggerRecordStatusBits>(1)), true);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_header().status_bits, 10);
     BOOST_REQUIRE_EQUAL(copy_assign_header.at(0).window_begin, 3);
-    BOOST_REQUIRE_EQUAL(copy_assign_header[1].window_begin, 7);
   }
 
   {
@@ -129,7 +125,6 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
     BOOST_REQUIRE_EQUAL(buffer_header.get_status_bit(static_cast<TriggerRecordStatusBits>(1)), true);
     BOOST_REQUIRE_EQUAL(buffer_header.get_header().status_bits, 10);
     BOOST_REQUIRE_EQUAL(buffer_header.at(0).window_begin, 3);
-    BOOST_REQUIRE_EQUAL(buffer_header[1].window_begin, 7);
   }
 
   BOOST_REQUIRE_EQUAL(*reinterpret_cast<uint32_t*>(buff), // NOLINT

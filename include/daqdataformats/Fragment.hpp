@@ -40,7 +40,6 @@ public:
    */
   enum class BufferAdoptionMode
   {
-    kReadOnlyMode,   ///< Just use the buffer in non-owning mode
     kTakeOverBuffer, ///< Take over control of the buffer
     kCopyFromBuffer  ///< Copy the contents of the buffer into a new Fragment array
   };
@@ -304,9 +303,7 @@ Fragment::Fragment(void* buffer, size_t size)
 
 Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode)
 {
-  if (adoption_mode == BufferAdoptionMode::kReadOnlyMode) {
-    m_data_arr = existing_fragment_buffer;
-  } else if (adoption_mode == BufferAdoptionMode::kTakeOverBuffer) {
+  if (adoption_mode == BufferAdoptionMode::kTakeOverBuffer) {
     m_data_arr = existing_fragment_buffer;
     m_alloc = true;
   } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {

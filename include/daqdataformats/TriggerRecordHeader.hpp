@@ -224,14 +224,6 @@ public:
   inline ComponentRequest at(size_t idx) const;
 
   /**
-   * @brief Operator[] to access ComponentRequests by index
-   * @param idx Index to access
-   * @return ComponentRequest reference
-   * @throws std::range_error exception if idx is outside of allowable range
-   */
-  inline ComponentRequest& operator[](size_t idx);
-
-  /**
    * @brief Access ComponentRequest by SourceID
    * @param source_id SourceID to access
    * @return ComponentRequest constant reference
@@ -317,16 +309,6 @@ TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
 
 ComponentRequest
 TriggerRecordHeader::at(size_t idx) const
-{
-  if (idx >= header_()->num_requested_components) {
-    throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
-  }
-  // Increment header pointer by one to skip header
-  return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
-}
-
-ComponentRequest&
-TriggerRecordHeader::operator[](size_t idx)
 {
   if (idx >= header_()->num_requested_components) {
     throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");

@@ -126,8 +126,7 @@ BOOST_AUTO_TEST_CASE(HeaderManipulation)
   components.back().window_end = 12;
 
   TriggerRecordHeader new_header(components);
-  record.set_header(new_header);
-  BOOST_REQUIRE_EQUAL(record.get_header_ref().get_num_requested_components(), 3);
+  BOOST_REQUIRE_EQUAL(new_header.get_num_requested_components(), 3);
 
   record.get_header_ref().set_trigger_timestamp(100);
   BOOST_REQUIRE_EQUAL(record.get_header_data().trigger_timestamp, 100);
@@ -161,11 +160,7 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
 
   BOOST_REQUIRE_EQUAL(record.get_total_size_bytes(), sizeof(TriggerRecordHeaderData) +
                       2 * sizeof(ComponentRequest) + sizeof(FragmentHeader) + 10);
-  BOOST_REQUIRE_EQUAL(record.get_sum_of_fragment_payload_sizes(), 10);
 
-  std::vector<std::unique_ptr<Fragment>> new_vector;
-  record.set_fragments(std::move(new_vector));
-  BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
