@@ -63,28 +63,15 @@ operator<<(std::ostream& o, ComponentRequest const& cr)
   return o << cr.component << ", begin: " << cr.window_begin << ", end: " << cr.window_end;
 }
 
-/**
- * @brief Read a ComponentRequest from a string stream
- * @param is Input stream
- * @param cr ComponentRequest to read
- * @return Stream instance for continued streaming
- */
-inline std::istream&
-operator>>(std::istream& is, ComponentRequest& cr)
-{
-  std::string tmp;
-  return is >> cr.component >> tmp >> tmp >> cr.window_begin >> tmp >> tmp >> cr.window_end;
-}
-
 ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
   : version(s_component_request_version)
   , component(comp)
   , window_begin(wbegin)
   , window_end(wend)
 {}
-
-#include "detail/ComponentRequest.hxx"
   
 } // namespace dunedaq::daqdataformats
+
+#include "detail/ComponentRequest.hxx"
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_COMPONENTREQUEST_HPP_

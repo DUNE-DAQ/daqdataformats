@@ -270,22 +270,6 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "element_id: " << hdr.element_id;
 }
 
-/**
- * @brief Read a FragmentHeader instance from a string stream
- * @param is Stream to read from
- * @param hdr FragmentHeader to read
- * @return Stream instance for continued streaming
- */
-inline std::istream&
-operator>>(std::istream& o, FragmentHeader& hdr)
-{
-  std::string tmp;
-  return o >> tmp >> std::hex >> hdr.fragment_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >> tmp >>
-         hdr.size >> tmp >> tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >>
-         hdr.trigger_timestamp >> tmp >> tmp >> hdr.window_begin >> tmp >> tmp >> hdr.window_end >> tmp >> tmp >>
-         hdr.status_bits >> tmp >> tmp >> hdr.fragment_type >> tmp >> tmp >> hdr.sequence_number >> tmp >> tmp >>
-         hdr.detector_id >> tmp >> tmp >> hdr.element_id;
-}
 } // namespace dunedaq::daqdataformats
 
 #include "detail/FragmentHeader.hxx"

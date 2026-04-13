@@ -166,23 +166,6 @@ operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr)
            << ", " << "element_id: { " << hdr.element_id << " }";
 }
 
-/**
- * @brief Read a TriggerRecordHeaderData instance from a string stream
- * @param is Stream to read from
- * @param hdr TriggerRecordHeaderData toread
- * @return Stream instance for continued streaming
- */
-inline std::istream&
-operator>>(std::istream& o, TriggerRecordHeaderData& hdr)
-{
-  std::string tmp;
-  return o >> tmp >> std::hex >> hdr.trigger_record_header_marker >> std::dec >> tmp >> tmp >> hdr.version >> tmp >>
-         tmp >> hdr.trigger_number >> tmp >> tmp >> hdr.run_number >> tmp >> tmp >> hdr.trigger_timestamp >> tmp >>
-         tmp >> hdr.trigger_type >> tmp >> tmp >> hdr.status_bits >> tmp >> tmp >> hdr.num_requested_components >>
-         tmp >> tmp >> hdr.sequence_number >> tmp >> tmp >> hdr.max_sequence_number >> tmp >> tmp >> tmp >>
-         hdr.element_id;
-}
-
 } // namespace dunedaq::daqdataformats
 
 #include "detail/TriggerRecordHeaderData.hxx"

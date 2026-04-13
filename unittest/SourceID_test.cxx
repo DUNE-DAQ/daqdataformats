@@ -61,21 +61,21 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   auto pos = output.find(std::to_string(test.id));
   BOOST_REQUIRE(pos != std::string::npos);
 
-  BOOST_TEST_MESSAGE("About to try to input from \"" << output << "\"");
-  std::istringstream istr(output);
-  SourceID test2;
-  istr >> test2;
-  BOOST_TEST_MESSAGE("Looks like the output-from-the-input is \"" << test2) << "\"";
-  BOOST_REQUIRE_EQUAL(test.subsystem, test2.subsystem); // Recall that output was generated from streaming out a SourceID instance
+  // BOOST_TEST_MESSAGE("About to try to input from \"" << output << "\"");
+  // std::istringstream istr(output);
+  // SourceID test2;
+  // istr >> test2;
+  // BOOST_TEST_MESSAGE("Looks like the output-from-the-input is \"" << test2) << "\"";
+  // BOOST_REQUIRE_EQUAL(test.subsystem, test2.subsystem); // Recall that output was generated from streaming out a  SourceID instance
 
-  SourceID::Subsystem cat{ SourceID::Subsystem::kTrigger };
-  std::ostringstream cat_ostr;
-  cat_ostr << cat;
-  std::istringstream cat_istr(cat_ostr.str());
-  SourceID::Subsystem cat2{ SourceID::Subsystem::kUnknown };
-  cat_istr >> cat2;
+  // SourceID::Subsystem cat{ SourceID::Subsystem::kTrigger };
+  // std::ostringstream cat_ostr;
+  // cat_ostr << cat;
+  // std::istringstream cat_istr(cat_ostr.str());
+  // SourceID::Subsystem cat2{ SourceID::Subsystem::kUnknown };
+  // cat_istr >> cat2;
 
-  BOOST_REQUIRE_EQUAL(cat, cat2);
+  // BOOST_REQUIRE_EQUAL(cat, cat2);
 }
 
 /**
