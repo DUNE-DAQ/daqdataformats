@@ -51,16 +51,6 @@ struct ComponentRequest
   inline ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
 };
 
-  static_assert(ComponentRequest::s_component_request_version == 2, "This is intentionally designed to tell the developer to update the static_assert checks (including this one) when the version is bumped");
-
-static_assert(sizeof(ComponentRequest) == 32, "ComponentRequest struct size different than expected!");
-static_assert(offsetof(ComponentRequest, version) == 0, "ComponentRequest version field not at expected offset");
-static_assert(offsetof(ComponentRequest, unused) == 4, "ComponentRequest unused field not at expected offset");
-static_assert(offsetof(ComponentRequest, component) == 8, "ComponentRequest component field not at expected offset");
-static_assert(offsetof(ComponentRequest, window_begin) == 16,
-              "ComponentRequest window_begin field not at expected offset");
-static_assert(offsetof(ComponentRequest, window_end) == 24, "ComponentRequest window_end field not at expected offset");
-
 /**
  * @brief Write out a ComponentRequest in human-readable form
  * @param o Output stream
@@ -92,6 +82,9 @@ ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbeg
   , window_begin(wbegin)
   , window_end(wend)
 {}
+
+#include "detail/ComponentRequest.hxx"
+  
 } // namespace dunedaq::daqdataformats
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_COMPONENTREQUEST_HPP_

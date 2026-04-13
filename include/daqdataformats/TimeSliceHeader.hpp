@@ -63,15 +63,6 @@ struct TimeSliceHeader
 
   SourceID element_id;
 };
-static_assert(sizeof(TimeSliceHeader) == 32, "TimeSliceHeader struct size different than expected!");
-static_assert(offsetof(TimeSliceHeader, timeslice_header_marker) == 0,
-              "TimeSliceHeader timeslice_header_marker field not at expected offset!");
-static_assert(offsetof(TimeSliceHeader, version) == 4, "TimeSliceHeader version field not at expected offset!");
-static_assert(offsetof(TimeSliceHeader, timeslice_number) == 8,
-              "TimeSliceHeader timeslice_number field not at expected offset!");
-static_assert(offsetof(TimeSliceHeader, run_number) == 16, "TimeSliceHeader run_number field not at expected offset!");
-static_assert(offsetof(TimeSliceHeader, unused) == 20, "TimeSliceHeader unused field not at expected offset!");
-static_assert(offsetof(TimeSliceHeader, element_id) == 24, "TimeSliceHeader source_id field not at expected offset!");
 
 /**
  * @brief Stream a TimeSliceHeader instance in human-readable form
@@ -105,5 +96,7 @@ operator>>(std::istream& o, TimeSliceHeader& hdr)
 }
 
 } // namespace dunedaq::daqdataformats
+
+#include "detail/TimeSliceHeader.hxx"
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICEHEADER_HPP_

@@ -1,6 +1,10 @@
 
 namespace dunedaq::daqdataformats {
 
+  static_assert(std::is_trivially_copyable<SourceID>::value, "SourceID isn't trivially copyable and can't be safely std::memcpy'd");
+  
+  static_assert(std::is_standard_layout<SourceID>::value, "SourceID isn't standard layout; reinterpret_cast and offsetof can't safely be used with it");
+
 static_assert(SourceID::s_source_id_version == 2,
               "This is intentionally designed to tell the developer to update the static_assert checks (including this "
               "one) when the version is bumped");

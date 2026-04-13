@@ -113,31 +113,6 @@ struct FragmentHeader
   //  }; ///< Padding to ensure 64-bit alignment of FragmentHeader basic fields
 };
 
-static_assert(FragmentHeader::s_fragment_header_version == 6,
-              "This is intentionally designed to tell the developer to update the static_assert checks (including this "
-              "one) when the version is bumped");
-
-static_assert(sizeof(FragmentHeader) == 72, "FragmentHeader struct size different than expected!");
-static_assert(offsetof(FragmentHeader, fragment_header_marker) == 0,
-              "FragmentHeader fragment_header_marker field not at expected offset!");
-static_assert(offsetof(FragmentHeader, version) == 4, "FragmentHeader version field not at expected offset!");
-static_assert(offsetof(FragmentHeader, size) == 8, "FragmentHeader size field not at expected offset!");
-static_assert(offsetof(FragmentHeader, trigger_number) == 16,
-              "FragmentHeader trigger_number field not at expected offset!");
-static_assert(offsetof(FragmentHeader, trigger_timestamp) == 24,
-              "FragmentHeader trigger_timestamp field not at expected offset!");
-static_assert(offsetof(FragmentHeader, window_begin) == 32,
-              "FragmentHeader window_begin field not at expected offset!");
-static_assert(offsetof(FragmentHeader, window_end) == 40, "FragmentHeader window_end field not at expected offset!");
-static_assert(offsetof(FragmentHeader, run_number) == 48, "FragmentHeader run_number field not at expected offset!");
-static_assert(offsetof(FragmentHeader, status_bits) == 52, "FragmentHeader status_bits field not at expected offset!");
-static_assert(offsetof(FragmentHeader, fragment_type) == 56,
-              "FragmentHeader fragment_type field not at expected offset!");
-static_assert(offsetof(FragmentHeader, sequence_number) == 60,
-              "FragmentHeader sequence_number field not at expected offset!");
-static_assert(offsetof(FragmentHeader, detector_id) == 62, "FragmentHeader detector_id field not at expected offset!");
-static_assert(offsetof(FragmentHeader, element_id) == 64, "FragmentHeader element_id field not at expected offset!");
-
 /**
  * @brief This enumeration should list all defined status bits, as well as a short documentation of their meaning
  */
@@ -312,5 +287,7 @@ operator>>(std::istream& o, FragmentHeader& hdr)
          hdr.detector_id >> tmp >> tmp >> hdr.element_id;
 }
 } // namespace dunedaq::daqdataformats
+
+#include "detail/FragmentHeader.hxx"
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_FRAGMENTHEADER_HPP_
