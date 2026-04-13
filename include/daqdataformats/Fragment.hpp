@@ -272,10 +272,6 @@ inline Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
       return a + b.second;
     });
 
-  if (size < sizeof(FragmentHeader)) {
-    throw std::length_error("The Fragment size is smaller than the Fragment header size.");
-  }
-
   m_data_arr = malloc(size); // NOLINT
   if (m_data_arr == nullptr) {
     throw std::bad_alloc();
@@ -289,7 +285,8 @@ inline Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
   size_t offset = sizeof(FragmentHeader);
   for (auto& piece : pieces) {
     if (piece.first == nullptr) {
-      throw std::invalid_argument("The Fragment buffer point to NULL.");
+      free(m_data_arr);
+      throw std::invalid_argument("The Fragment buffer points to NULL.");
     }
     memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT
     offset += piece.second;
@@ -326,16 +323,11 @@ inline Fragment::~Fragment()
 inline void
 Fragment::set_header_fields(const FragmentHeader& header)
 {
-  header_()->trigger_number = header.trigger_number;
-  header_()->trigger_timestamp = header.trigger_timestamp;
-  header_()->window_begin = header.window_begin;
-  header_()->window_end = header.window_end;
-  header_()->run_number = header.run_number;
-  header_()->element_id = header.element_id;
-  header_()->detector_id = header.detector_id;
-  header_()->status_bits = header.status_bits;
-  header_()->fragment_type = header.fragment_type;
-  header_()->sequence_number = header.sequence_number;
+  FragmentHeader* header_ptr { header_() };
+  fragment_size_t orig_size { header_ptr->size };
+
+  *header_ptr = header;
+  header_ptr->size = orig_size;
 }
 
 inline void

@@ -259,12 +259,7 @@ inline TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentReque
   TriggerRecordHeaderData header;
   header.num_requested_components = components.size();
   std::memcpy(m_data_arr, &header, sizeof(header));
-
-  size_t offset = sizeof(header);
-  for (auto const& component : components) {
-    std::memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(component)); // NOLINT
-    offset += sizeof(component);
-  }
+  std::memcpy(static_cast<uint8_t*>(m_data_arr) + sizeof(header), components.data(), sizeof(ComponentRequest)*components.size()); // NOLINT
 }
 
 inline TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer)

@@ -54,9 +54,8 @@ using timeslice_number_t = uint64_t; // NOLINT(build/unsigned)
 /**
  * @brief Default values for daqdataformats types
  */
-class TypeDefaults
+struct TypeDefaults
 {
-public:
   static constexpr run_number_t s_invalid_run_number =
     std::numeric_limits<run_number_t>::max(); ///< An invalid run number
   static constexpr trigger_number_t s_invalid_trigger_number =
