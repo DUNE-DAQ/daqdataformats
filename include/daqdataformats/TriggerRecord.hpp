@@ -38,13 +38,6 @@ public:
    */
   explicit TriggerRecord(TriggerRecordHeader const& header);
 
-  virtual ~TriggerRecord() = default; ///< TriggerRecord default destructor
-
-  TriggerRecord(TriggerRecord const&) = delete;            ///< TriggerRecords are not copy-constructible
-  TriggerRecord(TriggerRecord&&) = default;                ///< Default TriggerRecord move constructor
-  TriggerRecord& operator=(TriggerRecord const&) = delete; ///< TriggerRecords are not copy-assignable
-  TriggerRecord& operator=(TriggerRecord&&) = default;     ///< Default TriggerRecord move assignment operator
-
   /**
    * @brief Get a handle to the TriggerRecordHeader
    * @return A reference to the TriggerRecordHeader
@@ -83,6 +76,14 @@ public:
 
     return total_size;
   }
+
+  TriggerRecord(TriggerRecord const&) = delete;            ///< TriggerRecords are not copy-constructible
+  TriggerRecord& operator=(TriggerRecord const&) = delete; ///< TriggerRecords are not copy-assignable
+
+  TriggerRecord(TriggerRecord&&) = default;                ///< Default TriggerRecord move constructor
+  TriggerRecord& operator=(TriggerRecord&&) = default;     ///< Default TriggerRecord move assignment operator
+
+  ~TriggerRecord() = default; ///< TriggerRecord default destructor
 
 private:
   TriggerRecordHeader m_header;                       ///< TriggerRecordHeader object

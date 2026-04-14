@@ -60,12 +60,11 @@ struct ComponentRequest
   std::ostream& operator<<(std::ostream& o, ComponentRequest const& cr);
 
 inline ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
-  : version(s_component_request_version)
-  , component(comp)
+  : component(comp)
   , window_begin(wbegin)
   , window_end(wend)
 {}
-  
+
 } // namespace dunedaq::daqdataformats
 
 #include "detail/ComponentRequest.hxx"

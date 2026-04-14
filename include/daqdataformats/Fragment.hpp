@@ -61,27 +61,6 @@ public:
    * @param adoption_mode How the constructor should treat the existing_fragment_buffer
    */
   explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode);
-
-  Fragment(Fragment const&) = delete;            ///< Fragment copy constructor is deleted
-  Fragment& operator=(Fragment const&) = delete; ///< Fragment copy assignment operator is deleted
-  Fragment(Fragment&& other)
-  {
-    m_alloc = other.m_alloc;
-    other.m_alloc = false;
-    m_data_arr = other.m_data_arr;
-  }
-  Fragment& operator=(Fragment&& other)
-  {
-    m_alloc = other.m_alloc;
-    other.m_alloc = false;
-    m_data_arr = other.m_data_arr;
-    return *this;
-  }
-
-  /**
-   * @brief Fragment destructor
-   */
-  ~Fragment();
   /**
    * @brief Get a copy of the FragmentHeader struct
    * @return A copy of the FragmentHeader struct stored in this Fragment
@@ -251,6 +230,27 @@ public:
     return static_cast<void*>(header_() + 1); // NOLINT
   }
 
+  Fragment(Fragment const&) = delete;            ///< Fragment copy constructor is deleted
+  Fragment& operator=(Fragment const&) = delete; ///< Fragment copy assignment operator is deleted
+  Fragment(Fragment&& other)
+  {
+    m_alloc = other.m_alloc;
+    other.m_alloc = false;
+    m_data_arr = other.m_data_arr;
+  }
+  Fragment& operator=(Fragment&& other)
+  {
+    m_alloc = other.m_alloc;
+    other.m_alloc = false;
+    m_data_arr = other.m_data_arr;
+    return *this;
+  }
+
+  /**
+   * @brief Fragment destructor
+   */
+  ~Fragment();
+  
 private:
   /**
    * @brief Get the FragmentHeader from the m_data_arr array
@@ -282,10 +282,10 @@ inline Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
   header.size = size;
   memcpy(m_data_arr, &header, sizeof(header));
 
-  size_t offset = sizeof(FragmentHeader);
+  size_t offset = sizeof(header);
   for (auto& piece : pieces) {
     if (piece.first == nullptr) {
-      free(m_data_arr);
+      free(m_data_arr); // NOLINT
       throw std::invalid_argument("The Fragment buffer points to NULL.");
     }
     memcpy(static_cast<uint8_t*>(m_data_arr) + offset, piece.first, piece.second); // NOLINT

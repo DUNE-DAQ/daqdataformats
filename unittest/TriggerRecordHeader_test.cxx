@@ -76,11 +76,11 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
 
   BOOST_REQUIRE_THROW(header->at(header->get_header().num_requested_components), std::range_error);
 
-  void* buff = malloc(header->get_total_size_bytes());
+  void* buff = malloc(header->get_total_size_bytes()); // NOLINT
   std::memcpy(buff, header->get_storage_location(), header->get_total_size_bytes());
 
   // Constructor should copy header
-  TriggerRecordHeader copy_header(const_cast<void*>(header->get_storage_location()), true);
+  TriggerRecordHeader copy_header(const_cast<void*>(header->get_storage_location()), true); // NOLINT
   delete header; // NOLINT(build/raw_ownership)
 
   BOOST_REQUIRE_EQUAL(copy_header.get_run_number(), 9);
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
 
   {
     // Test copy constructor
-    TriggerRecordHeader copy_copy_header(copy_header);
+    TriggerRecordHeader copy_copy_header(copy_header); // NOLINT
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_run_number(), 9);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_sequence_number(), 13);
     BOOST_REQUIRE_EQUAL(copy_copy_header.get_max_sequence_number(), 14);
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   }
   {
     // Test copy assignment
-    TriggerRecordHeader copy_assign_header = copy_header;
+    TriggerRecordHeader copy_assign_header = copy_header; // NOLINT
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_run_number(), 9);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_sequence_number(), 13);
     BOOST_REQUIRE_EQUAL(copy_assign_header.get_max_sequence_number(), 14);
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(ExistingHeader)
   BOOST_REQUIRE_EQUAL(*reinterpret_cast<uint32_t*>(buff), // NOLINT
                       TriggerRecordHeaderData::s_trigger_record_header_magic);
 
-  free(buff);
+  free(buff); // NOLINT
 }
 
 BOOST_AUTO_TEST_CASE(MoveConstructor)
@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   header_data.trigger_timestamp = 11;
   header_data.trigger_type = 12;
 
-  auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest));
+  auto hdr = malloc(sizeof(TriggerRecordHeaderData) + sizeof(ComponentRequest)); // NOLINT
   std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
 
 #pragma GCC diagnostic push
@@ -204,9 +204,9 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
                       std::numeric_limits<uint64_t>::max() - 10); // NOLINT(build/unsigned)
 
   BOOST_REQUIRE_EXCEPTION(
-    TriggerRecordHeader header_inst = bad_header, std::bad_alloc, [&](std::bad_alloc) { return true; });
+			  TriggerRecordHeader header_inst = bad_header, std::bad_alloc, [&](std::bad_alloc) { return true; }); // NOLINT
 
-  free(hdr);
+  free(hdr); // NOLINT
 }
 
 /**

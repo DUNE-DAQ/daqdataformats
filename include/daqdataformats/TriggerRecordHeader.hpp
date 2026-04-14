@@ -17,6 +17,7 @@
 #include <bitset>
 #include <cstddef>
 #include <cstring>
+#include <format>
 #include <new>
 #include <ostream>
 #include <stdexcept>
@@ -45,41 +46,6 @@ public:
    * ownership (false)
    */
   explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false);
-
-  /**
-   * @brief TriggerRecordHeader Copy Constructor
-   * @param other TriggerRecordHeader to copy
-   */
-  TriggerRecordHeader(TriggerRecordHeader const& other);
-  /**
-   * @brief TriggerRecordHeader copy assignment operator
-   * @param other TriggerRecordHeader to copy
-   * @return Reference to TriggerRecordHeader copy
-   */
-  TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
-
-  TriggerRecordHeader(TriggerRecordHeader&& other)
-  {
-    m_alloc = other.m_alloc;
-    other.m_alloc = false;
-    m_data_arr = other.m_data_arr;
-  }
-  TriggerRecordHeader& operator=(TriggerRecordHeader&& other)
-  {
-    m_alloc = other.m_alloc;
-    other.m_alloc = false;
-    m_data_arr = other.m_data_arr;
-    return *this;
-  }
-
-  /**
-   * @brief TriggerRecordHeader destructor
-   */
-  ~TriggerRecordHeader()
-  {
-    if (m_alloc)
-      free(m_data_arr); // NOLINT
-  }
 
   /**
    * @brief Get a copy of the TriggerRecordHeaderData struct
@@ -231,6 +197,42 @@ public:
    */
   ComponentRequest const& get_component_for_source_id(SourceID const& source_id) const;
 
+
+  /**
+   * @brief TriggerRecordHeader Copy Constructor
+   * @param other TriggerRecordHeader to copy
+   */
+  TriggerRecordHeader(TriggerRecordHeader const& other);
+  /**
+   * @brief TriggerRecordHeader copy assignment operator
+   * @param other TriggerRecordHeader to copy
+   * @return Reference to TriggerRecordHeader copy
+   */
+  TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
+
+  TriggerRecordHeader(TriggerRecordHeader&& other)
+  {
+    m_alloc = other.m_alloc;
+    other.m_alloc = false;
+    m_data_arr = other.m_data_arr;
+  }
+  TriggerRecordHeader& operator=(TriggerRecordHeader&& other)
+  {
+    m_alloc = other.m_alloc;
+    other.m_alloc = false;
+    m_data_arr = other.m_data_arr;
+    return *this;
+  }
+
+  /**
+   * @brief TriggerRecordHeader destructor
+   */
+  ~TriggerRecordHeader()
+  {
+    if (m_alloc)
+      free(m_data_arr); // NOLINT
+  }
+
 private:
   /**
    * @brief Get the TriggerRecordHeaderData from the m_data_arr array
@@ -306,8 +308,11 @@ inline ComponentRequest
 TriggerRecordHeader::at(size_t idx) const
 {
   if (idx >= header_()->num_requested_components) {
-    throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
+    throw std::range_error(
+			   std::format("Supplied ComponentRequest index {} out of range (size: {})",
+				       idx, header_()->num_requested_components));
   }
+
   // Increment header pointer by one to skip header
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }

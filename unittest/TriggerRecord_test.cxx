@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(MoveConstructor)
   components.back().window_end = 8;
 
   TriggerRecord record(components);
-  std::vector<uint8_t> buf1(10);
+  std::vector<uint8_t> buf1(10); // NOLINT(build/unsigned)
   auto frag = std::make_unique<Fragment>(buf1.data(), buf1.size());
   record.add_fragment(std::move(frag));
 
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
 
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 0);
 
-  std::vector<uint8_t> buf1(10);
+  std::vector<uint8_t> buf1(10); // NOLINT(build/unsigned)
   auto frag = std::make_unique<Fragment>(buf1.data(), buf1.size());
   record.add_fragment(std::move(frag));
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 1);

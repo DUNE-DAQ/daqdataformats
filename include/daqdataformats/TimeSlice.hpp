@@ -37,13 +37,6 @@ public:
    */
   explicit TimeSlice(TimeSliceHeader const& header);
 
-  virtual ~TimeSlice() = default; ///< TimeSlice default destructor
-
-  TimeSlice(TimeSlice const&) = delete;            ///< TimeSlices are not copy-constructible
-  TimeSlice(TimeSlice&&) = default;                ///< Default TimeSlice move constructor
-  TimeSlice& operator=(TimeSlice const&) = delete; ///< TimeSlices are not copy-assignable
-  TimeSlice& operator=(TimeSlice&&) = default;     ///< Default TimeSlice move assignment operator
-
   /**
    * @brief Get a copy of the TimeSliceHeader struct
    * @return A copy of the TimeSliceHeader struct
@@ -105,6 +98,13 @@ public:
     return total_size;
   }
 
+  TimeSlice(TimeSlice const&) = delete;            ///< TimeSlices are not copy-constructible
+  TimeSlice& operator=(TimeSlice const&) = delete; ///< TimeSlices are not copy-assignable
+  TimeSlice(TimeSlice&&) = default;                ///< Default TimeSlice move constructor
+  TimeSlice& operator=(TimeSlice&&) = default;     ///< Default TimeSlice move assignment operator
+
+  ~TimeSlice() = default; ///< TimeSlice default destructor
+  
 private:
   TimeSliceHeader m_header;                           ///< TimeSliceHeader object
   std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
