@@ -203,8 +203,11 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   BOOST_REQUIRE_EQUAL(bad_header.get_num_requested_components(),
                       std::numeric_limits<uint64_t>::max() - 10); // NOLINT(build/unsigned)
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
   BOOST_REQUIRE_EXCEPTION(
 			  TriggerRecordHeader header_inst = bad_header, std::bad_alloc, [&](std::bad_alloc) { return true; }); // NOLINT
+#pragma GCC diagnostic pop
 
   free(hdr); // NOLINT
 }
