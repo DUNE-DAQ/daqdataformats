@@ -11,6 +11,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <sstream>
+
 namespace py = pybind11;
 
 namespace dunedaq::daqdataformats::python {
@@ -22,6 +24,16 @@ register_component_request(py::module& m)
   py::class_<ComponentRequest>(m, "ComponentRequest")
     .def(py::init())
     .def(py::init<SourceID const&, timestamp_t const&, timestamp_t const&>())
+    .def("__str__", [](const ComponentRequest& cr) {
+      std::ostringstream oss;
+      oss << cr;
+      return oss.str();
+    })
+    .def("__repr__", [](const ComponentRequest& cr) {
+      std::ostringstream oss;
+      oss << "<daqdataformats::ComponentRequest " << cr << ">";
+      return oss.str();
+    })
     .def_readonly_static("s_component_request_version", &ComponentRequest::s_component_request_version)
     .def_readonly("version", &ComponentRequest::version)
     .def_readonly("unused", &ComponentRequest::unused)

@@ -12,6 +12,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <sstream>
+
 namespace py = pybind11;
 using namespace pybind11::literals; // to bring in the `_a` literal
 
@@ -62,6 +64,16 @@ register_fragment(py::module& m)
     .export_values();
 
   py::class_<FragmentHeader>(m, "FragmentHeader")
+    .def(py::init<>())
+    .def_property_readonly_static(
+      "s_fragment_header_marker",
+      [](const py::object&) -> uint32_t { return FragmentHeader::s_fragment_header_marker; }) // NOLINT(build/unsigned)
+    .def_property_readonly_static(
+      "s_fragment_header_version",
+      [](const py::object&) -> uint32_t { return FragmentHeader::s_fragment_header_version; }) // NOLINT(build/unsigned)
+    .def_property_readonly_static(
+      "s_default_status_bits",
+      [](const py::object&) -> uint32_t { return FragmentHeader::s_default_status_bits; }) // NOLINT(build/unsigned)
     .def_property_readonly(
       "fragment_header_marker",
       [](const FragmentHeader& self) -> uint32_t { return self.fragment_header_marker; }) // NOLINT(build/unsigned)
@@ -85,7 +97,17 @@ register_fragment(py::module& m)
       "detector_id", [](const FragmentHeader& self) -> uint16_t { return self.detector_id; }) // NOLINT(build/unsigned)
     .def_property_readonly("element_id", [](const FragmentHeader& self) -> SourceID { return self.element_id; })
 
-    .def_static("sizeof", []() { return sizeof(FragmentHeader); });
+    .def_static("sizeof", []() { return sizeof(FragmentHeader); })
+    .def("__str__", [](const FragmentHeader& hdr) {
+      std::ostringstream oss;
+      oss << hdr;
+      return oss.str();
+    })
+    .def("__repr__", [](const FragmentHeader& hdr) {
+      std::ostringstream oss;
+      oss << "<daqdataformats::FragmentHeader " << hdr << ">";
+      return oss.str();
+    });
 
   py::enum_<FragmentStatusBits>(m, "FragmentStatusBits")
     .value("kLatencyBufferEmpty", FragmentStatusBits::kLatencyBufferEmpty)
@@ -111,6 +133,7 @@ register_fragment(py::module& m)
     .value("kHardwareSignal", FragmentType::kHardwareSignal)
     .value("kPACMAN", FragmentType::kPACMAN)
     .value("kWIBEth", FragmentType::kWIBEth)
+    .value("kMPD", FragmentType::kMPD)
     .value("kDAPHNEStream", FragmentType::kDAPHNEStream)
     .value("kCRT", FragmentType::kCRT)
     .value("kTDEEth", FragmentType::kTDEEth)
@@ -122,6 +145,7 @@ register_fragment(py::module& m)
 
   m.def("fragment_type_to_string", &fragment_type_to_string);
   m.def("string_to_fragment_type", &string_to_fragment_type);
+  m.def("get_fragment_type_names", &get_fragment_type_names);
 } // NOLINT(readability/fn_size)
 
 } // namespace dunedaq::daqdataformats::python

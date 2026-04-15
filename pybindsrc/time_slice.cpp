@@ -13,6 +13,7 @@
 #include <pybind11/stl.h>
 
 #include <memory>
+#include <sstream>
 #include <vector>
 
 namespace py = pybind11;
@@ -23,13 +24,14 @@ void
 register_timeslice(py::module& m)
 {
   py::class_<TimeSliceHeader>(m, "TimeSliceHeader")
+    .def(py::init<>())
     .def_property_readonly_static("s_timeslice_header_marker",
-                                  [](const TimeSliceHeader& self) -> uint32_t { // NOLINT(build/unsigned)
-                                    return self.s_timeslice_header_marker;
+                                  [](const py::object&) -> uint32_t { // NOLINT(build/unsigned)
+                                    return TimeSliceHeader::s_timeslice_header_marker;
                                   })
     .def_property_readonly_static("s_timeslice_header_version",
-                                  [](const TimeSliceHeader& self) -> uint32_t { // NOLINT(build/unsigned)
-                                    return self.s_timeslice_header_version;
+                                  [](const py::object&) -> uint32_t { // NOLINT(build/unsigned)
+                                    return TimeSliceHeader::s_timeslice_header_version;
                                   })
     .def_property_readonly("timeslice_header_marker",
                            [](const TimeSliceHeader& self) -> uint32_t { // NOLINT(build/unsigned)
@@ -39,8 +41,18 @@ register_timeslice(py::module& m)
       "version", [](const TimeSliceHeader& self) -> uint32_t { return self.version; }) // NOLINT(build/unsigned)
     .def_property_readonly("timeslice_number",
                            [](const TimeSliceHeader& self) -> timeslice_number_t { return self.timeslice_number; })
-
-    .def_property_readonly("run_number", [](const TimeSliceHeader& self) -> run_number_t { return self.run_number; });
+    .def_property_readonly("run_number", [](const TimeSliceHeader& self) -> run_number_t { return self.run_number; })
+    .def_property_readonly("element_id", [](const TimeSliceHeader& self) -> SourceID { return self.element_id; })
+    .def("__str__", [](const TimeSliceHeader& hdr) {
+      std::ostringstream oss;
+      oss << hdr;
+      return oss.str();
+    })
+    .def("__repr__", [](const TimeSliceHeader& hdr) {
+      std::ostringstream oss;
+      oss << "<daqdataformats::TimeSliceHeader " << hdr << ">";
+      return oss.str();
+    });
 
   py::class_<TimeSlice> py_timeslice(m, "TimeSlice", pybind11::buffer_protocol());
   py_timeslice.def(py::init<TimeSliceHeader const&>())
