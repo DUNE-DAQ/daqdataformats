@@ -35,10 +35,7 @@ struct SourceID
   using Subsystem_t = uint16_t; // NOLINT(build/unsigned)
   using ID_t = uint32_t;        // NOLINT(build/unsigned)
 
-  /**
-   * @brief The Subsystem enum describes the kind of source we're dealing with
-   */
-
+  /// @brief The Subsystem enum describes the kind of source we're dealing with
   enum class Subsystem : Subsystem_t
   {
     kUnknown = 0,
@@ -48,29 +45,17 @@ struct SourceID
     kTRBuilder = 4
   };
 
-  /**
-   * @brief The version of this SourceID struct.
-   */
-  static constexpr Version_t s_source_id_version =
-    2; // Taking SourceID as the direct successor of GeoID which had version 1
+  // Taking SourceID as the direct successor of GeoID which had version 1
+  static constexpr Version_t s_source_id_version = 2; 
 
-  /**
-   * @brief A value for the id meant to convey that it doesn't identify a data source and shouldn't be worked with
-   */
   static constexpr ID_t s_invalid_id = std::numeric_limits<ID_t>::max();
 
-  /**
-   * @brief Version number of the SourceID
-   */
   Version_t version{ s_source_id_version };
-  /**
-   * @brief The general subsystem of the source of the data
-   */
+
+  /// @brief The general subsystem of the source of the data
   Subsystem subsystem{ Subsystem::kUnknown };
 
-  /**
-   * @brief Unique identifier of the source of the data
-   */
+  /// @brief Unique identifier of the source of the data
   ID_t id{ s_invalid_id };
 
   SourceID() = default;
@@ -89,9 +74,7 @@ struct SourceID
 
   bool is_in_valid_state() const noexcept { return subsystem != Subsystem::kUnknown && id != s_invalid_id; }
 
-  /**
-   * @brief Comparison operators to allow SourceID to be used in std::map
-   */
+  /// @brief Comparison operators to allow SourceID to be used in std::map
   bool operator<(const SourceID& other) const noexcept;
   bool operator!=(const SourceID& other) const noexcept;
   bool operator==(const SourceID& other) const noexcept;

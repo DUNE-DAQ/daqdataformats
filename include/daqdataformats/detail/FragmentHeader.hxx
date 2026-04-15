@@ -30,6 +30,26 @@ static_assert(offsetof(FragmentHeader, sequence_number) == 60,
 static_assert(offsetof(FragmentHeader, detector_id) == 62, "FragmentHeader detector_id field not at expected offset!");
 static_assert(offsetof(FragmentHeader, element_id) == 64, "FragmentHeader element_id field not at expected offset!");
 
+inline std::string
+fragment_type_to_string(const FragmentType& type)
+{
+  try {
+    return get_fragment_type_names().at(type);
+  } catch (std::exception& e) {
+  }
+  return "Unknown";
+}
+
+inline FragmentType
+string_to_fragment_type(const std::string& name)
+{
+  for (auto& it : get_fragment_type_names()) {
+    if (it.second == name)
+      return it.first;
+  }
+  return FragmentType::kUnknown;
+}
+  
 inline std::ostream&
 operator<<(std::ostream& o, FragmentHeader const& hdr)
 {

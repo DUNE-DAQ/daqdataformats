@@ -45,10 +45,6 @@ public:
   const TriggerRecordHeader& get_header_ref() const { return m_header; }
   TriggerRecordHeader& get_header_ref() { return m_header; }
 
-  /**
-   * @brief Get a copy of the TriggerRecordHeaderData from the TriggerRecordHeader
-   * @return Copy of the TriggerRecordHeaderData struct from the TriggerRecordHeader
-   */
   TriggerRecordHeaderData get_header_data() const { return m_header.get_header(); }
 
   /**
@@ -59,8 +55,8 @@ public:
   std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() { return m_fragments; }
 
   /**
-   * @brief Add a Fragment pointer to the Fragments vector
-   * @param fragment Fragment to add
+   * @brief Move a unique_ptr owning a fragment to the Fragments vector
+   * @param fragment The unique_ptr
    */
   void add_fragment(std::unique_ptr<Fragment>&& fragment) { m_fragments.emplace_back(std::move(fragment)); }
 
@@ -77,20 +73,19 @@ public:
     return total_size;
   }
 
-  TriggerRecord(TriggerRecord const&) = delete;            ///< TriggerRecords are not copy-constructible
-  TriggerRecord& operator=(TriggerRecord const&) = delete; ///< TriggerRecords are not copy-assignable
+  TriggerRecord(TriggerRecord const&) = delete;
+  TriggerRecord& operator=(TriggerRecord const&) = delete;
 
-  TriggerRecord(TriggerRecord&&) = default;                ///< Default TriggerRecord move constructor
-  TriggerRecord& operator=(TriggerRecord&&) = default;     ///< Default TriggerRecord move assignment operator
+  TriggerRecord(TriggerRecord&&) = default;
+  TriggerRecord& operator=(TriggerRecord&&) = default;
 
-  ~TriggerRecord() = default; ///< TriggerRecord default destructor
+  ~TriggerRecord() = default;
 
 private:
-  TriggerRecordHeader m_header;                       ///< TriggerRecordHeader object
-  std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
+  TriggerRecordHeader m_header;
+  std::vector<std::unique_ptr<Fragment>> m_fragments;
 };
 
-//-------
 
 inline TriggerRecord::TriggerRecord(std::vector<ComponentRequest> const& components)
   : m_header(components)

@@ -24,39 +24,23 @@ namespace dunedaq::daqdataformats {
  */
 struct ComponentRequest
 {
-  /**
-   * @brief The current version of the ComponentRequest
-   */
   static constexpr uint32_t s_component_request_version = 2; // NOLINT(build/unsigned)
 
-  /**
-   * @brief The version number of this ComponentRequest
-   */
   uint32_t version{ s_component_request_version }; // NOLINT(build/unsigned)
   uint32_t unused{ 0xFFFFFFFF };                   ///< Padding to ensure 64b alignment // NOLINT(build/unsigned)
 
-  SourceID component; ///< The Requested Component
+  SourceID component; ///< The ID of the Requested Component
 
-  /**
-   * @brief Start of the data collection window
-   */
+  /// @brief Start of the data collection window
   timestamp_t window_begin{ TypeDefaults::s_invalid_timestamp };
 
-  /**
-   * @brief End of the data collection window
-   */
+  /// @brief End of the data collection window
   timestamp_t window_end{ TypeDefaults::s_invalid_timestamp };
 
   ComponentRequest() = default;
   ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
 };
 
-/**
- * @brief Write out a ComponentRequest in human-readable form
- * @param o Output stream
- * @param cr ComponentRequest to write
- * @return Stream instance for continued streaming
- */
   std::ostream& operator<<(std::ostream& o, ComponentRequest const& cr);
 
 inline ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)

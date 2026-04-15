@@ -239,7 +239,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   components.back().window_begin = 11;
   components.back().window_end = 12;
 
-  auto header = new TriggerRecordHeader(components);
+  auto header = new TriggerRecordHeader(components); // NOLINT
   header->set_run_number(9);
   header->set_trigger_number(10);
   header->set_trigger_timestamp(11);

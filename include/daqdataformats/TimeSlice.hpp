@@ -27,7 +27,7 @@ class TimeSlice
 {
 public:
   /**
-   * @brief Construct a TimeSlice, filling in header fields
+   * @brief Construct a TimeSlice, filling in some header fields
    */
   explicit TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number);
 

@@ -5,6 +5,8 @@
  * This version is not serializable, and classes wanting to stream it/write it to disk must
  * also fetch the data associated with the Fragment.
  *
+ * A Fragment can be expected to begin with a Fragment header, usually followed by a payload
+ *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
  * received with this code.
@@ -35,9 +37,8 @@ namespace dunedaq::daqdataformats {
 class Fragment
 {
 public:
-  /**
-   * @brief Describes how the "existing Fragment buffer" Constructor should treat the given buffer
-   */
+
+  /// @brief Describes how the "existing Fragment buffer" constructor should treat the given buffer
   enum class BufferAdoptionMode
   {
     kTakeOverBuffer, ///< Take over control of the buffer
@@ -61,76 +62,28 @@ public:
    * @param adoption_mode How the constructor should treat the existing_fragment_buffer
    */
   explicit Fragment(void* existing_fragment_buffer, BufferAdoptionMode adoption_mode);
-  /**
-   * @brief Get a copy of the FragmentHeader struct
-   * @return A copy of the FragmentHeader struct stored in this Fragment
-   */
+
   FragmentHeader get_header() const { return *header_(); }
-  /**
-   * @brief Copy fields from the provided header in this Fragment's header
-   * @param header Header to copy into the Fragment data array
-   *
-   * The size FragmentHeader field is *not* copied from the given FragmentHeader
-   */
+
+  /// @brief Fields from the provided header overwrite this Fragment's header, *except* for the size field
   void set_header_fields(const FragmentHeader& header);
 
-  /**
-   * @brief Get a pointer to the Fragment's data array to read its contents directly
-   * @return Pointer to the Fragment's data array
-   */
+  /// @brief Get read-only access to the Fragment's underlying data array via a pointer
   const void* get_storage_location() const { return m_data_arr; }
 
-  // Header setters and getters
-  /**
-   * @brief Get the trigger_number field from the header
-   * @return The trigger_number header field
-   */
   trigger_number_t get_trigger_number() const { return header_()->trigger_number; }
-  /**
-   * @brief Set the trigger_number for the Fragment
-   * @param trigger_number Value of trigger_number to set
-   */
   void set_trigger_number(trigger_number_t trigger_number) { header_()->trigger_number = trigger_number; }
-  /**
-   * @brief Get the run_number field from the header
-   * @return The run_number header field
-   */
+
   run_number_t get_run_number() const { return header_()->run_number; }
-  /**
-   * @brief Set the run_number for the Fragment
-   * @param run_number Value of run_number to set
-   */
   void set_run_number(run_number_t run_number) { header_()->run_number = run_number; }
 
-  /**
-   * @brief Get the trigger_timestamp field from the header
-   * @return The trigger_timestamp header field
-   */
   timestamp_t get_trigger_timestamp() const { return header_()->trigger_timestamp; }
-  /**
-   * @brief Set the trigger_timestamp for the Fragment
-   * @param trigger_timestamp Value of trigger_timestamp to set
-   */
   void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_()->trigger_timestamp = trigger_timestamp; }
-  /**
-   * @brief Get the window_begin field from the header
-   * @return The window_begin header field
-   */
+
   timestamp_t get_window_begin() const { return header_()->window_begin; }
-  /**
-   * @brief Set the window_begin for the Fragment
-   * @param window_begin Value of the window_begin to set
-   */
   void set_window_begin(timestamp_t window_begin) { header_()->window_begin = window_begin; }
-  /**
-   * @brief Get the window_end field from the header
-   * @return The window_end header field
-   */
+
   timestamp_t get_window_end() const { return header_()->window_end; }
-  /**
-   * @brief Set the window_end for the Fragment
-   * @param window_end Value of the window_end to set
-   */
   void set_window_end(timestamp_t window_end) { header_()->window_end = window_end; }
 
   /**
@@ -145,16 +98,7 @@ public:
    */
   void set_element_id(SourceID element_id) { header_()->element_id = element_id; }
 
-  /**
-   * @brief Get the DetID for the Fragment
-   * @return The detector_id header field
-   */
   uint16_t get_detector_id() const noexcept { return header_()->detector_id; } // NOLINT
-
-  /**
-   * @brief Set the DetID for the Fragment
-   * @param detector_id DetID to use as the detector_id
-   */
   void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; } // NOLINT
 
   /**
@@ -197,41 +141,24 @@ public:
    */
   void set_type(FragmentType fragment_type) { header_()->fragment_type = static_cast<fragment_type_t>(fragment_type); }
 
-  /**
-   * @brief Get the sequence_number field from the header
-   * @return The sequence_number header field
-   */
   sequence_number_t get_sequence_number() const { return header_()->sequence_number; }
-  /**
-   * @brief Set the sequence_number for the Fragment
-   * @param sequence_number Value of sequence_number to set
-   */
   void set_sequence_number(sequence_number_t number) { header_()->sequence_number = number; }
 
-  /**
-   * @brief Get the total size of the Fragment
-   * @return The size of the Fragment, including header and all payload pieces
-   */
+  /// @brief Get the total size of the Fragment in bytes, including header and all payload pieces
   fragment_size_t get_size() const { return header_()->size; }
 
-  /**
-   * @brief Get the size of the Fragment data
-   * @return The size of the Fragment data, payload only
-   */
+  /// @brief Get the size of the Fragment payload in bytes (total size minus FragmentHeader)
   fragment_size_t get_data_size() const { return header_()->size - sizeof(FragmentHeader); }
 
-  /**
-   * @brief Get a pointer to the data payload in the Fragmnet
-   * @return Pointer to the data payload in the Fragment
-   */
+  /// @brief Get a pointer to the data payload in the Fragmnet
   void* get_data() const
   {
     // Increment header pointer by one to skip header
     return static_cast<void*>(header_() + 1); // NOLINT
   }
 
-  Fragment(Fragment const&) = delete;            ///< Fragment copy constructor is deleted
-  Fragment& operator=(Fragment const&) = delete; ///< Fragment copy assignment operator is deleted
+  Fragment(Fragment const&) = delete;
+  Fragment& operator=(Fragment const&) = delete;
   Fragment(Fragment&& other)
   {
     m_alloc = other.m_alloc;
@@ -246,22 +173,14 @@ public:
     return *this;
   }
 
-  /**
-   * @brief Fragment destructor
-   */
   ~Fragment();
   
 private:
-  /**
-   * @brief Get the FragmentHeader from the m_data_arr array
-   * @return Pointer to the FragmentHeader
-   */
   FragmentHeader* header_() const { return static_cast<FragmentHeader*>(m_data_arr); }
-  void* m_data_arr{ nullptr }; ///< Flat memory containing a FragmentHeader and the data payload
+  void* m_data_arr{ nullptr }; ///< Points to flat memory containing a FragmentHeader and the data payload
   bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };
 
-// ------
 
 inline Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
 {
