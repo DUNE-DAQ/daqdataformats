@@ -83,6 +83,12 @@ struct SourceID
   static Subsystem string_to_subsystem(const std::string& typestring);
 };
 
+inline bool
+SourceID::operator<(const SourceID& other) const noexcept
+{
+  return std::tuple(subsystem, id) < std::tuple(other.subsystem, other.id);
+}
+
 } // namespace dunedaq::daqdataformats
 
 #include "detail/SourceID.hxx"

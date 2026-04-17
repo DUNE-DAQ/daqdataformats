@@ -45,13 +45,6 @@ operator>>(std::istream& is, SourceID& source_id)
   return is;
 }
 
-
-inline bool
-SourceID::operator<(const SourceID& other) const noexcept
-{
-  return std::tuple(subsystem, id) < std::tuple(other.subsystem, other.id);
-}
-
 inline bool
 SourceID::operator!=(const SourceID& other) const noexcept
 {
