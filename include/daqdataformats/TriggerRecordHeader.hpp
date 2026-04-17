@@ -117,12 +117,12 @@ public:
   const void* get_storage_location() const { return m_data_arr; }
 
   /**
-   * @brief Access ComponentRequest and copy result
-   * @param idx Index to access
-   * @return Copy of ComponentRequest at index
+   * @brief Access ComponentRequest by index
+   * @param idx Index for access
+   * @return Const reference of ComponentRequest at index
    * @throws std::range_error exception if idx is outside of allowable range
    */
-  ComponentRequest at(size_t idx) const;
+  const ComponentRequest& at(size_t idx) const;
 
   /**
    * @brief Access ComponentRequest by SourceID
@@ -227,7 +227,7 @@ TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
   return *this;
 }
 
-inline ComponentRequest
+inline const ComponentRequest&
 TriggerRecordHeader::at(size_t idx) const
 {
   if (idx >= header_()->num_requested_components) {
