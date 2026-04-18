@@ -28,7 +28,7 @@ register_sourceid(py::module& m)
     .def(py::self == py::self)
     .def(py::self != py::self)
     .def("__hash__", [](const SourceID& self) {
-    return py::hash(py::make_tuple(static_cast<uint32_t>(self.subsystem), self.id));
+      return py::hash(py::make_tuple(static_cast<uint32_t>(self.subsystem), self.id)); // NOLINT(build/unsigned)
     })
     .def_property_readonly_static("s_source_id_version",
                                   [](const py::object&) -> SourceID::Version_t {
