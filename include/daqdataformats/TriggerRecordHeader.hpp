@@ -1,7 +1,7 @@
 /**
  * @file TriggerRecordHeader.hpp  TriggerRecordHeader struct definition
  *
- * Conceptually, this is actually a header containing metadata about the trigger 
+ * Conceptually, this is actually a header containing metadata about the trigger
  * record followed by a collection of ComponentRequest instances
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
@@ -132,7 +132,6 @@ public:
    */
   ComponentRequest const& get_component_for_source_id(SourceID const& source_id) const;
 
-
   TriggerRecordHeader(TriggerRecordHeader const& other);
   TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
 
@@ -184,7 +183,9 @@ inline TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentReque
   TriggerRecordHeaderData header;
   header.num_requested_components = components.size();
   std::memcpy(m_data_arr, &header, sizeof(header));
-  std::memcpy(static_cast<uint8_t*>(m_data_arr) + sizeof(header), components.data(), sizeof(ComponentRequest)*components.size()); // NOLINT
+  std::memcpy(static_cast<uint8_t*>(m_data_arr) + sizeof(header), // NOLINT
+              components.data(),
+              sizeof(ComponentRequest) * components.size());
 }
 
 inline TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer)
@@ -231,9 +232,8 @@ inline const ComponentRequest&
 TriggerRecordHeader::at(size_t idx) const
 {
   if (idx >= header_()->num_requested_components) {
-    throw std::range_error(
-			   std::format("Supplied ComponentRequest index {} out of range (size: {})",
-				       idx, header_()->num_requested_components));
+    throw std::range_error(std::format(
+      "Supplied ComponentRequest index {} out of range (size: {})", idx, header_()->num_requested_components));
   }
 
   // Increment header pointer by one to skip header

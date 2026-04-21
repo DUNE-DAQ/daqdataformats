@@ -104,7 +104,7 @@ public:
   TimeSlice& operator=(TimeSlice&&) = default;     ///< Default TimeSlice move assignment operator
 
   ~TimeSlice() = default; ///< TimeSlice default destructor
-  
+
 private:
   TimeSliceHeader m_header;                           ///< TimeSliceHeader object
   std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
@@ -123,7 +123,8 @@ inline TimeSlice::TimeSlice(timeslice_number_t timeslice_number, run_number_t ru
 inline TimeSlice::TimeSlice(TimeSliceHeader const& header)
   : m_header(header)
   , m_fragments()
-{}
+{
+}
 
 } // namespace dunedaq::daqdataformats
 

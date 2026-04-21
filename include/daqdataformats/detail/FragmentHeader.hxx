@@ -1,10 +1,12 @@
 
 namespace dunedaq::daqdataformats {
 
-static_assert(std::is_trivially_copyable<FragmentHeader>::value, "FragmentHeader isn't trivially copyable and can't be safely std::memcpy'd");
-  
-static_assert(std::is_standard_layout<FragmentHeader>::value, "FragmentHeader isn't standard layout; reinterpret_cast and offsetof can't safely be used with it");
-  
+static_assert(std::is_trivially_copyable<FragmentHeader>::value,
+              "FragmentHeader isn't trivially copyable and can't be safely std::memcpy'd");
+
+static_assert(std::is_standard_layout<FragmentHeader>::value,
+              "FragmentHeader isn't standard layout; reinterpret_cast and offsetof can't safely be used with it");
+
 static_assert(FragmentHeader::s_fragment_header_version == 6,
               "This is intentionally designed to tell the developer to update the static_assert checks (including this "
               "one) when the version is bumped");
@@ -49,7 +51,7 @@ string_to_fragment_type(const std::string& name)
   }
   return FragmentType::kUnknown;
 }
-  
+
 inline std::ostream&
 operator<<(std::ostream& o, FragmentHeader const& hdr)
 {
@@ -61,5 +63,5 @@ operator<<(std::ostream& o, FragmentHeader const& hdr)
            << "sequence_number: " << hdr.sequence_number << ", " << "detector_id: " << hdr.detector_id << ", "
            << "element_id: " << hdr.element_id;
 }
-  
+
 } // namespace dunedaq::daqdataformats

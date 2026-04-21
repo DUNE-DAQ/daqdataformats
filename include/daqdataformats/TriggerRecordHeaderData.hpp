@@ -30,13 +30,13 @@ struct TriggerRecordHeaderData
   static constexpr uint32_t s_trigger_record_header_magic = 0x33334444; // NOLINT(build/unsigned)
 
   static constexpr uint32_t s_trigger_record_header_version = 5; // NOLINT(build/unsigned)
-  static constexpr uint64_t s_invalid_number_components = // NOLINT(build/unsigned)
-    std::numeric_limits<uint64_t>::max();                 // NOLINT(build/unsigned)
+  static constexpr uint64_t s_invalid_number_components =        // NOLINT(build/unsigned)
+    std::numeric_limits<uint64_t>::max();                        // NOLINT(build/unsigned)
 
   static constexpr uint32_t s_default_status_bits = 0; // NOLINT(build/unsigned)
 
   uint32_t trigger_record_header_marker = s_trigger_record_header_magic; // NOLINT(build/unsigned)
-  uint32_t version = s_trigger_record_header_version; // NOLINT(build/unsigned)
+  uint32_t version = s_trigger_record_header_version;                    // NOLINT(build/unsigned)
 
   trigger_number_t trigger_number{ TypeDefaults::s_invalid_trigger_number };
 
@@ -64,11 +64,12 @@ struct TriggerRecordHeaderData
   SourceID element_id;
 };
 
-/// @brief This enumeration lists all defined status bits, as well as a short documentation of their meaning when not obvious
+/// @brief This enumeration lists all defined status bits, as well as a short documentation of their meaning when not
+/// obvious
 enum class TriggerRecordStatusBits : size_t
 {
-  kIncomplete = 0,    ///< Indicates a trigger record that is missing requested components
-  kMismatch = 1,      ///< We have as many fragments as requested but they do not match the requested components
+  kIncomplete = 0, ///< Indicates a trigger record that is missing requested components
+  kMismatch = 1,   ///< We have as many fragments as requested but they do not match the requested components
   kUnassigned2 = 2,
   kUnassigned3 = 3,
   kUnassigned4 = 4,
@@ -99,7 +100,7 @@ enum class TriggerRecordStatusBits : size_t
   kUnassigned29 = 29,
   kUnassigned30 = 30,
   kUnassigned31 = 31,
-  kInvalid = 32       ///< Status bit 32 and higher are not valid (status_bits is only 32 bits)
+  kInvalid = 32 ///< Status bit 32 and higher are not valid (status_bits is only 32 bits)
 };
 
 std::ostream&

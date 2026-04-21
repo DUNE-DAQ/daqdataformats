@@ -46,7 +46,7 @@ struct SourceID
   };
 
   // Taking SourceID as the direct successor of GeoID which had version 1
-  static constexpr Version_t s_source_id_version = 2; 
+  static constexpr Version_t s_source_id_version = 2;
 
   static constexpr ID_t s_invalid_id = std::numeric_limits<ID_t>::max();
 
@@ -63,7 +63,8 @@ struct SourceID
   SourceID(const Subsystem& subsystem_arg, const ID_t& id_arg)
     : subsystem(subsystem_arg)
     , id(id_arg)
-  {}
+  {
+  }
 
   std::string to_string() const
   {

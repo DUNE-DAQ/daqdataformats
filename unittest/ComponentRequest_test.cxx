@@ -57,7 +57,6 @@ BOOST_AUTO_TEST_CASE(StreamOperator)
   BOOST_REQUIRE(pos != std::string::npos);
   pos = output.find("begin: 3,");
   BOOST_REQUIRE(pos != std::string::npos);
-
 }
 
 BOOST_AUTO_TEST_SUITE_END()

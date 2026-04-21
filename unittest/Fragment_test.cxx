@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
 
   auto bufsize = 10;
   std::vector<uint8_t> buf1(bufsize); // NOLINT(build/unsigned)
-  fragment_ptr = std::make_unique<Fragment>( buf1.data(), buf1.size() );
+  fragment_ptr = std::make_unique<Fragment>(buf1.data(), buf1.size());
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   auto frag = malloc(sizeof(FragmentHeader) + 4); // NOLINT
   memcpy(frag, &header, sizeof(FragmentHeader));
 
-  uint8_t one = 1, two = 2, three = 3, four = 4; // NOLINT
+  uint8_t one = 1, two = 2, three = 3, four = 4;                               // NOLINT
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader), &one, 1);       // NOLINT
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 1, &two, 1);   // NOLINT
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 2, &three, 1); // NOLINT
@@ -103,8 +103,8 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
 
   free(frag); // Should not cause errors // NOLINT
 
-  frag = malloc(sizeof(FragmentHeader) + 4); // NOLINT
-  memcpy(frag, &header, sizeof(FragmentHeader)); // NOLINT
+  frag = malloc(sizeof(FragmentHeader) + 4);                                   // NOLINT
+  memcpy(frag, &header, sizeof(FragmentHeader));                               // NOLINT
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader), &four, 1);      // NOLINT
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 1, &three, 1); // NOLINT
   memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 2, &two, 1);   // NOLINT
@@ -171,9 +171,9 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
 
 BOOST_AUTO_TEST_CASE(MoveConstructor)
 {
-  size_t bufsize {10};
+  size_t bufsize{ 10 };
   auto buf1 = malloc(bufsize); // NOLINT
-  auto single_frag = new Fragment(buf1, bufsize); 
+  auto single_frag = new Fragment(buf1, bufsize);
   BOOST_REQUIRE_EQUAL(single_frag->get_size(), sizeof(FragmentHeader) + bufsize);
 
   Fragment another_frag(std::move(*single_frag));
@@ -185,7 +185,7 @@ BOOST_AUTO_TEST_CASE(MoveConstructor)
 
 BOOST_AUTO_TEST_CASE(MoveAssignment)
 {
-  size_t bufsize {10};
+  size_t bufsize{ 10 };
   auto buf1 = malloc(bufsize); // NOLINT
   auto single_frag = new Fragment(buf1, bufsize);
   BOOST_REQUIRE_EQUAL(single_frag->get_size(), sizeof(FragmentHeader) + bufsize);
