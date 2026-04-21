@@ -30,20 +30,13 @@ public:
    * @brief Construct a TriggerRecord using the given vector of components to initialize the TriggerRecordHeader
    * @param components List of components requested for this TriggerRecord
    */
-  inline explicit TriggerRecord(std::vector<ComponentRequest> const& components);
+  explicit TriggerRecord(std::vector<ComponentRequest> const& components);
 
   /**
    * @brief Construct a TriggerRecord using the given TriggerRecordHeader
    * @param header TriggerRecordHeader to *copy* into the TriggerRecord
    */
-  inline explicit TriggerRecord(TriggerRecordHeader const& header);
-
-  virtual ~TriggerRecord() = default; ///< TriggerRecord default destructor
-
-  TriggerRecord(TriggerRecord const&) = delete;            ///< TriggerRecords are not copy-constructible
-  TriggerRecord(TriggerRecord&&) = default;                ///< Default TriggerRecord move constructor
-  TriggerRecord& operator=(TriggerRecord const&) = delete; ///< TriggerRecords are not copy-assignable
-  TriggerRecord& operator=(TriggerRecord&&) = default;     ///< Default TriggerRecord move assignment operator
+  explicit TriggerRecord(TriggerRecordHeader const& header);
 
   /**
    * @brief Get a handle to the TriggerRecordHeader
@@ -51,15 +44,7 @@ public:
    */
   const TriggerRecordHeader& get_header_ref() const { return m_header; }
   TriggerRecordHeader& get_header_ref() { return m_header; }
-  /**
-   * @brief Set the TriggerRecordHeader to the given TriggerRecordHeader object
-   * @param header new TriggerRecordHeader to use
-   */
-  void set_header(const TriggerRecordHeader& header) { m_header = header; }
-  /**
-   * @brief Get a copy of the TriggerRecordHeaderData from the TriggerRecordHeader
-   * @return Copy of the TriggerRecordHeaderData struct from the TriggerRecordHeader
-   */
+
   TriggerRecordHeaderData get_header_data() const { return m_header.get_header(); }
 
   /**
@@ -68,14 +53,10 @@ public:
    */
   const std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() const { return m_fragments; }
   std::vector<std::unique_ptr<Fragment>>& get_fragments_ref() { return m_fragments; }
+
   /**
-   * @brief Set the Fragments vector to the given vector of Fragments
-   * @param fragments Fragments vector to use
-   */
-  void set_fragments(std::vector<std::unique_ptr<Fragment>>&& fragments) { m_fragments = std::move(fragments); }
-  /**
-   * @brief Add a Fragment pointer to the Fragments vector
-   * @param fragment Fragment to add
+   * @brief Move a unique_ptr owning a fragment to the Fragments vector
+   * @param fragment The unique_ptr
    */
   void add_fragment(std::unique_ptr<Fragment>&& fragment) { m_fragments.emplace_back(std::move(fragment)); }
 
@@ -92,32 +73,26 @@ public:
     return total_size;
   }
 
-  /**
-   * @brief Get the sum of the fragment payload sizes
-   */
-  size_t get_sum_of_fragment_payload_sizes() const
-  {
-    size_t total_size = 0;
+  TriggerRecord(TriggerRecord const&) = delete;
+  TriggerRecord& operator=(TriggerRecord const&) = delete;
 
-    for (auto const& frag_ptr : m_fragments)
-      total_size += frag_ptr->get_data_size();
+  TriggerRecord(TriggerRecord&&) = default;
+  TriggerRecord& operator=(TriggerRecord&&) = default;
 
-    return total_size;
-  }
+  ~TriggerRecord() = default;
 
 private:
-  TriggerRecordHeader m_header;                       ///< TriggerRecordHeader object
-  std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
+  TriggerRecordHeader m_header;
+  std::vector<std::unique_ptr<Fragment>> m_fragments;
 };
 
-//-------
 
-TriggerRecord::TriggerRecord(std::vector<ComponentRequest> const& components)
+inline TriggerRecord::TriggerRecord(std::vector<ComponentRequest> const& components)
   : m_header(components)
   , m_fragments()
 {}
 
-TriggerRecord::TriggerRecord(TriggerRecordHeader const& header)
+inline TriggerRecord::TriggerRecord(TriggerRecordHeader const& header)
   : m_header(header)
   , m_fragments()
 {}

@@ -24,7 +24,26 @@ register_sourceid(py::module& m)
 
   py::class_<SourceID> py_sourceid(m, "SourceID");
   py_sourceid.def(py::init()).def(py::init<const SourceID::Subsystem&, const SourceID::ID_t&>());
-  py_sourceid.def(py::self < py::self).def("__repr__", [](const SourceID& gid) {
+  py_sourceid.def(py::self < py::self)
+    .def(py::self == py::self)
+    .def(py::self != py::self)
+    .def("__hash__", [](const SourceID& self) {
+      return py::hash(py::make_tuple(static_cast<uint32_t>(self.subsystem), self.id)); // NOLINT(build/unsigned)
+    })
+    .def_property_readonly_static("s_source_id_version",
+                                  [](const py::object&) -> SourceID::Version_t {
+                                    return SourceID::s_source_id_version;
+                                  })
+    .def_property_readonly_static("s_invalid_id",
+                                  [](const py::object&) -> SourceID::ID_t {
+                                    return SourceID::s_invalid_id;
+                                  })
+    .def("__str__", [](const SourceID& gid) {
+    std::ostringstream oss;
+    oss << gid;
+    return oss.str();
+  })
+    .def("__repr__", [](const SourceID& gid) {
     std::ostringstream oss;
     oss << "<daqdataformats::SourceID " << gid << ">";
     return oss.str();
@@ -44,7 +63,8 @@ register_sourceid(py::module& m)
 
   py_sourceid.def("subsystem_to_string", &SourceID::subsystem_to_string)
     .def("string_to_subsystem", &SourceID::string_to_subsystem)
-      .def("to_string", &SourceID::to_string);
+      .def("to_string", &SourceID::to_string)
+      .def("is_in_valid_state", &SourceID::is_in_valid_state);
 }
 
 } // namespace dunedaq::daqdataformats::python

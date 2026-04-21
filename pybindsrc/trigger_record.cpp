@@ -13,6 +13,7 @@
 #include <pybind11/stl.h>
 
 #include <memory>
+#include <sstream>
 #include <vector>
 
 namespace py = pybind11;
@@ -49,25 +50,29 @@ register_trigger_record(py::module& m)
     .def("get_total_size_bytes", &TriggerRecordHeader::get_total_size_bytes)
     .def(
       "get_storage_location", &TriggerRecordHeader::get_storage_location, py::return_value_policy::reference_internal)
+    .def("get_element_id", &TriggerRecordHeader::get_element_id)
+    .def("get_component_for_source_id", &TriggerRecordHeader::get_component_for_source_id,
+         py::return_value_policy::reference_internal)
     .def("at", &TriggerRecordHeader::at)
-    .def("__getitem__", &TriggerRecordHeader::operator[], py::return_value_policy::reference_internal);
+    .def("__getitem__", &TriggerRecordHeader::at, py::return_value_policy::reference_internal);
 
   py::class_<TriggerRecordHeaderData>(m, "TriggerRecordHeaderData")
+    .def(py::init<>())
     .def_property_readonly_static("s_trigger_record_header_magic",
-                                  [](const TriggerRecordHeaderData& self) -> uint32_t { // NOLINT(build/unsigned)
-                                    return self.s_trigger_record_header_magic;
+                                  [](const py::object&) -> uint32_t { // NOLINT(build/unsigned)
+                                    return TriggerRecordHeaderData::s_trigger_record_header_magic;
                                   })
     .def_property_readonly_static("s_trigger_record_header_version",
-                                  [](const TriggerRecordHeaderData& self) -> uint32_t { // NOLINT(build/unsigned)
-                                    return self.s_trigger_record_header_version;
+                                  [](const py::object&) -> uint32_t { // NOLINT(build/unsigned)
+                                    return TriggerRecordHeaderData::s_trigger_record_header_version;
                                   })
     .def_property_readonly_static("s_invalid_number_components",
-                                  [](const TriggerRecordHeaderData& self) -> uint64_t { // NOLINT(build/unsigned)
-                                    return self.s_invalid_number_components;
+                                  [](const py::object&) -> uint64_t { // NOLINT(build/unsigned)
+                                    return TriggerRecordHeaderData::s_invalid_number_components;
                                   })
     .def_property_readonly_static("s_default_status_bits",
-                                  [](const TriggerRecordHeaderData& self) -> uint32_t { // NOLINT(build/unsigned)
-                                    return self.s_default_status_bits;
+                                  [](const py::object&) -> uint32_t { // NOLINT(build/unsigned)
+                                    return TriggerRecordHeaderData::s_default_status_bits;
                                   })
     .def_property_readonly("trigger_record_header_marker",
                            [](const TriggerRecordHeaderData& self) -> uint32_t { // NOLINT(build/unsigned)
@@ -94,6 +99,18 @@ register_trigger_record(py::module& m)
       "sequence_number", [](const TriggerRecordHeaderData& self) -> sequence_number_t { return self.sequence_number; })
     .def_property_readonly("max_sequence_number", [](const TriggerRecordHeaderData& self) -> sequence_number_t {
       return self.max_sequence_number;
+    })
+    .def_property_readonly("element_id",
+                           [](const TriggerRecordHeaderData& self) -> SourceID { return self.element_id; })
+    .def("__str__", [](const TriggerRecordHeaderData& hdr) {
+      std::ostringstream oss;
+      oss << hdr;
+      return oss.str();
+    })
+    .def("__repr__", [](const TriggerRecordHeaderData& hdr) {
+      std::ostringstream oss;
+      oss << "<daqdataformats::TriggerRecordHeaderData " << hdr << ">";
+      return oss.str();
     });
 
   py::enum_<TriggerRecordStatusBits>(m, "TriggerRecordStatusBits")
@@ -138,7 +155,6 @@ register_trigger_record(py::module& m)
       "get_header_ref",
       [](TriggerRecord& self) { return self.get_header_ref(); },
       py::return_value_policy::reference_internal)
-    //    .def("set_header", &TriggerRecord::set_header)
     .def("get_header_data", &TriggerRecord::get_header_data)
     .def(
       "get_fragments_ref",
@@ -151,8 +167,7 @@ register_trigger_record(py::module& m)
         return fragments;
       },
       py::return_value_policy::reference_internal)
-    .def("get_total_size_bytes", &TriggerRecord::get_total_size_bytes)
-    .def("get_sum_of_fragment_payload_sizes", &TriggerRecord::get_sum_of_fragment_payload_sizes);
+    .def("get_total_size_bytes", &TriggerRecord::get_total_size_bytes);
 } // NOLINT
 
 } // namespace dunedaq::daqdataformats::python

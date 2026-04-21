@@ -1,6 +1,9 @@
 /**
  * @file TriggerRecordHeader.hpp  TriggerRecordHeader struct definition
  *
+ * Conceptually, this is actually a header containing metadata about the trigger 
+ * record followed by a collection of ComponentRequest instances
+ *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
  * received with this code.
@@ -17,6 +20,7 @@
 #include <bitset>
 #include <cstddef>
 #include <cstring>
+#include <format>
 #include <new>
 #include <ostream>
 #include <stdexcept>
@@ -36,7 +40,7 @@ public:
    * @brief Construct a TriggerRecordHeader using a vector of ComponentRequest objects
    * @param components Vector of ComponentRequests to copy into TriggerRecordHeader
    */
-  inline explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components);
+  explicit TriggerRecordHeader(const std::vector<ComponentRequest>& components);
 
   /**
    * @brief Construct a TriggerRecordHeader using an existing TriggerRecordHeader data array
@@ -44,100 +48,27 @@ public:
    * @param copy_from_buffer Whether to create a copy of the exiting buffer (true) or use that memory without taking
    * ownership (false)
    */
-  inline explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false);
+  explicit TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer = false);
 
-  /**
-   * @brief TriggerRecordHeader Copy Constructor
-   * @param other TriggerRecordHeader to copy
-   */
-  inline TriggerRecordHeader(TriggerRecordHeader const& other);
-  /**
-   * @brief TriggerRecordHeader copy assignment operator
-   * @param other TriggerRecordHeader to copy
-   * @return Reference to TriggerRecordHeader copy
-   */
-  inline TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
-
-  TriggerRecordHeader(TriggerRecordHeader&& other)
-  {
-    m_alloc = other.m_alloc;
-    other.m_alloc = false;
-    m_data_arr = other.m_data_arr;
-  }
-  TriggerRecordHeader& operator=(TriggerRecordHeader&& other)
-  {
-    m_alloc = other.m_alloc;
-    other.m_alloc = false;
-    m_data_arr = other.m_data_arr;
-    return *this;
-  }
-
-  /**
-   * @brief TriggerRecordHeader destructor
-   */
-  ~TriggerRecordHeader()
-  {
-    if (m_alloc)
-      free(m_data_arr); // NOLINT
-  }
-
-  /**
-   * @brief Get a copy of the TriggerRecordHeaderData struct
-   * @return A copy of the TriggerRecordHeaderData struct stored in this TriggerRecordHeader
-   */
   TriggerRecordHeaderData get_header() const { return *header_(); }
 
-  /**
-   * @brief Get the trigger number for this TriggerRecordHeader
-   * @return The trigger_number TriggerRecordHeaderData field
-   */
   trigger_number_t get_trigger_number() const { return header_()->trigger_number; }
-  /**
-   * @brief Set the trigger number for this TriggerRecordHeader
-   * @param trigger_number Trigger nunmber to set
-   */
   void set_trigger_number(trigger_number_t trigger_number) { header_()->trigger_number = trigger_number; }
-  /**
-   * @brief Get the trigger_timestamp stored in this TriggerRecordHeader
-   * @return The trigger_timestamp TriggerRecordHeaderData field
-   */
+
   timestamp_t get_trigger_timestamp() const { return header_()->trigger_timestamp; }
-  /**
-   * @brief Set the trigger timestamp for this TriggerRecordHeader
-   * @param trigger_timestamp Trigger timestamp to set
-   */
   void set_trigger_timestamp(timestamp_t trigger_timestamp) { header_()->trigger_timestamp = trigger_timestamp; }
 
-  /**
-   * @brief Get the number of ComponentRequest objects stored in this TriggerRecordHeader
-   * @return The num_requested_components TriggerRecordHeaderData field
-   */
   uint64_t get_num_requested_components() const // NOLINT(build/unsigned)
   {
     return header_()->num_requested_components;
   }
 
-  /**
-   * @brief Get the run_number stored in this TriggerRecordHeader
-   * @return The run_number TriggerRecordHeaderData field
-   */
   run_number_t get_run_number() const { return header_()->run_number; }
-  /**
-   * @brief Set the run number for this TriggerRecordHeader
-   * @param run_number Run number to set
-   */
   void set_run_number(run_number_t run_number) { header_()->run_number = run_number; }
 
-  /**
-   * @brief Get the status_bits header field as a bitset
-   * @return bitset containing status_bits header field
-   */
   std::bitset<32> get_status_bits() const { return header_()->status_bits; }
-  /**
-   * @brief Overwrite status bits using the given bitset
-   * @param bits Bitset of status bits to set
-   */
   void set_status_bits(std::bitset<32> bits) { header_()->status_bits = bits.to_ulong(); }
+
   /**
    * @brief Get the value of the given status bit
    * @param bit Bit to get
@@ -156,37 +87,13 @@ public:
     set_status_bits(bits);
   }
 
-  /**
-   * @brief Get the trigger_type field from the data struct
-   * @return The trigger_type field from the TriggerRecordHeaderData struct
-   */
   trigger_type_t get_trigger_type() const { return header_()->trigger_type; }
-  /**
-   * @brief Set the trigger_type header field to the given value
-   * @param trigger_type Value of trigger_type to set
-   */
   void set_trigger_type(trigger_type_t trigger_type) { header_()->trigger_type = trigger_type; }
 
-  /**
-   * @brief Get the sequence number for this TriggerRecordHeader
-   * @return The sequence_number TriggerRecordHeaderData field
-   */
   trigger_number_t get_sequence_number() const { return header_()->sequence_number; }
-  /**
-   * @brief Set the sequence number for this TriggerRecordHeader
-   * @param sequence_number Sequence number to set
-   */
   void set_sequence_number(sequence_number_t number) { header_()->sequence_number = number; }
 
-  /**
-   * @brief Get the maximum sequence number for this TriggerRecordHeader
-   * @return The max_sequence_number TriggerRecordHeaderData field
-   */
   trigger_number_t get_max_sequence_number() const { return header_()->max_sequence_number; }
-  /**
-   * @brief Set the maxiumum sequence number for this TriggerRecordHeader
-   * @param max_sequence_number Maximum sequence number to set
-   */
   void set_max_sequence_number(sequence_number_t number) { header_()->max_sequence_number = number; }
 
   /**
@@ -200,36 +107,22 @@ public:
    */
   void set_element_id(SourceID source_id) { header_()->element_id = source_id; }
 
-  /**
-   * @brief Get the total size of the TriggerRecordHeader
-   * @return The size of the TriggerRecordHeader, including header and all component requests
-   */
+  /// @brief Get the total size of the TriggerRecordHeader, including header and all component requests
   size_t get_total_size_bytes() const
   {
     return header_()->num_requested_components * sizeof(ComponentRequest) + sizeof(TriggerRecordHeaderData);
   }
-  /**
-   * @brief Get the location of the flat data array for output
-   * @return Pointer to the TriggerRecordHeader data array
-   */
 
+  /// @brief Get read-only access to the underlying flat data array
   const void* get_storage_location() const { return m_data_arr; }
 
   /**
-   * @brief Access ComponentRequest and copy result
-   * @param idx Index to access
-   * @return Copy of ComponentRequest at index
+   * @brief Access ComponentRequest by index
+   * @param idx Index for access
+   * @return Const reference of ComponentRequest at index
    * @throws std::range_error exception if idx is outside of allowable range
    */
-  inline ComponentRequest at(size_t idx) const;
-
-  /**
-   * @brief Operator[] to access ComponentRequests by index
-   * @param idx Index to access
-   * @return ComponentRequest reference
-   * @throws std::range_error exception if idx is outside of allowable range
-   */
-  inline ComponentRequest& operator[](size_t idx);
+  const ComponentRequest& at(size_t idx) const;
 
   /**
    * @brief Access ComponentRequest by SourceID
@@ -237,7 +130,31 @@ public:
    * @return ComponentRequest constant reference
    * @throws std::invalid_argument exception if source_id is not in ComponentRequest list
    */
-  inline ComponentRequest const& get_component_for_source_id(SourceID const& source_id) const;
+  ComponentRequest const& get_component_for_source_id(SourceID const& source_id) const;
+
+
+  TriggerRecordHeader(TriggerRecordHeader const& other);
+  TriggerRecordHeader& operator=(TriggerRecordHeader const& other);
+
+  TriggerRecordHeader(TriggerRecordHeader&& other)
+  {
+    m_alloc = other.m_alloc;
+    other.m_alloc = false;
+    m_data_arr = other.m_data_arr;
+  }
+  TriggerRecordHeader& operator=(TriggerRecordHeader&& other)
+  {
+    m_alloc = other.m_alloc;
+    other.m_alloc = false;
+    m_data_arr = other.m_data_arr;
+    return *this;
+  }
+
+  ~TriggerRecordHeader()
+  {
+    if (m_alloc)
+      free(m_data_arr); // NOLINT
+  }
 
 private:
   /**
@@ -254,7 +171,7 @@ private:
 
 //------
 
-TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& components)
+inline TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& components)
 {
   size_t size = sizeof(TriggerRecordHeaderData) + components.size() * sizeof(ComponentRequest);
 
@@ -267,15 +184,10 @@ TriggerRecordHeader::TriggerRecordHeader(const std::vector<ComponentRequest>& co
   TriggerRecordHeaderData header;
   header.num_requested_components = components.size();
   std::memcpy(m_data_arr, &header, sizeof(header));
-
-  size_t offset = sizeof(header);
-  for (auto const& component : components) {
-    std::memcpy(static_cast<uint8_t*>(m_data_arr) + offset, &component, sizeof(component)); // NOLINT
-    offset += sizeof(component);
-  }
+  std::memcpy(static_cast<uint8_t*>(m_data_arr) + sizeof(header), components.data(), sizeof(ComponentRequest)*components.size()); // NOLINT
 }
 
-TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer)
+inline TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_buffer, bool copy_from_buffer)
 {
   if (!copy_from_buffer) {
     m_data_arr = existing_trigger_record_header_buffer;
@@ -292,12 +204,12 @@ TriggerRecordHeader::TriggerRecordHeader(void* existing_trigger_record_header_bu
   }
 }
 
-TriggerRecordHeader::TriggerRecordHeader(TriggerRecordHeader const& other)
+inline TriggerRecordHeader::TriggerRecordHeader(TriggerRecordHeader const& other)
   : TriggerRecordHeader(other.m_data_arr, true)
 {
 }
 
-TriggerRecordHeader&
+inline TriggerRecordHeader&
 TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
 {
   if (&other == this)
@@ -315,27 +227,20 @@ TriggerRecordHeader::operator=(TriggerRecordHeader const& other)
   return *this;
 }
 
-ComponentRequest
+inline const ComponentRequest&
 TriggerRecordHeader::at(size_t idx) const
 {
   if (idx >= header_()->num_requested_components) {
-    throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
+    throw std::range_error(
+			   std::format("Supplied ComponentRequest index {} out of range (size: {})",
+				       idx, header_()->num_requested_components));
   }
+
   // Increment header pointer by one to skip header
   return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
 }
 
-ComponentRequest&
-TriggerRecordHeader::operator[](size_t idx)
-{
-  if (idx >= header_()->num_requested_components) {
-    throw std::range_error("Supplied ComponentRequest index is larger than the maximum index.");
-  }
-  // Increment header pointer by one to skip header
-  return *(reinterpret_cast<ComponentRequest*>(header_() + 1) + idx); // NOLINT
-}
-
-ComponentRequest const&
+inline ComponentRequest const&
 TriggerRecordHeader::get_component_for_source_id(SourceID const& source_id) const
 {
   for (uint64_t idx = 0; idx < get_num_requested_components(); ++idx) { // NOLINT(build/unsigned)

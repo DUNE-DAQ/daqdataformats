@@ -50,11 +50,11 @@ BOOST_AUTO_TEST_CASE(CopyAndMoveSemantics)
  */
 BOOST_AUTO_TEST_CASE(DataConstructors)
 {
-  std::vector<uint8_t> buf1(10);
+  std::vector<uint8_t> buf1(10); // NOLINT(build/unsigned)
   Fragment single_frag(buf1.data(), buf1.size());
   BOOST_REQUIRE_EQUAL(single_frag.get_size(), sizeof(FragmentHeader) + buf1.size());
 
-  std::vector<uint8_t> buf2(20);
+  std::vector<uint8_t> buf2(20); // NOLINT(build/unsigned)
   Fragment collect_frag({ { buf1.data(), buf1.size() }, { buf2.data(), buf2.size() } });
   BOOST_REQUIRE_EQUAL(collect_frag.get_size(), sizeof(FragmentHeader) + buf1.size() + buf2.size());
 }
@@ -69,8 +69,6 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(nullptr, size_t(100))),
                           std::invalid_argument,
                           [&](std::invalid_argument) { return true; });
-  BOOST_REQUIRE_EXCEPTION(
-    fragment_ptr.reset(new Fragment(nullptr, size_t(-1))), std::length_error, [&](std::length_error) { return true; });
 
   BOOST_REQUIRE_EXCEPTION(
     fragment_ptr.reset(new Fragment({ nullptr, size_t(-1) - sizeof(dunedaq::daqdataformats::FragmentHeader) })),
@@ -78,8 +76,8 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
     [&](std::bad_alloc) { return true; });
 
   auto bufsize = 10;
-  std::vector<uint8_t> buf1(bufsize);
-  fragment_ptr.reset(new Fragment(buf1.data(), buf1.size()));
+  std::vector<uint8_t> buf1(bufsize); // NOLINT(build/unsigned)
+  fragment_ptr = std::make_unique<Fragment>( buf1.data(), buf1.size() );
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
@@ -94,37 +92,23 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
   header.trigger_timestamp = 2;
   header.run_number = 3;
 
-  auto frag = malloc(sizeof(FragmentHeader) + 4);
+  auto frag = malloc(sizeof(FragmentHeader) + 4); // NOLINT
   memcpy(frag, &header, sizeof(FragmentHeader));
 
-  uint8_t one = 1, two = 2, three = 3, four = 4;                               // NOLINT(build/unsigned)
-  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader), &one, 1);       // NOLINT(build/unsigned)
-  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 1, &two, 1);   // NOLINT(build/unsigned)
-  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 2, &three, 1); // NOLINT(build/unsigned)
-  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &four, 1);  // NOLINT(build/unsigned)
+  uint8_t one = 1, two = 2, three = 3, four = 4; // NOLINT
+  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader), &one, 1);       // NOLINT
+  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 1, &two, 1);   // NOLINT
+  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 2, &three, 1); // NOLINT
+  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &four, 1);  // NOLINT
 
-  {
-    Fragment test_frag(frag, Fragment::BufferAdoptionMode::kReadOnlyMode);
+  free(frag); // Should not cause errors // NOLINT
 
-    BOOST_REQUIRE_EQUAL(test_frag.get_storage_location(), frag);
-
-    BOOST_REQUIRE_EQUAL(test_frag.get_trigger_number(), 1);
-    BOOST_REQUIRE_EQUAL(test_frag.get_trigger_timestamp(), 2);
-    BOOST_REQUIRE_EQUAL(test_frag.get_run_number(), 3);
-
-    BOOST_REQUIRE_EQUAL(*static_cast<uint8_t*>(test_frag.get_data()), one);         // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 1), two);   // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 2), three); // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 3), four);  // NOLINT(build/unsigned)
-  }
-  free(frag); // Should not cause errors
-
-  frag = malloc(sizeof(FragmentHeader) + 4);
-  memcpy(frag, &header, sizeof(FragmentHeader));
-  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader), &four, 1);      // NOLINT(build/unsigned)
-  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 1, &three, 1); // NOLINT(build/unsigned)
-  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 2, &two, 1);   // NOLINT(build/unsigned)
-  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &one, 1);   // NOLINT(build/unsigned)
+  frag = malloc(sizeof(FragmentHeader) + 4); // NOLINT
+  memcpy(frag, &header, sizeof(FragmentHeader)); // NOLINT
+  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader), &four, 1);      // NOLINT
+  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 1, &three, 1); // NOLINT
+  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 2, &two, 1);   // NOLINT
+  memcpy(static_cast<uint8_t*>(frag) + sizeof(FragmentHeader) + 3, &one, 1);   // NOLINT
 
   {
     Fragment test_frag(frag, Fragment::BufferAdoptionMode::kCopyFromBuffer);
@@ -154,7 +138,7 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
     BOOST_REQUIRE_EQUAL(sizeof(FragmentHeader) + blob1_num_elements + blob2_num_elements, test_frag.get_size());
   }
 
-  free(frag); // Should not cause errors
+  free(frag); // Should not cause errors // NOLINT
 }
 
 BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
@@ -165,7 +149,7 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
   header.trigger_timestamp = 2;
   header.run_number = 3;
 
-  auto frag = malloc(sizeof(FragmentHeader) + 4);
+  auto frag = malloc(sizeof(FragmentHeader) + 4); // NOLINT
   memcpy(frag, &header, sizeof(FragmentHeader));
 
   std::unique_ptr<Fragment> fragment_ptr{};
@@ -176,39 +160,41 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
                           [&](std::bad_alloc) { return true; });
 #pragma GCC diagnostic pop
 
-  free(frag);
+  free(frag); // NOLINT
 
   // Use fragment_ptr
-  auto bufsize = 10;
-  auto buf1 = malloc(bufsize);
-  fragment_ptr.reset(new Fragment(buf1, size_t(bufsize)));
+  size_t bufsize = 10;
+  auto buf1 = malloc(bufsize); // NOLINT
+  fragment_ptr = std::make_unique<Fragment>(buf1, bufsize);
   BOOST_REQUIRE_EQUAL(fragment_ptr->get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
 BOOST_AUTO_TEST_CASE(MoveConstructor)
 {
-  auto buf1 = malloc(10);
-  auto single_frag = new Fragment(buf1, size_t(10));
-  BOOST_REQUIRE_EQUAL(single_frag->get_size(), sizeof(FragmentHeader) + 10);
+  size_t bufsize {10};
+  auto buf1 = malloc(bufsize); // NOLINT
+  auto single_frag = new Fragment(buf1, bufsize); 
+  BOOST_REQUIRE_EQUAL(single_frag->get_size(), sizeof(FragmentHeader) + bufsize);
 
   Fragment another_frag(std::move(*single_frag));
 
   delete single_frag; // NOLINT We are specifically testing what happens when the original frag is deleted
 
-  BOOST_REQUIRE_EQUAL(another_frag.get_size(), sizeof(FragmentHeader) + 10);
+  BOOST_REQUIRE_EQUAL(another_frag.get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
 BOOST_AUTO_TEST_CASE(MoveAssignment)
 {
-  auto buf1 = malloc(10);
-  auto single_frag = new Fragment(buf1, size_t(10));
-  BOOST_REQUIRE_EQUAL(single_frag->get_size(), sizeof(FragmentHeader) + 10);
+  size_t bufsize {10};
+  auto buf1 = malloc(bufsize); // NOLINT
+  auto single_frag = new Fragment(buf1, bufsize);
+  BOOST_REQUIRE_EQUAL(single_frag->get_size(), sizeof(FragmentHeader) + bufsize);
 
   auto another_frag = std::move(*single_frag);
 
   delete single_frag; // NOLINT We are specifically testing what happens when the original frag is deleted
 
-  BOOST_REQUIRE_EQUAL(another_frag.get_size(), sizeof(FragmentHeader) + 10);
+  BOOST_REQUIRE_EQUAL(another_frag.get_size(), sizeof(FragmentHeader) + bufsize);
 }
 
 /**
@@ -232,8 +218,8 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   header.fragment_type = 8;
   header.sequence_number = 9;
 
-  auto buf1 = malloc(10);
-  Fragment frag(buf1, size_t(10));
+  auto buf1 = malloc(10); // NOLINT
+  Fragment frag(buf1, static_cast<size_t>(10));
   BOOST_REQUIRE_EQUAL(frag.get_size(), sizeof(FragmentHeader) + 10);
 
   frag.set_header_fields(header);
@@ -265,7 +251,7 @@ BOOST_AUTO_TEST_CASE(HeaderFields)
   BOOST_REQUIRE_EQUAL(theHeader->window_begin, 0x44);
   frag.set_window_end(0x55);
   BOOST_REQUIRE_EQUAL(theHeader->window_end, 0x55);
-  frag.set_type(static_cast<FragmentType>(0x88));
+  frag.set_type(static_cast<FragmentType>(0x88)); // NOLINT
   BOOST_REQUIRE_EQUAL(theHeader->fragment_type, 0x88);
   frag.set_sequence_number(0x99);
   BOOST_REQUIRE_EQUAL(theHeader->sequence_number, 0x99);

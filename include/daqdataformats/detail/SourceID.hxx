@@ -1,6 +1,10 @@
 
 namespace dunedaq::daqdataformats {
 
+  static_assert(std::is_trivially_copyable<SourceID>::value, "SourceID isn't trivially copyable and can't be safely std::memcpy'd");
+  
+  static_assert(std::is_standard_layout<SourceID>::value, "SourceID isn't standard layout; reinterpret_cast and offsetof can't safely be used with it");
+
 static_assert(SourceID::s_source_id_version == 2,
               "This is intentionally designed to tell the developer to update the static_assert checks (including this "
               "one) when the version is bumped");
@@ -9,36 +13,18 @@ static_assert(offsetof(SourceID, version) == 0, "SourceID version field not at e
 static_assert(offsetof(SourceID, subsystem) == 2, "SourceID subsystem field not at expected offset");
 static_assert(offsetof(SourceID, id) == 4, "SourceID id field not at expected offset");
 
-/**
- * @brief Stream a Subsystem instance in a human-readable form
- * @param o Stream to output to
- * @param id Subsystem to stream
- * @return Stream instance for further streaming
- */
 inline std::ostream&
 operator<<(std::ostream& o, SourceID::Subsystem const& type)
 {
   return o << SourceID::subsystem_to_string(type);
 }
 
-/**
- * @brief Stream a SourceID instance in a human-readable form
- * @param o Stream to output to
- * @param id SourceID to stream
- * @return Stream instance for further streaming
- */
 inline std::ostream&
 operator<<(std::ostream& o, SourceID const& source_id)
 {
   return o << "subsystem: " << source_id.subsystem << " id: " << source_id.id;
 }
 
-/**
- * @brief Read a SourceID::Subsystem from a string stream
- * @param is Stream to read from
- * @param id Subsystem to fill
- * @return Stream instance for further streaming
- */
 inline std::istream&
 operator>>(std::istream& is, SourceID::Subsystem& t)
 {
@@ -50,12 +36,6 @@ operator>>(std::istream& is, SourceID::Subsystem& t)
   return is;
 }
 
-/**
- * @brief Read a SourceID from a string stream
- * @param is Stream to read from
- * @param id SourceID to fill
- * @return Stream instance for further streaming
- */
 inline std::istream&
 operator>>(std::istream& is, SourceID& source_id)
 {
@@ -65,26 +45,19 @@ operator>>(std::istream& is, SourceID& source_id)
   return is;
 }
 
-
-bool
-SourceID::operator<(const SourceID& other) const noexcept
-{
-  return std::tuple(subsystem, id) < std::tuple(other.subsystem, other.id);
-}
-
-bool
+inline bool
 SourceID::operator!=(const SourceID& other) const noexcept
 {
   return (*this) < other || other < (*this);
 }
 
-bool
+inline bool
 SourceID::operator==(const SourceID& other) const noexcept
 {
   return !((*this) != other);
 }
 
-std::string
+inline std::string
 SourceID::subsystem_to_string(const Subsystem& type)
 {
   switch (type) {
@@ -102,7 +75,7 @@ SourceID::subsystem_to_string(const Subsystem& type)
   return "Unknown";
 }
 
-SourceID::Subsystem
+inline SourceID::Subsystem
 SourceID::string_to_subsystem(const std::string& typestring)
 {
   if (typestring == "Detector_Readout")

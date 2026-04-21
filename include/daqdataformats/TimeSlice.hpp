@@ -27,22 +27,15 @@ class TimeSlice
 {
 public:
   /**
-   * @brief Construct a TimeSlice, filling in header fields
+   * @brief Construct a TimeSlice, filling in some header fields
    */
-  inline explicit TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number);
+  explicit TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number);
 
   /**
    * @brief Construct a TimeSlice using the given TimeSliceHeader
    * @param header TimeSliceHeader to *copy* into the TimeSlice
    */
-  inline explicit TimeSlice(TimeSliceHeader const& header);
-
-  virtual ~TimeSlice() = default; ///< TimeSlice default destructor
-
-  TimeSlice(TimeSlice const&) = delete;            ///< TimeSlices are not copy-constructible
-  TimeSlice(TimeSlice&&) = default;                ///< Default TimeSlice move constructor
-  TimeSlice& operator=(TimeSlice const&) = delete; ///< TimeSlices are not copy-assignable
-  TimeSlice& operator=(TimeSlice&&) = default;     ///< Default TimeSlice move assignment operator
+  explicit TimeSlice(TimeSliceHeader const& header);
 
   /**
    * @brief Get a copy of the TimeSliceHeader struct
@@ -105,6 +98,13 @@ public:
     return total_size;
   }
 
+  TimeSlice(TimeSlice const&) = delete;            ///< TimeSlices are not copy-constructible
+  TimeSlice& operator=(TimeSlice const&) = delete; ///< TimeSlices are not copy-assignable
+  TimeSlice(TimeSlice&&) = default;                ///< Default TimeSlice move constructor
+  TimeSlice& operator=(TimeSlice&&) = default;     ///< Default TimeSlice move assignment operator
+
+  ~TimeSlice() = default; ///< TimeSlice default destructor
+  
 private:
   TimeSliceHeader m_header;                           ///< TimeSliceHeader object
   std::vector<std::unique_ptr<Fragment>> m_fragments; ///< Vector of unique_ptrs to Fragment objects
@@ -112,7 +112,7 @@ private:
 
 //-------
 
-TimeSlice::TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number)
+inline TimeSlice::TimeSlice(timeslice_number_t timeslice_number, run_number_t run_number)
   : m_header()
   , m_fragments()
 {
@@ -120,7 +120,7 @@ TimeSlice::TimeSlice(timeslice_number_t timeslice_number, run_number_t run_numbe
   m_header.run_number = run_number;
 }
 
-TimeSlice::TimeSlice(TimeSliceHeader const& header)
+inline TimeSlice::TimeSlice(TimeSliceHeader const& header)
   : m_header(header)
   , m_fragments()
 {}
