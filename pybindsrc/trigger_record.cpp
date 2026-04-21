@@ -51,7 +51,8 @@ register_trigger_record(py::module& m)
     .def(
       "get_storage_location", &TriggerRecordHeader::get_storage_location, py::return_value_policy::reference_internal)
     .def("get_element_id", &TriggerRecordHeader::get_element_id)
-    .def("get_component_for_source_id", &TriggerRecordHeader::get_component_for_source_id,
+    .def("get_component_for_source_id",
+         &TriggerRecordHeader::get_component_for_source_id,
          py::return_value_policy::reference_internal)
     .def("at", &TriggerRecordHeader::at)
     .def("__getitem__", &TriggerRecordHeader::at, py::return_value_policy::reference_internal);
@@ -97,16 +98,17 @@ register_trigger_record(py::module& m)
                            [](const TriggerRecordHeaderData& self) -> trigger_type_t { return self.trigger_type; })
     .def_property_readonly(
       "sequence_number", [](const TriggerRecordHeaderData& self) -> sequence_number_t { return self.sequence_number; })
-    .def_property_readonly("max_sequence_number", [](const TriggerRecordHeaderData& self) -> sequence_number_t {
-      return self.max_sequence_number;
-    })
+    .def_property_readonly(
+      "max_sequence_number",
+      [](const TriggerRecordHeaderData& self) -> sequence_number_t { return self.max_sequence_number; })
     .def_property_readonly("element_id",
                            [](const TriggerRecordHeaderData& self) -> SourceID { return self.element_id; })
-    .def("__str__", [](const TriggerRecordHeaderData& hdr) {
-      std::ostringstream oss;
-      oss << hdr;
-      return oss.str();
-    })
+    .def("__str__",
+         [](const TriggerRecordHeaderData& hdr) {
+           std::ostringstream oss;
+           oss << hdr;
+           return oss.str();
+         })
     .def("__repr__", [](const TriggerRecordHeaderData& hdr) {
       std::ostringstream oss;
       oss << "<daqdataformats::TriggerRecordHeaderData " << hdr << ">";

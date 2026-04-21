@@ -158,9 +158,8 @@ BOOST_AUTO_TEST_CASE(FragmentManipulation)
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref().size(), 1);
   BOOST_REQUIRE_EQUAL(record.get_fragments_ref()[0]->get_size(), sizeof(FragmentHeader) + 10);
 
-  BOOST_REQUIRE_EQUAL(record.get_total_size_bytes(), sizeof(TriggerRecordHeaderData) +
-                      2 * sizeof(ComponentRequest) + sizeof(FragmentHeader) + 10);
-
+  BOOST_REQUIRE_EQUAL(record.get_total_size_bytes(),
+                      sizeof(TriggerRecordHeaderData) + 2 * sizeof(ComponentRequest) + sizeof(FragmentHeader) + 10);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

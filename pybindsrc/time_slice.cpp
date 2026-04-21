@@ -43,11 +43,12 @@ register_timeslice(py::module& m)
                            [](const TimeSliceHeader& self) -> timeslice_number_t { return self.timeslice_number; })
     .def_property_readonly("run_number", [](const TimeSliceHeader& self) -> run_number_t { return self.run_number; })
     .def_property_readonly("element_id", [](const TimeSliceHeader& self) -> SourceID { return self.element_id; })
-    .def("__str__", [](const TimeSliceHeader& hdr) {
-      std::ostringstream oss;
-      oss << hdr;
-      return oss.str();
-    })
+    .def("__str__",
+         [](const TimeSliceHeader& hdr) {
+           std::ostringstream oss;
+           oss << hdr;
+           return oss.str();
+         })
     .def("__repr__", [](const TimeSliceHeader& hdr) {
       std::ostringstream oss;
       oss << "<daqdataformats::TimeSliceHeader " << hdr << ">";

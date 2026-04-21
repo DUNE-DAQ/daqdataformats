@@ -37,7 +37,6 @@ namespace dunedaq::daqdataformats {
 class Fragment
 {
 public:
-
   /// @brief Describes how the "existing Fragment buffer" constructor should treat the given buffer
   enum class BufferAdoptionMode
   {
@@ -98,7 +97,7 @@ public:
    */
   void set_element_id(SourceID element_id) { header_()->element_id = element_id; }
 
-  uint16_t get_detector_id() const noexcept { return header_()->detector_id; } // NOLINT
+  uint16_t get_detector_id() const noexcept { return header_()->detector_id; }                         // NOLINT
   void set_detector_id(const uint16_t& detector_id) noexcept { header_()->detector_id = detector_id; } // NOLINT
 
   /**
@@ -174,13 +173,12 @@ public:
   }
 
   ~Fragment();
-  
+
 private:
   FragmentHeader* header_() const { return static_cast<FragmentHeader*>(m_data_arr); }
   void* m_data_arr{ nullptr }; ///< Points to flat memory containing a FragmentHeader and the data payload
   bool m_alloc{ false };       ///< Whether the Fragment owns the memory pointed by m_data_arr
 };
-
 
 inline Fragment::Fragment(const std::vector<std::pair<void*, size_t>>& pieces)
 {
@@ -224,7 +222,7 @@ inline Fragment::Fragment(void* existing_fragment_buffer, BufferAdoptionMode ado
     m_alloc = true;
   } else if (adoption_mode == BufferAdoptionMode::kCopyFromBuffer) {
     auto header = reinterpret_cast<FragmentHeader*>(existing_fragment_buffer); // NOLINT
-    m_data_arr = malloc(header->size); // NOLINT
+    m_data_arr = malloc(header->size);                                         // NOLINT
     if (m_data_arr == nullptr) {
       throw std::bad_alloc();
     }
@@ -242,8 +240,8 @@ inline Fragment::~Fragment()
 inline void
 Fragment::set_header_fields(const FragmentHeader& header)
 {
-  FragmentHeader* header_ptr { header_() };
-  fragment_size_t orig_size { header_ptr->size };
+  FragmentHeader* header_ptr{ header_() };
+  fragment_size_t orig_size{ header_ptr->size };
 
   *header_ptr = header;
   header_ptr->size = orig_size;

@@ -1,11 +1,13 @@
 
 namespace dunedaq::daqdataformats {
 
-  static_assert(std::is_trivially_copyable<TriggerRecordHeaderData>::value, "TriggerRecordHeaderData isn't trivially copyable and can't be safely std::memcpy'd");
-  
-  static_assert(std::is_standard_layout<TriggerRecordHeaderData>::value, "TriggerRecordHeaderData isn't standard layout; reinterpret_cast and offsetof can't safely be used with it");
+static_assert(std::is_trivially_copyable<TriggerRecordHeaderData>::value,
+              "TriggerRecordHeaderData isn't trivially copyable and can't be safely std::memcpy'd");
 
-  
+static_assert(
+  std::is_standard_layout<TriggerRecordHeaderData>::value,
+  "TriggerRecordHeaderData isn't standard layout; reinterpret_cast and offsetof can't safely be used with it");
+
 static_assert(TriggerRecordHeaderData::s_trigger_record_header_version == 5,
               "This is intentionally designed to tell the developer to update the static_assert checks (including this "
               "one) when the version is bumped");
@@ -52,5 +54,4 @@ operator<<(std::ostream& o, TriggerRecordHeaderData const& hdr)
            << ", " << "element_id: { " << hdr.element_id << " }";
 }
 
-  
 } // namespace dunedaq::daqdataformats

@@ -21,7 +21,6 @@
 #include <string>
 #include <vector>
 
-
 namespace dunedaq::daqdataformats {
 
 /**
@@ -35,8 +34,8 @@ struct TimeSliceHeader
   static constexpr uint32_t s_timeslice_header_version = 2; // NOLINT(build/unsigned)
 
   uint32_t timeslice_header_marker = s_timeslice_header_marker; // NOLINT(build/unsigned)
-  uint32_t version = s_timeslice_header_version; // NOLINT(build/unsigned)
-  
+  uint32_t version = s_timeslice_header_version;                // NOLINT(build/unsigned)
+
   /// @brief Slice number of this TimeSlice within the stream
   timeslice_number_t timeslice_number{ TypeDefaults::s_invalid_timeslice_number };
 
@@ -53,6 +52,5 @@ operator<<(std::ostream& o, TimeSliceHeader const& hdr);
 } // namespace dunedaq::daqdataformats
 
 #include "detail/TimeSliceHeader.hxx"
-
 
 #endif // DAQDATAFORMATS_INCLUDE_DAQDATAFORMATS_TIMESLICEHEADER_HPP_

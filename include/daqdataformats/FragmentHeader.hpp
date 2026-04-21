@@ -1,7 +1,7 @@
 /**
  * @file FragmentHeader.hpp  FragmentHeader struct definition
  *
- * The FragmentHeader represents the metadata describing the contents of a DUNE DAQ Fragment  
+ * The FragmentHeader represents the metadata describing the contents of a DUNE DAQ Fragment
  *
  * This is part of the DUNE DAQ Application Framework, copyright 2020.
  * Licensing/copyright details are in the COPYING file that you should have
@@ -33,10 +33,10 @@ struct FragmentHeader
   static constexpr uint32_t s_fragment_header_marker = 0x11112222; // NOLINT(build/unsigned)
 
   static constexpr uint32_t s_fragment_header_version = 6; // NOLINT(build/unsigned)
-  static constexpr uint32_t s_default_status_bits = 0; // NOLINT(build/unsigned)
+  static constexpr uint32_t s_default_status_bits = 0;     // NOLINT(build/unsigned)
 
   uint32_t fragment_header_marker = s_fragment_header_marker; // NOLINT(build/unsigned)
-  uint32_t version = s_fragment_header_version; // NOLINT(build/unsigned)
+  uint32_t version = s_fragment_header_version;               // NOLINT(build/unsigned)
 
   /// @brief Size of the Fragment (including header and payload)
   fragment_size_t size{ TypeDefaults::s_invalid_fragment_size }; // NOLINT(build/unsigned)
@@ -69,10 +69,9 @@ struct FragmentHeader
 
   /// @brief Component that generated the data in this Fragment
   SourceID element_id;
-
 };
 
-  /// @brief All defined status bits, with a short documentation of their meaning if non-obvious
+/// @brief All defined status bits, with a short documentation of their meaning if non-obvious
 enum class FragmentStatusBits : size_t
 {
   kLatencyBufferEmpty = 0,        ///< The latency buffer had zero occupancy when the data request was made
@@ -107,10 +106,10 @@ enum class FragmentStatusBits : size_t
   kUnassigned29 = 29,
   kUnassigned30 = 30,
   kUnassigned31 = 31,
-  kInvalid = 32                   ///< Status bit 32 and higher are not valid (status_bits is only 32 bits)
+  kInvalid = 32 ///< Status bit 32 and higher are not valid (status_bits is only 32 bits)
 };
 
-  /// @brief All defined Fragment types
+/// @brief All defined Fragment types
 enum class FragmentType : fragment_type_t
 {
   kUnknown = 0,

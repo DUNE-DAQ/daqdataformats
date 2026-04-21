@@ -86,16 +86,17 @@ private:
   std::vector<std::unique_ptr<Fragment>> m_fragments;
 };
 
-
 inline TriggerRecord::TriggerRecord(std::vector<ComponentRequest> const& components)
   : m_header(components)
   , m_fragments()
-{}
+{
+}
 
 inline TriggerRecord::TriggerRecord(TriggerRecordHeader const& header)
   : m_header(header)
   , m_fragments()
-{}
+{
+}
 
 } // namespace dunedaq::daqdataformats
 

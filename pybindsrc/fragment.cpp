@@ -43,7 +43,9 @@ register_fragment(py::module& m)
     .def("get_data_size", &Fragment::get_data_size)
     .def(
       "get_data",
-      [](Fragment& self, size_t offset) { return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); }, // NOLINT
+      [](Fragment& self, size_t offset) {
+        return static_cast<void*>(static_cast<char*>(self.get_data()) + offset);
+      }, // NOLINT
       "offset"_a = 0,
       py::return_value_policy::reference_internal)
     .def(
@@ -98,11 +100,12 @@ register_fragment(py::module& m)
     .def_property_readonly("element_id", [](const FragmentHeader& self) -> SourceID { return self.element_id; })
 
     .def_static("sizeof", []() { return sizeof(FragmentHeader); })
-    .def("__str__", [](const FragmentHeader& hdr) {
-      std::ostringstream oss;
-      oss << hdr;
-      return oss.str();
-    })
+    .def("__str__",
+         [](const FragmentHeader& hdr) {
+           std::ostringstream oss;
+           oss << hdr;
+           return oss.str();
+         })
     .def("__repr__", [](const FragmentHeader& hdr) {
       std::ostringstream oss;
       oss << "<daqdataformats::FragmentHeader " << hdr << ">";

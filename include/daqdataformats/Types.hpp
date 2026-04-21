@@ -14,15 +14,15 @@
 
 namespace dunedaq::daqdataformats {
 
-using run_number_t = uint32_t; // NOLINT(build/unsigned)
+using run_number_t = uint32_t;     // NOLINT(build/unsigned)
 using trigger_number_t = uint64_t; // NOLINT(build/unsigned)
 
-  /// @brief Type used to represent Fragment type ID
+/// @brief Type used to represent Fragment type ID
 using fragment_type_t = uint32_t; // NOLINT(build/unsigned)
 
 using fragment_size_t = uint64_t; // NOLINT(build/unsigned)
 
-  /// @brief Type used to represent DUNE timing system timestamps
+/// @brief Type used to represent DUNE timing system timestamps
 using timestamp_t = uint64_t;     // NOLINT(build/unsigned)
 using timestamp_diff_t = int64_t; ///< Used to represent differences between timestamps
 
@@ -44,24 +44,17 @@ using timeslice_number_t = uint64_t; // NOLINT(build/unsigned)
  */
 struct TypeDefaults
 {
-  static constexpr run_number_t s_invalid_run_number =
-    std::numeric_limits<run_number_t>::max();
-  static constexpr trigger_number_t s_invalid_trigger_number =
-    std::numeric_limits<trigger_number_t>::max();
-  static constexpr fragment_type_t s_invalid_fragment_type =
-    std::numeric_limits<fragment_type_t>::max();
+  static constexpr run_number_t s_invalid_run_number = std::numeric_limits<run_number_t>::max();
+  static constexpr trigger_number_t s_invalid_trigger_number = std::numeric_limits<trigger_number_t>::max();
+  static constexpr fragment_type_t s_invalid_fragment_type = std::numeric_limits<fragment_type_t>::max();
   static constexpr fragment_size_t s_invalid_fragment_size =
     0; ///< Invalid size for a Fragment (as FragmentHeader is counted as well)
   static constexpr timestamp_t s_invalid_timestamp = std::numeric_limits<timestamp_t>::max();
-  static constexpr timestamp_diff_t s_invalid_timestamp_diff =
-    std::numeric_limits<timestamp_diff_t>::max();
+  static constexpr timestamp_diff_t s_invalid_timestamp_diff = std::numeric_limits<timestamp_diff_t>::max();
 
-  static constexpr trigger_type_t s_invalid_trigger_type =
-    std::numeric_limits<trigger_type_t>::max();
-  static constexpr sequence_number_t s_invalid_sequence_number =
-    std::numeric_limits<sequence_number_t>::max();
-  static constexpr timeslice_number_t s_invalid_timeslice_number =
-    std::numeric_limits<timeslice_number_t>::max();
+  static constexpr trigger_type_t s_invalid_trigger_type = std::numeric_limits<trigger_type_t>::max();
+  static constexpr sequence_number_t s_invalid_sequence_number = std::numeric_limits<sequence_number_t>::max();
+  static constexpr timeslice_number_t s_invalid_timeslice_number = std::numeric_limits<timeslice_number_t>::max();
 };
 
 } // namespace dunedaq::daqdataformats

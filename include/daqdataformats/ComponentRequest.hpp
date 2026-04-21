@@ -41,13 +41,15 @@ struct ComponentRequest
   ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend);
 };
 
-  std::ostream& operator<<(std::ostream& o, ComponentRequest const& cr);
+std::ostream&
+operator<<(std::ostream& o, ComponentRequest const& cr);
 
 inline ComponentRequest::ComponentRequest(SourceID const& comp, timestamp_t const& wbegin, timestamp_t const& wend)
   : component(comp)
   , window_begin(wbegin)
   , window_end(wend)
-{}
+{
+}
 
 } // namespace dunedaq::daqdataformats
 
