@@ -44,8 +44,8 @@ register_fragment(py::module& m)
     .def(
       "get_data",
       [](Fragment& self, size_t offset) {
-        return static_cast<void*>(static_cast<char*>(self.get_data()) + offset);
-      }, // NOLINT
+        return static_cast<void*>(static_cast<char*>(self.get_data()) + offset); // NOLINT
+      },
       "offset"_a = 0,
       py::return_value_policy::reference_internal)
     .def(
