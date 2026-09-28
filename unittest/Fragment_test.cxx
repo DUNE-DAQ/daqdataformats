@@ -8,15 +8,15 @@
 
 // Disable warnings in light of the use of intentially bad constructors during testing
 
-#pragma GCC diagnostic ignored "-Warray-bounds"
-#pragma GCC diagnostic ignored "-Wstringop-overflow="
-#pragma GCC diagnostic ignored "-Walloc-size-larger-than="
+#pragma GCC diagnostic ignored "-Warray-bounds"            // NOLINT
+#pragma GCC diagnostic ignored "-Wstringop-overflow="      // NOLINT
+#pragma GCC diagnostic ignored "-Walloc-size-larger-than=" // NOLINT
 
 #include "daqdataformats/Fragment.hpp"
 
-#pragma GCC diagnostic pop
-#pragma GCC diagnostic pop
-#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop // NOLINT
+#pragma GCC diagnostic pop // NOLINT
+#pragma GCC diagnostic pop // NOLINT
 
 /**
  * @brief Name of this test module
@@ -119,9 +119,9 @@ BOOST_AUTO_TEST_CASE(ExistingFragmentConstructor)
     BOOST_REQUIRE_EQUAL(test_frag.get_run_number(), 3);
 
     BOOST_REQUIRE_EQUAL(*static_cast<uint8_t*>(test_frag.get_data()), four);        // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 1), three); // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 2), two);   // NOLINT(build/unsigned)
-    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 3), one);   // NOLINT(build/unsigned)
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 1), three); // NOLINT
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 2), two);   // NOLINT
+    BOOST_REQUIRE_EQUAL(*(static_cast<uint8_t*>(test_frag.get_data()) + 3), one);   // NOLINT
   }
 
   {
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE(BadExistingFragmentConstructor)
 
   std::unique_ptr<Fragment> fragment_ptr{};
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wrestrict"
+#pragma GCC diagnostic ignored "-Wrestrict" // NOLINT
   BOOST_REQUIRE_EXCEPTION(fragment_ptr.reset(new Fragment(frag, Fragment::BufferAdoptionMode::kCopyFromBuffer)),
                           std::bad_alloc,
                           [&](std::bad_alloc) { return true; });

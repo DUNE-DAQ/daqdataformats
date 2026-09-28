@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE(FragmentTypeConversion)
 
   BOOST_REQUIRE_EQUAL(static_cast<fragment_type_t>(string_to_fragment_type("thisIsABadFragmentType")),
                       static_cast<fragment_type_t>(FragmentType::kUnknown));
-  BOOST_REQUIRE_EQUAL(fragment_type_to_string(static_cast<FragmentType>(-10)), "Unknown");
+  BOOST_REQUIRE_EQUAL(fragment_type_to_string(static_cast<FragmentType>(-10)), "Unknown"); // NOLINT
 }
 
 /**
