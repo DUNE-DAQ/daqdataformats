@@ -8,16 +8,16 @@
 
 // Disable warnings in light of the use of intentially bad constructors during testing
 
-#pragma GCC diagnostic ignored "-Walloc-size-larger-than="
-#pragma GCC diagnostic ignored "-Warray-bounds"
-#pragma GCC diagnostic ignored "-Wstringop-overflow="
+#pragma GCC diagnostic ignored "-Walloc-size-larger-than=" // NOLINT
+#pragma GCC diagnostic ignored "-Warray-bounds"            // NOLINT
+#pragma GCC diagnostic ignored "-Wstringop-overflow="      // NOLINT
 
 #include "daqdataformats/TriggerRecordHeader.hpp"
 #include "daqdataformats/TriggerRecordHeaderData.hpp"
 
-#pragma GCC diagnostic pop
-#pragma GCC diagnostic pop
-#pragma GCC diagnostic pop
+#pragma GCC diagnostic pop // NOLINT
+#pragma GCC diagnostic pop // NOLINT
+#pragma GCC diagnostic pop // NOLINT
 
 /**
  * @brief Name of this test module
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
   std::memcpy(hdr, &header_data, sizeof(TriggerRecordHeaderData));
 
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wrestrict"
+#pragma GCC diagnostic ignored "-Wrestrict" // NOLINT
   BOOST_REQUIRE_EXCEPTION(
     TriggerRecordHeader oversize_header(hdr, true), std::bad_alloc, [&](std::bad_alloc) { return true; });
 #pragma GCC diagnostic pop
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE(BadConstructors)
                       std::numeric_limits<uint64_t>::max() - 10); // NOLINT(build/unsigned)
 
 #pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wrestrict"
+#pragma GCC diagnostic ignored "-Wrestrict" // NOLINT
   BOOST_REQUIRE_EXCEPTION(
     TriggerRecordHeader header_inst = bad_header, std::bad_alloc, [&](std::bad_alloc) { return true; }); // NOLINT
 #pragma GCC diagnostic pop
