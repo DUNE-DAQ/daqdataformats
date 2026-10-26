@@ -94,6 +94,8 @@ register_record_index(py::module& m)
          py::overload_cast<detdataformats::DetID::Subdetector>(&SourceIDGeoIDMap::get_geo_ids, py::const_),
          py::arg("subdetector"))
     .def("get_source_id", &SourceIDGeoIDMap::get_source_id, py::arg("geo_id"))
+    .def("get_source_ids", &SourceIDGeoIDMap::get_source_ids, py::arg("geo_id"))
+    .def("get_shared_geo_ids", &SourceIDGeoIDMap::get_shared_geo_ids)
     .def("get_all_geo_ids", &SourceIDGeoIDMap::get_all_geo_ids)
     .def("restricted_to", &SourceIDGeoIDMap::restricted_to, py::arg("record_index"))
     .def(py::self == py::self);

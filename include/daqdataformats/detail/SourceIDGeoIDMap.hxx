@@ -9,7 +9,7 @@ SourceIDGeoIDMap::from_encoded(const encoded_map_t& encoded_map)
   SourceIDGeoIDMap the_map;
   for (auto const& [source_id, encoded_geo_ids] : encoded_map) {
     for (auto const& encoded_geo_id : encoded_geo_ids) {
-      the_map.add(source_id, detdataformats::GeoID::decode(encoded_geo_id));
+      the_map.add_unchecked(source_id, detdataformats::GeoID::decode(encoded_geo_id));
     }
   }
   return the_map;
@@ -31,6 +31,18 @@ SourceIDGeoIDMap::to_encoded() const
 inline void
 SourceIDGeoIDMap::add(const SourceID& source_id, const detdataformats::GeoID& geo_id)
 {
+  for (auto const& owner : get_source_ids(geo_id)) {
+    if (owner != source_id) {
+      throw std::invalid_argument("GeoID " + geo_id.to_string() + " can't be added to SourceID " +
+                                  source_id.to_string() + ": it already belongs to SourceID " + owner.to_string());
+    }
+  }
+  add_unchecked(source_id, geo_id);
+}
+
+inline void
+SourceIDGeoIDMap::add_unchecked(const SourceID& source_id, const detdataformats::GeoID& geo_id)
+{
   auto& geo_ids = m_geo_ids[source_id];
   if (std::find(geo_ids.begin(), geo_ids.end(), geo_id) == geo_ids.end()) {
     geo_ids.push_back(geo_id);
@@ -47,12 +59,38 @@ SourceIDGeoIDMap::get_geo_ids(const SourceID& source_id) const
 inline std::optional<SourceID>
 SourceIDGeoIDMap::get_source_id(const detdataformats::GeoID& geo_id) const
 {
+  auto source_ids = get_source_ids(geo_id);
+  if (source_ids.size() != 1) {
+    return std::nullopt;
+  }
+  return source_ids.front();
+}
+
+inline std::vector<SourceID>
+SourceIDGeoIDMap::get_source_ids(const detdataformats::GeoID& geo_id) const
+{
+  std::vector<SourceID> source_ids;
   for (auto const& [source_id, geo_ids] : m_geo_ids) {
     if (std::find(geo_ids.begin(), geo_ids.end(), geo_id) != geo_ids.end()) {
-      return source_id;
+      source_ids.push_back(source_id);
     }
   }
-  return std::nullopt;
+  return source_ids;
+}
+
+inline std::set<detdataformats::GeoID>
+SourceIDGeoIDMap::get_shared_geo_ids() const
+{
+  std::set<detdataformats::GeoID> seen;
+  std::set<detdataformats::GeoID> shared;
+  for (auto const& [source_id, geo_ids] : m_geo_ids) {
+    for (auto const& geo_id : geo_ids) {
+      if (!seen.insert(geo_id).second) {
+        shared.insert(geo_id);
+      }
+    }
+  }
+  return shared;
 }
 
 inline std::set<detdataformats::GeoID>

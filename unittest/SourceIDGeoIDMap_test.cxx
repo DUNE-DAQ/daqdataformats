@@ -13,6 +13,8 @@
 #include "boost/test/unit_test.hpp"
 
 #include <cstdint>
+#include <set>
+#include <stdexcept>
 #include <vector>
 
 using namespace dunedaq::daqdataformats;
@@ -75,6 +77,33 @@ BOOST_AUTO_TEST_CASE(EncodedRoundTrip)
   BOOST_REQUIRE_EQUAL(encoded[tpc_0].size(), 2);
   BOOST_REQUIRE_EQUAL(encoded[tpc_0][0], tpc_0_a.encode());
   BOOST_REQUIRE(SourceIDGeoIDMap::from_encoded(encoded) == the_map);
+}
+
+// Building a map enforces one SourceID per GeoID: a GeoID can't be added to a second SourceID
+BOOST_AUTO_TEST_CASE(AddRejectsASecondSourceIDForAGeoID)
+{
+  auto the_map = make_map();
+  const auto before = the_map;
+  BOOST_REQUIRE_THROW(the_map.add(tpc_1, tpc_0_a), std::invalid_argument);
+  BOOST_REQUIRE(the_map == before);
+  BOOST_REQUIRE_NO_THROW(the_map.add(tpc_0, tpc_0_a)); // the same pair again is fine
+  BOOST_REQUIRE(the_map.get_shared_geo_ids().empty());
+  BOOST_REQUIRE((the_map.get_source_ids(tpc_0_a) == std::vector<SourceID>{ tpc_0 }));
+}
+
+// Reading a stored map is lenient: a GeoID stored under two SourceIDs is kept under both, reported
+// by get_shared_geo_ids(), and has no single SourceID
+BOOST_AUTO_TEST_CASE(StoredMapWithASharedGeoIDIsStillRead)
+{
+  auto encoded = make_map().to_encoded();
+  encoded[tpc_1].push_back(tpc_0_a.encode());
+  auto the_map = SourceIDGeoIDMap::from_encoded(encoded);
+
+  BOOST_REQUIRE((the_map.get_shared_geo_ids() == std::set<GeoID>{ tpc_0_a }));
+  BOOST_REQUIRE((the_map.get_source_ids(tpc_0_a) == std::vector<SourceID>{ tpc_0, tpc_1 }));
+  BOOST_REQUIRE(!the_map.get_source_id(tpc_0_a).has_value());
+  BOOST_REQUIRE(the_map.get_source_id(tpc_0_b) == tpc_0); // unaffected GeoIDs still have their SourceID
+  BOOST_REQUIRE(the_map.to_encoded() == encoded);         // and nothing stored is lost
 }
 
 BOOST_AUTO_TEST_CASE(RestrictedToRecord)
