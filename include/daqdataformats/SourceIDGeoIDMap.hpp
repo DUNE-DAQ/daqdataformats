@@ -12,7 +12,6 @@
 #include "daqdataformats/RecordIndex.hpp"
 #include "daqdataformats/SourceID.hpp"
 
-// REVIEW: see the note in RecordIndex.hpp about the daqdataformats -> detdataformats dependency.
 #include "detdataformats/DetID.hpp"
 #include "detdataformats/GeoID.hpp"
 

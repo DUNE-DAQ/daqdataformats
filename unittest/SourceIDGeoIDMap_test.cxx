@@ -43,7 +43,7 @@ make_map()
   return the_map;
 }
 
-} // namespace
+} // namespace ""
 
 BOOST_AUTO_TEST_SUITE(SourceIDGeoIDMap_test)
 

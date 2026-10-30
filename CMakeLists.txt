@@ -6,8 +6,6 @@ find_package(daq-cmake REQUIRED)
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
-# REVIEW: new dependency of daqdataformats on detdataformats, needed for DetID::Subdetector and
-# GeoID in RecordIndex/SourceIDGeoIDMap. Please confirm during review whether this is acceptable.
 find_package(detdataformats REQUIRED)
 
 daq_setup_environment()

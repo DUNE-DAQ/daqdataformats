@@ -59,7 +59,7 @@ make_trigger_record()
   return record;
 }
 
-} // namespace
+} // namespace ""
 
 BOOST_AUTO_TEST_SUITE(RecordIndex_test)
 

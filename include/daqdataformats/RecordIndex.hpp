@@ -15,9 +15,6 @@
 #include "daqdataformats/TimeSlice.hpp"
 #include "daqdataformats/TriggerRecord.hpp"
 
-// REVIEW: this introduces a daqdataformats -> detdataformats dependency (for DetID::Subdetector),
-// which is new for this package. Please confirm during review whether this is acceptable, or
-// whether the subdetector should be carried as the raw uint16_t detector_id instead.
 #include "detdataformats/DetID.hpp"
 
 #include <map>
