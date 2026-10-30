@@ -6,13 +6,15 @@ find_package(daq-cmake REQUIRED)
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
+find_package(detdataformats REQUIRED)
+
 daq_setup_environment()
 
 
 ##############################################################################
 # Main library
 
-daq_add_library(LINK_LIBRARIES)
+daq_add_library(LINK_LIBRARIES detdataformats::detdataformats)
 
 ##############################################################################
 daq_add_python_bindings(*.cpp)
@@ -34,6 +36,8 @@ daq_add_unit_test(TimeSliceHeader_test     LINK_LIBRARIES ${PROJECT_NAME})
 daq_add_unit_test(TriggerRecord_test           LINK_LIBRARIES ${PROJECT_NAME})
 daq_add_unit_test(TriggerRecordHeader_test     LINK_LIBRARIES ${PROJECT_NAME})
 daq_add_unit_test(TriggerRecordHeaderData_test LINK_LIBRARIES ${PROJECT_NAME})
+daq_add_unit_test(RecordIndex_test             LINK_LIBRARIES ${PROJECT_NAME})
+daq_add_unit_test(SourceIDGeoIDMap_test        LINK_LIBRARIES ${PROJECT_NAME})
 
 ##############################################################################
 
