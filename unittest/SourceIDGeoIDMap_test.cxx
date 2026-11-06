@@ -79,6 +79,31 @@ BOOST_AUTO_TEST_CASE(EncodedRoundTrip)
   BOOST_REQUIRE(SourceIDGeoIDMap::from_encoded(encoded) == the_map);
 }
 
+// The stored form is a flat array: a header, then one entry per pair, grouped by SourceID.
+BOOST_AUTO_TEST_CASE(FlatArrayRoundTrip)
+{
+  auto the_map = make_map();
+  BOOST_REQUIRE_EQUAL(the_map.get_num_entries(), 4);
+  BOOST_REQUIRE_EQUAL(the_map.get_total_size_bytes(),
+                      sizeof(SourceIDGeoIDMapHeader) + 4 * sizeof(SourceIDGeoIDMapEntry));
+  BOOST_REQUIRE(the_map.at(0).source_id == tpc_0);
+  BOOST_REQUIRE(the_map.at(1).geo_id == tpc_0_b);
+  BOOST_REQUIRE(the_map.at(3).source_id == pds_0);
+  BOOST_REQUIRE_THROW(the_map.at(4), std::range_error);
+
+  const std::vector<SourceIDGeoIDMapEntry> entries{
+    { tpc_0, tpc_0_a }, { tpc_0, tpc_0_b }, { tpc_1, tpc_1_a }, { pds_0, pds_0_a }
+  };
+  BOOST_REQUIRE(SourceIDGeoIDMap(entries) == the_map);
+  BOOST_REQUIRE(SourceIDGeoIDMap(the_map.get_storage_location()) == the_map);
+
+  BOOST_REQUIRE(SourceIDGeoIDMap().empty());
+  BOOST_REQUIRE_EQUAL(SourceIDGeoIDMap().get_total_size_bytes(), sizeof(SourceIDGeoIDMapHeader));
+
+  const std::vector<uint8_t> not_a_map(sizeof(SourceIDGeoIDMapHeader), 0); // NOLINT(build/unsigned)
+  BOOST_REQUIRE_THROW(SourceIDGeoIDMap{ not_a_map.data() }, std::invalid_argument);
+}
+
 // Building a map enforces one SourceID per GeoID: a GeoID can't be added to a second SourceID
 BOOST_AUTO_TEST_CASE(AddRejectsASecondSourceIDForAGeoID)
 {
